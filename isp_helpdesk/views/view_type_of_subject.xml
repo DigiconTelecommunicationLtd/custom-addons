@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="isp_helpdesk_type_of_subject_search" model="ir.ui.view">
+        <field name="name">Type  of Subject- Search</field>
+        <field name="model">isp_helpdesk.type_of_subject</field>
+        <field name="arch" type="xml">
+            <search string="Type  of SubjectSearch">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_type_of_subject_tree" model="ir.ui.view">
+        <field name="name">isp_helpdesk.type_of_subject.tree</field>
+        <field name="model">isp_helpdesk.type_of_subject</field>
+        <field name="arch" type="xml">
+            <tree string="Types of Subject">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_type_of_subject_form" model="ir.ui.view">
+        <field name="name">isp_helpdesk.type_of_subject.form</field>
+        <field name="model">isp_helpdesk.type_of_subject</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Type of Subject">
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_type_of_subject_action" model="ir.actions.act_window">
+        <field name="name">Type of Subject</field>
+        <field name="res_model">isp_helpdesk.type_of_subject</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_helpdesk.isp_helpdesk_type_of_subject_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_isp_helpdesk_type_of_subject_act"
+        name="Types of Subject"
+        sequence="0"
+        action="isp_helpdesk_type_of_subject_action"
+        parent="isp_helpdesk_menu_config"
+        groups="base.group_no_one"/>
+
+</odoo>

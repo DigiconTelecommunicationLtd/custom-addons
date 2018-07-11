@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="isp_helpdesk_solution_search" model="ir.ui.view">
+        <field name="name">Solution - Search</field>
+        <field name="model">isp_helpdesk.solution</field>
+        <field name="arch" type="xml">
+            <search string="Solution Search">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_solution_tree" model="ir.ui.view">
+        <field name="name">isp_helpdesk.solution.tree</field>
+        <field name="model">isp_helpdesk.solution</field>
+        <field name="arch" type="xml">
+            <tree string="Solutions">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_solution_form" model="ir.ui.view">
+        <field name="name">isp_helpdesk.solution.form</field>
+        <field name="model">isp_helpdesk.solution</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Solution">
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_solution_action" model="ir.actions.act_window">
+        <field name="name">Solution</field>
+        <field name="res_model">isp_helpdesk.solution</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_helpdesk.isp_helpdesk_solution_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_isp_helpdesk_solution_act"
+        name="Solutions"
+        sequence="0"
+        action="isp_helpdesk_solution_action"
+        parent="isp_helpdesk_menu_config"
+        groups="base.group_no_one"/>
+
+</odoo>

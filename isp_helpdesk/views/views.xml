@@ -1,0 +1,19 @@
+<odoo>
+    <menuitem
+        id="isp_helpdesk_menu_root"
+        name="HelpDesk"/>
+
+    <menuitem
+        id="isp_helpdesk_menu_helpdesk"
+        name="Helpdesk"
+        parent="isp_helpdesk_menu_root"
+        sequence="1"/>
+
+    <menuitem
+        id="isp_helpdesk_menu_config"
+        name="Configuration"
+        parent="isp_helpdesk_menu_root"
+        sequence="2"/>
+
+
+</odoo>

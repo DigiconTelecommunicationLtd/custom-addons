@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record model="isp_helpdesk.team" id="default_isp_helpdesk_team_1">
+        <field name="name">Technical Team</field>
+    </record>
+    <record model="isp_helpdesk.team" id="default_isp_helpdesk_team_2">
+        <field name="name">Functional Team</field>
+    </record>
+</odoo>

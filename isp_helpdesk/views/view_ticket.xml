@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="isp_helpdesk_ticket_search" model="ir.ui.view">
+        <field name="name">Ticket - Search</field>
+        <field name="model">isp_helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <search string="Ticket Search">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="stage"/>
+                <field name="customer_rating"/>
+                <field name="customer_feedback"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_ticket_tree" model="ir.ui.view">
+        <field name="name">isp_helpdesk.ticket.tree</field>
+        <field name="model">isp_helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <tree string="Tickets">
+                <field name="name"/>
+                <field name="customer"/>
+                <field name="stage"/>
+                <field name="priority"/>
+                <field name="helpdesk_team"/>
+                <field name="is_ticket_closed"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_ticket_form" model="ir.ui.view">
+        <field name="name">isp_helpdesk.ticket.form</field>
+        <field name="model">isp_helpdesk.ticket</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Ticket">
+                <header class="oe_right">
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="customer"/>
+                        <field name="priority"/>
+                        <field name="helpdesk_team"/>
+                        <field name="is_ticket_closed"/>
+                    </group>
+                </group>
+
+                <notebook colspan="4">
+                    <page string="Description">
+                        <field name="description"/>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_ticket_action" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">isp_helpdesk.ticket</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_helpdesk.isp_helpdesk_ticket_tree"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to set a new ticket in your opportunity pipeline.
+          </p><p>
+            Tickets allow salespersons to easily track how a specific opportunity
+            is positioned in the sales cycle.
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_isp_helpdesk_ticket_act"
+        name="Tickets"
+        sequence="0"
+        action="isp_helpdesk_ticket_action"
+        parent="isp_helpdesk_menu_helpdesk"
+        groups="base.group_no_one"/>
+
+</odoo>

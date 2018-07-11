@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="isp_helpdesk_lead_team_search" model="ir.ui.view">
+        <field name="name">Team - Search</field>
+        <field name="model">isp_helpdesk.team</field>
+        <field name="arch" type="xml">
+            <search string="Team Search">
+                <field name="name"/>
+                <field name="leader"/>
+                <field name="is_default_team"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_team_tree" model="ir.ui.view">
+        <field name="name">isp_helpdesk.team.tree</field>
+        <field name="model">isp_helpdesk.team</field>
+        <field name="arch" type="xml">
+            <tree string="Teams">
+                <field name="name"/>
+                <field name="leader"/>
+                <field name="is_default_team"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_team_form" model="ir.ui.view">
+        <field name="name">isp_helpdesk.team.form</field>
+        <field name="model">isp_helpdesk.team</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Team">
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="leader"/>
+                        <field name="is_default_team"/>
+                    </group>
+                </group>
+
+                <notebook colspan="4">
+                    <page string="Team members">
+                        <field name="team_members"/>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_helpdesk_team_action" model="ir.actions.act_window">
+        <field name="name">Teams</field>
+        <field name="res_model">isp_helpdesk.team</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_helpdesk.isp_helpdesk_team_tree"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to set a new team in your opportunity pipeline.
+          </p><p>
+            Teams allow salespersons to easily track how a specific opportunity
+            is positioned in the sales cycle.
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_isp_helpdesk_lead_team_act"
+        name="Teams"
+        sequence="0"
+        action="isp_helpdesk_team_action"
+        parent="isp_helpdesk_menu_config"
+        groups="base.group_no_one"/>
+
+</odoo>

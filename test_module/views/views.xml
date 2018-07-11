@@ -1,0 +1,60 @@
+<odoo>
+
+    <menuitem
+        id="test_module_menu_root"
+        name="Test"
+        sequence="1"/>
+
+    <menuitem
+        id="test_module_sub_menu"
+        name="Helpdesk"
+        parent="test_module_menu_root"
+        sequence="2"/>
+
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="test_module.tree_test_model">
+        <field name="name">test_module.tree_test_model</field>
+        <field name="model">test_module.test</field>
+        <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>
+            <field name="state"/>
+        </tree>
+        </field>
+    </record>
+
+    <record id="test_module.form_test_model" model="ir.ui.view">
+        <field name="name">test_module.form_test_model</field>
+        <field name="model">test_module.test</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Test">
+                <header>
+                    <field name="state" widget="statusbar" clickable="True"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="test_module_action" model="ir.actions.act_window">
+        <field name="name">Test Model</field>
+        <field name="res_model">test_module.test</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_test_module_3"
+        name="Test"
+        sequence="1"
+        action="test_module_action"
+        parent="test_module_sub_menu"
+        groups="base.group_no_one"/>
+</odoo>

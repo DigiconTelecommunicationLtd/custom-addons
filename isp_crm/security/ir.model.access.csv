@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isp_crm_isp_crm,isp_crm.isp_crm,model_isp_crm_isp_crm,,1,0,0,0

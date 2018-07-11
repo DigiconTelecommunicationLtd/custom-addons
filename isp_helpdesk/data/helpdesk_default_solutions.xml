@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record model="isp_helpdesk.solution" id="default_isp_helpdesk_solution_1">
+        <field name="name">Solution 1</field>
+    </record>
+    <record model="isp_helpdesk.solution" id="default_isp_helpdesk_solution_2">
+        <field name="name">Solution 2</field>
+    </record>
+</odoo>

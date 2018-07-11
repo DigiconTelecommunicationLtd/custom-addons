@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <delete model='crm.stage' id="crm.stage_lead1"/>
+    <delete model='crm.stage' id="crm.stage_lead2"/>
+    <delete model='crm.stage' id="crm.stage_lead3"/>
+    <delete model='crm.stage' id="crm.stage_lead4"/>
+</odoo>

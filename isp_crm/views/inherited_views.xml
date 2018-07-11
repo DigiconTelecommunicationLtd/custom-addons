@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="view_inherited_crm_leads">
+        <field name="name">view.inherited.crm.leads</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor" />
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="replace">
+                <tree string="New Tree">
+                    <field name="name" string="Opportunity"/>
+                </tree>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="view_action_inherited_crm_leads">
+        <field name="name">PipeLines</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_inherited_crm_leads" name="New Pipeline"
+              parent="crm.crm_menu_root"
+              action="view_action_inherited_crm_leads"/>
+</odoo>

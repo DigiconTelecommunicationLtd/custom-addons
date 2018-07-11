@@ -1,0 +1,50 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+
+
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="isp_crm.action_window">
+      <field name="name">isp_crm window</field>
+      <field name="res_model">isp_crm.isp_crm</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="isp_crm.action_server">
+      <field name="name">isp_crm server</field>
+      <field name="model_id" ref="model_isp_crm_isp_crm"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="isp_crm" id="isp_crm.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="isp_crm.menu_1" parent="isp_crm.menu_root"/>
+    <menuitem name="Menu 2" id="isp_crm.menu_2" parent="isp_crm.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="isp_crm.menu_1_list" parent="isp_crm.menu_1"
+              action="isp_crm.action_window"/>
+    <menuitem name="Server to list" id="isp_crm" parent="isp_crm.menu_2"
+              action="isp_crm.action_server"/>
+    -->
+  </data>
+</odoo>
