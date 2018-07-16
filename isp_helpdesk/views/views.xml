@@ -16,4 +16,12 @@
         sequence="2"/>
 
 
+    <!-- Sequences for isp_helpdesk.ticket-->
+    <record id="seq_helpdesk_ticket" model="ir.sequence">
+        <field name="name">Helpdesk Ticket</field>
+        <field name="code">isp_helpdesk.ticket</field>
+        <field name="prefix">TICK</field>
+        <field name="padding">4</field>
+    </record>
+
 </odoo>

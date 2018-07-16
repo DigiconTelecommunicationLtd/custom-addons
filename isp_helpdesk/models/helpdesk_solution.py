@@ -12,3 +12,4 @@ class Solution(models.Model):
     _order = "name, id"
 
     name = fields.Char('Solution', required=True, translate=True)
+    is_done = fields.Boolean('Done', default=False)

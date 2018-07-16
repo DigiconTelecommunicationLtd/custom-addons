@@ -18,7 +18,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['crm'],
+    'depends': ['crm', 'project'],
 
     # always loaded
     'data': [
@@ -28,7 +28,8 @@
         'data/helpdesk_default_solutions.xml',
         'data/helpdesk_default_teams.xml',
         'views/views.xml',
-        'views/templates.xml',
+        # 'views/templates.xml',
+        'templates/template_ticket.xml',
         'views/view_stage.xml',
         'views/view_team.xml',
         'views/view_ticket_type.xml',
