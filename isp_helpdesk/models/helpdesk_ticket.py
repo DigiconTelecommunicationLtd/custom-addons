@@ -37,7 +37,7 @@ class Ticket(models.Model):
     customer_email = fields.Char(related='customer.email', store=True)
     customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
     customer_company = fields.Char(string="Company", related='customer.parent_id.name', store=True)
-    helpdesk_team = fields.Many2one('isp_helpdesk.team', string="Team")
+    helpdesk_team = fields.Many2one('isp_helpdesk.team', string="Team", realated="isp_helpdesk.assigned_to")
     team_leader = fields.Many2one('res.users', string="Team Leader",)
     project = fields.Many2one('project.project', string="Project")
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")

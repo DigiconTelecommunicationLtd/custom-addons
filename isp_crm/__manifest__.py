@@ -18,7 +18,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['crm'],
+    'depends': ['crm', 'sale'],
 
     # always loaded
     'data': [
@@ -28,6 +28,12 @@
         'data/default_states_data.xml',
         'views/inherited_views.xml',
         'views/views.xml',
+        'views/sequences.xml',
+        'views/menu_views.xml',
+        'views/service_type_views.xml',
+        'views/connection_type_views.xml',
+        'views/connection_media_views.xml',
+        'views/res_partner_views.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

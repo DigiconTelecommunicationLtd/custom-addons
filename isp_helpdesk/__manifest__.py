@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 {
     'name': "ISP Helpdesk",
 
@@ -10,6 +11,7 @@
 
     'author': "My Company",
     'website': "http://www.yourcompany.com",
+    'installable': True,
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
@@ -29,17 +31,33 @@
         'data/helpdesk_default_teams.xml',
         'views/views.xml',
         # 'views/templates.xml',
-        'templates/template_ticket.xml',
         'views/view_stage.xml',
+        'views/view_res_user.xml',
         'views/view_team.xml',
         'views/view_ticket_type.xml',
         'views/view_type_of_subject.xml',
         'views/view_problem.xml',
         'views/view_solution.xml',
+        'templates/template_ticket.xml',
         'views/view_ticket.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
-        'demo/demo.xml',
+        # 'demo/demo.xml',
     ],
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

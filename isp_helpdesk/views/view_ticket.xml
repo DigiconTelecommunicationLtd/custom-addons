@@ -5,7 +5,7 @@
         <field name="model">isp_helpdesk.ticket</field>
         <field name="arch" type="xml">
             <search string="Ticket Search">
-                <field name="name"/>
+                <!--<field name="name"/>-->
                 <field name="problem"/>
                 <field name="description"/>
                 <field name="stage"/>
@@ -22,22 +22,23 @@
         <field name="model">isp_helpdesk.ticket</field>
         <field name="type">kanban</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="stage" class="o_kanban_small_column" on_create="quick_create">
+            <kanban default_group_by="stage" class="o_kanban_small_column o_kanban_project_tasks" on_create="quick_create">
                 <field name="name"/>
-                <field name="problem"/>
-                <field name="stage" options='{"group_by_tooltip": {"description": "Stage Description", "legend_priority": "Use of stars"}}'/>
+                <field name="color"/>
+                <field name="priority"/>
+                <field name="stage" />
                 <field name="customer"/>
-                <field name="customer_email"/>
                 <field name="description"/>
+                <field name="problem"/>
                 <templates>
                 <t t-name="kanban-box">
-                    <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color)} oe_kanban_card oe_kanban_global_click">
+                    <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
                         <div class="oe_kanban_content">
                             <div class="o_kanban_record_top">
                                 <div class="o_kanban_record_headings">
                                     <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
                                     <small class="o_kanban_record_subtitle text-muted">
-                                        <field name="problem"/>
+                                        <field name="problem" />
                                     </small>
                                 </div>
                                 <div class="o_dropdown_kanban dropdown" groups="base.group_user">
@@ -45,18 +46,23 @@
                                         <span class="fa fa-ellipsis-v" aria-hidden="true"/>
                                     </a>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                        <li t-if="widget.editable"><a type="edit">Edit</a></li>
+                                        <li t-if="widget.editable"><a type="edit">Edit Ticket</a></li>
                                         <li t-if="widget.deletable"><a type="delete">Delete</a></li>
                                         <li class="divider"></li>
+                                        <li class="dropdown-header">Record's Colour</li>
+                                        <li>
+                                            <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="o_kanban_record_body">
-                                <field name="color" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             </div>
                             <div class="o_kanban_record_bottom">
                                 <div class="oe_kanban_bottom_left">
                                     <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
                                 </div>
                             </div>
                         </div>
@@ -74,6 +80,7 @@
         <field name="model">isp_helpdesk.ticket</field>
         <field name="arch" type="xml">
             <tree string="Tickets">
+                <field name="name"/>
                 <field name="problem"/>
                 <field name="customer"/>
                 <field name="stage"/>
@@ -101,7 +108,7 @@
                     <group>
                         <!--Left-->
                         <group>
-                            <field name="assigned_to"/>
+                            <field name="assigned_to" />
                             <field name="customer_email"/>
                             <field name="customer_company"/>
                         </group>
@@ -142,17 +149,14 @@
         </field>
     </record>
 
-
-
-
     <record id="isp_helpdesk_ticket_action" model="ir.actions.act_window">
-        <field name="problem">Tickets</field>
+        <field name="name">Tickets</field>
         <field name="res_model">isp_helpdesk.ticket</field>
         <field name="view_mode">kanban,tree,form</field>
-        <field name="search_view_id" ref="isp_helpdesk_ticket_search"/>
+        <field name="search_view_id" ref="isp_helpdesk_ticket_search" />
         <field name="help" type="html">
-            <p>
-                Helpdesk Ticket management
+            <p class="oe_view_nocontent_create">
+                Help Text
             </p>
         </field>
     </record>

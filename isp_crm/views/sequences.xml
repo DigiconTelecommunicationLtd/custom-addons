@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sequences for isp_helpdesk.ticket-->
+    <record id="seq_isp_crm_subcriber_id" model="ir.sequence">
+        <field name="name">Subcriber ID</field>
+        <field name="code">isp_crm.subscriber_id</field>
+        <field name="prefix">SUB-</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>
+
+

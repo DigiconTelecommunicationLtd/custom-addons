@@ -1,7 +1,8 @@
 <odoo>
     <menuitem
         id="isp_helpdesk_menu_root"
-        name="HelpDesk"/>
+        name="HelpDesk"
+        sequence="1"/>
 
     <menuitem
         id="isp_helpdesk_menu_helpdesk"

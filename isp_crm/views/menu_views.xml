@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+
+
+    <!--Menu configuration-->
+    <menuitem
+            id="menu_isp_crm_config_technical_info"
+            name="Technical Info Configuration"
+            parent="crm.crm_menu_config"
+            sequence="15"/>
+    <menuitem
+        id="menu_isp_crm_connection_media_act"
+        name="Connection Medias"
+        sequence="0"
+        action="isp_crm_connection_media_action"
+        parent="isp_crm.menu_isp_crm_config_technical_info"/>
+
+    <menuitem
+        id="menu_isp_crm_connection_type_act"
+        name="Connection Types"
+        sequence="0"
+        action="isp_crm_connection_type_action"
+        parent="isp_crm.menu_isp_crm_config_technical_info"/>
+
+    <menuitem
+        id="menu_isp_crm_service_type_act"
+        name="Service Types"
+        sequence="0"
+        action="isp_crm_service_type_action"
+        parent="isp_crm.menu_isp_crm_config_technical_info"/>
+
+
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="isp_crm_service_type_search" model="ir.ui.view">
+        <field name="name">Service Type - Search</field>
+        <field name="model">isp_crm.service_type</field>
+        <field name="arch" type="xml">
+            <search string="Service Type Search">
+                <field name="name"/>
+                <field name="short_code"/>
+                <field name="description"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_crm_service_type_tree" model="ir.ui.view">
+        <field name="name">isp_crm.service_type.tree</field>
+        <field name="model">isp_crm.service_type</field>
+        <field name="arch" type="xml">
+            <tree string="Service Types">
+                <field name="name"/>
+                <field name="short_code"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_crm_service_type_form" model="ir.ui.view">
+        <field name="name">isp_crm.service_type.form</field>
+        <field name="model">isp_crm.service_type</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Service Type">
+                <sheet>
+
+                    <h1>
+                        <label for="name" class="oe_edit_only" string="Service Type"/>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <field name="short_code"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_crm_service_type_action" model="ir.actions.act_window">
+        <field name="name">Service Type</field>
+        <field name="res_model">isp_crm.service_type</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_crm.isp_crm_service_type_tree"/>
+    </record>
+
+
+</odoo>
