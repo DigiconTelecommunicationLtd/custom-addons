@@ -29,11 +29,11 @@
         'views/inherited_views.xml',
         'views/views.xml',
         'views/sequences.xml',
-        'views/menu_views.xml',
         'views/service_type_views.xml',
         'views/connection_type_views.xml',
         'views/connection_media_views.xml',
         'views/res_partner_views.xml',
+        'views/menu_views.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

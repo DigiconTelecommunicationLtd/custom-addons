@@ -13,21 +13,21 @@
     <menuitem
         id="menu_isp_crm_connection_media_act"
         name="Connection Medias"
-        sequence="0"
+        sequence="15"
         action="isp_crm_connection_media_action"
         parent="isp_crm.menu_isp_crm_config_technical_info"/>
 
     <menuitem
         id="menu_isp_crm_connection_type_act"
         name="Connection Types"
-        sequence="0"
+        sequence="6"
         action="isp_crm_connection_type_action"
         parent="isp_crm.menu_isp_crm_config_technical_info"/>
 
     <menuitem
         id="menu_isp_crm_service_type_act"
         name="Service Types"
-        sequence="0"
+        sequence="7"
         action="isp_crm_service_type_action"
         parent="isp_crm.menu_isp_crm_config_technical_info"/>
 
