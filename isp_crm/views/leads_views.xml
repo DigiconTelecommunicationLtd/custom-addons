@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="isp_crm_connection_media_search" model="ir.ui.view">
+        <field name="name">Connection Media - Search</field>
+        <field name="model">isp_crm.connection_media</field>
+        <field name="arch" type="xml">
+            <search string="Connection Media Search">
+                <field name="name"/>
+                <field name="short_code"/>
+                <field name="description"/>
+            </search>
+        </field>
+    </record>
+</odoo>
