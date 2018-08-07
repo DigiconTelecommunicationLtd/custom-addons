@@ -33,6 +33,7 @@
         'views/connection_type_views.xml',
         'views/connection_media_views.xml',
         'views/res_partner_views.xml',
+        'views/leads_views.xml',
         'views/menu_views.xml',
         'views/templates.xml',
     ],
