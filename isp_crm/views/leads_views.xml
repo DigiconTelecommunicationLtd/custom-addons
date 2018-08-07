@@ -28,14 +28,4 @@
             </xpath>
         </field>
     </record>
-
-    <record model="ir.actions.act_window" id="view_action_inherited_crm_leads">
-        <field name="name">Leads</field>
-        <field name="res_model">crm.lead</field>
-        <field name="view_mode">tree</field>
-    </record>
-
-    <menuitem id="menu_inherited_crm_leads" name="Leads"
-              parent="crm.crm_menu_root"
-              action="view_action_inherited_crm_leads"/>
 </odoo>
