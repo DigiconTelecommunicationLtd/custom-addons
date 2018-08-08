@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="view_inherited_crm_opportunity">
+        <field name="name">view.inherited.crm.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <xpath  expr="//sheet/group/group/field[@name='tag_ids']" position="replace">
+                <field string="Package(s)" name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--Change menu name to opportunity-->
+    <menuitem id="crm.menu_crm_opportunities"
+              action="crm.action_your_pipeline"
+              name="Opportunities"
+              parent="crm.crm_menu_pipeline"
+              sequence="15"/>
+</odoo>

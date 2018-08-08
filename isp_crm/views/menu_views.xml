@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-
-
-
     <!--Menu configuration-->
     <menuitem
             id="menu_isp_crm_config_technical_info"
