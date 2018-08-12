@@ -55,6 +55,8 @@
                 <page string="Technical Information">
                     <group>
                         <group>
+                            <field name="connection_status" string="Bill Cycle Date"/>
+                            <field name="bill_cycle_date" string="Bill Cycle Date"/>
                             <field name="service_type" string="Service Type"/>
                             <field name="connection_type" string="Connection Type"/>
                             <field name="connection_media" string="Connection Media"/>

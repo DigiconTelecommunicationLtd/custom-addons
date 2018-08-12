@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+from datetime import datetime
 
 
 GENDERS = [
@@ -10,8 +11,8 @@ GENDERS = [
 ]
 
 
-
 class Customer(models.Model):
+    _name = 'res.partner'
     """Inherits res.partner and adds Customer info in partner form"""
     _inherit = 'res.partner'
 
@@ -27,6 +28,8 @@ class Customer(models.Model):
     service_type = fields.Many2one('isp_crm.service_type', string='Service Type')
     connection_type = fields.Many2one('isp_crm.connection_type', string='Connection Type')
     connection_media = fields.Many2one('isp_crm.connection_media', string='Connection Media')
+    connection_status = fields.Boolean(string='Connection Up', default=False)
+    bill_cycle_date = fields.Date(string='Bill Cycle Date', required=False, default=None)
 
     @api.model
     def create(self, vals):

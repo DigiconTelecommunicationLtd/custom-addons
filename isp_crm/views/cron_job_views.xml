@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Cron job  for sending invoice to each customer in mail-->
+    <data noupdate="1">
+        <record forcecreate="True" id="isp_crm_cron_job_send_customer_invoice_in_email" model="ir.cron">
+            <field name="name">Customer Invoice Sending in Mail</field>
+            <field name="model_id" ref="model_isp_crm_cron_job"/>
+            <field name="state">code</field>
+            <field name="model" eval="'isp_crm.cron_job'" />
+            <field name="code">model.send_customer_invoice_in_email()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+    </data>
+</odoo>
