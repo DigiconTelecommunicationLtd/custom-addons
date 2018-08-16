@@ -38,6 +38,7 @@
         'views/cron_job_views.xml',
         'views/menu_views.xml',
         'views/templates.xml',
+        'views/website_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
