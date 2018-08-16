@@ -22,9 +22,8 @@
 
     # always loaded
     'data': [
-
-        'security/ir.model.access.csv',
         'security/sd_user_group.xml',
+        'security/ir.model.access.csv',
         'data/delete_previous_states_data.xml',
         'data/default_states_data.xml',
         'views/inherited_views.xml',

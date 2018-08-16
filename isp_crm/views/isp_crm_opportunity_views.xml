@@ -16,6 +16,28 @@
         </field>
     </record>
 
+    <!--<record model="ir.actions.act_window" id="isp_crm_opportunity_list_act">-->
+        <!--<field name="name">Opportunities</field>-->
+        <!--<field name="res_model">crm.lead</field>-->
+        <!--<field name="view_mode">kanban,tree,graph,form,calendar</field>-->
+        <!--<field name="domain">['|',('user_id','=',False),('user_id','=',uid)]</field>-->
+        <!--<field name="context">{'stage_type': 'opportunity', 'default_type': 'opportunity', 'default_user_id': uid}</field>-->
+        <!--<field name="view_id" eval="False"/>-->
+        <!--<field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>-->
+        <!--<field name="help" type="html">-->
+            <!--<p class="oe_view_nocontent_create">-->
+              <!--Click to create a new opportunity.-->
+              <!--</p><p>-->
+              <!--OpenERP helps you keep track of your sales pipeline to follow-->
+              <!--up potential sales and better forecast your future revenues.-->
+              <!--</p><p>-->
+              <!--You will be able to plan meetings and phone calls from-->
+              <!--opportunities, convert them into quotations, attach related-->
+              <!--documents, track all discussions, and much more.-->
+            <!--</p>-->
+        <!--</field>-->
+     <!--</record>-->
+
 
     <!--Change menu name to opportunity-->
     <menuitem id="crm.menu_crm_opportunities"

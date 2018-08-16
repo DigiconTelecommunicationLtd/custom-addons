@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_isp_crm_sd_user_leads,crm.lead,model_crm_lead,isp_crm.sd_user_group,1,1,1,0
+access_isp_crm_sd_user_leads,Isp CRM User,model_crm_lead,isp_crm.sd_user_group,1,1,1,0
