@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="inherit_footer_odoo_link" inherit_id="website.layout" name="Footer Link">
+        <xpath expr="//footer" position="inside">
+           <div class="pull-left text-muted" itemscope="itemscope" itemtype="http://schema.org/Organization">
+                Copyright &amp;copy; <span t-field="res_company.name" itemprop="name">Company name</span>
+            </div>
+        </xpath>
+    </template>
+</odoo>
