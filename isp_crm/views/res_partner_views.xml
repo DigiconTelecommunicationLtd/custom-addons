@@ -51,7 +51,7 @@
 
 
             <!--Technical Information-->
-            <xpath expr="//notebook/page[@name='sales_purchases']" position="after">
+            <xpath expr="//notebook/page[@name='sales_purchases']" position="after" >
                 <page string="Technical Information">
                     <group>
                         <group>
@@ -63,6 +63,11 @@
                         </group>
                     </group>
                 </page>
+            </xpath>
+
+
+            <xpath expr="//notebook/page[@name='sales_purchases']" position="attributes" >
+                <attribute name="groups">isp_crm.sd_user_group</attribute>
             </xpath>
         </field>
    </record>
