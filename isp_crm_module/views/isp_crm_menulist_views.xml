@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+    <!--Change menu name to opportunity-->
+    <menuitem id="crm.menu_crm_opportunities"
+              action="crm.action_your_pipeline"
+              name="Opportunities"
+              parent="crm.crm_menu_pipeline"
+              sequence="2"/>
+
+    <!--Change menu name to opportunity-->
+    <menuitem id="menu_isp_crm_service_request"
+              action="isp_crm_Opportunities"
+              name="Service Request"
+              parent="crm.crm_menu_pipeline"
+              sequence="2"/>
+</odoo>
