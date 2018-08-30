@@ -13,6 +13,6 @@ class ServiceRequestStage(models.Model):
     _rec_name = 'name'
     _order = "sequence, name, id"
 
-    is_service_req_stage = models.BooleanField("Is Service Request Object")
+    is_service_req_stage = fields.Boolean("Is Service Request Object")
 
 

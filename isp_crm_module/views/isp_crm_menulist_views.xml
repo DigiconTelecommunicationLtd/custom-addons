@@ -9,7 +9,7 @@
 
     <!--Change menu name to opportunity-->
     <menuitem id="menu_isp_crm_service_request"
-              action="isp_crm_Opportunities"
+              action="isp_crm_lead_opportunities"
               name="Service Request"
               parent="crm.crm_menu_pipeline"
               sequence="2"/>

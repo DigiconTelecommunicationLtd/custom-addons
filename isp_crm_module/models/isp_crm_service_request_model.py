@@ -24,5 +24,6 @@ class ServiceRequestOpportunity(models.Model):
     stage_id = fields.Many2one('isp_crm_module.stage', string='Stage', track_visibility='onchange', index=True,
                                domain="['|', ('team_id', '=', False), ('team_id', '=', team_id)]",
                                group_expand='_read_group_stage_ids', default=lambda self: self._default_stage_id())
-
-
+    tag_ids = fields.Many2many('crm.lead.tag', 'crm_lead_tag_rel', 'lead_id', 'tag_id', string='Tags',
+                               help="Classify and analyze your lead/opportunity categories like: Training, Service")
+    color = fields.Integer('Color Index', default=0)

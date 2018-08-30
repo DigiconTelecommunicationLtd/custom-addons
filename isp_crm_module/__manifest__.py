@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     'name': "isp_crm_module",
 
@@ -25,8 +24,8 @@
     'data': [
         # 'security/ir.model.access.csv',
         'views/views.xml',
-        'views/isp_crm_menulist_views.xml',
         'views/isp_crm_service_request_views.xml',
+        'views/isp_crm_menulist_views.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode
@@ -34,3 +33,4 @@
         'demo/demo.xml',
     ],
 }
+# -*- coding: utf-8 -*-
