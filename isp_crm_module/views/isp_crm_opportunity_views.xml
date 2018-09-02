@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!--Adding a button in opportunity for creating service request-->
+    <record model="ir.ui.view" id="view_add_button_in_opportunity">
+        <field name="name">view.add.button.in.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <xpath  expr="//form/header/field[@name='stage_id']" position="before">
+                <button name="action_create_new_service_request" string="Create Service Request" type="object"  />
+            </xpath>
+
+            <xpath  expr="//form/sheet/div/h1/field[@name='name']" position="before">
+                <p>
+                    <field name="opportunity_seq_id"/>
+                </p>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--Adding ID in leads and opportunity kanban view-->
+    <record model="ir.ui.view" id="view_add_seq_id_in_opportunity">
+        <field name="name">view.add.seq.id.in.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads" />
+        <field name="arch" type="xml">
+            <xpath  expr="//div/strong/field[@name='name']" position="before">
+                <p>
+                    <field name="opportunity_seq_id"/>
+                </p>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Adding ID in leads and lead form view-->
+    <record model="ir.ui.view" id="view_add_seq_id_in_lead">
+        <field name="name">view.add.seq.id.in.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_leads" />
+        <field name="arch" type="xml">
+            <xpath  expr="//sheet/div/h1//field[@name='name']" position="before">
+                <p>
+                    <field name="opportunity_seq_id" readonly="1"/>
+                </p>
+            </xpath>
+        </field>
+    </record>
+
+
+
+</odoo>

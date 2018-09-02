@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="isp_crm_module_problem_search" model="ir.ui.view">
+        <field name="name">Problem - Search</field>
+        <field name="model">isp_crm_module.problem</field>
+        <field name="arch" type="xml">
+            <search string="Problem Search">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_problem_tree" model="ir.ui.view">
+        <field name="name">isp_crm_module.problem.tree</field>
+        <field name="model">isp_crm_module.problem</field>
+        <field name="arch" type="xml">
+            <tree string="Problems">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_problem_form" model="ir.ui.view">
+        <field name="name">isp_crm_module.problem.form</field>
+        <field name="model">isp_crm_module.problem</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Problem">
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_problem_action" model="ir.actions.act_window">
+        <field name="name">Problem</field>
+        <field name="res_model">isp_crm_module.problem</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_crm_module.isp_crm_module_problem_tree"/>
+    </record>
+
+
+
+</odoo>

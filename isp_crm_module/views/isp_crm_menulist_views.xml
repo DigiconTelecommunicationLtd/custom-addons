@@ -7,10 +7,53 @@
               parent="crm.crm_menu_pipeline"
               sequence="2"/>
 
-    <!--Change menu name to opportunity-->
-    <menuitem id="menu_isp_crm_service_request"
-              action="isp_crm_lead_opportunities"
-              name="Service Request"
-              parent="crm.crm_menu_pipeline"
-              sequence="2"/>
+    <!--Service request menu-->
+    <menuitem
+        id="menu_isp_crm_module_service_request_act"
+        name="Service Requests"
+        sequence="4"
+        action="isp_crm_module_service_request_action"
+        parent="crm.crm_menu_pipeline"
+        groups="base.group_no_one"/>
+
+    <!--Custom configuration menu-->
+    <menuitem id="menu_isp_crm_configuration"
+              name="ISP CRM Configuraitons"
+              parent="crm.crm_menu_config"
+              sequence="25"/>
+
+    <menuitem
+        id="menu_isp_crm_module_problem_act"
+        name="Problems"
+        sequence="0"
+        action="isp_crm_module_problem_action"
+        parent="menu_isp_crm_configuration"
+        groups="base.group_no_one"/>
+
+
+    <menuitem
+        id="menu_isp_crm_module_solution_act"
+        name="Solutions"
+        sequence="1"
+        action="isp_crm_module_solution_action"
+        parent="menu_isp_crm_configuration"
+        groups="base.group_no_one"/>
+
+    <menuitem
+        id="menu_isp_crm_module_lead_stage_act"
+        name="Stages"
+        sequence="2"
+        action="isp_crm_module_stage_action"
+        parent="menu_isp_crm_configuration"
+        groups="base.group_no_one"/>
+
+
+    <menuitem
+        id="menu_isp_crm_module_lead_team_act"
+        name="Teams"
+        sequence="3"
+        action="isp_crm_module_team_action"
+        parent="menu_isp_crm_configuration"
+        groups="base.group_no_one"/>
+
 </odoo>
