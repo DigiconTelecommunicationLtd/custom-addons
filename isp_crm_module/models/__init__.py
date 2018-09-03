@@ -8,3 +8,4 @@ from . import isp_crm_problem
 from . import isp_crm_team
 from . import isp_crm_opportunity_model
 from . import isp_crm_customer_model
+from . import isp_crm_product_line_model

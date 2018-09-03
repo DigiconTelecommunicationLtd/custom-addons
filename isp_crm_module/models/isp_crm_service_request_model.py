@@ -19,6 +19,18 @@ class ServiceRequest(models.Model):
     _rec_name = 'name'
     _order = "create_date desc, name, id"
 
+    @api.depends('product_line.price_total')
+    def _amount_all(self):
+        """
+        Compute the total amounts of the SO.
+        """
+        for service_request in self:
+            amount_untaxed = 0.00
+            for line in service_request.product_line:
+                amount_untaxed += line.price_subtotal
+            service_request.update({
+                'amount_total': amount_untaxed,
+            })
 
 
     # TODO-Arif: give a name field in this place
@@ -39,63 +51,34 @@ class ServiceRequest(models.Model):
     is_service_request_closed = fields.Boolean('Is Service Request Closed', default=False) # TODO-Arif: add a compute field for close date
     solutions = fields.Many2many('isp_crm_module.solution', string="Solutions")
     color = fields.Integer()
+    is_done = fields.Boolean("Is Done", default=False)
+    pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', required=True, readonly=True,
+                                   help="Pricelist for Service Request.")
+    currency_id = fields.Many2one("res.currency", related='pricelist_id.currency_id', string="Currency", readonly=True,
+                                  required=True)
+    product_line = fields.One2many('isp_crm_module.product_line', 'service_request_id', string='Product Lines', copy=True, auto_join=True)
+
+    amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_amount_all',
+                                   track_visibility='always')
+
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        """
+        Update the following fields when the partner is changed:
+        - Pricelist
+        """
+        if not self.partner_id:
+            return
+
+        values = {
+            'pricelist_id': self.partner_id.property_product_pricelist and self.partner_id.property_product_pricelist.id or False,
+            'user_id': self.partner_id.user_id.id or self.env.uid
+        }
+        self.update(values)
 
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
         return super(ServiceRequest, self).create(vals)
-
-    # @api.model
-    # def read_group(self,
-    #                domain,
-    #                fields,
-    #                groupby,
-    #                offset=0,
-    #                limit=None,
-    #                orderby=False,
-    #                lazy=True):
-    #     """ Override read_group to always display all stages. """
-    #     if groupby and groupby[0] == "stage":
-    #         # Default result structure
-    #         stages = [('new', _('New')), ('assign', _('Assigned')),
-    #                   ('evaluate', _('Evaluating')), ('done', _('Done')),
-    #                   ('cancel', _('Cancel'))]
-    #         read_group_all_stages = [{
-    #             '__context': {
-    #                 'group_by': groupby[1:]
-    #             },
-    #             '__domain':
-    #                 domain + [('stage', '=', stage_value)],
-    #             'stage':
-    #                 stage_value,
-    #             'stage_count':
-    #                 0,
-    #         } for stage_value, stage_name in stages]
-    #         # Get standard results
-    #         read_group_res = super(ServiceRequest, self).read_group(
-    #                 domain,
-    #                 fields,
-    #                 groupby,
-    #                 offset=offset,
-    #                 limit=limit,
-    #                 orderby=orderby)
-    #         # Update standard results with default results
-    #         result = []
-    #         for stage_value, stage_name in stages:
-    #             res = filter(lambda x: x['stage'] == stage_value,
-    #                          read_group_res)
-    #             if not res:
-    #                 res = filter(lambda x: x['stage'] == stage_value,
-    #                              read_group_all_stages)
-    #             res[0]['stage'] = [stage_value, stage_name]
-    #             result.append(res[0])
-    #         return result
-    #     else:
-    #         return super(ServiceRequest, self).read_group(
-    #                 domain,
-    #                 fields,
-    #                 groupby,
-    #                 offset=offset,
-    #                 limit=limit,
-    #                 orderby=orderby)
