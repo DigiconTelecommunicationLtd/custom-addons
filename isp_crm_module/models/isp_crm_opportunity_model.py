@@ -8,7 +8,7 @@ class Opportunity(models.Model):
     _inherit = 'crm.lead'
     _description = "Team of ISP CRM Opportunity."
 
-    opportunity_seq_id = fields.Char('Opportunity ID', required=True, index=True, copy=False, default='New')
+    opportunity_seq_id = fields.Char('Opportunity ID', required=True, index=True, copy=False, default='New', readonly=True)
 
     @api.model
     def create(self, vals):

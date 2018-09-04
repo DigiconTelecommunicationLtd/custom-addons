@@ -32,8 +32,6 @@ class ServiceRequest(models.Model):
                 'amount_total': amount_untaxed,
             })
 
-
-    # TODO-Arif: give a name field in this place
     name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
     problem = fields.Many2one('isp_crm_module.problem', string="Problem", required=True, translate=True)
     description = fields.Text('Description')
@@ -52,30 +50,13 @@ class ServiceRequest(models.Model):
     solutions = fields.Many2many('isp_crm_module.solution', string="Solutions")
     color = fields.Integer()
     is_done = fields.Boolean("Is Done", default=False)
-    pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', required=True, readonly=True,
+    pricelist_id = fields.Many2one('product.pricelist', string='Pricelist',  readonly=True,
                                    help="Pricelist for Service Request.")
-    currency_id = fields.Many2one("res.currency", related='pricelist_id.currency_id', string="Currency", readonly=True,
-                                  required=True)
+    currency_id = fields.Many2one("res.currency", related='pricelist_id.currency_id', string="Currency", readonly=True)
     product_line = fields.One2many('isp_crm_module.product_line', 'service_request_id', string='Product Lines', copy=True, auto_join=True)
 
     amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_amount_all',
                                    track_visibility='always')
-
-    @api.multi
-    @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        """
-        Update the following fields when the partner is changed:
-        - Pricelist
-        """
-        if not self.partner_id:
-            return
-
-        values = {
-            'pricelist_id': self.partner_id.property_product_pricelist and self.partner_id.property_product_pricelist.id or False,
-            'user_id': self.partner_id.user_id.id or self.env.uid
-        }
-        self.update(values)
 
     @api.model
     def create(self, vals):

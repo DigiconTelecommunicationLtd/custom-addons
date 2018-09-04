@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <!--showing total installation charge in customer-->
+    <record model="ir.ui.view" id="customer_view_buttons">
+        <field name="name">partner.view.buttons</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button type="object" class="oe_stat_button" icon="fa-pencil-square-o" name="action_view_customer_service_request"
+                    attrs="{'invisible': [('customer', '=', False)]}" context="{'default_partner_id': active_id}">
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="total_installation_charge" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        </span>
+                        <span class="o_stat_text">Total Charge</span>
+                    </div>
+                </button>
+            </div>
+        </field>
+    </record>
+
     <!--  Partners inherited form -->
     <record id="isp_crm_module.view_subscriber_info_in_partner_info_form" model="ir.ui.view">
         <field name="name">subscriber.info.partner.info.form</field>

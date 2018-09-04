@@ -28,7 +28,7 @@
         <field name="arch" type="xml">
             <xpath  expr="//div/strong/field[@name='name']" position="before">
                 <p>
-                    <field name="opportunity_seq_id"/>
+                    <field name="opportunity_seq_id" readonly="1"/>
                 </p>
             </xpath>
         </field>
