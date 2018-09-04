@@ -48,7 +48,7 @@
           <entry key="csv" value="111" />
           <entry key="py" value="2787" />
           <entry key="txt" value="145" />
-          <entry key="xml" value="2240" />
+          <entry key="xml" value="2242" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -56,7 +56,7 @@
           <entry key="CSV" value="16" />
           <entry key="PLAIN_TEXT" value="240" />
           <entry key="Python" value="2787" />
-          <entry key="XML" value="2240" />
+          <entry key="XML" value="2242" />
         </counts>
       </usages-collector>
     </session>
