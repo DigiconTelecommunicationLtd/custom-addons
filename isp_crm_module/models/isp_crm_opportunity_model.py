@@ -9,6 +9,7 @@ class Opportunity(models.Model):
     _description = "Team of ISP CRM Opportunity."
 
     opportunity_seq_id = fields.Char('Opportunity ID', required=True, index=True, copy=False, default='New', readonly=True)
+    is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
 
     @api.model
     def create(self, vals):
@@ -21,24 +22,19 @@ class Opportunity(models.Model):
         res = {}
         for opportunity in self:
             first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
-            first_problem = self.env['isp_crm_module.problem'].search([])[0]
             service_req_obj = self.env['isp_crm_module.service_request'].search([])
 
             service_req_data = {
-                'problem' : first_problem.id,
+                'problem' : opportunity.name,
                 'stage' : first_stage.id,
                 'customer' : opportunity.partner_id.id,
                 'customer_email' : opportunity.partner_id.email,
                 'customer_mobile' : opportunity.partner_id.mobile,
             }
             service_req_obj.create(service_req_data)
-
-            # raise Warning("This is warning")
-            res = {'warning': {
-                'title': _('Warning'),
-                'message': _('My warning message.')
-            }}
-            return res
-        return res
+            opportunity.update({
+                'is_service_request_created' : True
+            })
+        return True
 
 

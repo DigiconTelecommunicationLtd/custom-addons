@@ -8,7 +8,13 @@
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
         <field name="arch" type="xml">
             <xpath  expr="//form/header/field[@name='stage_id']" position="before">
-                <button name="action_create_new_service_request" string="Create Service Request" type="object"  />
+                <field name="is_service_request_created" invisible="1"/>
+                <button
+                    name="action_create_new_service_request"
+                    string="Create Service Request"
+                    type="object"
+                    attrs="{'invisible': [('is_service_request_created', '=', True)]}"
+                />
             </xpath>
 
             <xpath  expr="//form/sheet/div/h1/field[@name='name']" position="before">

@@ -33,7 +33,7 @@ class ServiceRequest(models.Model):
             })
 
     name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
-    problem = fields.Many2one('isp_crm_module.problem', string="Problem", required=True, translate=True)
+    problem = fields.Char(string="Problem", required=True, translate=True)
     description = fields.Text('Description')
     stage = fields.Many2one('isp_crm_module.stage', string="Stage")
     assigned_to = fields.Many2one('res.users', string="Assigned To")

@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9ae9f36d-8e49-45c3-a272-75dc9b88c81a" name="Default Changelist" comment="Updated the opportunies sequence.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_product_line_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_product_line_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,17 +48,17 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="csv" value="111" />
-          <entry key="py" value="2648" />
+          <entry key="py" value="2787" />
           <entry key="txt" value="145" />
-          <entry key="xml" value="2087" />
+          <entry key="xml" value="2118" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSV" value="16" />
           <entry key="PLAIN_TEXT" value="240" />
-          <entry key="Python" value="2648" />
-          <entry key="XML" value="2087" />
+          <entry key="Python" value="2787" />
+          <entry key="XML" value="2118" />
         </counts>
       </usages-collector>
     </session>
@@ -73,8 +68,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="57" column="16" selection-start-line="57" selection-start-column="4" selection-end-line="57" selection-end-column="16" />
+            <state relative-caret-position="188">
+              <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -88,20 +83,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="30" column="64" selection-start-line="30" selection-start-column="64" selection-end-line="30" selection-end-column="64" />
+            <state relative-caret-position="437">
+              <caret line="19" column="41" lean-forward="true" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="16" column="52" lean-forward="true" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
+            <state relative-caret-position="379">
+              <caret line="35" column="43" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -201,8 +196,8 @@
       <find>partner_id=</find>
       <find>user_iduser_iduser_iduser_iduser_id</find>
       <find>product</find>
-      <find>pricelist_id</find>
       <find>isp_crm_module_service_request_action</find>
+      <find>pricelist_id</find>
     </findStrings>
     <replaceStrings>
       <replace>isp_crm_module.service_request</replace>
@@ -241,13 +236,13 @@
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_req_stage_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_menulist_views.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/__init__.py" />
-        <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_product_line_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml" />
-        <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml" />
+        <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" />
+        <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml" />
       </list>
     </option>
   </component>
@@ -601,13 +596,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="57" column="16" selection-start-line="57" selection-start-column="4" selection-end-line="57" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="335">
@@ -615,17 +603,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml">
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="30" column="64" selection-start-line="30" selection-start-column="64" selection-end-line="30" selection-end-column="64" />
+        <state relative-caret-position="188">
+          <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="16" column="52" lean-forward="true" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
+        <state relative-caret-position="379">
+          <caret line="35" column="43" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="19" column="41" lean-forward="true" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
         </state>
       </provider>
     </entry>
