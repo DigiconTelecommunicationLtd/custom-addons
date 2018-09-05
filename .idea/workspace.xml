@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9ae9f36d-8e49-45c3-a272-75dc9b88c81a" name="Default Changelist" comment="Updated the opportunies sequence.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,17 +49,17 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="csv" value="111" />
-          <entry key="py" value="2930" />
+          <entry key="py" value="3050" />
           <entry key="txt" value="145" />
-          <entry key="xml" value="2323" />
+          <entry key="xml" value="2339" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSV" value="16" />
           <entry key="PLAIN_TEXT" value="240" />
-          <entry key="Python" value="2930" />
-          <entry key="XML" value="2323" />
+          <entry key="Python" value="3050" />
+          <entry key="XML" value="2339" />
         </counts>
       </usages-collector>
     </session>
@@ -67,8 +69,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="805">
-              <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
+            <state relative-caret-position="-831">
+              <caret line="14" column="21" lean-forward="true" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -82,20 +84,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="5" column="32" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
+            <state relative-caret-position="322">
+              <caret line="29" column="44" selection-start-line="29" selection-start-column="44" selection-end-line="29" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="20" column="6" lean-forward="true" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
+            <state relative-caret-position="264">
+              <caret line="33" column="51" selection-start-line="33" selection-start-column="51" selection-end-line="33" selection-end-column="51" />
               <folding>
                 <element signature="e#101#140#0" expanded="true" />
               </folding>
@@ -241,10 +243,10 @@
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_product_line_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml" />
-        <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py" />
-        <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" />
+        <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml" />
+        <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" />
       </list>
     </option>
   </component>
@@ -388,12 +390,12 @@
     <frame x="52" y="-11" width="1869" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28451884" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.28451884" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39958158" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -551,13 +553,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="805">
-          <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3243">
@@ -609,20 +604,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="20" column="6" lean-forward="true" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
-          <folding>
-            <element signature="e#101#140#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="322">
+          <caret line="29" column="44" selection-start-line="29" selection-start-column="44" selection-end-line="29" selection-end-column="44" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml">
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="5" column="32" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
+        <state relative-caret-position="-831">
+          <caret line="14" column="21" lean-forward="true" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="33" column="51" selection-start-line="33" selection-start-column="51" selection-end-line="33" selection-end-column="51" />
+          <folding>
+            <element signature="e#101#140#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -4,6 +4,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import Warning
+from . import isp_crm_service_request_model
 
 class Opportunity(models.Model):
     _inherit = 'crm.lead'
@@ -30,8 +31,8 @@ class Opportunity(models.Model):
             service_req_obj = self.env['isp_crm_module.service_request'].search([])
 
             service_req_data = {
-                'problem' : opportunity.name,
-                'stage' : first_stage.id,
+                'problem' : opportunity.description,
+                'stage' : isp_crm_service_request_model.DEFAULT_STATES[0][0],
                 'customer' : opportunity.partner_id.id,
                 'customer_email' : opportunity.partner_id.email,
                 'customer_mobile' : opportunity.partner_id.mobile,

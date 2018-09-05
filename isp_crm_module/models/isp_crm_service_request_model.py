@@ -8,6 +8,12 @@ AVAILABLE_PRIORITIES = [
         ('2', 'High'),
 ]
 
+DEFAULT_STATES = [
+    ('new', 'New'),
+    ('core', 'Core'),
+    ('transmission', 'Transmission'),
+    ('done', 'Done'),
+]
 
 
 class ServiceRequest(models.Model):
@@ -35,7 +41,7 @@ class ServiceRequest(models.Model):
     name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
     problem = fields.Char(string="Problem", required=True, translate=True)
     description = fields.Text('Description')
-    stage = fields.Many2one('isp_crm_module.stage', string="Stage")
+    stage = fields.Selection(DEFAULT_STATES, string="Stage")
     assigned_to = fields.Many2one('res.users', string="Assigned To")
     customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True)])
     customer_email = fields.Char(related='customer.email', store=True)

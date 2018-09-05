@@ -27,7 +27,7 @@
                     name="action_create_new_service_request"
                     string="Create Service Request"
                     type="object"
-                    attrs="{'invisible': ['&amp;', ('is_service_request_created', '=', True), ('probability', '&lt;', 100)]}"
+                    attrs="{'invisible': ['|', ('is_service_request_created', '=', True), ('probability', '&lt;', 100)]}"
                 />
             </xpath>
 
