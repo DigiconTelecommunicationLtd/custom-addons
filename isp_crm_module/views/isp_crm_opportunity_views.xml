@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <odoo>
     <!--Making the mobile required-->
-    <record model="ir.ui.view" id="view_make_lead_mobile_required">
-        <field name="name">view.add.button.in.opportunity</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm.crm_case_form_view_leads" />
-        <field name="arch" type="xml">
-            <xpath  expr="//sheet/group/group/field[@name='mobile']" position="attributes">
-                <attribute name="required">1</attribute>
-            </xpath>
-        </field>
-    </record>
+    <!--<record model="ir.ui.view" id="view_make_lead_mobile_required">-->
+        <!--<field name="name">view.add.button.in.opportunity</field>-->
+        <!--<field name="model">crm.lead</field>-->
+        <!--<field name="inherit_id" ref="crm.crm_case_form_view_leads" />-->
+        <!--<field name="arch" type="xml">-->
+            <!--<xpath  expr="//sheet/group/group/field[@name='mobile']" position="attributes">-->
+                <!--<attribute name="required">1</attribute>-->
+            <!--</xpath>-->
+        <!--</field>-->
+    <!--</record>-->
     <!--End of the section-->
 
 

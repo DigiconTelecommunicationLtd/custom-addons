@@ -3,6 +3,7 @@
 
 
 from odoo import api, fields, models, _
+from odoo.exceptions import Warning
 
 class Opportunity(models.Model):
     _inherit = 'crm.lead'
@@ -15,6 +16,10 @@ class Opportunity(models.Model):
     def create(self, vals):
         if vals.get('opportunity_seq_id', 'New') == 'New':
             vals['opportunity_seq_id'] = self.env['ir.sequence'].next_by_code('crm.lead') or '/'
+
+        if (not vals.get('email_from')) or (not vals.get('phone')) or (not vals.get('mobile')):
+            raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
+
         return super(Opportunity, self).create(vals)
 
     @api.multi
