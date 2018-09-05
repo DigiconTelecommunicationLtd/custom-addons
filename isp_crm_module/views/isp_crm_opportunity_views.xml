@@ -1,16 +1,17 @@
 <?xml version="1.0"?>
 <odoo>
     <!--Making the mobile required-->
-    <!--<record model="ir.ui.view" id="view_make_lead_mobile_required">-->
-        <!--<field name="name">view.add.button.in.opportunity</field>-->
-        <!--<field name="model">crm.lead</field>-->
-        <!--<field name="inherit_id" ref="crm.crm_case_form_view_leads" />-->
-        <!--<field name="arch" type="xml">-->
-            <!--<xpath  expr="//sheet/group/group/field[@name='mobile']" position="attributes">-->
-                <!--<attribute name="required">1</attribute>-->
-            <!--</xpath>-->
-        <!--</field>-->
-    <!--</record>-->
+    <record model="ir.ui.view" id="view_add_phone_mobile_in_search">
+        <field name="name">view.add.phone.mobile.in.search</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_leads_filter" />
+        <field name="arch" type="xml">
+            <xpath  expr="//search/field[@name='name']" position="after">
+                <field name="phone"/>
+                <field name="mobile"/>
+            </xpath>
+        </field>
+    </record>
     <!--End of the section-->
 
 
@@ -26,7 +27,7 @@
                     name="action_create_new_service_request"
                     string="Create Service Request"
                     type="object"
-                    attrs="{'invisible': [('is_service_request_created', '=', True)]}"
+                    attrs="{'invisible': ['&amp;', ('is_service_request_created', '=', True), ('probability', '&lt;', 100)]}"
                 />
             </xpath>
 
