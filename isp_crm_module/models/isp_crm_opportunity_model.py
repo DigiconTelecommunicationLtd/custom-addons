@@ -36,9 +36,11 @@ class Opportunity(models.Model):
                 'customer' : opportunity.partner_id.id,
                 'customer_email' : opportunity.partner_id.email,
                 'customer_mobile' : opportunity.partner_id.mobile,
+                'opportunity_id' : opportunity.id,
             }
             service_req_obj.create(service_req_data)
             opportunity.update({
+                'color' : 2,
                 'is_service_request_created' : True
             })
         return True

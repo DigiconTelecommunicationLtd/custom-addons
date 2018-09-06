@@ -84,7 +84,7 @@
                 <field name="stage"/>
                 <field name="priority"/>
                 <field name="team"/>
-                <field name="is_service_request_closed"/>
+                <field name="is_done"/>
             </tree>
         </field>
     </record>
@@ -96,7 +96,16 @@
         <field name="arch" type="xml">
             <form string="Service Request">
                 <field name="pricelist_id" invisible="1"/>
+                <field name="is_done" invisible="1"/>
                 <header>
+                    <button
+                        name="action_make_service_request_done"
+                        string="Mark Done"
+                        type="object"
+                        help="Mark Done"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('is_done', '=', 'True')]}"
+                    />
                     <field name="stage" widget="statusbar" clickable="True"/>
                 </header>
                 <sheet>
@@ -127,7 +136,6 @@
                         <group>
                             <field name="team_leader"/>
                             <field name="priority"/>
-                            <field name="is_service_request_closed"/>
                         </group>
                     </group>
 

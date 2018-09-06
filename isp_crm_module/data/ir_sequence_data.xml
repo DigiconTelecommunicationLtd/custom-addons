@@ -10,7 +10,7 @@
             <field name="padding">8</field>
         </record>
 
-
+        <!--Sequences for lead or opportunity-->
         <record id="seq_crm_lead_opportunity" model="ir.sequence">
             <field name="name">Lead/Opportunity Sequence</field>
             <field name="code">crm.lead</field>
@@ -18,5 +18,12 @@
             <field name="padding">8</field>
         </record>
 
+        <!--Sequences for lead or Customer-->
+        <record id="seq_crm_customer" model="ir.sequence">
+            <field name="name">Customer Sequence</field>
+            <field name="code">res.partner</field>
+            <field name="prefix">C-</field>
+            <field name="padding">6</field>
+        </record>
     </data>
 </odoo>

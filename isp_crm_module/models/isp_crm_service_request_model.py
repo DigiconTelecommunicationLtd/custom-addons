@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import string
+import random
+
 from odoo import api, fields, models, _
 
 AVAILABLE_PRIORITIES = [
@@ -15,6 +18,7 @@ DEFAULT_STATES = [
     ('done', 'Done'),
 ]
 
+DEFAULT_PASSWORD_SIZE = 8
 
 class ServiceRequest(models.Model):
     """
@@ -52,7 +56,7 @@ class ServiceRequest(models.Model):
     project = fields.Many2one('project.project', string="Project")
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
     close_date = fields.Datetime('Close Date', readonly=True, default=None)
-    is_service_request_closed = fields.Boolean('Is Service Request Closed', default=False) # TODO-Arif: add a compute field for close date
+    is_service_request_closed = fields.Boolean('Is Service Request Closed', default=False)
     solutions = fields.Many2many('isp_crm_module.solution', string="Solutions")
     color = fields.Integer()
     is_done = fields.Boolean("Is Done", default=False)
@@ -63,9 +67,31 @@ class ServiceRequest(models.Model):
 
     amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_amount_all',
                                    track_visibility='always')
+    opportunity_id = fields.Many2one('crm.lead', string='Opportunity', readonly=True,
+                                   help="Opportunity for which the service Request created.")
+
+    def _create_random_password(self, size):
+            chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
+            return ''.join(random.choice(chars) for _ in range(size))
 
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
         return super(ServiceRequest, self).create(vals)
+
+    @api.multi
+    def action_make_service_request_done(self):
+        for service_req in self:
+            customer = service_req.customer
+            customer_subs_id = customer.subscriber_id
+            cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
+            # send mail in this section
+            # invoice generation
+            # Opportunity color change
+            opportunity = service_req.opportunity_id
+            opportunity.update({
+                'color' : 1
+            })
+        return True
+

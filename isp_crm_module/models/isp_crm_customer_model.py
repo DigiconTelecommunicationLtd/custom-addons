@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+
+
 from ast import literal_eval
 from odoo import api, fields, models, _
 from datetime import datetime
-
 
 GENDERS = [
     ('male', _('Male')),
@@ -35,7 +36,7 @@ class Customer(models.Model):
     @api.model
     def create(self, vals):
         if vals.get('subscriber_id', 'New') == 'New':
-            vals['subscriber_id'] = self.env['ir.sequence'].next_by_code('isp_crm.subscriber_id') or '/'
+            vals['subscriber_id'] = self.env['ir.sequence'].next_by_code('res.partner') or '/'
         return super(Customer, self).create(vals)
 
     @api.multi
@@ -57,6 +58,4 @@ class Customer(models.Model):
             customer_service_req_object = self.env['isp_crm_module.service_request'].search([('customer', '=', partner.id)])
             total_instllation_charge =  sum(req.amount_total for req in customer_service_req_object)
             partner.total_installation_charge = total_instllation_charge
-
-
 
