@@ -34,6 +34,7 @@
             <xpath  expr="//form/sheet/div/h1/field[@name='name']" position="before">
                 <p>
                     <field name="opportunity_seq_id"/>
+                    <!--<field name="color"/>-->
                 </p>
             </xpath>
         </field>
@@ -49,6 +50,15 @@
             <xpath  expr="//div/strong/field[@name='name']" position="before">
                 <p>
                     <field name="opportunity_seq_id" readonly="1"/>
+                </p>
+            </xpath>
+            <!--Added service request number and status in kanban cards view-->
+            <xpath  expr="//div/div/field[@name='tag_ids']" position="after">
+                <p>
+                    <small>
+                        <field name="current_service_request_id" readonly="1"/>
+                        (<field name="current_service_request_status" readonly="1"/>)
+                    </small>
                 </p>
             </xpath>
         </field>

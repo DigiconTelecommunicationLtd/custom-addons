@@ -83,15 +83,40 @@ class ServiceRequest(models.Model):
     @api.multi
     def action_make_service_request_done(self):
         for service_req in self:
+            service_req.update({
+                'is_done': True,
+            })
             customer = service_req.customer
             customer_subs_id = customer.subscriber_id
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
-            # send mail in this section
+            # Create an user
+            # user_created = self._create_user(name=customer.name, username=customer_subs_id, password=cust_password)
             # invoice generation
+            invoice_generated = self._create_invoice_for_customer(customer=customer)
+            # send mail in this section
+            invoice_sent = self._send_invoice_to_customer(customer=customer)
             # Opportunity color change
             opportunity = service_req.opportunity_id
             opportunity.update({
-                'color' : 1
+                'color' : 10,
+                'current_service_request_id': service_req.name,
+                'current_service_request_status': 'Done',
             })
         return True
 
+    def _create_user(self, username, password, name=''):
+        user_model = self.env['res.users']
+        vals_user = {
+            'name': name,
+            'login': username,
+            'password' : password,
+        }
+        # user_model.with_context({'no_reset_password': True}).create(vals_user)
+        return True
+
+    def _create_invoice_for_customer(self, customer):
+        sales_order_obj = self.env['sale.order'].search([('partner_id', '=', customer.id)], order='create_date asc')
+        return True
+
+    def _send_invoice_to_customer(self, customer):
+        pass

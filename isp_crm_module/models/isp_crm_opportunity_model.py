@@ -11,12 +11,15 @@ class Opportunity(models.Model):
     _description = "Team of ISP CRM Opportunity."
 
     opportunity_seq_id = fields.Char('Opportunity ID', required=True, index=True, copy=False, default='New', readonly=True)
+    current_service_request_id = fields.Char(string='Service Request ID', readonly=True, required=False)
+    current_service_request_status = fields.Char(string='Service Request ID', readonly=True, required=False)
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
 
     @api.model
     def create(self, vals):
         if vals.get('opportunity_seq_id', 'New') == 'New':
-            vals['opportunity_seq_id'] = self.env['ir.sequence'].next_by_code('crm.lead') or '/'
+            sequence_id = self.env['ir.sequence'].next_by_code('crm.lead') or '/'
+            vals['opportunity_seq_id'] = sequence_id
 
         if (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
             raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
@@ -38,9 +41,11 @@ class Opportunity(models.Model):
                 'customer_mobile' : opportunity.partner_id.mobile,
                 'opportunity_id' : opportunity.id,
             }
-            service_req_obj.create(service_req_data)
+            created_service_req_obj = service_req_obj.create(service_req_data)
             opportunity.update({
                 'color' : 2,
+                'current_service_request_id' : created_service_req_obj.name,
+                'current_service_request_status' : 'Processing',
                 'is_service_request_created' : True
             })
         return True
