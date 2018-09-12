@@ -30,10 +30,10 @@
         'views/isp_crm_stage_views.xml',
         'views/isp_crm_team_views.xml',
         'views/isp_crm_service_request_views.xml',
-        'views/isp_crm_menulist_views.xml',
         'views/templates.xml',
         'views/isp_crm_opportunity_views.xml',
         'views/isp_crm_customer_views.xml',
+        'views/isp_crm_menulist_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

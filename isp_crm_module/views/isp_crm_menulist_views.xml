@@ -7,6 +7,8 @@
               parent="crm.crm_menu_pipeline"
               sequence="2"/>
 
+
+
     <!--Service request menu-->
     <menuitem
         id="menu_isp_crm_module_service_request_act"
@@ -55,5 +57,11 @@
         action="isp_crm_module_team_action"
         parent="menu_isp_crm_configuration"
         groups="base.group_no_one"/>
+
+    <menuitem id="isp_crm_menu_potential_customer"
+              action="isp_crm_potential_customer_act_window"
+              name="Potential Customers"
+              parent="crm.crm_menu_pipeline"
+              sequence="3"/>
 
 </odoo>

@@ -32,6 +32,7 @@ class Customer(models.Model):
     connection_status = fields.Boolean(string='Connection Up', default=False, required=False)
     bill_cycle_date = fields.Date(string='Bill Cycle Date', required=False, default=None)
     total_installation_charge = fields.Monetary(compute='_compute_installation_charge', string="Total Instl. Charge")
+    is_potential_customer = fields.Boolean(string='Is This Customer potential or not?', default=True, required=False)
 
     @api.model
     def create(self, vals):
