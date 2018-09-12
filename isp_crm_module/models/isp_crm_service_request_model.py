@@ -4,6 +4,7 @@ import string
 import random
 
 from odoo import api, fields, models, _
+from odoo.exceptions import Warning
 
 AVAILABLE_PRIORITIES = [
         ('0', 'Normal'),
@@ -19,6 +20,8 @@ DEFAULT_STATES = [
 ]
 
 DEFAULT_PASSWORD_SIZE = 8
+
+OTC_PRODUCT_CODE = 'ISP-OTC'
 
 class ServiceRequest(models.Model):
     """
@@ -43,7 +46,7 @@ class ServiceRequest(models.Model):
             })
 
     name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
-    problem = fields.Char(string="Problem", required=True, translate=True)
+    problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
     description = fields.Text('Description')
     stage = fields.Selection(DEFAULT_STATES, string="Stage")
     assigned_to = fields.Many2one('res.users', string="Assigned To")
@@ -80,6 +83,10 @@ class ServiceRequest(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
         return super(ServiceRequest, self).create(vals)
 
+    def _default_account(self):
+        journal = self.env['account.journal'].search([('code', '=', 'INV')])[0]
+        return journal.default_credit_account_id.id
+
     @api.multi
     def action_make_service_request_done(self):
         for service_req in self:
@@ -90,11 +97,11 @@ class ServiceRequest(models.Model):
             customer_subs_id = customer.subscriber_id
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
             # Create an user
-            # user_created = self._create_user(name=customer.name, username=customer_subs_id, password=cust_password)
+            user_created = self._create_user(name=customer.name, username=customer_subs_id, password=cust_password)
             # invoice generation
-            invoice_generated = self._create_invoice_for_customer(customer=customer)
+            # invoice_generated = self.create_invoice_for_customer(customer=customer)
             # send mail in this section
-            invoice_sent = self._send_invoice_to_customer(customer=customer)
+            # invoice_sent = self.send_invoice_to_customer(invoice=invoice_generated)
             # Opportunity color change
             opportunity = service_req.opportunity_id
             opportunity.update({
@@ -111,12 +118,68 @@ class ServiceRequest(models.Model):
             'login': username,
             'password' : password,
         }
-        # user_model.with_context({'no_reset_password': True}).create(vals_user)
+        user_model.with_context({'no_reset_password': True}).create(vals_user)
         return True
 
-    def _create_invoice_for_customer(self, customer):
-        sales_order_obj = self.env['sale.order'].search([('partner_id', '=', customer.id)], order='create_date asc')
-        return True
+    def create_invoice_for_customer(self, customer):
+        sales_order_line_list = []
+        sales_order_line = None
+        sales_order_obj = self.env['sale.order'].search([('partner_id', '=', customer.id)], order='create_date asc', limit=1)
+        if len(sales_order_obj) > 0:
+            sales_order_line_list = [order_line for order_line in sales_order_obj.order_line if order_line.product_id.default_code != OTC_PRODUCT_CODE]
+        else:
+            raise Warning(_('You Have To create a Sales Order First.'))
 
-    def _send_invoice_to_customer(self, customer):
-        pass
+        if len(sales_order_line_list) > 0:
+            sales_order_line = sales_order_line_list[0]
+            invoice_line_data = self._create_invoice_line_from_sales_order_line(sales_order_line=sales_order_line)
+            invoice_obj = self.env['account.invoice']
+            invoice_data = {
+                'partner_id' : customer.id,
+                'invoice_line_ids' : [(0, 0, invoice_line_data)],
+            }
+            created_invoice_obj = invoice_obj.create(invoice_data)
+            if not created_invoice_obj:
+                return False
+        else:
+            raise Warning(_('You Have To create a Sales Order First.'))
+
+        return created_invoice_obj
+
+    def _create_invoice_line_from_sales_order_line(self, sales_order_line):
+        invoice_line_data = {}
+        invoice_line_data = {
+            'account_id'    : self._default_account(),
+            'product_id'    : sales_order_line.product_id.id,
+            'name'          : sales_order_line.name,
+            'quantity'      : sales_order_line.product_uom_qty,
+            'price_unit'    : sales_order_line.price_unit,
+            'amount_total'  : sales_order_line.price_unit * sales_order_line.price_unit,
+        }
+        return invoice_line_data
+
+    def send_invoice_to_customer(self, invoice):
+        self.ensure_one()
+        template = self.env.ref('account.email_template_edi_invoice', False)
+        compose_form = self.env.ref('mail.email_compose_message_wizard_form', False)
+        ctx = dict(
+                default_model='account.invoice',
+                default_res_id=invoice.id,
+                default_use_template=bool(template),
+                default_template_id=template and template.id or False,
+                default_composition_mode='comment',
+                mark_invoice_as_sent=True,
+                custom_layout="account.mail_template_data_notification_email_account_invoice",
+                force_email=True
+        )
+        return {
+            'name': _('Compose Email'),
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(compose_form.id, 'form')],
+            'view_id': compose_form.id,
+            'target': 'new',
+            'context': ctx,
+        }
