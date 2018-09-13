@@ -3,11 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9ae9f36d-8e49-45c3-a272-75dc9b88c81a" name="Default Changelist" comment="Updated the opportunies sequence.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/isp_crm_module/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_menulist_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_menulist_views.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,7 +20,7 @@
           <entry key="project.closed" value="2" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="2" />
-          <entry key="project.open.time.12" value="5" />
+          <entry key="project.open.time.12" value="6" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.16" value="1" />
@@ -32,7 +30,7 @@
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="3" />
-          <entry key="project.opened" value="20" />
+          <entry key="project.opened" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -53,31 +51,30 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="csv" value="111" />
-          <entry key="py" value="6130" />
+          <entry key="py" value="6156" />
           <entry key="txt" value="145" />
-          <entry key="xml" value="2879" />
+          <entry key="xml" value="2917" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSV" value="16" />
           <entry key="PLAIN_TEXT" value="240" />
-          <entry key="Python" value="6130" />
-          <entry key="XML" value="2879" />
+          <entry key="Python" value="6156" />
+          <entry key="XML" value="2917" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="99" column="50" selection-start-line="99" selection-start-column="50" selection-end-line="99" selection-end-column="50" />
+            <state relative-caret-position="455">
+              <caret line="101" column="47" selection-start-line="101" selection-start-column="47" selection-end-line="101" selection-end-column="47" />
               <folding>
                 <element signature="e#25#38#0" expanded="true" />
-                <marker date="1536754085621" expanded="true" signature="7016:7055" ph="..." />
               </folding>
             </state>
           </provider>
@@ -86,8 +83,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="99" column="24" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
+            <state relative-caret-position="335">
+              <caret line="106" column="44" selection-start-line="106" selection-start-column="44" selection-end-line="106" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -95,7 +92,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../odoo/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1056">
+            <state relative-caret-position="76406">
               <caret line="3357" column="34" selection-start-line="3357" selection-start-column="34" selection-end-line="3357" selection-end-column="34" />
             </state>
           </provider>
@@ -104,8 +101,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-120">
-              <caret line="34" column="25" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="25" />
+            <state relative-caret-position="260">
+              <caret line="34" column="100" selection-start-line="34" selection-start-column="96" selection-end-line="34" selection-end-column="100" />
               <folding>
                 <element signature="e#27#55#0" expanded="true" />
               </folding>
@@ -113,11 +110,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="471">
-              <caret line="95" column="53" selection-start-line="95" selection-start-column="16" selection-end-line="95" selection-end-column="53" />
+            <state relative-caret-position="448">
+              <caret line="99" column="91" selection-start-line="99" selection-start-column="91" selection-end-line="99" selection-end-column="91" />
             </state>
           </provider>
         </entry>
@@ -130,7 +127,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_menulist_views.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="471">
+            <state relative-caret-position="1357">
               <caret line="59" selection-start-line="59" selection-end-line="59" />
             </state>
           </provider>
@@ -139,7 +136,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/__manifest__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
+            <state relative-caret-position="805">
               <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
             </state>
           </provider>
@@ -148,7 +145,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
+            <state relative-caret-position="230">
               <caret line="12" column="45" selection-start-line="12" selection-start-column="45" selection-end-line="12" selection-end-column="45" />
               <folding>
                 <element signature="e#101#140#0" expanded="true" />
@@ -247,12 +244,12 @@
         <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_opportunity_views.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/data/ir_sequence_data.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" />
-        <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py" />
-        <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_menulist_views.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/__manifest__.py" />
+        <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py" />
+        <option value="$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml" />
       </list>
     </option>
   </component>
@@ -270,6 +267,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -304,7 +302,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -399,7 +396,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="53" y="-4" width="1867" height="1084" extended-state="6" />
+    <frame x="52" y="-11" width="1869" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
@@ -575,9 +572,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="667">
           <caret line="30" column="75" selection-start-line="30" selection-start-column="75" selection-end-line="30" selection-end-column="75" />
-          <folding>
-            <element signature="e#25#64#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -635,8 +629,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../odoo/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1056">
+        <state relative-caret-position="76406">
           <caret line="3357" column="34" selection-start-line="3357" selection-start-column="34" selection-end-line="3357" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/views.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_menulist_views.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1357">
+          <caret line="59" selection-start-line="59" selection-end-line="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="805">
+          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="12" column="45" selection-start-line="12" selection-start-column="45" selection-end-line="12" selection-end-column="45" />
+          <folding>
+            <element signature="e#101#140#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -647,65 +668,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="12" column="45" selection-start-line="12" selection-start-column="45" selection-end-line="12" selection-end-column="45" />
-          <folding>
-            <element signature="e#101#140#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/views.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/__manifest__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_menulist_views.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="59" selection-start-line="59" selection-end-line="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="95" column="53" selection-start-line="95" selection-start-column="16" selection-end-line="95" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_customer_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-120">
-          <caret line="34" column="25" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="25" />
+        <state relative-caret-position="260">
+          <caret line="34" column="100" selection-start-line="34" selection-start-column="96" selection-end-line="34" selection-end-column="100" />
           <folding>
             <element signature="e#27#55#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml">
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="99" column="24" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
+        <state relative-caret-position="455">
+          <caret line="101" column="47" selection-start-line="101" selection-start-column="47" selection-end-line="101" selection-end-column="47" />
+          <folding>
+            <element signature="e#25#38#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_service_request_model.py">
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_service_request_views.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="99" column="50" selection-start-line="99" selection-start-column="50" selection-end-line="99" selection-end-column="50" />
-          <folding>
-            <element signature="e#25#38#0" expanded="true" />
-            <marker date="1536754085621" expanded="true" signature="7016:7055" ph="..." />
-          </folding>
+        <state relative-caret-position="335">
+          <caret line="106" column="44" selection-start-line="106" selection-start-column="44" selection-end-line="106" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/isp_crm_module/views/isp_crm_customer_views.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="99" column="91" selection-start-line="99" selection-start-column="91" selection-end-line="99" selection-end-column="91" />
         </state>
       </provider>
     </entry>

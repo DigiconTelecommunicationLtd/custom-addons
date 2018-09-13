@@ -98,13 +98,13 @@
                 <field name="pricelist_id" invisible="1"/>
                 <field name="is_done" invisible="1"/>
                 <header>
+                    <!--attrs="{'invisible': [('is_done', '=', True)]}"-->
                     <button
                         name="action_make_service_request_done"
                         string="Mark Done"
                         type="object"
                         help="Mark Done"
                         class="oe_highlight"
-                        attrs="{'invisible': [('is_done', '=', True)]}"
                     />
                     <field name="stage" widget="statusbar" clickable="True"/>
                 </header>

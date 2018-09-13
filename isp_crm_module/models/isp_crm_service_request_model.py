@@ -98,6 +98,9 @@ class ServiceRequest(models.Model):
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
 
             # TODO: Add the potetial customer true
+            customer.update({
+                'is_potential_customer' : False
+            })
             # Create an user
             user_created = self._create_user(name=customer.name, username=customer_subs_id, password=cust_password)
             # invoice generation
