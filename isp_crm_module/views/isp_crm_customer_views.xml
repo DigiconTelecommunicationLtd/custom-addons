@@ -93,10 +93,20 @@
             <!--</xpath>-->
         </field>
     </record>
+    <!--Potential Customer List-->
     <record id="isp_crm_potential_customer_act_window" model="ir.actions.act_window">
         <field name="name">Potential Customers</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[('is_potential_customer', '=', True), ('customer', '=', True)]</field>
     </record>
+
+    <!--Only Customer List-->
+    <record id="isp_crm_customer_act_window" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_potential_customer', '=', False), ('customer', '=', True)]</field>
+    </record>
+
 </odoo>

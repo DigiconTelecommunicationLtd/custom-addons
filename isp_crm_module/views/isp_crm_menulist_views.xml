@@ -7,16 +7,13 @@
               parent="crm.crm_menu_pipeline"
               sequence="2"/>
 
-
-
     <!--Service request menu-->
     <menuitem
         id="menu_isp_crm_module_service_request_act"
         name="Service Requests"
         sequence="4"
         action="isp_crm_module_service_request_action"
-        parent="crm.crm_menu_pipeline"
-        groups="base.group_no_one"/>
+        parent="crm.crm_menu_pipeline"/>
 
     <!--Custom configuration menu-->
     <menuitem id="menu_isp_crm_configuration"
@@ -31,7 +28,6 @@
         action="isp_crm_module_problem_action"
         parent="menu_isp_crm_configuration"
         groups="base.group_no_one"/>
-
 
     <menuitem
         id="menu_isp_crm_module_solution_act"
@@ -49,7 +45,6 @@
         parent="menu_isp_crm_configuration"
         groups="base.group_no_one"/>
 
-
     <menuitem
         id="menu_isp_crm_module_lead_team_act"
         name="Teams"
@@ -58,10 +53,21 @@
         parent="menu_isp_crm_configuration"
         groups="base.group_no_one"/>
 
+    <!--Potential Customer menu-->
     <menuitem id="isp_crm_menu_potential_customer"
-              action="isp_crm_potential_customer_act_window"
-              name="Potential Customers"
-              parent="crm.crm_menu_pipeline"
-              sequence="3"/>
+        action="isp_crm_potential_customer_act_window"
+        name="Potential Customers"
+        parent="crm.crm_menu_root"
+        sequence="3"/>
+
+    <!--Customer menu-->
+    <menuitem id="isp_crm_menu_customer"
+        action="isp_crm_customer_act_window"
+        name="Customers"
+        parent="crm.crm_menu_root"
+        sequence="3"/>
+
+    <!--Deleting the Default custmer menu-->
+    <delete model="ir.ui.menu" id="base.action_partner_customer_form"/>
 
 </odoo>
