@@ -63,9 +63,9 @@
     </record>
 
 
-    <!--Adding ID in leads and opportunity kanban view-->
-    <record model="ir.ui.view" id="view_add_seq_id_in_opportunity">
-        <field name="name">view.add.seq.id.in.opportunity</field>
+    <!--Adding ID in leads and opportunity kanban view and removing priority-->
+    <record model="ir.ui.view" id="view_add_seq_id_and_remove_priority_from_opportunity_kanban">
+        <field name="name">view.add.seq.id.and.remove.priority.from.opportunity.kanban</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_kanban_view_leads" />
         <field name="arch" type="xml">
@@ -83,8 +83,28 @@
                     </small>
                 </p>
             </xpath>
+            <!--Making invisible 'priority'-->
+            <xpath expr="//div/div/field[@name='priority']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
         </field>
     </record>
+
+    <!--Remove priority from opportunity form view-->
+    <record model="ir.ui.view" id="view_remove_priority_from_opportunity_form">
+        <field name="name">view.remove.priority.from.opportunity.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <!--Making invisible 'priority'-->
+            <xpath expr="//group/field[@name='priority']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--crm_case_form_view_oppor-->
 
     <!--Adding ID in leads and lead form view-->
     <record model="ir.ui.view" id="view_add_seq_id_in_lead">
