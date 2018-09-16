@@ -1,14 +1,37 @@
 <?xml version="1.0"?>
 <odoo>
-    <!--Making the mobile required-->
+    <!--Adding id, phone and mobile in search-->
     <record model="ir.ui.view" id="view_add_phone_mobile_in_search">
         <field name="name">view.add.phone.mobile.in.search</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.view_crm_case_leads_filter" />
         <field name="arch" type="xml">
             <xpath  expr="//search/field[@name='name']" position="after">
+                <field name="opportunity_seq_id"/>
                 <field name="phone"/>
                 <field name="mobile"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
+    <!--Adding '*' in phone, mobile, email in search-->
+    <record model="ir.ui.view" id="view_add_star_phone_mobile_in_form">
+        <field name="name">view.add.star.phone.mobile.in.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_leads" />
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='email_from']" position="attributes">
+                <attribute name="string">Email *</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='phone']" position="attributes">
+                <attribute name="string">Phone *</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='mobile']" position="attributes">
+                <attribute name="string">Mobile *</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='priority']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
         </field>
     </record>
@@ -30,7 +53,6 @@
                     attrs="{'invisible': ['|', ('is_service_request_created', '=', True), ('probability', '&lt;', 100)]}"
                 />
             </xpath>
-
             <xpath  expr="//form/sheet/div/h1/field[@name='name']" position="before">
                 <p>
                     <field name="opportunity_seq_id"/>
@@ -77,6 +99,21 @@
             </xpath>
         </field>
     </record>
+
+
+    <!--Adding filter in Opportunity with ID-->
+    <record model="ir.ui.view" id="view_add_opportunity_id_in_search">
+        <field name="name">view.add.opportunity.id.in.search</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter" />
+        <field name="arch" type="xml">
+            <xpath  expr="//search/field[@name='name']" position="after">
+                <field name="opportunity_seq_id"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
 
 
 

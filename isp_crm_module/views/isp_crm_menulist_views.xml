@@ -68,6 +68,6 @@
         sequence="3"/>
 
     <!--Deleting the Default custmer menu-->
-    <delete model="ir.ui.menu" id="base.action_partner_customer_form"/>
+    <delete model="ir.ui.menu" id="crm.res_partner_menu_crm" />
 
 </odoo>

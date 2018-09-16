@@ -12,7 +12,7 @@ class Opportunity(models.Model):
     _inherit = 'crm.lead'
     _description = "Team of ISP CRM Opportunity."
 
-    opportunity_seq_id = fields.Char('Opportunity ID', required=True, index=True, copy=False, default='New', readonly=True)
+    opportunity_seq_id = fields.Char('ID', required=True, index=True, copy=False, default='New', readonly=True)
     current_service_request_id = fields.Char(string='Service Request ID', readonly=True, required=False)
     current_service_request_status = fields.Char(string='Service Request ID', readonly=True, required=False)
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
