@@ -34,6 +34,7 @@
                 <group>
                     <group>
                         <field name="name"/>
+                        <field name="sequence"/>
                         <field name="team_id"/>
                         <field name="fold"/>
                         <separator string="Requirements"/>

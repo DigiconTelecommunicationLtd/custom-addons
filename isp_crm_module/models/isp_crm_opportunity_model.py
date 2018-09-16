@@ -32,12 +32,12 @@ class Opportunity(models.Model):
     def action_create_new_service_request(self):
         res = {}
         for opportunity in self:
-            first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
+            first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New'),], order="sequence asc")[0]
             service_req_obj = self.env['isp_crm_module.service_request'].search([])
 
             service_req_data = {
                 'problem' : opportunity.description or DEFAULT_PROBLEM,
-                'stage' : isp_crm_service_request_model.DEFAULT_STATES[0][0],
+                'stage' : first_stage.id,
                 'customer' : opportunity.partner_id.id,
                 'customer_email' : opportunity.partner_id.email,
                 'customer_mobile' : opportunity.partner_id.mobile,
