@@ -34,6 +34,7 @@
         'views/isp_crm_opportunity_views.xml',
         'views/isp_crm_customer_views.xml',
         'views/isp_crm_menulist_views.xml',
+        'views/isp_crm_cron_job_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

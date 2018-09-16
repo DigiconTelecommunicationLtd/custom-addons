@@ -100,16 +100,15 @@ class ServiceRequest(models.Model):
             customer_subs_id = customer.subscriber_id
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
 
-            # TODO: Add the potetial customer true
             customer.update({
                 'is_potential_customer' : False
             })
             # Create an user
-            user_created = self._create_user(name=customer.name, username=customer_subs_id, password=cust_password)
+            # user_created = self._create_user(name=customer.name, username=customer_subs_id, password=cust_password)
             # invoice generation
-            # invoice_generated = self.create_invoice_for_customer(customer=customer)
+            invoice_generated = self.create_invoice_for_customer(customer=customer)
             # send mail in this section
-            # invoice_sent = self.send_invoice_to_customer(invoice=invoice_generated)
+            invoice_sent = self.send_invoice_to_customer(invoice=invoice_generated)
             # Opportunity color change
             opportunity = service_req.opportunity_id
             opportunity.update({
@@ -142,7 +141,7 @@ class ServiceRequest(models.Model):
         """
         today_datetime = datetime.now()
         customer.update({
-            'bill_cycle_date' : int(today_datetime.day)
+            'bill_cycle_date' : int(today_datetime.day) + int(7)
         })
         return True
 
@@ -154,7 +153,7 @@ class ServiceRequest(models.Model):
         if len(sales_order_obj) > 0:
             sales_order_line_list = [order_line for order_line in sales_order_obj.order_line if order_line.product_id.default_code != OTC_PRODUCT_CODE]
         else:
-            raise Warning(_('You Have To create a Sales Order First.'))
+            print('You Have To create a Sales Order First.')
 
         if len(sales_order_line_list) > 0:
             sales_order_line = sales_order_line_list[0]
@@ -167,10 +166,11 @@ class ServiceRequest(models.Model):
             created_invoice_obj = invoice_obj.create(invoice_data)
             if not created_invoice_obj:
                 return False
+            else:
+                return created_invoice_obj
         else:
-            raise Warning(_('You Have To create a Sales Order First.'))
+            print('You Have To create a Sales Order First.')
 
-        return created_invoice_obj
 
     def _create_invoice_line_from_sales_order_line(self, sales_order_line):
         invoice_line_data = {}
@@ -180,12 +180,11 @@ class ServiceRequest(models.Model):
             'name'          : sales_order_line.name,
             'quantity'      : sales_order_line.product_uom_qty,
             'price_unit'    : sales_order_line.price_unit,
-            'amount_total'  : sales_order_line.price_unit * sales_order_line.price_unit,
         }
         return invoice_line_data
 
     def send_invoice_to_customer(self, invoice):
-        self.ensure_one()
+        # self.ensure_one()
         template = self.env.ref('account.email_template_edi_invoice', False)
         compose_form = self.env.ref('mail.email_compose_message_wizard_form', False)
         ctx = dict(
