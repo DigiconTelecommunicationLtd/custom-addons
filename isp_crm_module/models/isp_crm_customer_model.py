@@ -30,7 +30,7 @@ class Customer(models.Model):
     connection_type = fields.Many2one('isp_crm.connection_type', default=False, required=False, string='Connection Type')
     connection_media = fields.Many2one('isp_crm.connection_media', default=False, required=False, string='Connection Media' )
     connection_status = fields.Boolean(string='Connection Up', default=False, required=False)
-    bill_cycle_date = fields.Date(string='Bill Cycle Date', required=False, default=None)
+    bill_cycle_date = fields.Integer(string='Bill Cycle Date', required=False, default=None, readonly=True)
     total_installation_charge = fields.Monetary(compute='_compute_installation_charge', string="Total Instl. Charge")
     is_potential_customer = fields.Boolean(string='Is This Customer potential or not?', default=True, required=False)
 

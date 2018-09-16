@@ -2,9 +2,12 @@
 
 import string
 import random
+from datetime import datetime, timedelta
+
 
 from odoo import api, fields, models, _
 from odoo.exceptions import Warning
+
 
 AVAILABLE_PRIORITIES = [
         ('0', 'Normal'),
@@ -114,6 +117,10 @@ class ServiceRequest(models.Model):
                 'current_service_request_id': service_req.name,
                 'current_service_request_status': 'Done',
             })
+
+            # Update customer's bill date.
+            self.update_bill_cycle_date(customer=customer)
+
         return True
 
     def _create_user(self, username, password, name=''):
@@ -125,6 +132,20 @@ class ServiceRequest(models.Model):
         }
         user_model.with_context({'no_reset_password': True}).create(vals_user)
         return True
+
+    def update_bill_cycle_date(self, customer):
+        """
+        Updates bill cycle date of customer in technical information
+
+        :param customer:
+        :return: Boolean
+        """
+        today_datetime = datetime.now()
+        customer.update({
+            'bill_cycle_date' : int(today_datetime.day)
+        })
+        return True
+
 
     def create_invoice_for_customer(self, customer):
         sales_order_line_list = []
@@ -188,3 +209,4 @@ class ServiceRequest(models.Model):
             'target': 'new',
             'context': ctx,
         }
+
