@@ -63,7 +63,7 @@ class ServiceRequest(models.Model):
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
     close_date = fields.Datetime('Close Date', readonly=True, default=None)
     is_service_request_closed = fields.Boolean('Is Service Request Closed', default=False)
-    solutions = fields.Many2many('isp_crm_module.solution', string="Solutions")
+    solution_ids = fields.One2many('isp_crm_module.solution_line', 'service_request_id', string="Solutions", copy=True, auto_join=True)
     color = fields.Integer()
     is_done = fields.Boolean("Is Done", default=False)
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist',  readonly=True,

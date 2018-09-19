@@ -143,9 +143,34 @@
                         <page string="Description">
                             <field name="description"/>
                         </page>
+                        <!--Solutions list-->
                         <page string="Solutions">
-                            <field name="solutions"/>
+                            <field name="solution_ids" mode="tree">
+                                <!--solution line form-->
+                                <form string="Solutions">
+                                    <group>
+                                        <group>
+                                            <field name="solution_id" force_save="1"/>
+                                            <field name="name" class="oe_inline"/>
+                                            <field name="assigned_to_id" invisible="1" />
+                                            <field name="is_done" class="oe_inline"/>
+                                        </group>
+                                    </group>
+                                </form>
+                                <!--solution line tree-->
+                                <tree string="Product Lines" editable="bottom" >
+                                    <field name="solution_id" force_save="1"/>
+                                    <field name="name" />
+                                    <field name="assigned_to_id" invisible="1" />
+                                    <field name="is_done" />
+                                </tree>
+                            </field>
                         </page>
+
+
+
+
+
                         <!--Product Line-->
                         <page string="Installation Charge">
                             <field name="product_line" mode="tree,kanban">
