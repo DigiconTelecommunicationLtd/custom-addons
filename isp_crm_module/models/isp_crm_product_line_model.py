@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-from odoo.addons import decimal_precision as dp
+# from odoo.addons import decimal_precision as dp
+import odoo.addons.decimal_precision as dp
+
 
 AVAILABLE_PRIORITIES = [
         ('0', 'Normal'),
