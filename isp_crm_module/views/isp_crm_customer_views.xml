@@ -77,7 +77,7 @@
                 <page string="Technical Information">
                     <group>
                         <group>
-                            <field name="connection_status" string="Bill Cycle Date"/>
+                            <field name="package_id" string="Package ID"/>
                             <field name="bill_cycle_date" string="Bill Cycle Date"/>
                             <field name="service_type" string="Service Type"/>
                             <field name="connection_type" string="Connection Type"/>
@@ -86,13 +86,9 @@
                     </group>
                 </page>
             </xpath>
-
-
-            <!--<xpath expr="//notebook/page[@name='sales_purchases']" position="attributes" >-->
-                <!--<attribute name="groups">isp_crm_module.sd_user_group</attribute>-->
-            <!--</xpath>-->
         </field>
     </record>
+
     <!--Potential Customer List-->
     <record id="isp_crm_potential_customer_act_window" model="ir.actions.act_window">
         <field name="name">Potential Customers</field>

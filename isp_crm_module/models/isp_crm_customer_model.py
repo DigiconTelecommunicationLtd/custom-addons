@@ -33,6 +33,8 @@ class Customer(models.Model):
     bill_cycle_date = fields.Integer(string='Bill Cycle Date', required=False, default=None, readonly=True)
     total_installation_charge = fields.Monetary(compute='_compute_installation_charge', string="Total Instl. Charge")
     is_potential_customer = fields.Boolean(string='Is This Customer potential or not?', default=True, required=False)
+    package_id = fields.Many2one('product.product', string='Package', domain=[('sale_ok', '=', True)],
+                                 change_default=True, ondelete='restrict')
 
     @api.model
     def create(self, vals):
