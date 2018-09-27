@@ -76,6 +76,8 @@ class ServiceRequest(models.Model):
     opportunity_id = fields.Many2one('crm.lead', string='Opportunity', readonly=True,
                                    help="Opportunity for which the service Request created.")
 
+    is_helpdesk_ticket = fields.Boolean("Is Ticket", default=False)
+
     def _create_random_password(self, size):
             chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
             return ''.join(random.choice(chars) for _ in range(size))

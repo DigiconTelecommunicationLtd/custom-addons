@@ -1,0 +1,278 @@
+[33mcommit e56f8526d5dc95f1bb994cb7cc532a5575661060[m[33m ([m[1;36mHEAD -> [m[1;32mnew_ticket_page[m[33m, [m[1;31morigin/new_ticket_page[m[33m, [m[1;31morigin/develop[m[33m)[m
+Merge: 3505b78 d66e9e7
+Author: Tahseen Anam <tahseen.anam@cg-bd.com>
+Date:   Wed Sep 26 08:54:50 2018 +0000
+
+    Merged in isp_crm_package_id (pull request #1)
+    
+    Isp crm package id
+
+[33mcommit d66e9e7a03907469233c32fe6234be6dd967cf8e[m
+Author: TahseenAnam <tahseen.anam@cg-bd.com>
+Date:   Mon Sep 24 14:13:25 2018 +0600
+
+    Added Package-id in isp_crm_customer_model.py file and in Technical Information page
+
+[33mcommit 3505b7880574885ce7a57c991daaef1a9952349c[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Mon Sep 24 13:13:45 2018 +0600
+
+    Added sale account and crm in depends list.
+
+[33mcommit 2f307cb3c7ecc02dfe1dff7274101be46386d9de[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Sep 19 17:30:29 2018 +0600
+
+    Added solution line in solutions in service request.
+
+[33mcommit 377567d48d6640195f6efe512d056017585ffe95[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Sun Sep 16 17:53:26 2018 +0600
+
+    Added stage according to sequences
+
+[33mcommit 54bd7513786440610290ae79d8d9f51b08abe63e[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Sun Sep 16 16:53:13 2018 +0600
+
+    Removed priority from different views.
+
+[33mcommit 61a597fe1e83ea1dae935afeec0ac6c9f777b6c2[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Sun Sep 16 15:55:12 2018 +0600
+
+    Added filter in opportunity and leads
+
+[33mcommit 3bd240ce6c070058ac4475f5debb1327e8ef859f[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Sun Sep 16 12:40:05 2018 +0600
+
+    Added cron job for auto creating invoice.
+
+[33mcommit 32be0d5bea56ceb1351b80f99c48169dce6a7f1b[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Sun Sep 16 10:38:23 2018 +0600
+
+    Added bill cycle date.
+
+[33mcommit df15406b3aad369b6d4fcb4ca1419a214f22a015[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Sun Sep 16 09:56:04 2018 +0600
+
+    Added some view changes.
+
+[33mcommit d5c8e15f1332ccfb86b811b9c2937dbfab1a5dc5[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Thu Sep 13 11:15:44 2018 +0600
+
+    Added potential customer.
+
+[33mcommit c5386a907fdb69aaaaae739f19e28d4af687e575[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Sep 12 18:08:29 2018 +0600
+
+    Added customer menu
+
+[33mcommit d780a140ceb90d85973ba84bd52efef663975aa3[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Sep 12 16:58:50 2018 +0600
+
+    Added the mark done button in service request and fuctionality.
+
+[33mcommit b344b50e3280442b992e8464afe56ebd1029ec74[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Sep 11 18:01:10 2018 +0600
+
+    Added service request status in opportunity
+
+[33mcommit 5e2558a5697146e17f3e45648f0c5a919ac21fd8[m[33m ([m[1;31morigin/aditdevelop[m[33m)[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Thu Sep 6 14:59:18 2018 +0600
+
+    Added mark done in service request.
+
+[33mcommit 592c990b74ae9df7f85a09d20c96ecd003e59cf3[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Sep 5 17:56:09 2018 +0600
+
+    Added the features.
+
+[33mcommit 3263da4b5b6432e4fd2ad985ad8f0b061be28562[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Sep 5 16:17:11 2018 +0600
+
+    Added phone and mobile in search
+
+[33mcommit 388c153051e918c40e308117253c0053ea0e45b8[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Sep 5 15:43:03 2018 +0600
+
+    Added warning msg in creating leads.
+
+[33mcommit 85ae932831631a9b7b2a19296e8efe92c6c031f1[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Sep 4 16:18:07 2018 +0600
+
+    Fixed some error.
+
+[33mcommit c61ab9184197406bbd77ba3f40cacdb0c2e531e1[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Sep 4 16:09:32 2018 +0600
+
+    Made mobile required in leads.
+
+[33mcommit dfd480b1c8f11df865b7b8a95b709d93e87590da[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Sep 4 15:57:13 2018 +0600
+
+    Added the only service creation.
+
+[33mcommit 619ce15cfff30463883c9e94ba57f77915abb01d[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Sep 4 15:19:26 2018 +0600
+
+    Added installation charge and updated some fields in opportunity.
+
+[33mcommit f9441acd0eca8199c37937004803856e8ea4ba55[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Mon Sep 3 18:04:23 2018 +0600
+
+    Added service request product line.
+
+[33mcommit 9fee474966da8c4b334d35b47169679f6e385bbe[m
+Author: Md. Akhter-uz-zaman Arif <arif.cse28@gmail.com>
+Date:   Mon Sep 3 00:54:11 2018 +0600
+
+    Added new feature in isp_crm_module.
+
+[33mcommit 5d1b4553baa002c15a8ac6e55dba541cc8bb1c93[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Thu Aug 30 17:54:11 2018 +0600
+
+    Added service request.
+
+[33mcommit a68eb0cc8f5ca8cc4f30d45ce03a1a123ae64f0b[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Mon Aug 27 17:10:44 2018 +0600
+
+    Added service request.
+
+[33mcommit 27f8ddf8c1725ea50d73c494133602e1e115cf80[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Mon Aug 27 17:09:59 2018 +0600
+
+    Added service requests.
+
+[33mcommit 95a9fc2f9896a21f343610f89688a3979eb1ebcf[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Mon Aug 27 11:41:26 2018 +0600
+
+    renamed isp_crm folder.
+
+[33mcommit d7383bff35aa314be25a6089b7d86257d0fc4178[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Sun Aug 26 14:56:59 2018 +0600
+
+    Added access permission in res.partner view.
+
+[33mcommit ce97ad6de9f9270f3e5842cdd51eb8416b010957[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Thu Aug 16 11:19:07 2018 +0600
+
+    removed the bottom odoo.
+
+[33mcommit 0ccd20297d802d1676526af5ca4948bc7b031628[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Thu Aug 16 10:42:20 2018 +0600
+
+    Removed the odoo logo from bottom.
+
+[33mcommit d6da949e0909a621c64127caf79c3516461152d0[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Thu Aug 16 10:32:24 2018 +0600
+
+    added a user group.
+
+[33mcommit e57515dc44db910bfff0ca94eac08c999f36ea86[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Aug 14 18:02:48 2018 +0600
+
+    added the group filter.
+
+[33mcommit 000ffcb7f8cdc2810a021458d30f5977593035d2[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Aug 14 15:11:22 2018 +0600
+
+    Added Updated the opportunities position.
+
+[33mcommit 226aed5c42dc545744a4d81f8136b3f345845864[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Sun Aug 12 16:13:47 2018 +0600
+
+    Added some changes on different module and alson made a crron-job.
+
+[33mcommit c4b48f2348878f99913f19c33eeec16fe6ada3ec[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Aug 8 12:01:36 2018 +0600
+
+    Changed name of opportunity and added package.
+
+[33mcommit e7b1a2d9be0337ae6e0dddebb7e8a3f36e3f421f[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Aug 7 15:09:53 2018 +0600
+
+    Added the views in leads view.
+
+[33mcommit c6d2b268ef385e0feb290e4013a790ce261ab5f1[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Aug 7 15:06:36 2018 +0600
+
+    Added order_by create_date in leads.
+
+[33mcommit 719fffbe1bb87f22b7fd17e6308c6d785146c671[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Aug 7 14:57:21 2018 +0600
+
+    added order_by created_date in leads list.
+
+[33mcommit b234436548196ce5163185c5b47a34f7c1196c89[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Aug 7 14:53:01 2018 +0600
+
+    Added order_by create_date in leads.
+
+[33mcommit d972bb99b764a069b20e87f9311d2555b753cb1b[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Tue Aug 7 14:51:50 2018 +0600
+
+    Added order_by create_date in leads.
+
+[33mcommit 9eb9eeb64e1812123a9beec524810a2a80eb9005[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Mon Aug 6 12:40:13 2018 +0600
+
+    Fixed the error in sp_crm
+
+[33mcommit 9b16a66b0bcd27eb4a861345716bb3a4eba186dd[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Aug 1 10:46:04 2018 +0600
+
+    Added custom addons
+
+[33mcommit a140fcacac7b76977ea5bd9c97e10ab8083d2917[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Aug 1 10:41:22 2018 +0600
+
+    Added new custome addons.
+
+[33mcommit 0f88f662ec80c3921d3ae931d8f3af3b95fe8d3a[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Mon Jul 16 16:12:52 2018 +0600
+
+    Added new custome addons.
+
+[33mcommit 398d57dc7a119dae598bc5c4cc7438a4fcd991d8[m
+Author: Md. Akhter-uz-zaman <arif.cse28@gmail.com>
+Date:   Wed Jul 11 17:11:57 2018 +0600
+
+    First commit
