@@ -2,9 +2,11 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 
+import re
 from odoo import api, fields, models, _
-from odoo.exceptions import Warning
+from odoo.exceptions import Warning, UserError
 from . import isp_crm_service_request_model
+
 
 DEFAULT_PROBLEM = "There are some Problem"
 
@@ -16,6 +18,24 @@ class Opportunity(models.Model):
     current_service_request_id = fields.Char(string='Service Request ID', readonly=True, required=False)
     current_service_request_status = fields.Char(string='Service Request ID', readonly=True, required=False)
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
+
+    @api.onchange('email_from')
+    def onchange_email(self):
+        if self.email_from:
+            if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", self.email_from) == None:
+                raise UserError(_('Please Enter a Valid Email Address!'))
+
+    @api.onchange('mobile')
+    def onchange_mobile(self):
+        if self.mobile:
+            if re.match("^([0-9]+-)*[0-9]+$", self.mobile) == None:
+                raise UserError(_('Please Enter a Valid Mobile Number!'))
+
+    @api.onchange('phone')
+    def onchange_phone(self):
+        if self.phone:
+            if re.match("^([0-9]+-)*[0-9]+$", self.phone) == None:
+                raise UserError(_('Please Enter a Valid Phone Number!'))
 
     @api.model
     def create(self, vals):
