@@ -19,6 +19,21 @@ class Opportunity(models.Model):
     current_service_request_status = fields.Char(string='Service Request ID', readonly=True, required=False)
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
 
+    @api.multi
+    def action_set_won(self):
+        for lead in self:
+            # TODO Arif: `invoice_status` will be added later. Now checking status will be `confirm_sale`
+            sale_confirmed = False
+            for order in lead.order_ids:
+                if order.state == 'sale':
+                    sale_confirmed = True
+                    break
+            if not sale_confirmed:
+                raise UserError(_("This Opportunity's Sale has not been confirmed.\n Confirm Sale First."))
+            else:
+                super(Opportunity, lead).action_set_won()
+        return True
+
     @api.onchange('email_from')
     def onchange_email(self):
         if self.email_from:
@@ -71,5 +86,6 @@ class Opportunity(models.Model):
                 'is_service_request_created' : True
             })
         return True
+
 
 
