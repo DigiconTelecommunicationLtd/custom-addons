@@ -69,3 +69,14 @@ docs/_build/
 .cprofile_*
 node_modules
 package-lock.json
+
+# dotfiles
+.*
+# compiled python files
+*.py[co]
+# emacs backup files
+*~
+# runbot work files
+runbot/static/build
+runbot/static/repo
+runbot/static/nginx

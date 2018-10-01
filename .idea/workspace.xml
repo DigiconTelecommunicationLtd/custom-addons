@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9ae9f36d-8e49-45c3-a272-75dc9b88c81a" name="Default Changelist" comment="Updated the opportunies sequence.">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,6 +36,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="csv" value="3" />
+          <entry key="gitignore" value="1" />
           <entry key="py" value="89" />
           <entry key="xml" value="70" />
         </counts>
@@ -42,7 +44,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSV" value="2" />
-          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="PLAIN_TEXT" value="2" />
           <entry key="Python" value="89" />
           <entry key="XML" value="70" />
         </counts>
@@ -51,6 +53,7 @@
         <counts>
           <entry key="csv" value="111" />
           <entry key="dummy" value="15" />
+          <entry key="gitignore" value="2" />
           <entry key="py" value="8032" />
           <entry key="txt" value="145" />
           <entry key="xml" value="3785" />
@@ -59,7 +62,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSV" value="16" />
-          <entry key="PLAIN_TEXT" value="255" />
+          <entry key="PLAIN_TEXT" value="257" />
           <entry key="Python" value="8032" />
           <entry key="XML" value="3785" />
         </counts>
@@ -69,22 +72,22 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/isp_helpdesk/controllers/ticket_controller.py">
+        <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="11" column="9" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="9" />
+            <state relative-caret-position="533">
+              <caret line="31" column="73" lean-forward="true" selection-start-line="31" selection-start-column="73" selection-end-line="31" selection-end-column="73" />
+              <folding>
+                <element signature="e#101#110#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="579">
-              <caret line="33" column="42" selection-start-line="33" selection-start-column="42" selection-end-line="33" selection-end-column="42" />
-              <folding>
-                <element signature="e#101#110#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="572">
+              <caret line="81" column="19" selection-start-line="81" selection-start-column="19" selection-end-line="81" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -242,6 +245,7 @@
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_product_line_model.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/__manifest__.py" />
         <option value="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -372,13 +376,13 @@
     <frame x="52" y="-11" width="1869" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3308026" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3308026" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3294979" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.5376569" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.2290795" />
+      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.2290795" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3294979" />
@@ -457,13 +461,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/isp_crm_module/models/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" selection-start-line="2" selection-end-line="14" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/isp_crm_old/views/inherited_views.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -759,11 +756,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="579">
-          <caret line="33" column="42" selection-start-line="33" selection-start-column="42" selection-end-line="33" selection-end-column="42" />
+        <state relative-caret-position="533">
+          <caret line="31" column="73" lean-forward="true" selection-start-line="31" selection-start-column="73" selection-end-line="31" selection-end-column="73" />
           <folding>
             <element signature="e#101#110#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="572">
+          <caret line="81" column="19" selection-start-line="81" selection-start-column="19" selection-end-line="81" selection-end-column="19" />
         </state>
       </provider>
     </entry>
