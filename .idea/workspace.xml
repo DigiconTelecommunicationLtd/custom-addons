@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9ae9f36d-8e49-45c3-a272-75dc9b88c81a" name="Default Changelist" comment="Updated the opportunies sequence.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/isp_crm_module/models/isp_crm_opportunity_model.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
