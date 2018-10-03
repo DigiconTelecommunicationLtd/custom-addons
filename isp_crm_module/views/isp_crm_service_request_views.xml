@@ -260,6 +260,12 @@
                                     <field name="price_subtotal"/>
                                 </tree>
                             </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="order_line_total" />
+                                </div>
+                                <field name="order_line_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            </group>
                         </page>
                         <!--end of order line-->
                     </notebook>
