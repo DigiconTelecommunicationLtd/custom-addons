@@ -11,3 +11,4 @@ from . import isp_crm_customer_model
 from . import isp_crm_product_line_model
 from . import isp_crm_cron_job_model
 from . import isp_crm_solution_line_model
+from . import isp_crm_sales_order_line_model

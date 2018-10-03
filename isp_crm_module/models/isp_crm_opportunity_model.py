@@ -19,6 +19,7 @@ class Opportunity(models.Model):
     current_service_request_status = fields.Char(string='Service Request ID', readonly=True, required=False)
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
 
+
     @api.multi
     def action_set_won(self):
         for lead in self:
@@ -70,6 +71,12 @@ class Opportunity(models.Model):
             first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New'),], order="sequence asc")[0]
             service_req_obj = self.env['isp_crm_module.service_request'].search([])
 
+            for order in opportunity.order_ids:
+                if order.state == 'sale':
+                    confirmed_sale_order_id = order.id
+                    sale_order_line_obj = self.env['sale.order.line'].search([('order_id', '=', confirmed_sale_order_id)])
+                    break
+
             service_req_data = {
                 'problem' : opportunity.description or DEFAULT_PROBLEM,
                 'stage' : first_stage.id,
@@ -77,8 +84,14 @@ class Opportunity(models.Model):
                 'customer_email' : opportunity.partner_id.email,
                 'customer_mobile' : opportunity.partner_id.mobile,
                 'opportunity_id' : opportunity.id,
+                'confirmed_sale_order_id' : confirmed_sale_order_id,
             }
             created_service_req_obj = service_req_obj.create(service_req_data)
+            if len(sale_order_line_obj) > 0:
+                for sale_order_line in sale_order_line_obj:
+                    sale_order_line.update({
+                        'service_request_id' : created_service_req_obj.id
+                    })
             opportunity.update({
                 'color' : 2,
                 'current_service_request_id' : created_service_req_obj.name,

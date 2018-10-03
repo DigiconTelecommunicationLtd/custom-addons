@@ -97,6 +97,7 @@
             <form string="Service Request">
                 <field name="pricelist_id" invisible="1"/>
                 <field name="is_done" invisible="1"/>
+                <field name="confirmed_sale_order_id" invisible="1"/>
                 <header>
                     <!--attrs="{'invisible': [('is_done', '=', True)]}"-->
                     <button
@@ -167,12 +168,8 @@
                             </field>
                         </page>
 
-
-
-
-
                         <!--Product Line-->
-                        <page string="Installation Charge">
+                        <page string="Installation Materials">
                             <field name="product_line" mode="tree,kanban">
                                 <form string="Product Lines">
                                     <group>
@@ -248,6 +245,23 @@
                             <div class="oe_clear"/>
                         </page>
                         <!--End Of product Line-->
+
+                        <!--showing order lines-->
+                        <page string="Service Lines">
+                            <field name="order_line" mode="tree">
+                                <tree string="Sales Order Lines">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="qty_delivered"/>
+                                    <field name="qty_invoiced"/>
+                                    <field name="price_unit"/>
+                                    <field name="tax_id"/>
+                                    <field name="price_subtotal"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <!--end of order line-->
                     </notebook>
                 </sheet>
             </form>

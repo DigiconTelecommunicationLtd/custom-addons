@@ -77,6 +77,8 @@ class ServiceRequest(models.Model):
                                    help="Opportunity for which the service Request created.")
 
     is_helpdesk_ticket = fields.Boolean("Is Ticket", default=False)
+    confirmed_sale_order_id = fields.Many2one('sale.order', string='Confirmed Sale Order')
+    order_line = fields.One2many('sale.order.line', 'service_request_id', string='Order Lines', copy=True, auto_join=True)
 
     def _create_random_password(self, size):
             chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
