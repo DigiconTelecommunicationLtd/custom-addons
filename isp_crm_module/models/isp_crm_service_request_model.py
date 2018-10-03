@@ -115,7 +115,7 @@ class ServiceRequest(models.Model):
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
             # send mail in this section
-            invoice_sent = self.send_invoice_to_customer(invoice=invoice_generated)
+            # invoice_sent = self.send_invoice_to_customer(invoice=invoice_generated)
             # Opportunity color change
             opportunity = service_req.opportunity_id
             opportunity.update({
