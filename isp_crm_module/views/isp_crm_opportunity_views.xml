@@ -10,17 +10,21 @@
                 <field name="opportunity_seq_id"/>
                 <field name="phone"/>
                 <field name="mobile"/>
+                <field name="tagged_product_ids"/>
             </xpath>
         </field>
     </record>
     <!--End of the section-->
 
     <!--Adding '*' in phone, mobile, email in search-->
-    <record model="ir.ui.view" id="view_add_star_phone_mobile_in_form">
-        <field name="name">view.add.star.phone.mobile.in.form</field>
+    <record model="ir.ui.view" id="view_add_star_phone_mobile_product_in_form">
+        <field name="name">view.add.star.phone.mobile.product.in.form</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_leads" />
         <field name="arch" type="xml">
+            <xpath expr="//h1/field[@name='name']" position="attributes">
+                <attribute name="placeholder">Name of the Leads...</attribute>
+            </xpath>
             <xpath expr="//group/field[@name='email_from']" position="attributes">
                 <attribute name="string">Email *</attribute>
             </xpath>
@@ -33,6 +37,15 @@
             <xpath expr="//group/field[@name='priority']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <xpath expr="//group/field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//h1/field[@name='name']" position="after">
+                <h3>
+                    <label for="tagged_product_ids" string="Products"/>
+                    <field name="tagged_product_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                </h3>
+            </xpath>
         </field>
     </record>
     <!--End of the section-->
@@ -44,6 +57,9 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
         <field name="arch" type="xml">
+            <xpath expr="//h1/field[@name='name']" position="attributes">
+                <attribute name="placeholder">Name of the Opportunity...</attribute>
+            </xpath>
             <xpath  expr="//form/header/field[@name='stage_id']" position="before">
                 <field name="is_service_request_created" invisible="1"/>
                 <button
@@ -59,13 +75,22 @@
                     <!--<field name="color"/>-->
                 </p>
             </xpath>
+            <xpath expr="//group/field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//h1/field[@name='name']" position="after">
+                <h3>
+                    <label for="tagged_product_ids" string="Products"/>
+                    <field name="tagged_product_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                </h3>
+            </xpath>
         </field>
     </record>
 
 
     <!--Adding ID in leads and opportunity kanban view and removing priority-->
-    <record model="ir.ui.view" id="view_add_seq_id_and_remove_priority_from_opportunity_kanban">
-        <field name="name">view.add.seq.id.and.remove.priority.from.opportunity.kanban</field>
+    <record model="ir.ui.view" id="view_add_seq_id_product_and_remove_priority_from_opportunity_kanban">
+        <field name="name">view.add.seq.id.product.and.remove.priority.from.opportunity.kanban</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_kanban_view_leads" />
         <field name="arch" type="xml">
@@ -87,12 +112,16 @@
             <xpath expr="//div/div/field[@name='priority']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <!--showing product_tags in kanban of opportunity-->
+            <xpath expr="//div/div/field[@name='tag_ids']" position="replace">
+                <field name="tagged_product_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </xpath>
         </field>
     </record>
 
     <!--Remove priority from opportunity form view-->
-    <record model="ir.ui.view" id="view_remove_priority_from_opportunity_form">
-        <field name="name">view.remove.priority.from.opportunity.form</field>
+    <record model="ir.ui.view" id="view_add_product_remove_priority_from_opportunity_form">
+        <field name="name">view.add.product.remove.priority.from.opportunity.form</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
         <field name="arch" type="xml">
@@ -120,7 +149,6 @@
         </field>
     </record>
 
-
     <!--Adding filter in Opportunity with ID-->
     <record model="ir.ui.view" id="view_add_opportunity_id_in_search">
         <field name="name">view.add.opportunity.id.in.search</field>
@@ -129,12 +157,9 @@
         <field name="arch" type="xml">
             <xpath  expr="//search/field[@name='name']" position="after">
                 <field name="opportunity_seq_id"/>
+                <field name="tagged_product_ids"/>
             </xpath>
         </field>
     </record>
     <!--End of the section-->
-
-
-
-
 </odoo>
