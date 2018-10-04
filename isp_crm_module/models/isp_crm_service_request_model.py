@@ -77,6 +77,11 @@ class ServiceRequest(models.Model):
                                    help="Opportunity for which the service Request created.")
 
     is_helpdesk_ticket = fields.Boolean("Is Ticket", default=False)
+    confirmed_sale_order_id = fields.Many2one('sale.order', string='Confirmed Sale Order')
+    order_line = fields.One2many('sale.order.line', 'service_request_id', string='Order Lines', copy=True, auto_join=True)
+    order_line_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_order_line_total',
+                                   track_visibility='always')
+
 
     def _create_random_password(self, size):
             chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
@@ -110,7 +115,7 @@ class ServiceRequest(models.Model):
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
             # send mail in this section
-            invoice_sent = self.send_invoice_to_customer(invoice=invoice_generated)
+            # invoice_sent = self.send_invoice_to_customer(invoice=invoice_generated)
             # Opportunity color change
             opportunity = service_req.opportunity_id
             opportunity.update({
@@ -211,3 +216,15 @@ class ServiceRequest(models.Model):
             'context': ctx,
         }
 
+    @api.depends('order_line.price_total')
+    def _compute_order_line_total(self):
+        """
+        Compute the total amounts of the SO.
+        """
+        for order in self:
+            amount_untaxed = 0.0
+            for line in order.order_line:
+                amount_untaxed += line.price_subtotal
+            order.update({
+                'order_line_total': amount_untaxed,
+            })
