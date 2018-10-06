@@ -14,8 +14,8 @@
         <record id="seq_crm_lead_opportunity" model="ir.sequence">
             <field name="name">Lead/Opportunity Sequence</field>
             <field name="code">crm.lead</field>
-            <field name="prefix">ID-</field>
-            <field name="padding">8</field>
+            <field name="prefix">ID-%(y)s%(month)s-</field>
+            <field name="padding">4</field>
         </record>
 
         <!--Sequences for lead or Customer-->

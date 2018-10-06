@@ -16,7 +16,7 @@
     </record>
     <!--End of the section-->
 
-    <!--Adding '*' in phone, mobile, email in search-->
+    <!--Adding '*' in phone, mobile, email in form-->
     <record model="ir.ui.view" id="view_add_star_phone_mobile_product_in_form">
         <field name="name">view.add.star.phone.mobile.product.in.form</field>
         <field name="model">crm.lead</field>
@@ -45,6 +45,16 @@
                     <label for="tagged_product_ids" string="Products"/>
                     <field name="tagged_product_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                 </h3>
+            </xpath>
+            <!--Adding emergency contact name-->
+            <xpath expr="//div/field[@name='contact_name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group/label[@for='contact_name']" position="replace">
+                <label for="emergency_contact_name"/>
+            </xpath>
+            <xpath expr="//div/field[@name='contact_name']" position="after">
+                <field name="emergency_contact_name" />
             </xpath>
         </field>
     </record>
@@ -83,6 +93,20 @@
                     <label for="tagged_product_ids" string="Products"/>
                     <field name="tagged_product_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                 </h3>
+            </xpath>
+            <!--Adding emergency contact name-->
+            <!--<xpath expr="//page/group/div/field[@name='contact_name']" position="replace">-->
+                <!--<field name="emergency_contact_name" />-->
+            <!--</xpath>-->
+
+            <xpath expr="//div/field[@name='contact_name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group/label[@for='contact_name']" position="replace">
+                <label for="emergency_contact_name"/>
+            </xpath>
+            <xpath expr="//div/field[@name='contact_name']" position="after">
+                <field name="emergency_contact_name" />
             </xpath>
         </field>
     </record>

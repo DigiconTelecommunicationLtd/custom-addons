@@ -19,6 +19,7 @@ class Opportunity(models.Model):
     current_service_request_status = fields.Char(string='Service Request ID', readonly=True, required=False)
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
     tagged_product_ids = fields.Many2many('product.product', 'crm_lead_product_rel', 'lead_id', 'product_id', string='Products', help="Classify and analyze your lead/opportunity according to Products : Unlimited Package etc")
+    emergency_contact_name = fields.Char(string='Emergency Contact Name', required=False)
 
 
     @api.multi
