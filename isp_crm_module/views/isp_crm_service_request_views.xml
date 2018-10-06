@@ -114,29 +114,29 @@
                         <label class="oe_edit_only" for="problem" string="Problem Name"/>
                         <h1><field name="problem" string="Name" placeholder="Problem Name"/></h1>
                     </div>
-                    <group>
+                    <group string="Customer Info">
                         <!--Left-->
                         <group>
-                            <field name="assigned_to" />
-                            <field name="customer_email"/>
-                            <field name="customer_company"/>
+                            <field name="customer" string="Customer Name" options="{'no_create_edit': True}"/>
+                            <field name="customer_mobile" string="Customer Mobile" readonly="1"/>
                         </group>
                         <!--Right-->
                         <group>
-                            <field name="customer"/>
-                            <field name="customer_mobile"/>
+                            <field name="customer_email" string="Customer Email" readonly="1"/>
+                            <field name="customer_company" string="Customer Company" readonly="1"/>
+                            <field name="customer_address" string="Customer Address" readonly="1"/>
                         </group>
                     </group>
-                    <group>
+                    <group string="Team Info">
                         <!--Left-->
                         <group>
+                            <field name="assigned_to" options="{'no_create_edit': True}"/>
                             <field name="team"/>
-                            <!--<field name="project"/>-->
                         </group>
                         <!--Right-->
                         <group>
                             <field name="team_leader"/>
-                            <field name="priority"/>
+                            <field name="priority" widget="priority"/>
                         </group>
                     </group>
 
@@ -153,7 +153,7 @@
                                         <group>
                                             <field name="solution_id" force_save="1"/>
                                             <field name="name" class="oe_inline"/>
-                                            <field name="assigned_to_id" invisible="1" />
+                                            <field name="assigned_to_id" />
                                             <field name="is_done" class="oe_inline"/>
                                         </group>
                                     </group>

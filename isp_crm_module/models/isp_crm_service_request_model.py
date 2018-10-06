@@ -52,13 +52,17 @@ class ServiceRequest(models.Model):
     problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
     description = fields.Text('Description')
     stage = fields.Many2one('isp_crm_module.stage', string='Stage', required=False)
-    assigned_to = fields.Many2one('res.users', string="Assigned To")
-    customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True)])
+
+    assigned_to = fields.Many2one('hr.employee', string='Assigned To', index=True, track_visibility='onchange')
+    team = fields.Many2one('hr.department', string='Department', readonly=True)
+    team_leader = fields.Many2one('hr.employee', string='Tam Leader', readonly=True)
+
+    customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True)], track_visibility='onchange')
     customer_email = fields.Char(related='customer.email', store=True)
     customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
     customer_company = fields.Char(string="Company", related='customer.parent_id.name', store=True)
-    team = fields.Many2one('isp_crm_module.team', string="Team", realated="isp_crm_module.assigned_to")
-    team_leader = fields.Many2one('res.users', string="Team Leader",)
+    customer_address = fields.Char(string="Address", related='customer.parent_id.name', store=True)
+
     project = fields.Many2one('project.project', string="Project")
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
     close_date = fields.Datetime('Close Date', readonly=True, default=None)
@@ -82,6 +86,24 @@ class ServiceRequest(models.Model):
     order_line_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_order_line_total',
                                    track_visibility='always')
 
+    @api.onchange('assigned_to')
+    def _onchange_assigned_to(self):
+        self.team_leader = self.assigned_to and self.assigned_to.parent_id
+        self.team = self.assigned_to.department_id
+
+    @api.onchange('customer')
+    def _onchange_customer(self):
+        address_str = ""
+        if len(self.opportunity_id) > 0:
+            address_str = "{street}{street2}, \n {city}, {state} - {zip}, \n{country}".format(
+                street = self.opportunity_id.street,
+                street2 = self.opportunity_id.street2,
+                city = self.opportunity_id.city,
+                state = self.opportunity_id.state_id.name,
+                zip = self.opportunity_id.zip,
+                country = self.opportunity_id.country_id.name,
+            )
+        self.customer_address = address_str
 
     def _create_random_password(self, size):
             chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
