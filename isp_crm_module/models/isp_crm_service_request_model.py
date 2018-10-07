@@ -54,8 +54,8 @@ class ServiceRequest(models.Model):
     stage = fields.Many2one('isp_crm_module.stage', string='Stage', required=False)
 
     assigned_to = fields.Many2one('hr.employee', string='Assigned To', index=True, track_visibility='onchange')
-    team = fields.Many2one('hr.department', string='Department', readonly=True, store=True)
-    team_leader = fields.Many2one('hr.employee', string='Tam Leader', readonly=True, store=True)
+    team = fields.Many2one('hr.department', string='Department', store=True)
+    team_leader = fields.Many2one('hr.employee', string='Team Leader', store=True)
 
     customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True)], track_visibility='onchange')
     customer_email = fields.Char(related='customer.email', store=True)
