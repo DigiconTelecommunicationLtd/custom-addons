@@ -38,6 +38,6 @@ class SolutionLine(models.Model):
     service_request_id = fields.Many2one('isp_crm_module.service_request', string="Service Request", required=True)
     solution_id = fields.Many2one('isp_crm_module.solution', string="Solution", required=True, translate=True)
     name = fields.Text('Description', required=False)
-    assigned_to_id = fields.Many2one('res.users', string="Assigned To")
+    assigned_to_id = fields.Many2one('hr.employee', string="Assigned To")
     is_done = fields.Boolean("Is Done", default=False)
 

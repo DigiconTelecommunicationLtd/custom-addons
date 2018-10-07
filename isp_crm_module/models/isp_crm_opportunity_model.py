@@ -22,6 +22,19 @@ class Opportunity(models.Model):
     emergency_contact_name = fields.Char(string='Emergency Contact Name', required=False)
 
 
+    def get_opportunity_address_str(self, opportunity):
+        address_str = ""
+        if len(opportunity) > 0:
+            address_str = ", ".join([
+                opportunity.street or '',
+                opportunity.street2 or '',
+                opportunity.city or '',
+                opportunity.state_id.name or '',
+                opportunity.zip or '',
+                opportunity.country_id.name or '',
+            ])
+        return address_str
+
     @api.multi
     def action_set_won(self):
         for lead in self:
@@ -85,8 +98,10 @@ class Opportunity(models.Model):
                 'customer' : opportunity.partner_id.id,
                 'customer_email' : opportunity.partner_id.email,
                 'customer_mobile' : opportunity.partner_id.mobile,
-                'opportunity_id' : opportunity.id,
-                'confirmed_sale_order_id' : confirmed_sale_order_id,
+                'opportunity_id': opportunity.id,
+                'confirmed_sale_order_id': confirmed_sale_order_id,
+                'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
+                'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
             }
             created_service_req_obj = service_req_obj.create(service_req_data)
             if len(sale_order_line_obj) > 0:

@@ -54,14 +54,14 @@ class ServiceRequest(models.Model):
     stage = fields.Many2one('isp_crm_module.stage', string='Stage', required=False)
 
     assigned_to = fields.Many2one('hr.employee', string='Assigned To', index=True, track_visibility='onchange')
-    team = fields.Many2one('hr.department', string='Department', readonly=True)
-    team_leader = fields.Many2one('hr.employee', string='Tam Leader', readonly=True)
+    team = fields.Many2one('hr.department', string='Department', readonly=True, store=True)
+    team_leader = fields.Many2one('hr.employee', string='Tam Leader', readonly=True, store=True)
 
     customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True)], track_visibility='onchange')
     customer_email = fields.Char(related='customer.email', store=True)
     customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
     customer_company = fields.Char(string="Company", related='customer.parent_id.name', store=True)
-    customer_address = fields.Char(string="Address", related='customer.parent_id.name', store=True)
+    customer_address = fields.Char(string="Address", track_visibility='onchange')
 
     project = fields.Many2one('project.project', string="Project")
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
@@ -85,6 +85,23 @@ class ServiceRequest(models.Model):
     order_line = fields.One2many('sale.order.line', 'service_request_id', string='Order Lines', copy=True, auto_join=True)
     order_line_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_order_line_total',
                                    track_visibility='always')
+    tagged_product_ids = fields.Many2many('product.product', 'isp_crm_module_service_request_product_rel', 'service_request_id', 'product_id',
+                                          string='Products',
+                                          help="Classify and analyze your lead/opportunity according to Products : Unlimited Package etc")
+
+    def get_customer_address_str(self, customer):
+        address_str = ""
+        if len(customer) > 0:
+            address_str = ", ".join([
+                customer.street or '',
+                customer.street2 or '',
+                customer.city or '',
+                customer.state_id.name or '',
+                customer.zip or '',
+                customer.country_id.name or '',
+            ])
+        return address_str
+
 
     @api.onchange('assigned_to')
     def _onchange_assigned_to(self):
@@ -93,17 +110,7 @@ class ServiceRequest(models.Model):
 
     @api.onchange('customer')
     def _onchange_customer(self):
-        address_str = ""
-        if len(self.opportunity_id) > 0:
-            address_str = "{street}{street2}, \n {city}, {state} - {zip}, \n{country}".format(
-                street = self.opportunity_id.street,
-                street2 = self.opportunity_id.street2,
-                city = self.opportunity_id.city,
-                state = self.opportunity_id.state_id.name,
-                zip = self.opportunity_id.zip,
-                country = self.opportunity_id.country_id.name,
-            )
-        self.customer_address = address_str
+        self.customer_address = self.get_customer_address_str(customer=self.customer)
 
     def _create_random_password(self, size):
             chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
