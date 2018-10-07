@@ -12,5 +12,3 @@ class Solution(models.Model):
     _order = "name, id"
 
     name = fields.Char('Solution', required=True, translate=True)
-    remarks = fields.Text('Remarks')
-    is_done = fields.Boolean('Done', default=False)
