@@ -132,7 +132,7 @@
                         <group>
                             <field name="customer_email" string="Customer Email" readonly="1"/>
                             <field name="customer_company" string="Customer Company" readonly="1"/>
-                            <field name="customer_address" string="Customer Address" readonly="1"/>
+                            <field name="customer_address" string="Customer Address"/>
                         </group>
                     </group>
                     <group string="Team Info">
