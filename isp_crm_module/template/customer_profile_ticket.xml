@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="isp_crm_module.template_ticket_create" name="Create Ticket">
+            <t t-call="website.layout">
+                <div class="container">
+                    <div class="col-md-4 col-md-offset-4">
+                        <h3>
+                            Create A Ticket
+                        </h3>
+                        <div class="alert alert-success" t-if="success_msg != ''">
+                            <strong>
+                                <t t-esc="success_msg" />
+                            </strong>
+                        </div>
+
+                        <div>
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <!--Problems List-->
+                            <div class="form-group">
+                                <label for="problem">Problems List</label>
+                                <select class="form-control" id="select_problem" name="problem">
+                                    <option selected="1" value="">Choose a Problem ...</option>
+                                    <t t-foreach='problems' t-as='prb' id="problem">
+                                        <t t-if="prb.shortcode == 'customer_profile_update'">
+                                            <option t-att-value='prb.id'><t t-esc='prb.name'/></option>
+                                        </t>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Problem Description</label>
+                                <textarea name="description" class="form-control" id="description" rows="3" placeholder="Description of your Problem"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" id="create_customer_profile_update_ticket" class="btn btn-primary">Submit</button>
+                                    <a href="/customer/profile/ticket" class="pull-right">Tickets List</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <script type="text/javascript" src="/isp_crm_module/static/src/js/customer_profile_ticket_api.js"/>
+        </template>
+
+        <template id="isp_crm_module.template_ticket_list" name="Tickets List">
+            <t t-call="website.layout">
+                <div class="container">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3>
+                                    Your Tickets List
+                                    <a href="/call/api/customer/profile/ticket/create" class="btn btn-warning pull-right"> Create A Ticket </a>
+                                </h3>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-sm table-bordered" id="ticket_list_table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Problem Name</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Stage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <script type="text/javascript" src="/isp_crm_module/static/src/js/customer_profile_update_ticket_list_api.js"/>
+        </template>
+    </data>
+</odoo>
