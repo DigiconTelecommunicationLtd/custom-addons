@@ -173,6 +173,7 @@
         </field>
     </record>
 
+
     <!--Adding filter in Opportunity with ID-->
     <record model="ir.ui.view" id="view_add_opportunity_id_in_search">
         <field name="name">view.add.opportunity.id.in.search</field>
@@ -186,4 +187,24 @@
         </field>
     </record>
     <!--End of the section-->
+
+    <!--Adding fields in leads list-->
+    <record model="ir.ui.view" id="view_adding_fields_in_leads_list">
+        <field name="name">view.adding.fields.in.leads.list</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="replace">
+                <field name="tagged_product_ids" widget="many2many_tags"/>
+            </xpath>
+            <xpath  expr="//field[@name='phone']" position="replace">
+                <field name="mobile"/>
+            </xpath>
+        </field>
+    </record>
+
+
 </odoo>
