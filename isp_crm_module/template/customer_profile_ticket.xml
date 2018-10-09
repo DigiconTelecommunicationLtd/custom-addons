@@ -35,7 +35,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <button type="submit" id="create_customer_profile_update_ticket" class="btn btn-primary">Submit</button>
-                                    <a href="/call/api/customer/profile/ticket/" class="pull-right">Tickets List</a>
+                                    <a href="/api/customer/profile/ticket/" class="pull-right">Tickets List</a>
                                 </div>
                             </div>
 
@@ -54,7 +54,7 @@
                             <div class="col-sm-12">
                                 <h3>
                                     Your Tickets List
-                                    <a href="/call/api/customer/profile/ticket/create" class="btn btn-warning pull-right"> Create A Ticket </a>
+                                    <a href="/api/customer/profile/ticket/create" class="btn btn-warning pull-right"> Create A Ticket </a>
                                 </h3>
                             </div>
                         </div>
