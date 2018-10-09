@@ -24,7 +24,7 @@ class CustomerProfileTicket(http.Controller):
 
         }
 
-    @http.route("/call/api/customer/profile/ticket/", auth='user', methods=["GET"], website=True)
+    @http.route("/api/customer/profile/ticket/", auth='user', methods=["GET"], website=True)
     def ticket_list_call_api(self, **kw):
         return http.request.render("isp_crm_module.template_ticket_list")
 
@@ -57,7 +57,7 @@ class CustomerProfileTicket(http.Controller):
 
         }
 
-    @http.route("/call/api/customer/profile/ticket/create/", auth='user', methods=["GET"], website=True)
+    @http.route("/api/customer/profile/ticket/create/", auth='user', methods=["GET"], website=True)
     def ticket_create_call_api(self, **kw):
         success_msg = ''
         problems = http.request.env['isp_crm_module.problem'].search([])

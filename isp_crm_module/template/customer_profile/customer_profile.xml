@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="isp_crm_module.customer_profile_show" name="Tickets List">
+            <t t-call="website.layout">
+                <div class="container">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3>
+                                    Customer Profile
+                                </h3>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <record id="isp_crm_module.customer_profile" model="ir.ui.view">
+                                    <label for="company_name">Company Name:</label>
+                                    <field name="company_name" id="company_name"></field><br></br>
+                                    <label for="is_potential_customer">Is Potential Customer:</label>
+                                    <field name="is_potential_customer" id="is_potential_customer"></field>
+                                    <field name="arch" type="xml"></field>
+                                </record>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <script type="text/javascript" src="/isp_crm_module/static/src/js/customer_profile/customer_profile_api.js"/>
+        </template>
+    </data>
+</odoo>
