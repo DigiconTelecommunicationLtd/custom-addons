@@ -2,7 +2,7 @@
 <odoo>
     <!--Change menu name to opportunity-->
     <menuitem id="crm.menu_crm_opportunities"
-              action="crm.action_your_pipeline"
+              action="isp_crm_lead_opportunities_tree_view"
               name="Opportunities"
               parent="crm.crm_menu_pipeline"
               sequence="2"/>
