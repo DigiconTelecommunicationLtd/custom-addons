@@ -26,7 +26,13 @@ class CustomerProfileTicket(http.Controller):
 
     @http.route("/api/customer/profile/ticket/", auth='user', methods=["GET"], website=True)
     def ticket_list_call_api(self, **kw):
-        return http.request.render("isp_crm_module.template_ticket_list")
+        logincode = http.request.httprequest.cookies.get('login_token')
+        isloggedin = http.request.env['isp_crm_module.track_login'].search([("logincode", "=", logincode)])
+
+        if len(isloggedin) < 1:
+            return http.request.render("isp_crm_module.customer_login")
+        else:
+            return http.request.render("isp_crm_module.template_ticket_list")
 
 
 
@@ -60,10 +66,16 @@ class CustomerProfileTicket(http.Controller):
     @http.route("/api/customer/profile/ticket/create/", auth='user', methods=["GET"], website=True)
     def ticket_create_call_api(self, **kw):
         success_msg = ''
-        problems = http.request.env['isp_crm_module.problem'].search([])
-        values = {
-            "user": http.request.env.user,
-            "problems": problems,
-            'success_msg': success_msg,
-        }
-        return http.request.render("isp_crm_module.template_ticket_create", values)
+        logincode = http.request.httprequest.cookies.get('login_token')
+        isloggedin = http.request.env['isp_crm_module.track_login'].search([("logincode", "=", logincode)])
+
+        if len(isloggedin) < 1:
+            return http.request.render("isp_crm_module.customer_login")
+        else:
+            problems = http.request.env['isp_crm_module.problem'].search([])
+            values = {
+                "user": http.request.env.user,
+                "problems": problems,
+                'success_msg': success_msg,
+            }
+            return http.request.render("isp_crm_module.template_ticket_create", values)

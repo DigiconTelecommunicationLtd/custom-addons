@@ -16,10 +16,6 @@ odoo.define('isp_crm_module.template_ticket_list', ['web.ajax'], function (requi
          var problemDescription = data['problemDescription'];
          var problemStage = data['problemStage'];
 
-         console.log(problemName);
-         console.log(problemDescription);
-         console.log(problemStage);
-
          document.getElementById("ticket_list_table").getElementsByTagName("tbody")[0].innerHTML = "<tr><td scope=\"row\">"+problemName[0]+"</td><td>"+problemDescription[0]+"</td><td>"+problemStage[0]+"</td></tr>";
 
          for(var i = 1; i < problemName.length; i++){

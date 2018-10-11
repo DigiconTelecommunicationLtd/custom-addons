@@ -5,9 +5,15 @@ class NewTicketPage(http.Controller):
 
     @http.route("/ticket/", auth='user', methods=["GET"], website=True)
     def ticket_list(self, **kw):
-        tickets_list = http.request.env['isp_crm_module.service_request'].search([("customer", "=", http.request.env.user[0].id)])
-        return http.request.render("isp_crm_module.isp_crm_template_ticket_list",
-                                   {"user": http.request.env.user, "tickets": tickets_list})
+        logincode = http.request.httprequest.cookies.get('login_token')
+        isloggedin = http.request.env['isp_crm_module.track_login'].search([("logincode", "=", logincode)])
+
+        if len(isloggedin) < 1:
+            return http.request.render("isp_crm_module.customer_login")
+        else:
+            tickets_list = http.request.env['isp_crm_module.service_request'].search([("customer", "=", http.request.env.user[0].id)])
+            return http.request.render("isp_crm_module.isp_crm_template_ticket_list",
+                                       {"user": http.request.env.user, "tickets": tickets_list})
 
     @http.route("/ticket/create/", auth='user', methods=["GET", "POST"], website=True)
     def ticket_create(self, **kw):
@@ -32,4 +38,10 @@ class NewTicketPage(http.Controller):
             "problems": problems,
             "success_msg": success_msg
         }
-        return http.request.render("isp_crm_module.isp_crm_new_ticket", values)
+        logincode = http.request.httprequest.cookies.get('login_token')
+        isloggedin = http.request.env['isp_crm_module.track_login'].search([("logincode", "=", logincode)])
+
+        if len(isloggedin) < 1:
+            return http.request.render("isp_crm_module.customer_login")
+        else:
+            return http.request.render("isp_crm_module.isp_crm_new_ticket", values)
