@@ -8,7 +8,6 @@ class CustomerProfile(http.Controller):
 
         customer_list = http.request.env['res.partner'].search([("id", "=", http.request.env.user[0].id)])
 
-
         name = customer_list.name
         is_potential_customer = customer_list.is_potential_customer
 
@@ -22,4 +21,10 @@ class CustomerProfile(http.Controller):
 
     @http.route("/api/customer/profile/", auth='user', methods=["GET"], website=True)
     def customer_profile_api(self, **kw):
-        return http.request.render("isp_crm_module.customer_profile_show")
+        logincode = http.request.httprequest.cookies.get('login_token')
+        isloggedin = http.request.env['isp_crm_module.track_login'].search([("logincode", "=", logincode)])
+
+        if len(isloggedin) < 1:
+            return http.request.render("isp_crm_module.customer_login")
+        else:
+            return http.request.render("isp_crm_module.customer_profile_show")

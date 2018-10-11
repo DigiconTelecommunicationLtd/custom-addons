@@ -3,8 +3,9 @@
 import string
 import random
 from datetime import datetime, timedelta
-
-
+import logging
+from passlib.context import CryptContext
+from odoo import http
 from odoo import api, fields, models, _
 from odoo.exceptions import Warning
 
@@ -25,6 +26,18 @@ DEFAULT_STATES = [
 DEFAULT_PASSWORD_SIZE = 8
 
 OTC_PRODUCT_CODE = 'ISP-OTC'
+
+default_crypt_context = CryptContext(
+    # kdf which can be verified by the context. The default encryption kdf is
+    # the first of the list
+    ['pbkdf2_sha512', 'md5_crypt'],
+    # deprecated algorithms are still verified as usual, but ``needs_update``
+    # will indicate that the stored hash should be replaced by a more recent
+    # algorithm. Passlib 1.6 supports an `auto` value which deprecates any
+    # algorithm but the default, but Ubuntu LTS only provides 1.5 so far.
+    deprecated=['md5_crypt'],
+)
+
 
 class ServiceRequest(models.Model):
     """
@@ -135,12 +148,22 @@ class ServiceRequest(models.Model):
             customer = service_req.customer
             customer_subs_id = customer.subscriber_id
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
+            # print(cust_password)
+            encrypted = self._crypt_context().encrypt(cust_password)
+            # print(encrypted)
+
+            # customer_login_creating_values = {
+            #     'subscriber_id': customer_subs_id,
+            #     'password': cust_password,
+            # }
+            #
+            # http.request.env['isp_crm_module.login'].create(customer_login_creating_values)
 
             customer.update({
                 'is_potential_customer' : False
             })
             # Create an user
-            # user_created = self._create_user(name=customer.name, username=customer_subs_id, password=cust_password)
+            user_created = self._create_user(name=customer.name, username=customer_subs_id, password=encrypted)
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
             # send mail in this section
@@ -158,14 +181,25 @@ class ServiceRequest(models.Model):
 
         return True
 
+    def _crypt_context(self):
+        """ Passlib CryptContext instance used to encrypt and verify
+        passwords. Can be overridden if technical, legal or political matters
+        require different kdfs than the provided default.
+
+        Requires a CryptContext as deprecation and upgrade notices are used
+        internally
+        """
+        return default_crypt_context
+
     def _create_user(self, username, password, name=''):
-        user_model = self.env['res.users']
+        user_model = self.env['isp_crm_module.login']
         vals_user = {
             'name': name,
-            'login': username,
-            'password' : password,
+            'subscriber_id': username,
+            'password': password,
         }
-        user_model.with_context({'no_reset_password': True}).create(vals_user)
+        # user_model.with_context({'no_reset_password': True}).create(vals_user)
+        user_model.create(vals_user)
         return True
 
     def update_bill_cycle_date(self, customer):
