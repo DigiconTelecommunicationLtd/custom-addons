@@ -7,27 +7,81 @@
                     <div class="col-md-8 col-md-offset-2">
                         <div class="row">
                             <div class="col-sm-12">
-                                <h3>
+                                <h1>
                                     Customer Profile
-                                </h3>
+                                </h1>
                             </div>
                         </div>
                         <br/>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <record id="isp_crm_module.customer_profile" model="ir.ui.view">
-                                    <label for="company_name">Company Name:</label>
-                                    <field name="company_name" id="company_name"></field><br></br>
-                                    <label for="is_potential_customer">Is Potential Customer:</label>
-                                    <field name="is_potential_customer" id="is_potential_customer"></field>
-                                    <field name="arch" type="xml"></field>
-                                </record>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <record id="isp_crm_module.customer_profile" model="ir.ui.view">
+
+                                        <field name="subscriber_id" id="subscriber_id"/><br/>
+                                        <label for="company_name">Company Name:</label>
+                                        <field name="company_name" id="company_name"/><br/>
+                                        <label for="is_potential_customer">Is Potential Customer:</label>
+                                        <field name="is_potential_customer" id="is_potential_customer"/><br/>
+                                        <div id="information_box1">
+                                            <div id="general_info">
+                                                <h3>General Information</h3>
+                                                <label for="father">Father:</label>
+                                                <field name="father" id="father"/><br/>
+                                                <label for="mother">Mother:</label>
+                                                <field name="mother" id="mother"/><br/>
+                                                <label for="birthday">Birthday:</label>
+                                                <field name="birthday" id="birthday"/><br/>
+                                                <label for="gender">Gender:</label>
+                                                <field name="gender" id="gender"/>
+                                            </div>
+                                            <div id="identifiers_info">
+                                                <h3>Identifier's Information</h3>
+                                                <label for="identifier_name">Identifier Name:</label>
+                                                <field name="identifier_name" id="identifier_name"/><br/>
+                                                <label for="identifier_phone">Identifier Phone:</label>
+                                                <field name="identifier_phone" id="identifier_phone"/><br/>
+                                                <label for="identifier_mobile">Identifier Mobile:</label>
+                                                <field name="identifier_mobile" id="identifier_mobile"/><br/>
+                                                <label for="identifier_nid">Identifier NID:</label>
+                                                <field name="identifier_nid" id="identifier_nid"/><br/>
+                                            </div>
+                                        </div>
+                                        <div id="information_box2">
+                                            <div id="technical_info">
+                                                <h3>Technical Information</h3>
+                                                <label for="service_type">Service Type:</label>
+                                                <field name="service_type" id="service_type"/><br/>
+                                                <label for="connection_type">Connection Type:</label>
+                                                <field name="connection_type" id="connection_type"/><br/>
+                                                <label for="connection_media">Connection Media:</label>
+                                                <field name="connection_media" id="connection_media"/><br/>
+                                                <label for="connection_status">Connection Status:</label>
+                                                <field name="connection_status" id="connection_status"/><br/>
+                                                <label for="package_id">Package Id:</label>
+                                                <field name="package_id" id="package_id"/><br/>
+                                            </div>
+                                            <div id="billing_info">
+                                                <h3>Billing Information</h3>
+                                                <label for="bill_cycle_date">Bill Cycle Date:</label>
+                                                <field name="bill_cycle_date" id="bill_cycle_date"/><br/>
+                                                <label for="total_installation_charge">Total Installation Charge:</label>
+                                                <field name="total_installation_charge" id="total_installation_charge"/><br/>
+                                            </div>
+                                        </div>
+                                        <field name="arch" type="xml"></field>
+
+                                    </record>
+                                </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </t>
             <script type="text/javascript" src="/isp_crm_module/static/src/js/customer_profile/customer_profile_api.js"/>
+            <link rel="stylesheet" type="text/css" href="/isp_crm_module/static/src/css/customer_profile/customer_profile_api.css"/>
         </template>
     </data>
 </odoo>
+
+
+
+
