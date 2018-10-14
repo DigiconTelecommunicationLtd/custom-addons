@@ -1,0 +1,28 @@
+#information_box1,#information_box2{
+
+    display: -webkit-box;
+
+}
+
+#general_info,#technical_info{
+
+    float:left;
+    width: 50%;
+    border-right: solid black 1px;
+
+}
+
+#identifiers_info,#billing_info{
+
+    float:right;
+    width: 50%;
+    padding-left:5%;
+
+}
+
+#company_name{
+
+    font-size: large;
+    padding-left: 2%;
+
+}

@@ -12,3 +12,4 @@ class Problem(models.Model):
     _order = "name, id"
 
     name = fields.Char('Problem', required=True, translate=True)
+    shortcode = fields.Char('Short Code', required=True, translate=True)
