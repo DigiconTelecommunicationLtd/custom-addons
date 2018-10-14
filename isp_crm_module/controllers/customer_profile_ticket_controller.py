@@ -16,12 +16,10 @@ class CustomerProfileTicket(http.Controller):
             problemStage.append(ticket.stage.name)
 
         return {
-
             'user': http.request.env.user,
             'problemName': problemName,
             'problemDescription': problemDescription,
             'problemStage': problemStage,
-
         }
 
     @http.route("/api/customer/profile/ticket/", auth='user', methods=["GET"], website=True)
@@ -57,9 +55,7 @@ class CustomerProfileTicket(http.Controller):
         success_msg = "Ticket Has been created Successfully."
 
         return {
-
             'success_msg': success_msg
-
         }
 
     @http.route("/api/customer/profile/ticket/create/", auth='user', methods=["GET"], website=True)

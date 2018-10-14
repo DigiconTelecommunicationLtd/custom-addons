@@ -28,7 +28,6 @@ class CustomerProfile(http.Controller):
         package_id = customer_list.package_id.name
 
         return {
-
             'user': http.request.env.user,
             'subscriber_id':subscriber_id,
             'name': name,
@@ -48,7 +47,6 @@ class CustomerProfile(http.Controller):
             'bill_cycle_date':bill_cycle_date,
             'total_installation_charge':total_installation_charge,
             'package_id':package_id,
-
         }
 
     @http.route("/api/customer/profile/", auth='user', methods=["GET"], website=True)
