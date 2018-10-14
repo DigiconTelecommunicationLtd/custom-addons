@@ -156,6 +156,23 @@
         </field>
     </record>
 
+    <!--Removing the fields in contact info-->
+    <record model="ir.ui.view" id="view_remove_fields_from_opportunity_form">
+        <field name="name">view.remove.fields.from.opportunity.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <!--Making invisible 'partner_name'-->
+            <xpath expr="//group/field[@name='partner_name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!--making invisible 'Marketing' group-->
+            <xpath expr="(//page[@name='lead']/group/group)[3]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
 
     <!--crm_case_form_view_oppor-->
 
@@ -258,9 +275,9 @@
     </record>
 
     <menuitem
-            id="crm.crm_menu_root"
-            name="CRM"
-            action="isp_crm_lead_opportunities_tree_view"/>
+        id="crm.crm_menu_root"
+        name="CRM"
+        action="isp_crm_lead_opportunities_tree_view"/>
 
 
 </odoo>
