@@ -16,15 +16,15 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <record id="isp_crm_module.customer_profile" model="ir.ui.view">
-
-                                        <field name="subscriber_id" id="subscriber_id"/><br/>
-                                        <label for="company_name">Company Name:</label>
+                                        <img src="/isp_crm_module/static/src/assets/images/no-image.png" class="img-circle" alt="Profile Picture" width="104" height="106"/>
                                         <field name="company_name" id="company_name"/><br/>
-                                        <label for="is_potential_customer">Is Potential Customer:</label>
-                                        <field name="is_potential_customer" id="is_potential_customer"/><br/>
+                                        <!--<label for="is_potential_customer">Is Potential Customer:</label>-->
+                                        <!--<field name="is_potential_customer" id="is_potential_customer"/><br/>-->
                                         <div id="information_box1">
                                             <div id="general_info">
                                                 <h3>General Information</h3>
+                                                <label for="subscriber_id">Subscriber ID:</label>
+                                                <field name="subscriber_id" id="subscriber_id"/><br/>
                                                 <label for="father">Father:</label>
                                                 <field name="father" id="father"/><br/>
                                                 <label for="mother">Mother:</label>

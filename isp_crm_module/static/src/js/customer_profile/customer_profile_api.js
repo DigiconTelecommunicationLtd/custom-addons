@@ -31,8 +31,69 @@ odoo.define('isp_crm_module.customer_profile_show', ['web.ajax'], function (requ
          var totalInstallationCharge = data['total_installation_charge'];
          var packageId = data['package_id'];
 
+         console.log(identifierNid);
+         console.log(father);
+
+         if(father == ""){
+
+            father = "N/A";
+         }
+         if(mother == ""){
+
+            mother = "N/A";
+         }
+         if(identifierName == ""){
+
+            identifierName = "N/A";
+         }
+         if(identifierPhone == ""){
+
+            identifierPhone = "N/A";
+         }
+         if(identifierMobile == ""){
+
+            identifierMobile = "N/A";
+         }
+         if(identifierNid == false){
+
+            identifierNid = "N/A";
+         }
+         if(serviceType == false){
+
+            serviceType = "N/A";
+         }
+         if(connectionType == false){
+
+            connectionType = "N/A";
+         }
+         if(connectionMedia == false){
+
+            connectionMedia = "N/A";
+         }
+         if(connectionStatus == false){
+
+            connectionStatus = "N/A";
+         }
+         if(packageId == false){
+
+            packageId = "N/A";
+         }
+         if(birthday == false){
+
+            birthday = "N/A";
+         }
+         if(gender == false){
+
+            gender = "N/A";
+         }
+         if(identifierNid == false){
+
+            identifierNid = "N/A";
+         }
+
+
          document.getElementById("company_name").innerHTML = name;
-         document.getElementById("is_potential_customer").innerHTML = isPotentialCustomer;
+         //document.getElementById("is_potential_customer").innerHTML = isPotentialCustomer;
          document.getElementById("subscriber_id").innerHTML = subscriberId;
          document.getElementById("father").innerHTML = father;
          document.getElementById("mother").innerHTML = mother;
