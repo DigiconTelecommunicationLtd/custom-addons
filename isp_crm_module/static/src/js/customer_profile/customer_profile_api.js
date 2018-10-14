@@ -31,9 +31,6 @@ odoo.define('isp_crm_module.customer_profile_show', ['web.ajax'], function (requ
          var totalInstallationCharge = data['total_installation_charge'];
          var packageId = data['package_id'];
 
-         console.log(identifierNid);
-         console.log(father);
-
          if(father == ""){
 
             father = "N/A";
@@ -93,7 +90,6 @@ odoo.define('isp_crm_module.customer_profile_show', ['web.ajax'], function (requ
 
 
          document.getElementById("company_name").innerHTML = name;
-         //document.getElementById("is_potential_customer").innerHTML = isPotentialCustomer;
          document.getElementById("subscriber_id").innerHTML = subscriberId;
          document.getElementById("father").innerHTML = father;
          document.getElementById("mother").innerHTML = mother;

@@ -44,7 +44,6 @@ class CustomerProfileTicket(http.Controller):
 
         problem = kw.get('problem')
         description = kw.get('description')
-        print(problem)
         customer = http.request.env.user[0].id
         stage = http.request.env['isp_crm_module.stage'].search(
             [("sequence", "=", 1)])

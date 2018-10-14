@@ -18,8 +18,6 @@
                                     <record id="isp_crm_module.customer_profile" model="ir.ui.view">
                                         <img src="/isp_crm_module/static/src/assets/images/no-image.png" class="img-thumbnail" alt="Profile Picture" width="20%" height="20%"/><br/>
                                         <field name="company_name" id="company_name"/><br/>
-                                        <!--<label for="is_potential_customer">Is Potential Customer:</label>-->
-                                        <!--<field name="is_potential_customer" id="is_potential_customer"/><br/>-->
                                         <div id="information_box1">
                                             <div id="general_info">
                                                 <h3>General Information</h3>

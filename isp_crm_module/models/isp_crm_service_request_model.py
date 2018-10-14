@@ -148,16 +148,8 @@ class ServiceRequest(models.Model):
             customer = service_req.customer
             customer_subs_id = customer.subscriber_id
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
-            # print(cust_password)
             encrypted = self._crypt_context().encrypt(cust_password)
-            # print(encrypted)
 
-            # customer_login_creating_values = {
-            #     'subscriber_id': customer_subs_id,
-            #     'password': cust_password,
-            # }
-            #
-            # http.request.env['isp_crm_module.login'].create(customer_login_creating_values)
 
             customer.update({
                 'is_potential_customer' : False
@@ -166,9 +158,7 @@ class ServiceRequest(models.Model):
             user_created = self._create_user(name=customer.name, username=customer_subs_id, password=encrypted)
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
-            # send mail in this section
-            # invoice_sent = self.send_invoice_to_customer(invoice=invoice_generated)
-            # Opportunity color change
+
             opportunity = service_req.opportunity_id
             opportunity.update({
                 'color' : 10,
@@ -198,7 +188,6 @@ class ServiceRequest(models.Model):
             'subscriber_id': username,
             'password': password,
         }
-        # user_model.with_context({'no_reset_password': True}).create(vals_user)
         user_model.create(vals_user)
         return True
 

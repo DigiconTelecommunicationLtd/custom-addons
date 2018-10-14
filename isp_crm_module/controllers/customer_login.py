@@ -33,16 +33,9 @@ class CustomerLoginController(http.Controller):
 
         for customer in customer_list:
             isLegitUser = self._crypt_context().verify_and_update(password, customer.password)
-            print(isLegitUser[0])
             if customer.subscriber_id == subscriber_id and isLegitUser[0]:
                 success_msg = "Successfully logged in"
-
-                # chars = string.ascii_uppercase + string.digits
-                # logincode = ''.join(random.choice(chars) for _ in range(15))
-                # logincode = http.request.httprequest.cookies.get('login_token')
                 logincode = uuid.uuid4()
-
-                print("Login code generated")
 
                 creating_values = {
                     'logincode': logincode,
@@ -51,7 +44,6 @@ class CustomerLoginController(http.Controller):
                 }
 
                 track_login = http.request.env['isp_crm_module.track_login'].create(creating_values)
-                print("Login track record created")
 
                 break
 
