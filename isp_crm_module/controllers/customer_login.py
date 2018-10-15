@@ -20,7 +20,7 @@ class CustomerLoginController(http.Controller):
 
     @http.route("/customer/login/", type='json', auth='user', website=True)
     def customer_login(self, **kw):
-        success_msg = 'Login unsuccessful ! Incorrect login or password given'
+        success_msg = 'Failure ! Incorrect Login or Password!'
 
         # Fetch input json data sent from js
 
@@ -67,4 +67,8 @@ class CustomerLoginController(http.Controller):
 
     @http.route("/api/customer/login/", auth='user', methods=["GET"], website=True)
     def customer_login_api(self, **kw):
-        return http.request.render("isp_crm_module.customer_login")
+        success_msg = ''
+        values = {
+            'success_msg': success_msg,
+        }
+        return http.request.render("isp_crm_module.customer_login", values)

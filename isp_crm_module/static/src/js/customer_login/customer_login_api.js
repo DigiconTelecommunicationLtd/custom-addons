@@ -53,8 +53,14 @@ function customerLoginRequest() {
          if (loginToken.length > 2){
             utils.set_cookie('login_token', loginToken);
          }
-         $(".alert-success").html(output_data);
 
+         var alertSuccessMessage = "<div class=\"alert alert-success\"><strong>"+output_data+"</strong></div>";
+         var alertDangerMessage = "<div class=\"alert alert-danger\"><strong>"+output_data+"</strong></div>";
 
+         if(output_data == "Successfully logged in"){
+            $(".alertmsg").html(alertSuccessMessage);
+         }else{
+            $(".alertmsg").html(alertDangerMessage);
+         }
     });
 }
