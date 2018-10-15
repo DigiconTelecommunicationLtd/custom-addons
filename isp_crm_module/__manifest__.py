@@ -39,6 +39,7 @@
         'template/customer_profile_ticket.xml',
         'template/customer_profile/customer_profile.xml',
         'template/customer_login/customer_login_api.xml',
+        'template/customer_packages/customer_packages_list_api.xml',
         'data/default_stages_data.xml',
 
     ],
