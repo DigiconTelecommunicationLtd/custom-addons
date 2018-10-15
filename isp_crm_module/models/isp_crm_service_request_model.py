@@ -186,7 +186,7 @@ class ServiceRequest(models.Model):
         vals_user = {
             'name': name,
             'subscriber_id': username,
-            'password': password,
+            'password': "abcd1234",
         }
         user_model.create(vals_user)
         return True
