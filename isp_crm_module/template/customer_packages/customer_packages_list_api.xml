@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="isp_crm_module.customer_package_list" name="Packages List">
+            <t t-call="website.layout">
+                <div class="container">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3>
+                                    Packages List
+                                </h3>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-sm table-bordered" id="package_list_table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Code</th>
+                                            <th scope="col">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <script type="text/javascript" src="/isp_crm_module/static/src/js/customer_packages/customer_package_list_api.js"/>
+        </template>
+    </data>
+</odoo>
