@@ -32,7 +32,10 @@ class CustomerLoginController(http.Controller):
         customer_list = http.request.env['isp_crm_module.login'].search([])
 
         for customer in customer_list:
-            isLegitUser = self._crypt_context().verify_and_update(password, customer.password)
+            try:
+                isLegitUser = self._crypt_context().verify_and_update(password, customer.password)
+            except Exception as ex:
+                print(ex)
             if customer.subscriber_id == subscriber_id and isLegitUser[0]:
                 success_msg = "Successfully logged in"
                 logincode = uuid.uuid4()
