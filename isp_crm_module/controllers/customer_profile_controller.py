@@ -6,26 +6,28 @@ class CustomerProfile(http.Controller):
     @http.route("/customer/profile/", type='json', auth='user', website=True)
     def customer_profile_show(self, **kw):
 
-        customer_list = http.request.env['res.partner'].search([("id", "=", http.request.env.user[0].id)])
+        getlogincode = http.request.httprequest.cookies.get('login_token')
+        getcustomer = http.request.env['isp_crm_module.track_login'].search([("logincode", "=", getlogincode)])
+        customer_list = http.request.env['res.partner'].search([("subscriber_id", "=", getcustomer.subscriber_id)])
 
-        subscriber_id = customer_list.subscriber_id
-        name = customer_list.name
-        is_potential_customer = customer_list.is_potential_customer
-        father = customer_list.father
-        mother = customer_list.mother
-        birthday = customer_list.birthday
-        gender = customer_list.gender
-        identifier_name = customer_list.identifier_name
-        identifier_phone = customer_list.identifier_phone
-        identifier_mobile = customer_list.identifier_mobile
-        identifier_nid = customer_list.identifier_nid
-        service_type = customer_list.service_type.name
-        connection_type = customer_list.connection_type.name
-        connection_media = customer_list.connection_media.name
-        connection_status = customer_list.connection_status
-        bill_cycle_date = customer_list.bill_cycle_date
-        total_installation_charge = customer_list.total_installation_charge
-        package_id = customer_list.package_id.name
+        subscriber_id = customer_list[0].subscriber_id
+        name = customer_list[0].name
+        is_potential_customer = customer_list[0].is_potential_customer
+        father = customer_list[0].father
+        mother = customer_list[0].mother
+        birthday = customer_list[0].birthday
+        gender = customer_list[0].gender
+        identifier_name = customer_list[0].identifier_name
+        identifier_phone = customer_list[0].identifier_phone
+        identifier_mobile = customer_list[0].identifier_mobile
+        identifier_nid = customer_list[0].identifier_nid
+        service_type = customer_list[0].service_type.name
+        connection_type = customer_list[0].connection_type.name
+        connection_media = customer_list[0].connection_media.name
+        connection_status = customer_list[0].connection_status
+        bill_cycle_date = customer_list[0].bill_cycle_date
+        total_installation_charge = customer_list[0].total_installation_charge
+        package_id = customer_list[0].package_id.name
 
         return {
             'user': http.request.env.user,

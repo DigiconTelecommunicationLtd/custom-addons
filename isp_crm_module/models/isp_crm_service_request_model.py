@@ -148,7 +148,7 @@ class ServiceRequest(models.Model):
             customer = service_req.customer
             customer_subs_id = customer.subscriber_id
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
-            encrypted = self._crypt_context().encrypt(cust_password)
+            encrypted = self._crypt_context().encrypt("abcd1234")
 
 
             customer.update({
@@ -186,7 +186,7 @@ class ServiceRequest(models.Model):
         vals_user = {
             'name': name,
             'subscriber_id': username,
-            'password': "abcd1234",
+            'password': password,
         }
         user_model.create(vals_user)
         return True
