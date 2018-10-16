@@ -32,20 +32,24 @@ class CustomerLoginController(http.Controller):
         customer_list = http.request.env['isp_crm_module.login'].search([])
 
         for customer in customer_list:
-            isLegitUser = self._crypt_context().verify_and_update(password, customer.password)
-            if customer.subscriber_id == subscriber_id and isLegitUser[0]:
-                success_msg = "Successfully logged in"
-                logincode = uuid.uuid4()
+            try:
+                isLegitUser = self._crypt_context().verify_and_update(password, customer.password)
 
-                creating_values = {
-                    'logincode': logincode,
-                    'subscriber_id': subscriber_id,
-                    'password': encrypted_password,
-                }
+                if customer.subscriber_id == subscriber_id and isLegitUser[0]:
+                    success_msg = "Successfully logged in"
+                    logincode = uuid.uuid4()
 
-                track_login = http.request.env['isp_crm_module.track_login'].create(creating_values)
+                    creating_values = {
+                        'logincode': logincode,
+                        'subscriber_id': subscriber_id,
+                        'password': encrypted_password,
+                    }
 
-                break
+                    track_login = http.request.env['isp_crm_module.track_login'].create(creating_values)
+
+                    break
+            except Exception as ex:
+                print(ex)
 
         return {
 
