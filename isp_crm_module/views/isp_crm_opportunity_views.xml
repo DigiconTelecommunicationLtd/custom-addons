@@ -56,6 +56,10 @@
             <xpath expr="//div/field[@name='contact_name']" position="after">
                 <field name="emergency_contact_name" />
             </xpath>
+            <!--Adding reffered by-->
+            <xpath expr="//page/group/group/field[@name='referred']" position="replace">
+                <field name="referred_by" options="{'no_create_edit': True}"/>
+            </xpath>
         </field>
     </record>
     <!--End of the section-->
@@ -95,10 +99,6 @@
                 </h3>
             </xpath>
             <!--Adding emergency contact name-->
-            <!--<xpath expr="//page/group/div/field[@name='contact_name']" position="replace">-->
-                <!--<field name="emergency_contact_name" />-->
-            <!--</xpath>-->
-
             <xpath expr="//div/field[@name='contact_name']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
@@ -107,6 +107,10 @@
             </xpath>
             <xpath expr="//div/field[@name='contact_name']" position="after">
                 <field name="emergency_contact_name" />
+            </xpath>
+            <!--Adding reffered by-->
+            <xpath expr="//page/group/group/field[@name='referred']" position="replace">
+                <field name="referred_by" options="{'no_create_edit': True}"/>
             </xpath>
         </field>
     </record>

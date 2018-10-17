@@ -20,6 +20,7 @@ class Opportunity(models.Model):
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
     tagged_product_ids = fields.Many2many('product.product', 'crm_lead_product_rel', 'lead_id', 'product_id', string='Products', help="Classify and analyze your lead/opportunity according to Products : Unlimited Package etc")
     emergency_contact_name = fields.Char(string='Emergency Contact Name', required=False)
+    referred_by = fields.Many2one('res.partner', string='Referred By')
 
 
     def get_opportunity_address_str(self, opportunity):
