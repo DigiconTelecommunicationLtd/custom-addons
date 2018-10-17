@@ -64,7 +64,8 @@ class ServiceRequest(models.Model):
     name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
     problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
     description = fields.Text('Description')
-    stage = fields.Many2one('isp_crm_module.stage', string='Stage', required=False)
+    stage = fields.Many2one('isp_crm_module.stage', string='Stage', required=False,
+                            group_expand='_read_group_stage_ids')
 
     assigned_to = fields.Many2one('hr.employee', string='Assigned To', index=True, track_visibility='onchange')
     team = fields.Many2one('hr.department', string='Department', store=True)
@@ -115,6 +116,10 @@ class ServiceRequest(models.Model):
             ])
         return address_str
 
+    @ api.model
+    def _read_group_stage_ids(self, stages, domain, order):
+        stage_ids = self.env['isp_crm_module.stage'].search([])
+        return stage_ids
 
     @api.onchange('assigned_to')
     def _onchange_assigned_to(self):
