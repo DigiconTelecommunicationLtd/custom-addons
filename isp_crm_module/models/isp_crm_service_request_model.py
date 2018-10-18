@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 from odoo import http
 from odoo import api, fields, models, _
 from odoo.exceptions import Warning
+from odoo.tools import email_split
 
 
 AVAILABLE_PRIORITIES = [
@@ -60,6 +61,14 @@ class ServiceRequest(models.Model):
             service_request.update({
                 'amount_total': amount_untaxed,
             })
+
+    def _get_default_portal(self):
+        return self.env['res.groups'].search([('is_portal', '=', True)], limit=1)
+
+    def extract_email(self, email):
+        """ extract the email address from a user-friendly email address """
+        addresses = email_split(email)
+        return addresses[0] if addresses else ''
 
     name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
     problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
@@ -160,14 +169,14 @@ class ServiceRequest(models.Model):
             customer = service_req.customer
             customer_subs_id = customer.subscriber_id
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
-            encrypted = self._crypt_context().encrypt("abcd1234")
+            encrypted = "abcd1234"
 
 
             customer.update({
                 'is_potential_customer' : False
             })
             # Create an user
-            user_created = self._create_user(name=customer.name, username=customer_subs_id, password=encrypted)
+            user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
 
@@ -193,7 +202,23 @@ class ServiceRequest(models.Model):
         """
         return default_crypt_context
 
-    def _create_user(self, username, password, name=''):
+    def _create_user(self, partner, username, password, name=''):
+        portal_group = self._get_default_portal()
+        # creating portal user
+        created_user = self.env['res.users'].with_context(no_reset_password=True).create({
+            'email': self.extract_email(email=partner.email),
+            'login': username,
+            'partner_id': partner.id,
+            'company_id': partner.company_id.id,
+            'company_ids': [(6, 0, [partner.company_id.id])],
+            'groups_id': [(6, 0, [portal_group.id])],
+        })
+        created_user.write({
+            'password' : password
+        })
+        return created_user
+
+
         user_model = self.env['isp_crm_module.login']
         vals_user = {
             'name': name,
