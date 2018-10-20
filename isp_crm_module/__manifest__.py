@@ -50,6 +50,9 @@
         'template/customer_profile/customer_profile.xml',
         'template/customer_login/customer_login_api.xml',
         'template/customer_packages/customer_packages_list_api.xml',
+        'template/selfcare_layout_templates.xml',
+        'template/selfcare_login_templates.xml',
+        'data/default_stages_data.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

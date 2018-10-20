@@ -1,78 +1,56 @@
 # -*- coding: utf-8 -*-
-from odoo import http
 import string
 import random
 import uuid
+from odoo import http
+from odoo.tools.translate import _
 from passlib.context import CryptContext
-
-default_crypt_context = CryptContext(
-    # kdf which can be verified by the context. The default encryption kdf is
-    # the first of the list
-    ['pbkdf2_sha512', 'md5_crypt'],
-    # deprecated algorithms are still verified as usual, but ``needs_update``
-    # will indicate that the stored hash should be replaced by a more recent
-    # algorithm. Passlib 1.6 supports an `auto` value which deprecates any
-    # algorithm but the default, but Ubuntu LTS only provides 1.5 so far.
-    deprecated=['md5_crypt'],
-)
-
-class CustomerLoginController(http.Controller):
-
-    @http.route("/customer/login/", type='json', auth='user', website=True)
-    def customer_login(self, **kw):
-        success_msg = 'Failure ! Incorrect Login or Password!'
-
-        # Fetch input json data sent from js
-
-        subscriber_id = kw.get('Login')
-        password = kw.get('Password')
-        encrypted_password = self._crypt_context().encrypt(password)
-
-        logincode = ''
-        customer_list = http.request.env['isp_crm_module.login'].search([])
-
-        for customer in customer_list:
-            try:
-                isLegitUser = self._crypt_context().verify_and_update(password, customer.password)
-
-                if customer.subscriber_id == subscriber_id and isLegitUser[0]:
-                    success_msg = "Successfully logged in"
-                    logincode = uuid.uuid4()
-
-                    creating_values = {
-                        'logincode': logincode,
-                        'subscriber_id': subscriber_id,
-                        'password': encrypted_password,
-                    }
-
-                    track_login = http.request.env['isp_crm_module.track_login'].create(creating_values)
-
-                    break
-            except Exception as ex:
-                print(ex)
-
-        return {
-
-            'success_msg': success_msg,
-            'logincode':logincode
-
-        }
+from odoo.http import content_disposition, dispatch_rpc, request, \
+    serialize_exception as _serialize_exception, Response
 
 
-    def _crypt_context(self):
-        """ Passlib CryptContext instance used to encrypt and verify
-        passwords. Can be overridden if technical, legal or political matters
-        require different kdfs than the provided default.
 
-        Requires a CryptContext as deprecation and upgrade notices are used
-        internally
-        """
-        return default_crypt_context
 
-    @http.route("/api/customer/login/", auth='user', methods=["GET"], website=True)
-    def customer_login_api(self, **kw):
-        success_msg = ''
-        values = {
-            'success_msg': success_msg,
-        }
-        return http.request.render("isp_crm_module.customer_login", values)
+
+class SelfcareController(http.Controller):
+    DEFAULT_LOGIN_REDIRECT = "/selfcare"
+
+
+    def _login_redirect(self, redirect=None):
+        if redirect is None:
+            redirect = self.DEFAULT_LOGIN_REDIRECT
+        request.redirect(redirect)
+
+    @http.route("/selfcare/login", auth='public', methods=["GET", "POST"], website=True, csrf=False)
+    def selfcare_login(self, **kw):
+        template = "isp_crm_module.template_selfcare_login_main"
+        context = {}
+        if request.httprequest.method == 'POST':
+            old_uid = request.uid
+            uid = request.session.authenticate(request.session.db, request.params['login'], request.params['password'])
+            if uid is not False:
+                request.params['login_success'] = True
+                return http.redirect_with_hash(self._login_redirect())
+            request.uid = old_uid
+            context['error'] = _("Wrong login/password")
+
+        return request.render(template, context)
+
+    @http.route("/selfcare", auth='public', methods=["GET"], website=True)
+    def selfcare_home(self, **kw):
+        context = {}
+        msg = ""
+        full_name = ""
+        template = "isp_crm_module.template_selfcare_login_main"
+
+        if request.env.context.get('uid') is None:
+            msg = "Not Logged In..."
+        else:
+            msg = "Logged In..."
+            user_id = request.env.context.get('uid')
+            full_name = user_id
+            template = "isp_crm_module.template_selfcare_main_layout"
+
+        context['msg'] = msg
+        context['full_name'] = full_name
+        return request.render(template, context)

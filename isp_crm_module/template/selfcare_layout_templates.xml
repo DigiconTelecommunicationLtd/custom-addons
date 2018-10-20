@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--MIME logo -->
+    <template id="template_selfcare_logo">
+        <div class="login-logo">
+            <a href="http://www.digicontel.com/">
+                <img src="/isp_crm_module/static/src/assets/images/logo.png" width="60%" height="10%"/>
+            </a>
+        </div>
+    </template>
+    <!--end of logo-->
+
+    <!--selfcare css-->
+    <template id="template_selfcare_layout_css">
+          <!-- Bootstrap 3.3.7 -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+          <!-- Font Awesome -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/font-awesome/css/font-awesome.min.css"/>
+          <!-- Ionicons -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/Ionicons/css/ionicons.min.css"/>
+          <!-- daterange picker -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/bootstrap-daterangepicker/daterangepicker.css"/>
+          <!-- bootstrap datepicker -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"/>
+          <!-- iCheck for checkboxes and radio inputs -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/plugins/iCheck/all.css"/>
+          <!-- Bootstrap Color Picker -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css"/>
+          <!-- Bootstrap time Picker -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/plugins/timepicker/bootstrap-timepicker.min.css"/>
+          <!-- Select2 -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/select2/dist/css/select2.min.css"/>
+          <!-- Theme style -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/dist/css/AdminLTE.min.css"/>
+          <!-- AdminLTE Skins. Choose a skin from the css/skins
+               folder instead of downloading all of them to reduce the load. -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/dist/css/skins/_all-skins.min.css"/>
+    </template>
+    <!--end of css-->
+
+    <!--selfcare js-->
+    <template id="template_selfcare_layout_js">
+        <!-- jQuery 3 -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- Select2 -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/select2/dist/js/select2.full.min.js"></script>
+        <!-- InputMask -->
+        <script src="/isp_crm_module/static/src/lib/plugins/input-mask/jquery.inputmask.js"></script>
+        <script src="/isp_crm_module/static/src/lib/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+        <script src="/isp_crm_module/static/src/lib/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+        <!-- date-range-picker -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/moment/min/moment.min.js"></script>
+        <script src="/isp_crm_module/static/src/lib/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <!-- bootstrap datepicker -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+        <!-- bootstrap color picker -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+        <!-- bootstrap time picker -->
+        <script src="/isp_crm_module/static/src/lib/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+        <!-- SlimScroll -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+        <!-- iCheck 1.0.1 -->
+        <script src="/isp_crm_module/static/src/lib/plugins/iCheck/icheck.min.js"></script>
+        <!-- FastClick -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/fastclick/lib/fastclick.js"></script>
+        <!-- AdminLTE App -->
+        <script src="/isp_crm_module/static/src/lib/dist/js/adminlte.min.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="/isp_crm_module/static/src/lib/dist/js/demo.js"></script>
+        <!-- Page script -->
+        <script>
+            $(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+            //Datemask dd/mm/yyyy
+            $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            //Datemask2 mm/dd/yyyy
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+
+            //Date range picker
+            $('#reservation').daterangepicker()
+            //Date range picker with time picker
+            $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+            //Date range as a button
+            $('#daterange-btn').daterangepicker(
+            {
+                ranges   : {
+                    'Today'       : [moment(), moment()],
+                    'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    startDate: moment().subtract(29, 'days'),
+                    endDate  : moment()
+                },
+                function (start, end) {
+                    $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+                }
+            )
+
+            //Date picker
+            $('#datepicker').datepicker({
+                autoclose: true
+            })
+
+            //iCheck for checkbox and radio inputs
+            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass   : 'iradio_minimal-blue'
+            })
+            //Red color scheme for iCheck
+            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                checkboxClass: 'icheckbox_minimal-red',
+                radioClass   : 'iradio_minimal-red'
+            })
+            //Flat red color scheme for iCheck
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass   : 'iradio_flat-green'
+            })
+
+            //Colorpicker
+            $('.my-colorpicker1').colorpicker()
+            //color picker with addon
+            $('.my-colorpicker2').colorpicker()
+
+            //Timepicker
+            $('.timepicker').timepicker({
+                showInputs: false
+                })
+            })
+        </script>
+
+    </template>
+    <!--end js-->
+
+    <!--Main header-->
+    <template id="template_selfcare_main_header">
+        <!-- Main Header -->
+        <header class="main-header">
+
+            <!-- Logo -->
+            <a href="index2.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>A</b>LT</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Admin</b>LTE</span>
+            </a>
+
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <!-- The user image in the navbar-->
+                                <img src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
+                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                <span class="hidden-xs">
+                                    <t t-esc="full_name" />
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- The user image in the menu -->
+                                <li class="user-header">
+                                    <img src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+
+                                    <p>
+                                        Alexander Pierce - Web Developer
+                                        <small>Member since Nov. 2012</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <li class="user-body">
+                                    <div class="row">
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Followers</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Sales</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Friends</a>
+                                        </div>
+                                    </div>
+                                <!-- /.row -->
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </template>
+    <!--Main header ends here-->
+
+
+    <template id="template_selfcare_sidebar">
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                    </div>
+                    <div class="pull-left info">
+                        <p>
+                            <t t-esc="full_name" />
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">HEADER</li>
+                    <!-- Optionally, you can add icons to the links -->
+                    <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
+                    <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#">Link in level 2</a></li>
+                            <li><a href="#">Link in level 2</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- /.sidebar-menu -->
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+    </template>
+
+
+
+    <!--Test template-->
+    <template id="isp_crm_module.template_selfcare_main_layout">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+
+                <h1>
+                    <t t-esc="msg"/>
+                </h1>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+    <!--end of test template section-->
+
+
+
+
+
+</odoo>
