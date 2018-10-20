@@ -54,8 +54,11 @@ class Opportunity(models.Model):
     @api.onchange('email_from')
     def onchange_email(self):
         if self.email_from:
-            if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", self.email_from) == None:
-                raise UserError(_('Please Enter a Valid Email Address!'))
+            if len(self.email_from) < 200:
+                if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+([\.]?[a-zA-Z0-9-])*$", self.email_from) == None:
+                    raise UserError(_('Please Enter a Valid Email Address!'))
+            else:
+                raise UserError(_('Email Address is too long!'))
 
     @api.onchange('mobile')
     def onchange_mobile(self):
