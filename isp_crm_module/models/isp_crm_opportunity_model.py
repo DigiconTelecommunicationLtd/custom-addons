@@ -54,20 +54,29 @@ class Opportunity(models.Model):
     @api.onchange('email_from')
     def onchange_email(self):
         if self.email_from:
-            if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", self.email_from) == None:
-                raise UserError(_('Please Enter a Valid Email Address!'))
+            if len(self.email_from) < 200:
+                if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+([\.]?[a-zA-Z0-9-])*$", self.email_from) == None:
+                    raise UserError(_('Please Enter a Valid Email Address!'))
+            else:
+                raise UserError(_('Email Address is too long!'))
 
     @api.onchange('mobile')
     def onchange_mobile(self):
         if self.mobile:
-            if re.match("^([0-9]+-)*[0-9]+$", self.mobile) == None:
-                raise UserError(_('Please Enter a Valid Mobile Number!'))
+            if len(self.mobile) < 13:
+                if re.match("^([0-9]+-)*[0-9]+$", self.mobile) == None:
+                    raise UserError(_('Please Enter a Valid Mobile Number!'))
+            else:
+                raise UserError(_('Mobile number is too long!'))
 
     @api.onchange('phone')
     def onchange_phone(self):
         if self.phone:
-            if re.match("^([0-9]+-)*[0-9]+$", self.phone) == None:
-                raise UserError(_('Please Enter a Valid Phone Number!'))
+            if len(self.mobile) < 10:
+                if re.match("^([0-9]+-)*[0-9]+$", self.phone) == None:
+                    raise UserError(_('Please Enter a Valid Phone Number!'))
+            else:
+                raise UserError(_('Phone number is too long!'))
 
     @api.model
     def create(self, vals):
@@ -84,7 +93,7 @@ class Opportunity(models.Model):
     def action_create_new_service_request(self):
         res = {}
         for opportunity in self:
-            first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New'),], order="sequence asc")[0]
+            first_stage = self.env['isp_crm_module.stage'].search(order="sequence asc")[0]
             service_req_obj = self.env['isp_crm_module.service_request'].search([])
 
             for order in opportunity.order_ids:
