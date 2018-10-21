@@ -6,7 +6,7 @@
         <record id="seq_service_request" model="ir.sequence">
             <field name="name">Service Request</field>
             <field name="code">isp_crm_module.service_request</field>
-            <field name="prefix">REQ-%(y)s%(month)s-</field>
+            <field name="prefix">REQ%(y)s%(month)s</field>
             <field name="padding">4</field>
         </record>
 
@@ -14,7 +14,7 @@
         <record id="seq_crm_lead_opportunity" model="ir.sequence">
             <field name="name">Lead/Opportunity Sequence</field>
             <field name="code">crm.lead</field>
-            <field name="prefix">ID-%(y)s%(month)s-</field>
+            <field name="prefix">ID%(y)s%(month)s</field>
             <field name="padding">4</field>
         </record>
 
@@ -22,7 +22,7 @@
         <record id="seq_crm_customer" model="ir.sequence">
             <field name="name">Customer Sequence</field>
             <field name="code">res.partner</field>
-            <field name="prefix">-%(y)s%(month)s-</field>
+            <field name="prefix">%(y)s%(month)s</field>
             <field name="padding">4</field>
         </record>
     </data>
