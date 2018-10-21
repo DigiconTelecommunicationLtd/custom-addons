@@ -54,7 +54,7 @@ class Opportunity(models.Model):
     @api.onchange('email_from')
     def onchange_email(self):
         if self.email_from:
-            if len(self.email_from) < 200:
+            if len(self.email_from) < 256:
                 if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+([\.]?[a-zA-Z0-9-])*$", self.email_from) == None:
                     raise UserError(_('Please Enter a Valid Email Address!'))
             else:
@@ -63,7 +63,7 @@ class Opportunity(models.Model):
     @api.onchange('mobile')
     def onchange_mobile(self):
         if self.mobile:
-            if len(self.mobile) < 13:
+            if len(self.mobile) < 15:
                 if re.match("^([0-9]+-)*[0-9]+$", self.mobile) == None:
                     raise UserError(_('Please Enter a Valid Mobile Number!'))
             else:
@@ -72,7 +72,7 @@ class Opportunity(models.Model):
     @api.onchange('phone')
     def onchange_phone(self):
         if self.phone:
-            if len(self.mobile) < 10:
+            if len(self.phone) < 15:
                 if re.match("^([0-9]+-)*[0-9]+$", self.phone) == None:
                     raise UserError(_('Please Enter a Valid Phone Number!'))
             else:
