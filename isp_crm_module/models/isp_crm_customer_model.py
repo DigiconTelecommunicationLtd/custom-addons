@@ -4,6 +4,8 @@
 
 from ast import literal_eval
 from odoo import api, fields, models, _
+from odoo.exceptions import Warning, UserError
+import re
 from datetime import datetime
 
 GENDERS = [
@@ -43,6 +45,7 @@ class Customer(models.Model):
             sequence = self.env['ir.sequence'].next_by_code('res.partner')
             sequence_str = customer_type + sequence
             vals['subscriber_id'] = sequence_str
+
         return super(Customer, self).create(vals)
 
     @api.multi
