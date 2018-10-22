@@ -93,7 +93,7 @@ class Opportunity(models.Model):
     def action_create_new_service_request(self):
         res = {}
         for opportunity in self:
-            first_stage = self.env['isp_crm_module.stage'].search(order="sequence asc")[0]
+            first_stage = self.env['isp_crm_module.stage'].search([],order="sequence asc")[0]
             service_req_obj = self.env['isp_crm_module.service_request'].search([])
 
             for order in opportunity.order_ids:
