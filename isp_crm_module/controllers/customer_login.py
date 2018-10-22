@@ -45,38 +45,17 @@ class SelfcareController(Home):
 
         return request.render(template, context)
 
-    @http.route('/selfcare/logout', methods=["GET"], auth="none", website=True)
+    @http.route('/selfcare/logout', methods=["GET"], auth="public", website=True)
     def logout(self):
         request.session.logout(keep_db=True)
         redirect = self.DEFAULT_LOGIN_ROUTE
         return request.redirect(redirect)
 
-    @http.route("/selfcare", auth='public', methods=["GET"], website=True)
-    def selfcare_home(self, **kw):
-        context = {}
-        full_name = ""
-        customer_id = ""
-        image = ""
-        img_url = ""
-
-        template = "isp_crm_module.template_selfcare_login_main"
-        if self._redirect_if_not_login(req=request):
-            user_id = request.env.context.get('uid')
-            logged_in_user = request.env['res.users'].sudo().browse(user_id)
-            template = "isp_crm_module.template_selfcare_main_layout"
-            context['user'] = logged_in_user
-            context['full_name'] = logged_in_user.name.title()
-            context['customer_id'] = logged_in_user.subscriber_id
-            context['image'] = logged_in_user.image
-            img_url = '/web/content/%s' % logged_in_user.image
-            context['img_url'] = img_url
-
-        return request.render(template, context)
 
     @http.route("/selfcare/profile", auth='user', methods=["GET"], website=True)
-    def selfcare_home(self, **kw):
+    def selfcare_profile(self, **kw):
         context = {}
-        content_header = "Test Template"
+        content_header = "User Profile"
 
         template = "isp_crm_module.template_selfcare_login_main"
         if self._redirect_if_not_login(req=request):
@@ -94,7 +73,7 @@ class SelfcareController(Home):
     @http.route("/selfcare", auth='user', methods=["GET"], website=True)
     def selfcare_home(self, **kw):
         context = {}
-        content_header = "Test Template"
+        content_header = "Hellllooooo Template"
 
         template = "isp_crm_module.template_selfcare_login_main"
         if self._redirect_if_not_login(req=request):
@@ -108,4 +87,3 @@ class SelfcareController(Home):
             context['content_header'] = content_header
 
         return request.render(template, context)
-

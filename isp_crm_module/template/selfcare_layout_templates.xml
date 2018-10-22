@@ -221,9 +221,33 @@
 
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
-                    <li class="header">HEADER</li>
-                    <!-- Optionally, you can add icons to the links -->
-                    <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
+                    <li class="header">Selfcare</li>
+                    <li class="active">
+                        <a href="/selfcare">
+                            <i class="fa fa-dashboard">  </i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/selfcare/profile">
+                            <i class="fa fa-user">  </i>
+                            <span>User Profile</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="/selfcare/payment">
+                            <i class="fa fa-credit-card">  </i>
+                            <span>Payment</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="/selfcare/payment">Payment</a></li>
+                            <li><a href="/selfcare/payment-history">Payment History</a></li>
+                        </ul>
+                    </li>
+
                     <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
                     <li class="treeview">
                         <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
@@ -244,7 +268,7 @@
     </template>
 
 
-    <!--Test template-->
+    <!--Main Template-->
     <template id="template_selfcare_main_layout">
         <head>
             <t t-call="isp_crm_module.template_selfcare_layout_css"/>
@@ -258,6 +282,7 @@
                 <div class="content-wrapper" style="min-height: 901px;">
                     <section class="content-header" id="section_id_selfcare_content_header">
                         <!--inherited content header goes here-->
+                        <h1>Hellllooo</h1>
                     </section>
                     <section class="content">
                         <div class="row" id="div_id_selfcare_content">
@@ -269,87 +294,81 @@
             </div>
         </body>
     </template>
-    <!--end of test template section-->
+    <!--end of main template section-->
 
-    <!--test template-->
-    <!--<template id="template_selfcare_test" inherit_id="isp_crm_module.template_selfcare_main_layout">-->
-        <!--<xpath expr="//section[@id='section_id_selfcare_content_header']" position="inside">-->
-            <!--<h1>-->
-                <!--<t t-if='content_header'>-->
-                    <!--<t t-esc="content_header"/>-->
-                <!--</t>-->
-            <!--</h1>-->
-        <!--</xpath>-->
-        <!--&lt;!&ndash;<xpath expr="//section[@id='id_selfcare_content_header']" position="inside">&ndash;&gt;-->
-            <!--&lt;!&ndash;<h1>&ndash;&gt;-->
-                <!--&lt;!&ndash;Hello happiness&ndash;&gt;-->
-            <!--&lt;!&ndash;</h1>&ndash;&gt;-->
-        <!--&lt;!&ndash;</xpath>&ndash;&gt;-->
-    <!--</template>-->
 
-    <!--test template-->
-    <!--<template id="template_selfcare_dashboard">-->
-        <!--<t t-call="isp_crm_module.template_selfcare_main_layout">-->
-            <!--<xpath expr="//section[@id='section_id_selfcare_content_header']" position="inside">-->
-                <!--<h1>-->
-                    <!--<t t-if='content_header'>-->
-                        <!--<t t-esc="content_header"/>-->
-                    <!--</t>-->
-                <!--</h1>-->
-            <!--</xpath>-->
-            <!--<xpath expr="//div[@id='div_id_selfcare_content']" position="inside">-->
-                <!--<div class="col-lg-6 col-xs-6">-->
-                <!--&lt;!&ndash; small box &ndash;&gt;-->
-                    <!--<div class="small-box bg-green">-->
-                        <!--<div class="inner">-->
-                            <!--<h3>53<sup style="font-size: 20px">%</sup></h3>-->
+    <template id="template_selfcare_profile">
+        <div class="col-md-4 col-md-offset-4">
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <img itemprop="image" t-att-src="website.image_url(user, 'image')" class="profile-user-img img-responsive img-circle" alt="User Image"/>
 
-                            <!--<p>Bounce Rate</p>-->
-                        <!--</div>-->
-                        <!--<div class="icon">-->
-                            <!--<i class="ion ion-stats-bars"></i>-->
-                        <!--</div>-->
-                        <!--<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</xpath>-->
-        <!--</t>-->
-    <!--</template>-->
-    <!--dashboard ends here-->
+                    <h3 class="profile-username text-center">
+                      <t t-esc="user.name" />
+                    </h3>
 
-    <!--test template-->
-    <!--<template id="template_selfcare_user_profile">-->
-        <!--<head>-->
-            <!--<t t-call="isp_crm_module.template_selfcare_layout_css"/>-->
-        <!--</head>-->
+                    <p class="text-muted text-center">
+                      <t t-esc="user.subscriber_id" />
+                    </p>
 
-        <!--<body class="hold-transition skin-blue sidebar-mini">-->
-            <!--<div class="wrapper">-->
-                <!--<t t-call="isp_crm_module.template_selfcare_main_header"/>-->
-                <!--<t t-call="isp_crm_module.template_selfcare_sidebar"/>-->
-                <!--&lt;!&ndash;<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>&ndash;&gt;-->
-                <!--<div class="content-wrapper" style="min-height: 901px;">-->
-                    <!--<section class="content-header">-->
-                        <!--&lt;!&ndash;inherited content header goes here&ndash;&gt;-->
-                        <!--<h1>-->
-                            <!--<t t-if='content_header'>-->
-                                <!--<t t-esc="content_header"/>-->
-                            <!--</t>-->
-                        <!--</h1>-->
-                    <!--</section>-->
-                    <!--<section class="content">-->
-                        <!--<div class="row">-->
-                            <!--<div class="row">-->
-                                <!--<h1>-->
-                                    <!--Profile goes here-->
-                                <!--</h1>-->
+                    <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item">
+                            <b>Package Name</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.package_id.name" />
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Valid till</b>
+                            <b class="pull-right text-info">
+                                23-Nov-2018
+                                <!--<t t-esc="user.package_id.name" />-->
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                        <b>Friends</b> <a class="pull-right">13,287</a>
+                        </li>
+                    </ul>
+                </div>
+            <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
 
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</section>-->
-                <!--</div>-->
-                <!--<t t-call="isp_crm_module.template_selfcare_layout_js"/>-->
-            <!--</div>-->
-        <!--</body>-->
-    <!--</template>-->
+
+
+
+    <!--Profile template-->
+    <template id="template_selfcare_user_profile">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_profile"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
 </odoo>
