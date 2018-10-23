@@ -136,8 +136,10 @@ class ServiceRequest(models.Model):
 
     @api.model
     def create(self, vals):
+        first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
+            vals['stage'] = first_stage.id
         return super(ServiceRequest, self).create(vals)
 
     def _default_account(self):
