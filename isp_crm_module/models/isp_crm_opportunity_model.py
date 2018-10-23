@@ -55,7 +55,7 @@ class Opportunity(models.Model):
     def onchange_email(self):
         if self.email_from:
             if len(self.email_from) < 256:
-                if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+([\.]?[a-zA-Z0-9-])*$", self.email_from) == None:
+                if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$", self.email_from) == None:
                     raise UserError(_('Please Enter a Valid Email Address!'))
             else:
                 raise UserError(_('Email Address is too long!'))
@@ -93,7 +93,7 @@ class Opportunity(models.Model):
     def action_create_new_service_request(self):
         res = {}
         for opportunity in self:
-            first_stage = self.env['isp_crm_module.stage'].search([],order="sequence asc")[0]
+            first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New'),], order="sequence asc")[0]
             service_req_obj = self.env['isp_crm_module.service_request'].search([])
 
             for order in opportunity.order_ids:
