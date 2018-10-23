@@ -65,7 +65,7 @@ class ServiceRequest(models.Model):
     problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
     description = fields.Text('Description')
     stage = fields.Many2one('isp_crm_module.stage', string='Stage', required=False,
-                            group_expand='_read_group_stage_ids')
+                            group_expand='_default_stages')
 
     assigned_to = fields.Many2one('hr.employee', string='Assigned To', index=True, track_visibility='onchange')
     team = fields.Many2one('hr.department', string='Department', store=True)
@@ -143,6 +143,10 @@ class ServiceRequest(models.Model):
     def _default_account(self):
         journal = self.env['account.journal'].search([('code', '=', 'INV')])[0]
         return journal.default_credit_account_id.id
+
+    def _default_stages(self, stages, domain, order):
+        stage_ids = self.env['isp_crm_module.stage'].search([('name', '!=', 'Undefined')])
+        return stage_ids
 
     @api.multi
     def action_make_service_request_done(self):
