@@ -136,7 +136,7 @@ class ServiceRequest(models.Model):
 
     @api.model
     def create(self, vals):
-        first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New'), ], order="sequence asc")[0]
+        first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
             vals['stage'] = first_stage.id

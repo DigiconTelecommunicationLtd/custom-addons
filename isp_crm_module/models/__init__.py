@@ -17,3 +17,9 @@ from . import isp_crm_login
 from . import isp_crm_connection_media
 from . import isp_crm_connection_type
 from . import isp_crm_service_type
+from . import isp_crm_hd_solution
+from . import isp_crm_hd_stage
+from . import isp_crm_hd_tasks
+from . import isp_crm_hd_ticket_complexity
+from . import isp_crm_hd_ticket_history
+from . import isp_crm_hd_type

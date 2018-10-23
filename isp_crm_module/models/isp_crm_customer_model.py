@@ -4,9 +4,9 @@
 
 from ast import literal_eval
 from odoo import api, fields, models, _
+from datetime import datetime
 from odoo.exceptions import Warning, UserError
 import re
-from datetime import datetime
 
 GENDERS = [
     ('male', _('Male')),
@@ -46,7 +46,38 @@ class Customer(models.Model):
             sequence_str = customer_type + sequence
             vals['subscriber_id'] = sequence_str
 
-        return super(Customer, self).create(vals)
+        validated = True
+
+        if vals.get('email'):
+            if len(vals.get('email')) < 256:
+                if re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$", vals.get('email')) == None:
+                    validated = False
+                    raise UserError(_('Please Enter a Valid Email Address!'))
+
+            else:
+                validated = False
+                raise UserError(_('Email Address is too long!'))
+
+        if vals.get('mobile'):
+            if len(vals.get('mobile')) < 15:
+                if re.match("^([0-9]+-)*[0-9]+$", vals.get('mobile')) == None:
+                    validated = False
+                    raise UserError(_('Please Enter a Valid Mobile Number!'))
+            else:
+                validated = False
+                raise UserError(_('Mobile number is too long!'))
+
+        if vals.get('phone'):
+            if len(vals.get('phone')) < 15:
+                if re.match("^([0-9]+-)*[0-9]+$", vals.get('phone')) == None:
+                    validated = False
+                    raise UserError(_('Please Enter a Valid Phone Number!'))
+            else:
+                validated = False
+                raise UserError(_('Phone number is too long!'))
+
+        if validated:
+            return super(Customer, self).create(vals)
 
     @api.multi
     def action_view_customer_service_request(self):

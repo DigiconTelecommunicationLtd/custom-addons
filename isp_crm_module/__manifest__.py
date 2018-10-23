@@ -34,6 +34,8 @@
         'views/isp_crm_opportunity_views.xml',
         'views/isp_crm_customer_views.xml',
         'views/isp_crm_menulist_views.xml',
+        'views/isp_crm_hd_menu_list.xml',
+        'views/isp_crm_hd_type.xml',
         'views/isp_crm_cron_job_views.xml',
         'template/new_ticket_page.xml',
         'template/customer_profile_ticket.xml',
