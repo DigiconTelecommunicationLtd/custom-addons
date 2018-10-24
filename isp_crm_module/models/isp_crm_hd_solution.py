@@ -9,5 +9,5 @@ class HelpdeskSolution(models.Model):
     _name = "isp_crm_module.helpdesk_solution"
     _description = "Helpdesk Solution"
 
-    name = fields.Char('Name', required=True, translate=True)
+    name = fields.Char('Solution', required=True, translate=True)
     color = fields.Integer()
