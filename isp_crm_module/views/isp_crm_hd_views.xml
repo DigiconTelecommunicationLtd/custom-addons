@@ -87,8 +87,6 @@
                 <sheet>
                     <group>
                         <field name="type"/>
-                        <field name="stage"/>
-                        <!--<field name="assigned_to"/>-->
                         <field name="complexity"/>
                     </group>
                     <group string="Customer Info">

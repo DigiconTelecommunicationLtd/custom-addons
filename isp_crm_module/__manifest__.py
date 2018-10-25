@@ -24,6 +24,8 @@
     'data': [
         # 'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
+        'data/default_hd_stages_data.xml',
+        'data/default_stages_data.xml',
         'views/views.xml',
         'views/isp_crm_problem_views.xml',
         'views/isp_crm_solution_views.xml',
@@ -48,8 +50,6 @@
         'template/customer_profile/customer_profile.xml',
         'template/customer_login/customer_login_api.xml',
         'template/customer_packages/customer_packages_list_api.xml',
-        'data/default_stages_data.xml',
-
     ],
     # only loaded in demonstration mode
     'demo': [

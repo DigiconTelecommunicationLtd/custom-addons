@@ -20,7 +20,7 @@ class Helpdesk(models.Model):
     type = fields.Many2one('isp_crm_module.helpdesk_type', string='Type', ondelete='set null',
                                   help='Ticket Type.')
     stage = fields.Many2one('isp_crm_module.helpdesk_stage', string='Stage', ondelete='set null',
-                           help='Stage of the ticket.')
+                           help='Stage of the ticket.', group_expand='_default_stages')
     assigned_to = fields.Many2one('hr.employee', string='Assigned To', ondelete='set null',
                                   help='Person assigned to complete the task.')
     team = fields.Many2one('hr.department', string='Department', store=True)
@@ -41,7 +41,8 @@ class Helpdesk(models.Model):
 
     @api.model
     def create(self, vals):
-
+        first_stage = self.env['isp_crm_module.helpdesk_stage'].search([], order="sequence asc")[0]
+        vals['stage'] = first_stage.id
         newrecord = super(Helpdesk, self).create(vals)
         self.env['isp_crm_module.helpdesk_ticket_history'].create(
             {
@@ -52,3 +53,7 @@ class Helpdesk(models.Model):
         )
 
         return newrecord
+
+    def _default_stages(self, stages, domain, order):
+        stage_ids = self.env['isp_crm_module.helpdesk_stage'].search([('name', '!=', 'Undefined')])
+        return stage_ids
