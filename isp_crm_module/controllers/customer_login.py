@@ -8,9 +8,10 @@ from passlib.context import CryptContext
 from odoo.http import content_disposition, dispatch_rpc, request, \
     serialize_exception as _serialize_exception, Response
 from odoo.addons.web.controllers.main import Home
+from .payment_controller import PaymentController
 
 
-class SelfcareController(Home):
+class SelfcareController(PaymentController):
 
     DEFAULT_LOGIN_REDIRECT = "/selfcare"
     DEFAULT_LOGIN_ROUTE = "/selfcare/login"
@@ -62,6 +63,40 @@ class SelfcareController(Home):
             user_id = request.env.context.get('uid')
             logged_in_user = request.env['res.users'].sudo().browse(user_id)
             template = "isp_crm_module.template_selfcare_user_profile"
+            context['user'] = logged_in_user
+            context['full_name'] = logged_in_user.name.title()
+            context['customer_id'] = logged_in_user.subscriber_id
+            context['image'] = logged_in_user.image
+            context['content_header'] = content_header
+
+        return request.render(template, context)
+
+    @http.route("/selfcare/payment", auth='user', methods=["GET", "POST"], website=True, csrf=False)
+    def selfcare_payment(self, **kw):
+        context = {}
+        content_header = "User Payment"
+        template = "isp_crm_module.template_selfcare_login_main"
+
+        if self._redirect_if_not_login(req=request):
+            template = "isp_crm_module.template_selfcare_user_payment"
+            user_id = request.env.context.get('uid')
+            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+
+            if request.httprequest.method == 'POST':
+                amount = request.params["amount"]
+                service_type = request.params["service_type"]
+                response_content = self.initiate_session(customer=logged_in_user, amount=amount, transaction_id="12345")
+                if response_content['status'] == "SUCCESS":
+                    template = "isp_crm_module.template_selfcare_user_make_payment"
+                    request.session['payment_session_id'] = response_content['sessionkey']
+                    context['cards'] = response_content["desc"]
+                    context['redirect_gateway'] = response_content["redirectGatewayURL"]
+                    context['gateway_list'] = response_content["gw"]
+
+                    # TODO (Arif): take the pic from the local and fit it on the gateway list.
+                    # TODO (Arif) : redirect to the gateway list page.
+                    return request.redirect(response_content["redirectGatewayURL"] + response_content["gw"]["mobilebanking"])
+
             context['user'] = logged_in_user
             context['full_name'] = logged_in_user.name.title()
             context['customer_id'] = logged_in_user.subscriber_id
