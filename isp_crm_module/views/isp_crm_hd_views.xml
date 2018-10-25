@@ -88,8 +88,33 @@
                     <group>
                         <field name="type"/>
                         <field name="stage"/>
-                        <field name="assigned_to"/>
+                        <!--<field name="assigned_to"/>-->
                         <field name="complexity"/>
+                    </group>
+                    <group string="Customer Info">
+                        <!--Left-->
+                        <group>
+                            <field name="customer" string="Customer Name" options="{'no_create_edit': True}"/>
+                            <field name="customer_mobile" string="Customer Mobile" readonly="1"/>
+                        </group>
+                        <!--Right-->
+                        <group>
+                            <field name="customer_email" string="Customer Email" readonly="1"/>
+                            <field name="customer_company" string="Customer Company" readonly="1"/>
+                            <field name="customer_address" string="Customer Address"/>
+                        </group>
+                    </group>
+                    <group string="Team Info">
+                        <!--Left-->
+                        <group>
+                            <field name="assigned_to" options="{'no_create_edit': True}"/>
+                            <field name="team"/>
+                        </group>
+                        <!--Right-->
+                        <group>
+                            <field name="team_leader"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
                     </group>
                     <notebook colspan="4">
                         <!--Solutions list-->
