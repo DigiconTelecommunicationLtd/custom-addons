@@ -41,6 +41,7 @@
         'views/isp_crm_hd_solution_views.xml',
         'views/isp_crm_hd_tasks_views.xml',
         'views/isp_crm_hd_ticket_history.xml',
+        'data/default_hd_stages_data.xml',
         'views/isp_crm_hd_views.xml',
         'views/isp_crm_cron_job_views.xml',
         'template/new_ticket_page.xml',
