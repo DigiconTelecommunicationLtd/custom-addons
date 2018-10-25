@@ -24,6 +24,8 @@
     'data': [
         # 'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
+        'data/default_hd_stages_data.xml',
+        'data/default_stages_data.xml',
         'views/views.xml',
         'views/isp_crm_problem_views.xml',
         'views/isp_crm_solution_views.xml',
@@ -41,7 +43,6 @@
         'views/isp_crm_hd_solution_views.xml',
         'views/isp_crm_hd_tasks_views.xml',
         'views/isp_crm_hd_ticket_history.xml',
-        'data/default_hd_stages_data.xml',
         'views/isp_crm_hd_views.xml',
         'views/isp_crm_cron_job_views.xml',
         'template/new_ticket_page.xml',
@@ -49,8 +50,6 @@
         'template/customer_profile/customer_profile.xml',
         'template/customer_login/customer_login_api.xml',
         'template/customer_packages/customer_packages_list_api.xml',
-        'data/default_stages_data.xml',
-
     ],
     # only loaded in demonstration mode
     'demo': [
