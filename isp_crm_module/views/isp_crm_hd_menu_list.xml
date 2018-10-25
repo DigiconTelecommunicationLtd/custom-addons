@@ -8,18 +8,11 @@
         parent="crm.crm_menu_root"
      />
 
-    <!--ISP CRM Helpdesk Menu-->
-    <menuitem
-        id="isp_crm_hd_menu"
-        name="Helpdesk Menu"
-        parent="crm.crm_menu_root"
-     />
-
     <!--ISP CRM Helpdesk Configuration-->
     <menuitem
         id="isp_crm_hd_config"
         name="Helpdesk Configuration"
-        parent="crm.crm_menu_root"
+        parent="crm.crm_menu_config"
      />
 
 

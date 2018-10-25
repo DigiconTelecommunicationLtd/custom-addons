@@ -4,7 +4,7 @@
     <record id="isp_crm_module.helpdesk_type_list" model="ir.ui.view">
         <field name="name">List of Ticket Types</field>
         <field name="model">isp_crm_module.helpdesk_type</field>
-        <field name= "arch" type = "xml">
+        <field name="arch" type="xml">
             <tree string="Helpdesk Type List">
                 <field name="name"/>
             </tree>
@@ -24,7 +24,7 @@
     <record id="isp_crm_module.helpdesk_type_create" model="ir.ui.view">
         <field name="name">Create Ticket Type</field>
         <field name="model">isp_crm_module.helpdesk_type</field>
-        <field name= "arch" type = "xml">
+        <field name="arch" type="xml">
             <form string="Helpdesk Type List">
                 <sheet>
                     <group>
@@ -41,13 +41,18 @@
         <field name="view_mode">list,form</field>
         <field name="domain" eval=""/>
         <field name="search_view_id" ref="isp_crm_module.helpdesk_type_search"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to set a new type in your helpdesk model.
+            </p>
+        </field>
     </record>
 
     <menuitem
-        id="isp_crm_hd_type"
-        name="Ticket Type"
-        parent="isp_crm_hd_menu"
-        action="isp_crm_helpdesk_type"
-     />
+            id="isp_crm_hd_type"
+            name="Ticket Type"
+            parent="isp_crm_hd_config"
+            action="isp_crm_helpdesk_type"
+    />
 
 </odoo>

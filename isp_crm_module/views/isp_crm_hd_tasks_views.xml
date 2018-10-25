@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="isp_crm_module_hd_tasks_search" model="ir.ui.view">
+        <field name="name">Helpdesk Ticket Tasks Tree - Search</field>
+        <field name="model">isp_crm_module.helpdesk_tasks</field>
+        <field name="arch" type="xml">
+            <search string="Tasks Search">
+                <field name="name"/>
+                <field name="problem"/>
+                <field name="solution_id"/>
+                <field name="assigned_to"/>
+                <field name="is_done"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_hd_tasks_tree" model="ir.ui.view">
+        <field name="name">Helpdesk Ticket Tasks Tree</field>
+        <field name="model">isp_crm_module.helpdesk_tasks</field>
+        <field name="arch" type="xml">
+            <tree string="Tasks">
+                <field name="name"/>
+                <field name="problem"/>
+                <field name="solution_id"/>
+                <field name="assigned_to"/>
+                <field name="is_done"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_hd_tasks_form" model="ir.ui.view">
+        <field name="name">Helpdesk Ticket Tasks Form</field>
+        <field name="model">isp_crm_module.helpdesk_tasks</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Tasks">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="problem"/>
+                            <field name="solution_id"/>
+                            <field name="assigned_to"/>
+                            <field name="is_done"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_hd_tasks_action" model="ir.actions.act_window">
+        <field name="name">Helpdesk Ticket Tasks</field>
+        <field name="res_model">isp_crm_module.helpdesk_tasks</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_crm_module.isp_crm_module_hd_tasks_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to set a new tasks in your helpdesk model.
+            </p>
+        </field>
+    </record>
+
+    <!--<menuitem-->
+            <!--id="isp_crm_hd_ticket_tasks"-->
+            <!--name="Helpdesk Tasks"-->
+            <!--parent="isp_crm_hd"-->
+            <!--action="isp_crm_module_hd_tasks_action"-->
+    <!--/>-->
+
+</odoo>

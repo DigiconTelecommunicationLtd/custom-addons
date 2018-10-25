@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="isp_crm_module_hd_ticket_history_search" model="ir.ui.view">
+        <field name="name">Helpdesk Ticket History - Search</field>
+        <field name="model">isp_crm_module.helpdesk_ticket_history</field>
+        <field name="arch" type="xml">
+            <search string="Ticket History Search">
+                <field name="type"/>
+                <field name="assigned_to"/>
+                <field name="ticket_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_hd_ticket_history_tree" model="ir.ui.view">
+        <field name="name">Helpdesk Ticket History Tree</field>
+        <field name="model">isp_crm_module.helpdesk_ticket_history</field>
+        <field name="arch" type="xml">
+            <tree string="Ticket History">
+                <field name="type"/>
+                <field name="assigned_to"/>
+                <field name="ticket_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_hd_ticket_history_form" model="ir.ui.view">
+        <field name="name">Helpdesk Ticket History Form</field>
+        <field name="model">isp_crm_module.helpdesk_ticket_history</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Ticket History">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="assigned_to"/>
+                            <field name="ticket_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_hd_ticket_history_action" model="ir.actions.act_window">
+        <field name="name">Helpdesk Ticket History</field>
+        <field name="res_model">isp_crm_module.helpdesk_ticket_history</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_crm_module.isp_crm_module_hd_ticket_history_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to set a new ticket history in your helpdesk model.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="isp_crm_hd_ticket_history"
+            name="Ticket History"
+            parent="isp_crm_hd"
+            action="isp_crm_module_hd_ticket_history_action"
+    />
+
+</odoo>
