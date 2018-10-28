@@ -85,8 +85,14 @@
         <field name="arch" type="xml">
             <form string="Helpdesk Ticket Create Form">
                 <sheet>
+                    <div class="oe_title">
+                        <label class="oe_edit_only" for="problem" string="Problem Name"/>
+                        <h1><field name="problem" string="Name" placeholder="Problem Name"/></h1>
+                    </div>
                     <group>
                         <field name="type"/>
+                    </group>
+                    <group>
                         <field name="complexity"/>
                     </group>
                     <group string="Customer Info">
@@ -94,6 +100,7 @@
                         <group>
                             <field name="customer" string="Customer Name" options="{'no_create_edit': True}"/>
                             <field name="customer_mobile" string="Customer Mobile" readonly="1"/>
+                            <field name="customer_phone" string="Customer Phone" readonly="1"/>
                         </group>
                         <!--Right-->
                         <group>
@@ -140,6 +147,11 @@
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                   <field name="message_follower_ids" widget="mail_followers"/>
+                   <field name="activity_ids" widget="mail_activity"/>
+                   <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                </div>`
             </form>
         </field>
     </record>

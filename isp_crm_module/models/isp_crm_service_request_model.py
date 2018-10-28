@@ -74,6 +74,7 @@ class ServiceRequest(models.Model):
     customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True)], track_visibility='onchange')
     customer_email = fields.Char(related='customer.email', store=True)
     customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
+    customer_phone = fields.Char(string="Phone", related='customer.phone', store=True)
     customer_company = fields.Char(string="Company", related='customer.parent_id.name', store=True)
     customer_address = fields.Char(string="Address", track_visibility='onchange')
 
