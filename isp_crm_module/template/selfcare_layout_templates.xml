@@ -477,19 +477,14 @@
                 </div>
                 <div class="box-body">
                     <div class="row">
-                        <t t-foreach="cards" t-as="card">
+                        <t t-foreach="gateway_list" t-as="gateway">
                             <div class="col-md-3">
                                 <label>
-                                    <t t-esc="card['name']"/>
+                                    <t t-esc="gateway['name']"/>
                                 </label>
-                                <t t-if="'redirectGatewayURL' in card">
-                                    <a t-att-href="card['redirectGatewayURL']">
-                                        <img class="img img-responsive" t-att-src="card['logo']" />
-                                    </a>
-                                </t>
-                                <t t-else="">
-                                    <img class="img img-responsive" t-att-src="card['logo']" />
-                                </t>
+                                <a t-att-href="gateway['gateway_link']">
+                                    <img class="img img-responsive" t-att-src="gateway['img_src']" />
+                                </a>
                             </div>
                         </t>
                     </div>
@@ -500,6 +495,7 @@
         </div>
         <!-- /.col-md -->
     </template>
+
 
     <!--User Payment template-->
     <template id="template_selfcare_user_make_payment">

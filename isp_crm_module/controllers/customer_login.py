@@ -76,6 +76,7 @@ class SelfcareController(PaymentController):
         context = {}
         content_header = "User Payment"
         template = "isp_crm_module.template_selfcare_login_main"
+        template_name = True
 
         if self._redirect_if_not_login(req=request):
             template = "isp_crm_module.template_selfcare_user_payment"
@@ -91,17 +92,47 @@ class SelfcareController(PaymentController):
                     request.session['payment_session_id'] = response_content['sessionkey']
                     context['cards'] = response_content["desc"]
                     context['redirect_gateway'] = response_content["redirectGatewayURL"]
-                    context['gateway_list'] = response_content["gw"]
+
+                    amex_card = {
+                        "name" : "Amex Cards",
+                        "img_src" : "/isp_crm_module/static/src/assets/images/amex.png",
+                        "gateway_link" : response_content["redirectGatewayURL"] + response_content["gw"]["amex"],
+                    }
+
+                    visa_card = {
+                        "name": "Visa Cards",
+                        "img_src": "/isp_crm_module/static/src/assets/images/visa.png",
+                        "gateway_link": response_content["redirectGatewayURL"] + response_content["gw"]["visa"],
+                    }
+
+                    master_card = {
+                        "name": "Master Cards",
+                        "img_src": "/isp_crm_module/static/src/assets/images/master.png",
+                        "gateway_link": response_content["redirectGatewayURL"] + response_content["gw"]["master"],
+                    }
+
+                    mobile_banking = {
+                        "name": "Mobile Banking",
+                        "img_src": "/isp_crm_module/static/src/assets/images/mobilebanking.png",
+                        "gateway_link": response_content["redirectGatewayURL"] + response_content["gw"]["mobilebanking"],
+                    }
+
+
+                    context['gateway_list'] = [amex_card, visa_card, master_card, mobile_banking]
 
                     # TODO (Arif): take the pic from the local and fit it on the gateway list.
                     # TODO (Arif) : redirect to the gateway list page.
-                    return request.redirect(response_content["redirectGatewayURL"] + response_content["gw"]["mobilebanking"])
+                    template_name = False
+                    # return request.redirect(response_content["redirectGatewayURL"] + response_content["gw"]["mobilebanking"])
+
 
             context['user'] = logged_in_user
             context['full_name'] = logged_in_user.name.title()
             context['customer_id'] = logged_in_user.subscriber_id
             context['image'] = logged_in_user.image
             context['content_header'] = content_header
+            context['template_name'] = template_name
+
 
         return request.render(template, context)
 
