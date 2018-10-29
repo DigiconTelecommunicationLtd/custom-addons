@@ -16,7 +16,10 @@ class Helpdesk(models.Model):
     _name = "isp_crm_module.helpdesk"
     _description = "Helpdesk"
     _rec_name = 'type'
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 
+    name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
+    problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
     type = fields.Many2one('isp_crm_module.helpdesk_type', string='Type', ondelete='set null',
                                   help='Ticket Type.')
     stage = fields.Many2one('isp_crm_module.helpdesk_stage', string='Stage', ondelete='set null',
@@ -30,6 +33,7 @@ class Helpdesk(models.Model):
                                track_visibility='onchange')
     customer_email = fields.Char(related='customer.email', store=True)
     customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
+    customer_phone = fields.Char(string="Phone", related='customer.phone', store=True)
     customer_company = fields.Char(string="Company", related='customer.parent_id.name', store=True)
     customer_address = fields.Char(string="Address", track_visibility='onchange')
     complexity = fields.Many2one('isp_crm_module.helpdesk_ticket_complexity', string='Complexity', ondelete='set null',
