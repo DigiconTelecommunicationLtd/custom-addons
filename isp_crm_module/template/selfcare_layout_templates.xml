@@ -400,9 +400,16 @@
                                 <td>
                                     <div class="input-group">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-dollar"></i>
+                                            <i class="fa fa-list"></i>
                                         </div>
-                                        <input name="service_type" type="text" class="form-control pull-right"/>
+                                        <select name="service_type" class="form-control pull-right">
+                                            <option value=""> Select </option>
+                                            <t t-foreach="service_list" t-as="service">
+                                                <option t-att-value="service.id">
+                                                    <t t-esc="service.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
                                     </div>
                                 </td>
                             </tr>

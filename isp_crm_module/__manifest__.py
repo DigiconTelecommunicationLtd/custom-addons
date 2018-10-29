@@ -26,6 +26,7 @@
         'data/ir_sequence_data.xml',
         'data/default_hd_stages_data.xml',
         'data/default_stages_data.xml',
+        'data/default_payment_service_data.xml',
         'views/views.xml',
         'views/isp_crm_problem_views.xml',
         'views/isp_crm_solution_views.xml',

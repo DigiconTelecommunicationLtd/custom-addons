@@ -24,3 +24,4 @@ from . import isp_crm_hd_ticket_complexity
 from . import isp_crm_hd_ticket_history
 from . import isp_crm_hd_type
 from . import isp_crm_hd
+from . import isp_crm_selfcare_service

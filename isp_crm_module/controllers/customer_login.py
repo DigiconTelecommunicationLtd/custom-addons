@@ -132,6 +132,7 @@ class SelfcareController(PaymentController):
             context['image'] = logged_in_user.image
             context['content_header'] = content_header
             context['template_name'] = template_name
+            context['service_list'] = request.env['isp_crm_module.selfcare_payment_service'].sudo().search([])
 
 
         return request.render(template, context)
