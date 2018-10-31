@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="isp_crm_module_change_package_search" model="ir.ui.view">
+        <field name="name">Solution - Search</field>
+        <field name="model">isp_crm_module.change_package</field>
+        <field name="arch" type="xml">
+            <search string="Solution Search">
+                <field name="ticket_ref"/>
+                <field name="customer_id"/>
+                <field name="from_package_id"/>
+                <field name="to_package_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_change_package_tree" model="ir.ui.view">
+        <field name="name">isp_crm_module.change_package.tree</field>
+        <field name="model">isp_crm_module.change_package</field>
+        <field name="arch" type="xml">
+            <tree string="Change Packages Requests List">
+                <field name="ticket_ref"/>
+                <field name="customer_id"/>
+                <field name="from_package_id"/>
+                <field name="to_package_id"/>
+                <field name="active_from"/>
+                <field name="state"/>
+                <field name="validated_by_id"/>
+                <field name="canceled_by_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_change_package_form" model="ir.ui.view">
+        <field name="name">isp_crm_module.change_package.form</field>
+        <field name="model">isp_crm_module.change_package</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Change Package">
+                <header>
+                    <!--attrs="{'invisible': [('state', '=', 'validated')]}"-->
+                    <!--attrs="{'invisible': [('state', '=', 'canceled')]}"-->
+                    <button
+                        name="action_make_package_change_validated"
+                        string="Validate"
+                        type="object"
+                        help="Validate"
+                        class="oe_highlight"
+
+                    />
+                    <button
+                        name="action_make_package_change_canceled"
+                        string="Cancel"
+                        type="object"
+                        help="Cancel"
+                        class=""
+
+                    />
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group string="Ticket And Customer">
+                        <group>
+                            <field name="ticket_ref" required="1"/>
+                        </group>
+                        <group>
+                            <field name="customer_id" required="1" options="{'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group string="Package Info">
+                        <group>
+                            <field name="from_package_id" required="1" options="{'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="to_package_id" required="1" options="{'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group string="Will Active From">
+                        <group>
+                            <field name="active_from" required="1"/>
+                        </group>
+                        <group></group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_change_package_action" model="ir.actions.act_window">
+        <field name="name">Change Package</field>
+        <field name="res_model">isp_crm_module.change_package</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="isp_crm_module.isp_crm_module_change_package_tree"/>
+    </record>
+
+
+</odoo>

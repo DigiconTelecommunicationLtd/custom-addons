@@ -7,6 +7,7 @@ from odoo import api, fields, models, _
 from datetime import datetime
 from odoo.exceptions import Warning, UserError
 import re
+import odoo.addons.decimal_precision as dp
 
 GENDERS = [
     ('male', _('Male')),
@@ -37,6 +38,25 @@ class Customer(models.Model):
     is_potential_customer = fields.Boolean(string='Is This Customer potential or not?', default=True, required=False)
     package_id = fields.Many2one('product.product', string='Package', domain=[('sale_ok', '=', True)],
                                  change_default=True, ondelete='restrict')
+    # Package Info
+    current_package_id = fields.Many2one('product.product', string='Package', domain=[('sale_ok', '=', True)],
+                                         change_default=True, ondelete='restrict')
+    current_package_start_date = fields.Date('Start Date', default=None)
+    current_package_end_date = fields.Date('Valid Till', default=None)
+    current_package_price = fields.Float('Current Package Price', required=True,
+                                         digits=dp.get_precision('Product Price'), default=0.0)
+    current_package_original_price = fields.Float('Current Package Original Price',
+                                                  digits=dp.get_precision('Product Price'), default=0.0)
+    current_package_sales_order_id = fields.Many2one('sale.order', string='Current Package Sales Order')
+    next_package_id = fields.Many2one('product.product', string='Future Package', domain=[('sale_ok', '=', True)],
+                                      change_default=True, ondelete='restrict')
+    next_package_start_date = fields.Date('Next Package Start Date', default=None)
+    next_package_price = fields.Float('Next Package Price',
+                                      digits=dp.get_precision('Product Price'), default=0.0)
+    next_package_original_price = fields.Float('Next Package Original Price',
+                                               digits=dp.get_precision('Product Price'), default=0.0)
+    next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order')
+
 
     @api.model
     def create(self, vals):

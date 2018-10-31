@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 from odoo import http
 from odoo import api, fields, models, _
 from odoo.exceptions import Warning
+from odoo.tools import email_split
 
 
 AVAILABLE_PRIORITIES = [
@@ -24,6 +25,9 @@ DEFAULT_STATES = [
 ]
 
 DEFAULT_PASSWORD_SIZE = 8
+DEFAULT_MONTH_DAYS = 30
+DEFAULT_NEXT_MONTH_DAYS = 31
+DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
 OTC_PRODUCT_CODE = 'ISP-OTC'
 
@@ -60,6 +64,14 @@ class ServiceRequest(models.Model):
             service_request.update({
                 'amount_total': amount_untaxed,
             })
+
+    def _get_default_portal(self):
+        return self.env['res.groups'].search([('is_portal', '=', True)], limit=1)
+
+    def extract_email(self, email):
+        """ extract the email address from a user-friendly email address """
+        addresses = email_split(email)
+        return addresses[0] if addresses else ''
 
     name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
     problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
@@ -103,6 +115,18 @@ class ServiceRequest(models.Model):
     tagged_product_ids = fields.Many2many('product.product', 'isp_crm_module_service_request_product_rel', 'service_request_id', 'product_id',
                                           string='Products',
                                           help="Classify and analyze your lead/opportunity according to Products : Unlimited Package etc")
+
+    def _get_next_package_end_date(self, given_date):
+        given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
+        package_end_date_obj = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
+        return package_end_date_obj.strftime(DEFAULT_DATE_FORMAT)
+
+    def _get_next_package_start_date(self, given_date):
+        given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
+        package_start_date_obj = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
+        return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
+
+
 
     def get_customer_address_str(self, customer):
         address_str = ""
@@ -160,16 +184,44 @@ class ServiceRequest(models.Model):
             customer = service_req.customer
             customer_subs_id = customer.subscriber_id
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
-            encrypted = self._crypt_context().encrypt("abcd1234")
+            encrypted = "abcd1234"
 
 
             customer.update({
                 'is_potential_customer' : False
             })
             # Create an user
-            user_created = self._create_user(name=customer.name, username=customer_subs_id, password=encrypted)
+            user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
+            sales_order_obj = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
+            current_package_id = invoice_generated.invoice_line_ids[0].product_id.id
+            current_package_price = invoice_generated.invoice_line_ids[0].price_unit
+            current_package_original_price = current_package_price
+            current_package_start_date = fields.Date.today()
+            current_package_end_date = self._get_next_package_end_date(given_date=current_package_start_date)
+            current_package_sales_order_id = sales_order_obj.id
+
+            # next package start date will be today + 31 days
+            next_package_id = current_package_id
+            next_package_start_date = self._get_next_package_start_date(given_date=current_package_start_date)
+            next_package_price = current_package_price
+            next_package_original_price = current_package_price
+            next_package_sales_order_id = current_package_sales_order_id
+
+            customer.update({
+                'current_package_id' : current_package_id,
+                'current_package_price' : current_package_price,
+                'current_package_original_price' : current_package_original_price,
+                'current_package_start_date' : current_package_start_date,
+                'current_package_end_date' : current_package_end_date,
+                'current_package_sales_order_id' : current_package_sales_order_id,
+                'next_package_id' : next_package_id,
+                'next_package_start_date' : next_package_start_date,
+                'next_package_price' : next_package_price,
+                'next_package_original_price' : next_package_original_price,
+                'next_package_sales_order_id' : next_package_sales_order_id,
+            })
 
             opportunity = service_req.opportunity_id
             opportunity.update({
@@ -193,7 +245,23 @@ class ServiceRequest(models.Model):
         """
         return default_crypt_context
 
-    def _create_user(self, username, password, name=''):
+    def _create_user(self, partner, username, password, name=''):
+        portal_group = self._get_default_portal()
+        # creating portal user
+        created_user = self.env['res.users'].with_context(no_reset_password=True).create({
+            'email': self.extract_email(email=partner.email),
+            'login': username,
+            'partner_id': partner.id,
+            'company_id': partner.company_id.id,
+            'company_ids': [(6, 0, [partner.company_id.id])],
+            'groups_id': [(6, 0, [portal_group.id])],
+        })
+        created_user.write({
+            'password' : password
+        })
+        return created_user
+
+
         user_model = self.env['isp_crm_module.login']
         vals_user = {
             'name': name,
@@ -233,6 +301,7 @@ class ServiceRequest(models.Model):
             invoice_data = {
                 'partner_id' : customer.id,
                 'invoice_line_ids' : [(0, 0, invoice_line_data)],
+                'origin' : sales_order_obj.name
             }
             created_invoice_obj = invoice_obj.create(invoice_data)
             if not created_invoice_obj:

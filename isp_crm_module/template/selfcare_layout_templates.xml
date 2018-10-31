@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--MIME logo -->
+    <template id="template_selfcare_logo">
+        <div class="login-logo">
+            <a href="http://www.digicontel.com/">
+                <img src="/isp_crm_module/static/src/assets/images/logo.png" width="60%" height="10%"/>
+            </a>
+        </div>
+    </template>
+    <!--end of logo-->
+
+    <!--selfcare css-->
+    <template id="template_selfcare_layout_css">
+          <!-- Bootstrap 3.3.7 -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+          <!-- Font Awesome -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/font-awesome/css/font-awesome.min.css"/>
+          <!-- Ionicons -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/Ionicons/css/ionicons.min.css"/>
+          <!-- daterange picker -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/bootstrap-daterangepicker/daterangepicker.css"/>
+          <!-- bootstrap datepicker -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"/>
+          <!-- iCheck for checkboxes and radio inputs -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/plugins/iCheck/all.css"/>
+          <!-- Bootstrap Color Picker -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css"/>
+          <!-- Bootstrap time Picker -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/plugins/timepicker/bootstrap-timepicker.min.css"/>
+          <!-- Select2 -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/bower_components/select2/dist/css/select2.min.css"/>
+          <!-- Theme style -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/dist/css/AdminLTE.min.css"/>
+          <!-- AdminLTE Skins. Choose a skin from the css/skins
+               folder instead of downloading all of them to reduce the load. -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/lib/dist/css/skins/_all-skins.min.css"/>
+    </template>
+    <!--end of css-->
+
+    <!--selfcare js-->
+    <template id="template_selfcare_layout_js">
+        <!-- jQuery 3 -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- Select2 -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/select2/dist/js/select2.full.min.js"></script>
+        <!-- InputMask -->
+        <script src="/isp_crm_module/static/src/lib/plugins/input-mask/jquery.inputmask.js"></script>
+        <script src="/isp_crm_module/static/src/lib/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+        <script src="/isp_crm_module/static/src/lib/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+        <!-- date-range-picker -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/moment/min/moment.min.js"></script>
+        <script src="/isp_crm_module/static/src/lib/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <!-- bootstrap datepicker -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+        <!-- bootstrap color picker -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+        <!-- bootstrap time picker -->
+        <script src="/isp_crm_module/static/src/lib/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+        <!-- SlimScroll -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+        <!-- iCheck 1.0.1 -->
+        <script src="/isp_crm_module/static/src/lib/plugins/iCheck/icheck.min.js"></script>
+        <!-- FastClick -->
+        <script src="/isp_crm_module/static/src/lib/bower_components/fastclick/lib/fastclick.js"></script>
+        <!-- AdminLTE App -->
+        <script src="/isp_crm_module/static/src/lib/dist/js/adminlte.min.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="/isp_crm_module/static/src/lib/dist/js/demo.js"></script>
+        <!-- Page script -->
+        <script>
+            $(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+            //Datemask dd/mm/yyyy
+            $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            //Datemask2 mm/dd/yyyy
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+
+            //Date range picker
+            $('#reservation').daterangepicker()
+            //Date range picker with time picker
+            $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+            //Date range as a button
+            $('#daterange-btn').daterangepicker(
+            {
+                ranges   : {
+                    'Today'       : [moment(), moment()],
+                    'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    startDate: moment().subtract(29, 'days'),
+                    endDate  : moment()
+                },
+                function (start, end) {
+                    $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+                }
+            )
+
+            //Date picker
+            $('#datepicker').datepicker({
+                autoclose: true
+            })
+
+            //iCheck for checkbox and radio inputs
+            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass   : 'iradio_minimal-blue'
+            })
+            //Red color scheme for iCheck
+            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                checkboxClass: 'icheckbox_minimal-red',
+                radioClass   : 'iradio_minimal-red'
+            })
+            //Flat red color scheme for iCheck
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass   : 'iradio_flat-green'
+            })
+
+            //Colorpicker
+            $('.my-colorpicker1').colorpicker()
+            //color picker with addon
+            $('.my-colorpicker2').colorpicker()
+
+            //Timepicker
+            $('.timepicker').timepicker({
+                showInputs: false
+                })
+            })
+        </script>
+
+    </template>
+    <!--end js-->
+
+    <!--Main header-->
+    <template id="template_selfcare_main_header">
+        <!-- Main Header -->
+        <header class="main-header">
+
+            <!-- Logo -->
+            <a href="index2.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>A</b>LT</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Admin</b>LTE</span>
+            </a>
+
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <!-- The user image in the navbar-->
+                                <img itemprop="image" t-att-src="website.image_url(user, 'image')" class="img-circle" t-att-alt="full_name" width="18px" height="18px"/>
+                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                <span class="hidden-xs">
+                                    <t t-esc="full_name" />
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- The user image in the menu -->
+                                <li class="user-header">
+                                    <img itemprop="image" t-att-src="website.image_url(user, 'image')" class="img-circle" t-att-alt="full_name"/>
+                                    <p>
+                                        <t t-esc="full_name" /> - <t t-esc="customer_id" />
+                                        <!--<small>Member since Nov. 2012</small>-->
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="/selfcare/profile" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="/selfcare/logout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </template>
+    <!--Main header ends here-->
+
+
+    <template id="template_selfcare_sidebar">
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img itemprop="image" t-att-src="website.image_url(user, 'image')" class="img-circle" alt="User Image"/>
+                    </div>
+                    <div class="pull-left info">
+                        <p>
+                            <t t-esc="full_name" />
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">Selfcare</li>
+                    <li class="active">
+                        <a href="/selfcare">
+                            <i class="fa fa-dashboard">  </i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/selfcare/profile">
+                            <i class="fa fa-user">  </i>
+                            <span>User Profile</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="/selfcare/payment">
+                            <i class="fa fa-credit-card">  </i>
+                            <span>Payment</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="/selfcare/payment">Payment</a></li>
+                            <li><a href="/selfcare/payment-history">Payment History</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#">Link in level 2</a></li>
+                            <li><a href="#">Link in level 2</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- /.sidebar-menu -->
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+    </template>
+
+
+    <!--Main Template-->
+    <template id="template_selfcare_main_layout">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header" id="section_id_selfcare_content_header">
+                        <!--inherited content header goes here-->
+                        <h1>Hellllooo</h1>
+                    </section>
+                    <section class="content">
+                        <div class="row" id="div_id_selfcare_content">
+                        <!--inherited contents goes here-->
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+    <!--end of main template section-->
+
+
+    <template id="template_selfcare_profile">
+        <div class="col-md-4 col-md-offset-4">
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <img itemprop="image" t-att-src="website.image_url(user, 'image')" class="profile-user-img img-responsive img-circle" alt="User Image"/>
+
+                    <h3 class="profile-username text-center">
+                      <t t-esc="user.name" />
+                    </h3>
+
+                    <p class="text-muted text-center">
+                      <t t-esc="user.subscriber_id" />
+                    </p>
+
+                    <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item">
+                            <b>Package Name</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.current_package_id.name" />
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Package Price</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.current_package_price" />
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Valid till</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.current_package_end_date" />
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Status</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.current_package_end_date" />
+                            </b>
+                        </li>
+                    </ul>
+                </div>
+            <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+
+    <!--Profile template-->
+    <template id="template_selfcare_user_profile">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_profile"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
+    <!--Payment Template-->
+    <template id="template_selfcare_payment">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+                      <t t-esc="content_header"/>
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <form role="form" action="/selfcare/payment" method="POST">
+                        <!--Info Table-->
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Name</th>
+                                    <td>
+                                        <t t-esc="full_name"/>
+                                    </td>
+                                </tr>
+                            <tr>
+                                <th>Package</th>
+                                <td>
+                                    <t t-esc="user.package_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Service Type</th>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-list"></i>
+                                        </div>
+                                        <select name="service_type" class="form-control pull-right">
+                                            <option value=""> Select </option>
+                                            <t t-foreach="service_list" t-as="service">
+                                                <option t-att-value="service.id">
+                                                    <t t-esc="service.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Service Type</th>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-dollar"></i>
+                                        </div>
+                                        <input type="text" name="amount" class="form-control pull-right"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Go for payment</button>
+                        </div>
+                    </form>
+
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+
+    <!--User Payment template-->
+    <template id="template_selfcare_user_payment">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_payment"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
+
+
+    <!--Make payment template-->
+    <template id="template_selfcare_make_payment">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+                      <t t-esc="content_header"/>
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <t t-foreach="gateway_list" t-as="gateway">
+                            <div class="col-md-3">
+                                <label>
+                                    <t t-esc="gateway['name']"/>
+                                </label>
+                                <a t-att-href="gateway['gateway_link']">
+                                    <img class="img img-responsive" t-att-src="gateway['img_src']" />
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+
+
+    <!--User Payment template-->
+    <template id="template_selfcare_user_make_payment">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_make_payment"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
+
+
+
+    <!--Make payment Success template-->
+    <template id="template_selfcare_make_payment_success">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+                      <t t-esc="content_header"/>
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <h1>
+                        Your Payment succeeded.
+                    </h1>
+                    <a href="/selfcare" class="btn btn-info">
+                        Go Back to Dashboard
+                    </a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+
+
+
+    <!--Success message for payment-->
+    <template id="template_selfcare_user_make_payment_success">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_make_payment_success"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
+
+    <!--Make payment Failure template-->
+    <template id="template_selfcare_make_payment_failure">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+                      <t t-esc="content_header"/>
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <h1 class="text-danger">
+                        Your Payment Failed.
+                    </h1>
+                    <a href="/selfcare" class="btn btn-info">
+                        Go Back to Dashboard
+                    </a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+
+
+
+    <!--Failure message for payment-->
+    <template id="template_selfcare_user_make_payment_failure">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_make_payment_failure"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
+
+
+
+
+
+</odoo>

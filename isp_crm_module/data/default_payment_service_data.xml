@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record  id="default_selfcare_payment_service_monthly_bill" model="isp_crm_module.selfcare_payment_service">
+        <field name="name">Monthly bill</field>
+    </record>
+    <record  id="default_selfcare_payment_service_advance" model="isp_crm_module.selfcare_payment_service">
+        <field name="name">Advance</field>
+    </record>
+    <record  id="default_selfcare_payment_service_relocation" model="isp_crm_module.selfcare_payment_service">
+        <field name="name">Relocation/Shifting</field>
+    </record>
+    <record  id="default_selfcare_payment_service_lan_support" model="isp_crm_module.selfcare_payment_service">
+        <field name="name">LAN support</field>
+    </record>
+    <record  id="default_selfcare_payment_service_router_configuration" model="isp_crm_module.selfcare_payment_service">
+        <field name="name">Router configuration</field>
+    </record>
+    <record  id="default_selfcare_payment_service_hardware" model="isp_crm_module.selfcare_payment_service">
+        <field name="name">Hardware</field>
+    </record>
+    <record  id="default_selfcare_payment_service_others" model="isp_crm_module.selfcare_payment_service">
+        <field name="name">Others</field>
+    </record>
+</odoo>

@@ -15,6 +15,13 @@
         action="isp_crm_module_service_request_action"
         parent="crm.crm_menu_pipeline"/>
 
+    <menuitem
+        id="menu_isp_crm_module_change_package_act"
+        name="Package Change"
+        sequence="5"
+        action="isp_crm_module_change_package_action"
+        parent="crm.crm_menu_pipeline"/>
+
     <!--Custom configuration menu-->
     <menuitem id="menu_isp_crm_configuration"
               name="ISP CRM Configuraitons"
