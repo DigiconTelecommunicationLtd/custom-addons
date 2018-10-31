@@ -13,6 +13,7 @@ from .payment_controller import PaymentController
 
 class SelfcareController(PaymentController):
 
+    DEFAULT_SERVER_LOC = "http://localhost:8069"
     DEFAULT_LOGIN_REDIRECT = "/selfcare"
     DEFAULT_LOGIN_ROUTE = "/selfcare/login"
     DEFAULT_LOGOUT_ROUTE = "/selfcare/logout"
@@ -20,13 +21,11 @@ class SelfcareController(PaymentController):
     def _redirect_if_not_login(self, req):
         if req.env.context.get('uid') is None:
             redirect = self.DEFAULT_LOGIN_ROUTE
-            return request.redirect(redirect)
+            return req.redirect(redirect)
         return True
 
-
-
     def _login_redirect(self, uid, redirect=None):
-        if not redirect and not request.env['res.users'].sudo().browse(uid).has_group('base.group_user'):
+        if not redirect and not request.env['res.users'].sudo().browse(uid):
             return request.redirect(self.DEFAULT_LOGIN_ROUTE)
         return request.redirect(redirect)
 
@@ -171,7 +170,7 @@ class SelfcareController(PaymentController):
 
         return request.render(template, context)
 
-    @http.route("/selfcare", auth='user', methods=["GET"], website=True)
+    @http.route("/selfcare", methods=["GET"], website=True)
     def selfcare_home(self, **kw):
         context = {}
         content_header = "Hellllooooo Template"

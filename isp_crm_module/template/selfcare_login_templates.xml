@@ -52,6 +52,11 @@
             </h3>
 
             <form action="/selfcare/login" method="POST">
+                <t t-if='error'>
+                    <h5 class="text-danger">
+                        <t t-esc="error"/>
+                    </h5>
+                </t>
                 <div class="form-group has-feedback">
                     <input name="login" type="text" class="form-control" placeholder="Customer ID"/>
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
