@@ -41,19 +41,21 @@ class Customer(models.Model):
     # Package Info
     current_package_id = fields.Many2one('product.product', string='Package', domain=[('sale_ok', '=', True)],
                                          change_default=True, ondelete='restrict')
-    current_package_end_date = fields.Datetime('Valid Till', default=None)
+    current_package_start_date = fields.Date('Start Date', default=None)
+    current_package_end_date = fields.Date('Valid Till', default=None)
     current_package_price = fields.Float('Current Package Price', required=True,
                                          digits=dp.get_precision('Product Price'), default=0.0)
     current_package_original_price = fields.Float('Current Package Original Price',
                                                   digits=dp.get_precision('Product Price'), default=0.0)
+    current_package_sales_order_id = fields.Many2one('sale.order', string='Current Package Sales Order')
     next_package_id = fields.Many2one('product.product', string='Future Package', domain=[('sale_ok', '=', True)],
                                       change_default=True, ondelete='restrict')
-    next_package_start_date = fields.Datetime('Next Package Start Date', default=None)
+    next_package_start_date = fields.Date('Next Package Start Date', default=None)
     next_package_price = fields.Float('Next Package Price',
                                       digits=dp.get_precision('Product Price'), default=0.0)
     next_package_original_price = fields.Float('Next Package Original Price',
                                                digits=dp.get_precision('Product Price'), default=0.0)
-
+    next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order')
 
 
     @api.model

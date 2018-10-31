@@ -25,6 +25,9 @@ DEFAULT_STATES = [
 ]
 
 DEFAULT_PASSWORD_SIZE = 8
+DEFAULT_MONTH_DAYS = 30
+DEFAULT_NEXT_MONTH_DAYS = 31
+DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
 OTC_PRODUCT_CODE = 'ISP-OTC'
 
@@ -113,6 +116,18 @@ class ServiceRequest(models.Model):
                                           string='Products',
                                           help="Classify and analyze your lead/opportunity according to Products : Unlimited Package etc")
 
+    def _get_next_package_end_date(self, given_date):
+        given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
+        package_end_date_obj = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
+        return package_end_date_obj.strftime(DEFAULT_DATE_FORMAT)
+
+    def _get_next_package_start_date(self, given_date):
+        given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
+        package_start_date_obj = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
+        return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
+
+
+
     def get_customer_address_str(self, customer):
         address_str = ""
         if len(customer) > 0:
@@ -179,6 +194,34 @@ class ServiceRequest(models.Model):
             user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
+            sales_order_obj = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
+            current_package_id = invoice_generated.invoice_line_ids[0].price_unit
+            current_package_price = invoice_generated.invoice_line_ids[0].price_unit
+            current_package_original_price = current_package_price
+            current_package_start_date = fields.Date.today()
+            current_package_end_date = self._get_next_package_end_date(given_date=current_package_start_date)
+            current_package_sales_order_id = sales_order_obj.id
+
+            # next package start date will be today + 31 days
+            next_package_id = current_package_id
+            next_package_start_date = self._get_next_package_start_date(given_date=current_package_start_date)
+            next_package_price = current_package_price
+            next_package_original_price = current_package_price
+            next_package_sales_order_id = current_package_sales_order_id
+
+            customer.update({
+                'current_package_id' : current_package_id,
+                'current_package_price' : current_package_price,
+                'current_package_original_price' : current_package_original_price,
+                'current_package_start_date' : current_package_start_date,
+                'current_package_end_date' : current_package_end_date,
+                'current_package_sales_order_id' : current_package_sales_order_id,
+                'next_package_id' : next_package_id,
+                'next_package_start_date' : next_package_start_date,
+                'next_package_price' : next_package_price,
+                'next_package_original_price' : next_package_original_price,
+                'next_package_sales_order_id' : next_package_sales_order_id,
+            })
 
             opportunity = service_req.opportunity_id
             opportunity.update({
@@ -258,6 +301,7 @@ class ServiceRequest(models.Model):
             invoice_data = {
                 'partner_id' : customer.id,
                 'invoice_line_ids' : [(0, 0, invoice_line_data)],
+                'origin' : sales_order_obj.name
             }
             created_invoice_obj = invoice_obj.create(invoice_data)
             if not created_invoice_obj:
