@@ -71,6 +71,40 @@ class SelfcareController(PaymentController):
 
         return request.render(template, context)
 
+    @http.route("/selfcare/make-payment/success", auth='user', methods=["GET", "POST"], website=True, csrf=False)
+    def selfcare_payment_success(self, **kw):
+        context = {}
+        content_header = "Success"
+        template = "isp_crm_module.template_selfcare_user_make_payment_success"
+        template_name = True
+
+        if self._redirect_if_not_login(req=request):
+            if request.httprequest.method == 'POST':
+                data = request.params
+            user_id = request.env.context.get('uid')
+            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            context['user'] = logged_in_user
+
+        context['content_header'] = content_header
+        return request.render(template, context)
+
+    @http.route("/selfcare/make-payment/failure", auth='user', methods=["GET", "POST"], website=True, csrf=False)
+    def selfcare_payment_failure(self, **kw):
+        context = {}
+        content_header = "Failure"
+        template = "isp_crm_module.template_selfcare_user_make_payment_failure"
+        template_name = True
+
+        if self._redirect_if_not_login(req=request):
+            if request.httprequest.method == 'POST':
+                data = request.params
+            user_id = request.env.context.get('uid')
+            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            context['user'] = logged_in_user
+
+        context['content_header'] = content_header
+        return request.render(template, context)
+
     @http.route("/selfcare/payment", auth='user', methods=["GET", "POST"], website=True, csrf=False)
     def selfcare_payment(self, **kw):
         context = {}

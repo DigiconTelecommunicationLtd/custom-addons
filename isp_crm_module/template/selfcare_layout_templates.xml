@@ -316,18 +316,26 @@
                         <li class="list-group-item">
                             <b>Package Name</b>
                             <b class="pull-right text-info">
-                                <t t-esc="user.package_id.name" />
+                                <t t-esc="user.current_package_id.name" />
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Package Price</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.current_package_price" />
                             </b>
                         </li>
                         <li class="list-group-item">
                             <b>Valid till</b>
                             <b class="pull-right text-info">
-                                23-Nov-2018
-                                <!--<t t-esc="user.package_id.name" />-->
+                                <t t-esc="user.current_package_end_date" />
                             </b>
                         </li>
                         <li class="list-group-item">
-                        <b>Friends</b> <a class="pull-right">13,287</a>
+                            <b>Status</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.current_package_end_date" />
+                            </b>
                         </li>
                     </ul>
                 </div>
@@ -534,6 +542,125 @@
             </div>
         </body>
     </template>
+
+
+
+
+    <!--Make payment Success template-->
+    <template id="template_selfcare_make_payment_success">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+                      <t t-esc="content_header"/>
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <h1>
+                        Your Payment succeeded.
+                    </h1>
+                    <a href="/selfcare" class="btn btn-info">
+                        Go Back to Dashboard
+                    </a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+
+
+
+    <!--Success message for payment-->
+    <template id="template_selfcare_user_make_payment_success">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_make_payment_success"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
+
+    <!--Make payment Failure template-->
+    <template id="template_selfcare_make_payment_failure">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+                      <t t-esc="content_header"/>
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <h1 class="text-danger">
+                        Your Payment Failed.
+                    </h1>
+                    <a href="/selfcare" class="btn btn-info">
+                        Go Back to Dashboard
+                    </a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+
+
+
+    <!--Failure message for payment-->
+    <template id="template_selfcare_user_make_payment_failure">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_make_payment_failure"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
 
 
 

@@ -195,7 +195,7 @@ class ServiceRequest(models.Model):
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
             sales_order_obj = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
-            current_package_id = invoice_generated.invoice_line_ids[0].price_unit
+            current_package_id = invoice_generated.invoice_line_ids[0].product_id.id
             current_package_price = invoice_generated.invoice_line_ids[0].price_unit
             current_package_original_price = current_package_price
             current_package_start_date = fields.Date.today()
