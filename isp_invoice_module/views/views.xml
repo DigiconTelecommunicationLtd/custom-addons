@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="isp_invoice_module.list">
+      <field name="name">isp_invoice_module list</field>
+      <field name="model">isp_invoice_module.isp_invoice_module</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="isp_invoice_module.action_window">
+      <field name="name">isp_invoice_module window</field>
+      <field name="res_model">isp_invoice_module.isp_invoice_module</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="isp_invoice_module.action_server">
+      <field name="name">isp_invoice_module server</field>
+      <field name="model_id" ref="model_isp_invoice_module_isp_invoice_module"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="isp_invoice_module" id="isp_invoice_module.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="isp_invoice_module.menu_1" parent="isp_invoice_module.menu_root"/>
+    <menuitem name="Menu 2" id="isp_invoice_module.menu_2" parent="isp_invoice_module.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="isp_invoice_module.menu_1_list" parent="isp_invoice_module.menu_1"
+              action="isp_invoice_module.action_window"/>
+    <menuitem name="Server to list" id="isp_invoice_module" parent="isp_invoice_module.menu_2"
+              action="isp_invoice_module.action_server"/>
+    -->
+  </data>
+</odoo>

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isp_invoice_module_isp_invoice_module,isp_invoice_module.isp_invoice_module,model_isp_invoice_module_isp_invoice_module,,1,0,0,0
