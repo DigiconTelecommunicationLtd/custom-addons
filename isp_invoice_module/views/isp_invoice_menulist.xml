@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <menuitem
+            id="isp_invoice_top_menu"
+            name="ISP Invoice"
+         />
+    <menuitem id="menu_isp_finance_receivables" name="ISP Sales" parent="isp_invoice_top_menu" sequence="2"/>
+            <!--Sales sub-menus-->
+            <menuitem id="menu_isp_finance_receivables_documents" name="Documents" parent="menu_isp_finance_receivables" sequence="1"/>
+
+
+
+</odoo>
