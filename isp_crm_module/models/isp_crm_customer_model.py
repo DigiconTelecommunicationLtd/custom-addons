@@ -57,6 +57,10 @@ class Customer(models.Model):
                                                digits=dp.get_precision('Product Price'), default=0.0)
     next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order')
 
+    customer_ip = fields.Char('Customer IP', track_visibility='onchange')
+    customer_subnet_mask = fields.Char('Customer Subnet Mask', track_visibility='onchange')
+    customer_gateway = fields.Char('Customer Gateway', track_visibility='onchange')
+
 
     @api.model
     def create(self, vals):
