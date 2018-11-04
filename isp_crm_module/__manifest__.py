@@ -39,6 +39,7 @@
         'views/isp_crm_change_package_views.xml',
         'views/isp_crm_hd_menu_list.xml',
         'views/isp_crm_hd_type.xml',
+        'views/isp_crm_hd_problem.xml',
         'views/isp_crm_hd_stage_views.xml',
         'views/isp_crm_hd_ticket_complexity_views.xml',
         'views/isp_crm_hd_solution_views.xml',

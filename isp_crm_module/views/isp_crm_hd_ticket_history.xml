@@ -18,9 +18,9 @@
         <field name="model">isp_crm_module.helpdesk_ticket_history</field>
         <field name="arch" type="xml">
             <tree string="Ticket History">
+                <field name="ticket_id"/>
                 <field name="type"/>
                 <field name="assigned_to"/>
-                <field name="ticket_id"/>
             </tree>
         </field>
     </record>
@@ -34,9 +34,9 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="ticket_id"/>
                             <field name="type"/>
                             <field name="assigned_to"/>
-                            <field name="ticket_id"/>
                         </group>
                     </group>
                 </sheet>

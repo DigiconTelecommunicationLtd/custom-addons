@@ -29,6 +29,8 @@
                         <div class="oe_kanban_content">
                             <div class="o_kanban_record_top">
                                 <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
+                                    <strong class="o_kanban_record_title"><field name="problem"/></strong><br/>
                                     <strong class="o_kanban_record_title"><field name="type"/></strong><br/>
                                     <strong class="o_kanban_record_title"><field name="assigned_to"/></strong><br/>
                                     <!--<field name="type" widget="many2one_tags" options="{'color_field': 'color'}" readonly="1"/>-->
@@ -86,14 +88,15 @@
             <form string="Helpdesk Ticket Create Form">
                 <sheet>
                     <div class="oe_title">
-                        <label class="oe_edit_only" for="problem" string="Problem Name"/>
-                        <h1><field name="problem" string="Name" placeholder="Problem Name"/></h1>
+                        <h1><field name="problem" string="Name" placeholder="Problem"/></h1>
                     </div>
                     <group>
-                        <field name="type"/>
-                    </group>
-                    <group>
-                        <field name="complexity"/>
+                        <group>
+                            <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="complexity"/>
+                        </group>
                     </group>
                     <group string="Customer Info">
                         <!--Left-->
@@ -121,6 +124,16 @@
                             <field name="priority" widget="priority"/>
                         </group>
                     </group>
+                    <group string="Customer Feedback">
+                        <!--Left-->
+                        <group>
+                            <field name="customer_feedback"/>
+                        </group>
+                        <!--Right-->
+                        <group>
+                            <field name="customer_rating" widget="priority"/>
+                        </group>
+                    </group>
                     <notebook colspan="4">
                         <!--Solutions list-->
                         <page string="Tasks">
@@ -144,6 +157,21 @@
                                     <field name="is_done" />
                                 </tree>
                             </field>
+                        </page>
+
+                        <page string="Description">
+                                <!--description form-->
+                                <form string="Description">
+                                    <group>
+                                        <group>
+                                            <field name="description" force_save="1"/>
+                                        </group>
+                                    </group>
+                                </form>
+                                <!--description tree-->
+                                <tree string="Tasks" editable="bottom" >
+                                    <field name="description" force_save="1"/>
+                                </tree>
                         </page>
                     </notebook>
                 </sheet>

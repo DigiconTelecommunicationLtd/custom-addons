@@ -27,3 +27,4 @@ from . import isp_crm_hd
 from . import isp_crm_selfcare_service
 from . import isp_crm_customer_package_history
 from . import isp_crm_package_change
+from . import isp_crm_hd_problem

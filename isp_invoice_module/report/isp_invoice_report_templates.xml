@@ -110,7 +110,7 @@
                                 <table class="table table-bordered table-condensed" name="invoice_customer_table">
                                     <tbody class="invoice_tbody">
                                         <tr>
-                                            <th colspan="2">DIGICON TELECOMMUNICATION LIMITED</th>
+                                            <th colspan="2">DIGICON TELECOMMUNICATIONS LIMITED</th>
                                         </tr>
                                         <tr>
                                             <th>ETIN</th>
@@ -146,7 +146,7 @@
                                         </tr>
                                         <tr>
                                             <th>Customer PO No.</th>
-                                            <td></td>
+                                            <td><span t-field="o.reference"/></td>
                                         </tr>
                                         <tr>
                                             <th>Bill Date</th>
@@ -203,7 +203,7 @@
                                     </td>
                                     <td class="text-right" id="subtotal">
                                         <span t-field="l.price_subtotal"
-                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                              t-field-options='{"widget": "False"}'/>
                                     </td>
                                 </tr>
 
@@ -213,7 +213,7 @@
                                     </td>
                                     <td class="text-right pull-right">
                                         <span t-field="o.amount_untaxed"
-                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                              t-field-options='{"widget": "False"}'/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -230,7 +230,7 @@
                                     </td>
                                     <td class="text-right pull-right">
                                         <span t-field="o.amount_total"
-                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                              t-field-options='{"widget": "False"}'/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -239,7 +239,7 @@
                                     </td>
                                     <td class="text-right pull-right">
                                         <span t-field="o.residual"
-                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                              t-field-options='{"widget": "False"}'/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -250,8 +250,10 @@
                                     <tr style="border:1px solid #dddddd;">
                                         <th>Total Outstanding</th>
                                         <th>
-                                            <span t-field="o.amount_total"
-                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            <span class="text-right pull-right">
+                                                <strong>BDT </strong>
+                                                <span t-field="o.amount_total" t-field-options='{"widget": "False"}'/>
+                                            </span>
                                         </th>
                                     </tr>
                                 </tbody>
@@ -265,7 +267,7 @@
                                 <strong>Payment Instructions:</strong>
                             </u>
                             <ul style="margin-top:2%;">
-                                <li>Payment to be made in favor of "DigiCon Telecommunication Limited".</li>
+                                <li>Payment to be made in favor of "DigiCon Telecommunications Limited".</li>
                                 <li>Please ignore this invoice if already paid</li>
                                 <li>As prepaid subscriber, ensure smooth and uninterrupted service by always paying
                                     within due date.
