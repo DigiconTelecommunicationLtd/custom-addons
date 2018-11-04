@@ -51,6 +51,7 @@ class ServiceRequest(models.Model):
     _description = "Service Request To be solved."
     _rec_name = 'name'
     _order = "create_date desc, name, id"
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 
     @api.depends('product_line.price_total')
     def _amount_all(self):
@@ -73,11 +74,11 @@ class ServiceRequest(models.Model):
         addresses = email_split(email)
         return addresses[0] if addresses else ''
 
-    name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
+    name = fields.Char('Request Name', required=True, index=True, copy=False, default='New', track_visibility='onchange')
     problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
-    description = fields.Text('Description')
+    description = fields.Text('Description', track_visibility='onchange')
     stage = fields.Many2one('isp_crm_module.stage', string='Stage', required=False,
-                            group_expand='_default_stages')
+                            group_expand='_default_stages', track_visibility='onchange')
 
     assigned_to = fields.Many2one('hr.employee', string='Assigned To', index=True, track_visibility='onchange')
     team = fields.Many2one('hr.department', string='Department', store=True)
@@ -94,7 +95,7 @@ class ServiceRequest(models.Model):
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
     close_date = fields.Datetime('Close Date', readonly=True, default=None)
     is_service_request_closed = fields.Boolean('Is Service Request Closed', default=False)
-    solution_ids = fields.One2many('isp_crm_module.solution_line', 'service_request_id', string="Solutions", copy=True, auto_join=True)
+    solution_ids = fields.One2many('isp_crm_module.solution_line', 'service_request_id', string="Solutions", copy=True, auto_join=True, track_visibility='onchange')
     color = fields.Integer()
     is_done = fields.Boolean("Is Done", default=False)
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist',  readonly=True,
@@ -103,18 +104,24 @@ class ServiceRequest(models.Model):
     product_line = fields.One2many('isp_crm_module.product_line', 'service_request_id', string='Product Lines', copy=True, auto_join=True)
 
     amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_amount_all',
-                                   track_visibility='always')
+                                   track_visibility='onchange')
     opportunity_id = fields.Many2one('crm.lead', string='Opportunity', readonly=True,
-                                   help="Opportunity for which the service Request created.")
+                                   help="Opportunity for which the service Request created.", track_visibility='onchange')
 
     is_helpdesk_ticket = fields.Boolean("Is Ticket", default=False)
     confirmed_sale_order_id = fields.Many2one('sale.order', string='Confirmed Sale Order')
-    order_line = fields.One2many('sale.order.line', 'service_request_id', string='Order Lines', copy=True, auto_join=True)
+    order_line = fields.One2many('sale.order.line', 'service_request_id', string='Order Lines', copy=True, auto_join=True, track_visibility='onchange')
     order_line_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_order_line_total',
                                    track_visibility='always')
     tagged_product_ids = fields.Many2many('product.product', 'isp_crm_module_service_request_product_rel', 'service_request_id', 'product_id',
                                           string='Products',
                                           help="Classify and analyze your lead/opportunity according to Products : Unlimited Package etc")
+
+    customer_ip = fields.Char('Customer IP', track_visibility='onchange')
+    customer_subnet_mask = fields.Char('Customer Subnet Mask', track_visibility='onchange')
+    customer_gateway = fields.Char('Customer Gateway', track_visibility='onchange')
+
+
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
