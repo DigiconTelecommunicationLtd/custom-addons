@@ -170,6 +170,45 @@ class SelfcareController(PaymentController):
 
         return request.render(template, context)
 
+    @http.route("/selfcare/ticket/create", methods=["GET", "POST"], website=True)
+    def selfcare_ticket_create(self, **kw):
+        context = {}
+        success_msg = ''
+        content_header = "Create a Ticket"
+        template = "isp_crm_module.template_selfcare_login_main"
+        template_name = True
+
+        if self._redirect_if_not_login(req=request):
+            template = "isp_crm_module.template_selfcare_user_ticket_create"
+            user_id = request.env.context.get('uid')
+            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            problems = request.env['isp_crm_module.helpdesk_problem'].search([])
+            if request.httprequest.method == 'POST':
+                problem_id = request.params['problem_id']
+                description = request.params['description']
+
+                ticket_obj = request.env['isp_crm_module.helpdesk'].search([])
+                ticket_obj.create({
+                    'customer' : logged_in_user.id,
+                    'problem' : problem_id,
+                    'description' : description,
+                })
+                success_msg = "Your Ticket has been Created Successfully"
+                #TODO (Arif): Sending mail and other things according to SRS
+
+        context['csrf_token'] = request.csrf_token()
+        context['user'] = logged_in_user
+        context['full_name'] = logged_in_user.name.title()
+        context['customer_id'] = logged_in_user.subscriber_id
+        context['content_header'] = content_header
+        context['problems_list'] = problems
+        context['success_msg'] = success_msg
+
+        return request.render(template, context)
+
+
+
+
     @http.route("/selfcare", methods=["GET"], website=True)
     def selfcare_home(self, **kw):
         context = {}
