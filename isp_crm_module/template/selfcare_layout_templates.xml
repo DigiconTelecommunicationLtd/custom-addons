@@ -707,7 +707,7 @@
                                 <tr>
                                     <th>Problems List</th>
                                     <td>
-                                        <select name="problem_id" class="form-control pull-right">
+                                        <select name="problem_id" class="form-control pull-right" required="1">
                                             <option value=""> Select Your Problem </option>
                                             <t t-foreach="problems_list" t-as="problem">
                                                 <option t-att-value="problem.id">
@@ -720,7 +720,7 @@
                                 <tr>
                                     <th>Description Of Problem</th>
                                     <td>
-                                        <textarea name="description" class="form-control pull-right"></textarea>
+                                        <textarea name="description" class="form-control pull-right" required="1"></textarea>
                                     </td>
                                 </tr>
                             </tbody>
@@ -770,7 +770,84 @@
         </body>
     </template>
 
+    <!--Ticket List-->
+    <template id="template_selfcare_ticket_list">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+                      <t t-esc="content_header"/>
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <!--Info Table-->
+                    <t t-if='tickets'>
 
+                        <table class="table table-condensed table-bordered table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Ticket#</th>
+                                    <th>Problem Type</th>
+                                    <th>Description</th>
+                                    <th>Current Stage</th>
+                                </tr>
+                                <t t-foreach="tickets" t-as="ticket">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="ticket.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="ticket.problem.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="ticket.description"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="ticket.stage"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    <t t-else="">
+                        <h3>There are no tickets!!!</h3>
+                    </t>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+    <!--Ticket List Template-->
+    <template id="template_selfcare_user_ticket_list">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
 
-
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_ticket_list"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
 </odoo>

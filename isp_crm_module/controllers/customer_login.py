@@ -182,14 +182,14 @@ class SelfcareController(PaymentController):
             template = "isp_crm_module.template_selfcare_user_ticket_create"
             user_id = request.env.context.get('uid')
             logged_in_user = request.env['res.users'].sudo().browse(user_id)
-            problems = request.env['isp_crm_module.helpdesk_problem'].search([])
+            problems = request.env['isp_crm_module.helpdesk_problem'].sudo().search([])
             if request.httprequest.method == 'POST':
                 problem_id = request.params['problem_id']
                 description = request.params['description']
 
-                ticket_obj = request.env['isp_crm_module.helpdesk'].search([])
-                ticket_obj.create({
-                    'customer' : logged_in_user.id,
+                ticket_obj = request.env['isp_crm_module.helpdesk'].sudo().search([])
+                created_ticket = ticket_obj.create({
+                    'customer' : logged_in_user.partner_id.id,
                     'problem' : problem_id,
                     'description' : description,
                 })
@@ -206,8 +206,26 @@ class SelfcareController(PaymentController):
 
         return request.render(template, context)
 
+    @http.route("/selfcare/ticket/list", methods=["GET"], website=True)
+    def selfcare_ticket_list(self, **kw):
+        context = {}
+        content_header = "Tickets List"
+        template = "isp_crm_module.template_selfcare_login_main"
+        template_name = True
 
+        if self._redirect_if_not_login(req=request):
+            template = "isp_crm_module.template_selfcare_user_ticket_list"
+            user_id = request.env.context.get('uid')
+            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            tickets_list = request.env['isp_crm_module.helpdesk'].sudo().search([('customer', '=', logged_in_user.partner_id.id)])
 
+        context['user'] = logged_in_user
+        context['full_name'] = logged_in_user.name.title()
+        context['customer_id'] = logged_in_user.subscriber_id
+        context['content_header'] = content_header
+        context['tickets'] = tickets_list
+
+        return request.render(template, context)
 
     @http.route("/selfcare", methods=["GET"], website=True)
     def selfcare_home(self, **kw):
