@@ -790,6 +790,10 @@
                                     <th>Problem Type</th>
                                     <th>Description</th>
                                     <th>Current Stage</th>
+                                    <th>
+                                        Created
+                                        (dd-mm-yyyy)
+                                    </th>
                                 </tr>
                                 <t t-foreach="tickets" t-as="ticket">
                                     <tr>
@@ -804,6 +808,9 @@
                                         </td>
                                         <td>
                                             <t t-esc="ticket.stage"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="ticket.create_date" t-field-options='{"format": "dd-MM-Y"}' />
                                         </td>
                                     </tr>
                                 </t>
