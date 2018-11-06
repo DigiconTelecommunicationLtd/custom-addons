@@ -18,6 +18,7 @@ class SelfcareController(PaymentController):
     DEFAULT_LOGIN_ROUTE = "/selfcare/login"
     DEFAULT_LOGOUT_ROUTE = "/selfcare/logout"
     DEFAULT_PRODUCT_CATEGORY = "Package"
+    DEFAULT_PROFILE_CHANGE_NAME = "Profile Change"
 
     def _redirect_if_not_login(self, req):
         if req.env.context.get('uid') is None:
@@ -294,6 +295,42 @@ class SelfcareController(PaymentController):
         context['customer_id'] = logged_in_user.subscriber_id
         context['content_header'] = content_header
         context['products'] = products
+        context['success_msg'] = success_msg
+
+        return request.render(template, context)
+
+    @http.route("/selfcare/profile/update", methods=["GET", "POST"], website=True)
+    def selfcare_profile_update(self, **kw):
+        context = {}
+        success_msg = ''
+        content_header = "Update Your Profile"
+        template = "isp_crm_module.template_selfcare_login_main"
+        template_name = True
+
+        if self._redirect_if_not_login(req=request):
+            template = "isp_crm_module.template_selfcare_user_profile_update"
+            user_id = request.env.context.get('uid')
+            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            problems = request.env['isp_crm_module.helpdesk_problem'].sudo().search([('name', '=', self.DEFAULT_PROFILE_CHANGE_NAME)])
+            if request.httprequest.method == 'POST':
+                problem_id = request.params['problem_id']
+                description = request.params['description']
+
+                ticket_obj = request.env['isp_crm_module.helpdesk'].sudo().search([])
+                created_ticket = ticket_obj.create({
+                    'customer': logged_in_user.partner_id.id,
+                    'problem': problem_id,
+                    'description': description,
+                })
+                success_msg = "Profile Update Ticket has been Created."
+                # TODO (Arif): Sending mail and other things according to SRS
+
+        context['csrf_token'] = request.csrf_token()
+        context['user'] = logged_in_user
+        context['full_name'] = logged_in_user.name.title()
+        context['customer_id'] = logged_in_user.subscriber_id
+        context['content_header'] = content_header
+        context['problems_list'] = problems
         context['success_msg'] = success_msg
 
         return request.render(template, context)

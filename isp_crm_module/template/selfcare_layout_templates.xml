@@ -234,6 +234,12 @@
                             <span>User Profile</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="/selfcare/profile/update">
+                            <i class="fa fa-user">  </i>
+                            <span>User Profile Update</span>
+                        </a>
+                    </li>
                     <!--Ticket tree-->
                     <li class="treeview">
                         <a href="/selfcare/ticket/create">
@@ -769,6 +775,96 @@
                     <section class="content">
                         <div class="row">
                             <t t-call="isp_crm_module.template_selfcare_ticket_create"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
+    <!--Profile Update list-->
+    <template id="template_selfcare_profile_update">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+                      <t t-esc="content_header"/>
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <!---->
+                    <t t-if='success_msg'>
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-check"></i> Success</h4>
+                            <t t-esc="success_msg" />
+                        </div>
+                    </t>
+                    <!---->
+                    <form role="form" action="/selfcare/profile/update" method="POST">
+                        <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
+
+                        <!--Info Table-->
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Problems List</th>
+                                    <td>
+                                        <select name="problem_id" class="form-control pull-right" required="1" readonly="1">
+                                            <t t-foreach="problems_list" t-as="problem">
+                                                <option t-att-value="problem.id" select="1">
+                                                    <t t-esc="problem.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Description Of Problem</th>
+                                    <td>
+                                        <textarea name="description" class="form-control pull-right" required="1"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <button type="submit" class="btn btn-primary">Create Profile Update Ticket</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+    <!--Profile Update list Template-->
+    <template id="template_selfcare_user_profile_update">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_profile_update"/>
                         </div>
                     </section>
                 </div>
