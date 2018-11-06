@@ -1002,10 +1002,17 @@
                                             <t t-esc="product.list_price"/>
                                         </td>
                                         <td>
-                                            <form role="form" t-attf-action="/selfcare/change-package/#{product.id}" method="POST">
-                                                <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
-                                                <button type="submit" class="btn btn-info" onclick="return confirm('Are you sure you want to change plan?');">Change Plan</button>
-                                            </form>
+                                            <t t-if="product.id==user.current_package_id.id">
+                                                <b class="text-success">
+                                                    Current Plan
+                                                </b>
+                                            </t>
+                                            <t t-else="">
+                                                <form role="form" t-attf-action="/selfcare/change-package/#{product.id}" method="POST">
+                                                    <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
+                                                    <button type="submit" class="btn btn-info" onclick="return confirm('Are you sure you want to change plan?');">Change Plan</button>
+                                                </form>
+                                            </t>
                                         </td>
                                     </tr>
                                 </t>
