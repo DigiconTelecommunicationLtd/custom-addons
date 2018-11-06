@@ -228,7 +228,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="/selfcare/profile">
                             <i class="fa fa-user">  </i>
                             <span>User Profile</span>
