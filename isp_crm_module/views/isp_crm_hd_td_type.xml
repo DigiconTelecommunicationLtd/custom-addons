@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="isp_crm_module.helpdesk_td_type_list" model="ir.ui.view">
+        <field name="name">List of Ticket Types</field>
+        <field name="model">isp_crm_module.helpdesk_td_type</field>
+        <field name="arch" type="xml">
+            <tree string="Helpdesk TD Type List">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_crm_module.helpdesk_td_type_search" model="ir.ui.view">
+        <field name="name">Search Ticket Type</field>
+        <field name="model">isp_crm_module.helpdesk_td_type</field>
+        <field name="arch" type="xml">
+            <search string="Helpdesk TD Type List">
+                <field name="name" string="Everywhere" filter_domain="[('name','ilike',self)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_crm_module.helpdesk_td_type_create" model="ir.ui.view">
+        <field name="name">Create Ticket Type</field>
+        <field name="model">isp_crm_module.helpdesk_td_type</field>
+        <field name="arch" type="xml">
+            <form string="Helpdesk TD Type List">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="isp_crm_helpdesk_td_type">
+        <field name="name">Helpdesk TD Ticekt Type</field>
+        <field name="res_model">isp_crm_module.helpdesk_td_type</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain" eval=""/>
+        <field name="search_view_id" ref="isp_crm_module.helpdesk_td_type_search"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to set a new type in your helpdesk technical department model.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="isp_crm_hd_td_type"
+            name="Ticket Type"
+            parent="isp_crm_hd_td_config"
+            action="isp_crm_helpdesk_td_type"
+    />
+
+</odoo>

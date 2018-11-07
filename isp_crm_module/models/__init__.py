@@ -28,3 +28,12 @@ from . import isp_crm_selfcare_service
 from . import isp_crm_customer_package_history
 from . import isp_crm_package_change
 from . import isp_crm_hd_problem
+from . import isp_crm_hd_td
+from . import isp_crm_hd_solution
+from . import isp_crm_hd_td_problem
+from . import isp_crm_hd_td_stage
+from . import isp_crm_hd_td_tasks
+from . import isp_crm_hd_td_ticket_complexity
+from . import isp_crm_hd_td_ticket_history
+from . import isp_crm_hd_td_type
+from . import isp_crm_hd_td_solution

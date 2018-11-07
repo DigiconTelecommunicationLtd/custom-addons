@@ -190,7 +190,7 @@
                                     <td>
                                         <span t-field="l.name"/>
                                     </td>
-                                    <td>N/A</td>
+                                    <td>DTC-CGHQ</td>
                                     <td class="hidden">
                                         <span t-field="l.origin"/>
                                     </td>
