@@ -96,14 +96,6 @@
                         attrs="{'invisible': [('default_stages', '!=', '1')]}"
                         confirm="Are you sure you want to continue?"
                     />
-                    <!--<button-->
-                        <!--name="action_cancel_ticket_td"-->
-                        <!--string="Cancel Ticket"-->
-                        <!--type="object"-->
-                        <!--help="Cancel Ticket"-->
-                        <!--class="oe_highlight"-->
-                        <!--confirm="are you sure you want to continue?"-->
-                    <!--/>-->
                     <field name="default_stages" widget="statusbar" clickable="True"/>
                 </header>
                 <sheet>
