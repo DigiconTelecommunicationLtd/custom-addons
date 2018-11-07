@@ -161,52 +161,59 @@ class HelpdeskTD(models.Model):
     @api.multi
     def action_assign_complexity_l2_td(self):
         for helpdesk_td_ticket in self:
-            helpdesk_td_ticket_complexity = helpdesk_td_ticket.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                [('name', '=', 'L-2')])
-            if helpdesk_td_ticket_complexity:
-                helpdesk_td_ticket.update({
-                    'complexity': helpdesk_td_ticket_complexity,
-                })
+            if helpdesk_td_ticket.assigned_to:
+                helpdesk_td_ticket_complexity = helpdesk_td_ticket.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
+                    [('name', '=', 'L-2')])
+                if helpdesk_td_ticket_complexity:
+                    helpdesk_td_ticket.update({
+                        'complexity': helpdesk_td_ticket_complexity,
+                    })
+                else:
+                    helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
+                        'isp_crm_module.helpdesk_td_ticket_complexity'].create(
+
+                        {
+
+                            'name': 'L-2',
+                            'time_limit': '16 Hours',
+
+                        }
+
+                    )
+                    helpdesk_td_ticket.update({
+                        'complexity': helpdesk_td_ticket_complexity,
+                    })
+                return True
             else:
-                helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
-                    'isp_crm_module.helpdesk_td_ticket_complexity'].create(
+                raise UserError('You must assign the ticket before assigning the complexity level')
 
-                    {
-
-                        'name': 'L-2',
-                        'time_limit': '16 Hours',
-
-                    }
-
-                )
-                helpdesk_td_ticket.update({
-                    'complexity': helpdesk_td_ticket_complexity,
-                })
-        return True
 
     @api.multi
     def action_assign_complexity_l3_td(self):
         for helpdesk_td_ticket in self:
-            helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
-                'isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                [('name', '=', 'L-3')])
-            if helpdesk_td_ticket_complexity:
-                helpdesk_td_ticket.update({
-                    'complexity': helpdesk_td_ticket_complexity,
-                })
-            else:
+            if helpdesk_td_ticket.assigned_to:
                 helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
-                    'isp_crm_module.helpdesk_td_ticket_complexity'].create(
+                    'isp_crm_module.helpdesk_td_ticket_complexity'].search(
+                    [('name', '=', 'L-3')])
+                if helpdesk_td_ticket_complexity:
+                    helpdesk_td_ticket.update({
+                        'complexity': helpdesk_td_ticket_complexity,
+                    })
+                else:
+                    helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
+                        'isp_crm_module.helpdesk_td_ticket_complexity'].create(
 
-                    {
+                        {
 
-                        'name': 'L-3',
-                        'time_limit': '24 Hours',
+                            'name': 'L-3',
+                            'time_limit': '24 Hours',
 
-                    }
+                        }
 
-                )
-                helpdesk_td_ticket.update({
-                    'complexity': helpdesk_td_ticket_complexity,
-                })
-        return True
+                    )
+                    helpdesk_td_ticket.update({
+                        'complexity': helpdesk_td_ticket_complexity,
+                    })
+                return True
+            else:
+                raise UserError('You must assign the ticket before assigning the complexity level')
