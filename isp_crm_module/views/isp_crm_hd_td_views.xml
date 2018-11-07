@@ -94,7 +94,7 @@
                         help="Mark Done"
                         class="oe_highlight"
                         attrs="{'invisible': [('default_stages', '!=', '1')]}"
-                        confirm="are you sure you want to continue?"
+                        confirm="Are you sure you want to continue?"
                     />
                     <!--<button-->
                         <!--name="action_cancel_ticket_td"-->

@@ -95,7 +95,7 @@
                         help="Send Ticket to Technical Department"
                         class="oe_highlight"
                         attrs="{'invisible': [('default_stages', '!=', '1')]}"
-                        confirm="are you sure you want to continue?"
+                        confirm="Are you sure you want to continue?"
                     />
                     <field name="default_stages" widget="statusbar" clickable="True"/>
                 </header>
