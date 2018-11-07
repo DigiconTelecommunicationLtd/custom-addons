@@ -30,7 +30,7 @@ TD_FLAGS = [
     ('0', 'Not Sent to TD'),
     ('1', 'Sent to TD'),
     ('2', 'Marked Done by TD'),
-    ('3', 'Cancelled by TD'),
+    ('3', 'Resolved'),
 ]
 
 class Helpdesk(models.Model):
@@ -71,8 +71,9 @@ class Helpdesk(models.Model):
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
     customer_rating = fields.Selection(AVAILABLE_RATINGS, string="Rating")
     customer_feedback = fields.Text('Feedback')
-    color = fields.Integer()
-    td_flags = fields.Selection(TD_FLAGS, string="TD Flags")
+    color = fields.Integer(default=1)
+    td_flags = fields.Selection(TD_FLAGS, string="Status")
+    sd_resolved_by = fields.Many2one('hr.employee', string='Resolved By', store=True)
 
 
     @api.model
@@ -113,6 +114,8 @@ class Helpdesk(models.Model):
                 raise UserError('System does not allow you to change stage after resolving the ticket.')
             if self.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_ticket.name)]).td_flags =='1':
                 raise UserError('Can not change stage. Ticket is not resolved by TD.')
+            if self.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_ticket.name)]).td_flags =='2':
+                raise UserError('Can not change stage. Ticket is not resolved by SD.')
 
     @api.onchange('td_flags')
     def _onchange_td_flags(self):
@@ -223,4 +226,16 @@ class Helpdesk(models.Model):
                 })
                 helpdesk_ticket.env['isp_crm_module.helpdesk_td'].search(
                         [('helpdesk_ticket', '=', helpdesk_ticket.id)]).unlink()
+        return True
+
+    @api.multi
+    def action_resolved_by_sd(self):
+        for helpdesk_ticket in self:
+            if helpdesk_ticket.td_flags == '2':
+                helpdesk_ticket.update({
+                    'td_flags': '3',
+                    'default_stages': '3',
+                    'sd_resolved_by':self.env.uid,
+                })
+
         return True

@@ -97,6 +97,15 @@
                         attrs="{'invisible': [('default_stages', '!=', '1')]}"
                         confirm="Are you sure you want to continue?"
                     />
+                    <button
+                        name="action_resolved_by_sd"
+                        string="Is Resolved"
+                        type="object"
+                        help="Is Resolved"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('td_flags', '!=', '2')]}"
+                        confirm="Are you sure you want to continue?"
+                    />
                     <field name="default_stages" widget="statusbar" clickable="True"/>
                 </header>
                 <sheet>
@@ -109,6 +118,9 @@
                         </group>
                         <group>
                             <field name="complexity"/>
+                        </group>
+                        <group>
+                            <field name="td_flags"/>
                         </group>
                     </group>
                     <group string="Customer Info">
