@@ -96,6 +96,24 @@
                         attrs="{'invisible': [('default_stages', '!=', '1')]}"
                         confirm="Are you sure you want to continue?"
                     />
+                    <button
+                        name="action_assign_complexity_l2_td"
+                        string="Assign Complexity L-2"
+                        type="object"
+                        help="Assign Complexity L-2"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('default_stages', '=', '2')]}"
+                        confirm="Are you sure you want to continue?"
+                    />
+                    <button
+                        name="action_assign_complexity_l3_td"
+                        string="Assign Complexity L-3"
+                        type="object"
+                        help="Assign Complexity L-3"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('default_stages', '=', '2')]}"
+                        confirm="Are you sure you want to continue?"
+                    />
                     <field name="default_stages" widget="statusbar" clickable="True"/>
                 </header>
                 <sheet>
@@ -107,7 +125,7 @@
                             <field name="type"/>
                         </group>
                         <group>
-                            <field name="complexity"/>
+                            <field name="complexity" readonly="1" options="{'no_create_edit': True}"/>
                         </group>
                     </group>
                     <group string="Customer Info">

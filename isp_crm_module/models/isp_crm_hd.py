@@ -46,7 +46,7 @@ class Helpdesk(models.Model):
     problem = fields.Many2one('isp_crm_module.helpdesk_problem',string="Problem", required=True, translate=True, ondelete='set null',help='Ticket Problem.')
     type = fields.Many2one('isp_crm_module.helpdesk_type', string='Type', ondelete='set null',
                                   help='Ticket Type.')
-    helpdesk_td_ticket = fields.Many2one('isp_crm_module.helpdesk_td', string="Helpdesk TD Ticket", required=True, translate=True,
+    helpdesk_td_ticket = fields.Many2one('isp_crm_module.helpdesk_td', string="Helpdesk TD Ticket", required=False, translate=True,
                                      ondelete='set null', help='Helpdesk TD Ticket.')
     description = fields.Text('Description')
     stage = fields.Many2one('isp_crm_module.helpdesk_stage', string='Stage', ondelete='set null',
@@ -82,6 +82,21 @@ class Helpdesk(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
             vals['default_stages'] = '0'
             vals['td_flags'] = '0'
+            helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', 'L-1')])
+            if helpdesk_ticket_complexity:
+                vals['complexity'] = helpdesk_ticket_complexity.id
+            else:
+                helpdesk_ticket_complexity = helpdesk_ticket_complexity.env['isp_crm_module.helpdesk_ticket_complexity'].create(
+
+                    {
+
+                        'name': 'L-1',
+                        'time_limit': '8 Hours',
+
+                    }
+
+                )
+                vals['complexity'] = helpdesk_ticket_complexity.id
         newrecord = super(Helpdesk, self).create(vals)
         self.env['isp_crm_module.helpdesk_ticket_history'].create(
             {
@@ -120,11 +135,8 @@ class Helpdesk(models.Model):
     @api.onchange('td_flags')
     def _onchange_td_flags(self):
         for helpdesk_ticket in self:
-            print(helpdesk_ticket.color)
             if self.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_ticket.name)]).td_flags == '2':
-                print(helpdesk_ticket.color)
                 helpdesk_ticket.color = 3
-                print(helpdesk_ticket.color)
 
     def get_customer_address_str(self, customer):
         address_str = ""

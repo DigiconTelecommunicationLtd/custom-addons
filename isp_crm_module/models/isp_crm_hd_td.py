@@ -22,6 +22,8 @@ AVAILABLE_STAGES = [
     ('1', 'Doing'),
     ('2', 'Done'),
 ]
+
+
 CANCEL_REQUEST_SD = [
     ('0', 'False'),
     ('1', 'True'),
@@ -94,6 +96,10 @@ class HelpdeskTD(models.Model):
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
         for helpdesk_td_ticket in self:
+            if self.env['isp_crm_module.helpdesk_td'].search([('name', '=', helpdesk_td_ticket.name)]).default_stages == '1':
+                if helpdesk_td_ticket.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_td_ticket.helpdesk_ticket.name)]).td_flags != '2':
+                    raise UserError('System does not allow you to change stage without resolving the ticket.')
+
             if self.env['isp_crm_module.helpdesk_td'].search([('name', '=', helpdesk_td_ticket.name)]).default_stages == '2':
                 raise UserError('System does not allow you to change stage after resolving the ticket.')
 
@@ -149,5 +155,58 @@ class HelpdeskTD(models.Model):
             if helpdesk_ticket.td_flags == '1':
                 helpdesk_ticket.update({
                     'default_stages': '3',
+                })
+        return True
+
+    @api.multi
+    def action_assign_complexity_l2_td(self):
+        for helpdesk_td_ticket in self:
+            helpdesk_td_ticket_complexity = helpdesk_td_ticket.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
+                [('name', '=', 'L-2')])
+            if helpdesk_td_ticket_complexity:
+                helpdesk_td_ticket.update({
+                    'complexity': helpdesk_td_ticket_complexity,
+                })
+            else:
+                helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
+                    'isp_crm_module.helpdesk_td_ticket_complexity'].create(
+
+                    {
+
+                        'name': 'L-2',
+                        'time_limit': '16 Hours',
+
+                    }
+
+                )
+                helpdesk_td_ticket.update({
+                    'complexity': helpdesk_td_ticket_complexity,
+                })
+        return True
+
+    @api.multi
+    def action_assign_complexity_l3_td(self):
+        for helpdesk_td_ticket in self:
+            helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
+                'isp_crm_module.helpdesk_td_ticket_complexity'].search(
+                [('name', '=', 'L-3')])
+            if helpdesk_td_ticket_complexity:
+                helpdesk_td_ticket.update({
+                    'complexity': helpdesk_td_ticket_complexity,
+                })
+            else:
+                helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
+                    'isp_crm_module.helpdesk_td_ticket_complexity'].create(
+
+                    {
+
+                        'name': 'L-3',
+                        'time_limit': '24 Hours',
+
+                    }
+
+                )
+                helpdesk_td_ticket.update({
+                    'complexity': helpdesk_td_ticket_complexity,
                 })
         return True
