@@ -1010,7 +1010,7 @@
                                             <t t-else="">
                                                 <form role="form" t-attf-action="/selfcare/change-package/#{product.id}" method="POST">
                                                     <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
-                                                    <button type="submit" class="btn btn-info" onclick="return confirm('Are you sure you want to change plan?');">Change Plan</button>
+                                                    <button type="submit" class="btn btn-sm btn-info" onclick="return confirm('Are you sure you want to change plan?');">Change Plan</button>
                                                 </form>
                                             </t>
                                         </td>
