@@ -277,22 +277,8 @@
                             </group>
                         </page>
                         <!--end of order line-->
-                        <!--Add Technical Info-->
-                        <page string="Technical Info">
-                            <group>
-                                <field name="customer_ip"/>
-                                <field name="customer_subnet_mask"/>
-                                <field name="customer_gateway" />
-                            </group>
-                            <group></group>
-                        </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"/>
-                    <field name="activity_ids" widget="mail_activity"/>
-                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
-                </div>
             </form>
         </field>
     </record>
@@ -308,15 +294,6 @@
                 Help Text
             </p>
         </field>
-    </record>
-
-
-
-    <record id="service_req_subtype_xml" model="mail.message.subtype">
-        <field name="name">service.req.subtype.xml</field>
-        <field name="res_model">isp_crm_module.service_request</field>
-        <field name="default" eval="True"/>
-        <field name="description">Hello Happiness.</field>
     </record>
 
 </odoo>

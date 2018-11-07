@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <odoo>
 
-    <record id="isp_crm_module.helpdesk_ticket_list" model="ir.ui.view">
+    <record id="isp_crm_module.helpdesk_td_ticket_list" model="ir.ui.view">
         <field name="name">List of Ticket Types</field>
-        <field name="model">isp_crm_module.helpdesk</field>
+        <field name="model">isp_crm_module.helpdesk_td</field>
         <field name="arch" type="xml">
             <tree string="Helpdesk Ticket List">
                 <field name="type"/>
@@ -15,9 +15,9 @@
     </record>
 
     <!--Ticket Kanban-->
-    <record model="ir.ui.view" id="view_isp_crm_module_helpdesk_ticket_kanban">
+    <record model="ir.ui.view" id="view_isp_crm_module_helpdesk_td_ticket_kanban">
         <field name="problem">isp.crm_module.kanban</field>
-        <field name="model">isp_crm_module.helpdesk</field>
+        <field name="model">isp_crm_module.helpdesk_td</field>
         <field name="type">kanban</field>
         <field name="arch" type="xml">
             <kanban default_group_by="default_stages" class="o_kanban_small_column o_kanban_project_tasks" quick_create="false">
@@ -29,7 +29,6 @@
                         <div class="oe_kanban_content">
                             <div class="o_kanban_record_top">
                                 <div class="o_kanban_record_headings">
-                                    <h6><field name="td_flags"/></h6><br/>
                                     <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
                                     <strong class="o_kanban_record_title"><field name="problem"/></strong><br/>
                                     <strong class="o_kanban_record_title"><field name="type"/></strong><br/>
@@ -72,38 +71,47 @@
         </field>
     </record>
 
-    <record id="isp_crm_module.helpdesk_ticket_search" model="ir.ui.view">
-        <field name="name">Search Helpdesk Ticket</field>
-        <field name="model">isp_crm_module.helpdesk</field>
+    <record id="isp_crm_module.helpdesk_td_ticket_search" model="ir.ui.view">
+        <field name="name">Search Helpdesk TD Ticket</field>
+        <field name="model">isp_crm_module.helpdesk_td</field>
         <field name="arch" type="xml">
-            <search string="Helpdesk Type Search">
-                <field name="type" string="Everywhere" filter_domain="['|','|','|','|',('type','ilike',self),('stage','ilike',self),('assigned_to','ilike',self),('complexity','ilike',self),('td_flags','ilike',self)]"/>
+            <search string="Helpdesk TD Type Search">
+                <field name="type" string="Everywhere" filter_domain="['|','|','|',('type','ilike',self),('stage','ilike',self),('assigned_to','ilike',self),('complexity','ilike',self)]"/>
             </search>
         </field>
     </record>
 
-    <record id="isp_crm_module.helpdesk_ticket_create" model="ir.ui.view">
-        <field name="name">Create Helpdesk Ticket</field>
-        <field name="model">isp_crm_module.helpdesk</field>
+    <record id="isp_crm_module.helpdesk_td_ticket_create" model="ir.ui.view">
+        <field name="name">Create Helpdesk TD Ticket</field>
+        <field name="model">isp_crm_module.helpdesk_td</field>
         <field name="arch" type="xml">
-            <form string="Helpdesk Ticket Create Form">
+            <form string="Helpdesk TD Ticket Create Form">
                 <header>
                     <button
-                        name="action_send_ticket_to_td"
-                        string="Send Ticket to TD"
+                        name="action_mark_done_ticket_td"
+                        string="Mark Done"
                         type="object"
-                        help="Send Ticket to Technical Department"
+                        help="Mark Done"
                         class="oe_highlight"
                         attrs="{'invisible': [('default_stages', '!=', '1')]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button
-                        name="action_resolved_by_sd"
-                        string="Is Resolved"
+                        name="action_assign_complexity_l2_td"
+                        string="Assign Complexity L-2"
                         type="object"
-                        help="Is Resolved"
+                        help="Assign Complexity L-2"
                         class="oe_highlight"
-                        attrs="{'invisible': [('td_flags', '!=', '2')]}"
+                        attrs="{'invisible': [('default_stages', '=', '2')]}"
+                        confirm="Are you sure you want to continue?"
+                    />
+                    <button
+                        name="action_assign_complexity_l3_td"
+                        string="Assign Complexity L-3"
+                        type="object"
+                        help="Assign Complexity L-3"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('default_stages', '=', '2')]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <field name="default_stages" widget="statusbar" clickable="True"/>
@@ -118,9 +126,6 @@
                         </group>
                         <group>
                             <field name="complexity" readonly="1" options="{'no_create_edit': True}"/>
-                        </group>
-                        <group>
-                            <field name="td_flags"  readonly="1" options="{'no_create_edit': True}"/>
                         </group>
                     </group>
                     <group string="Customer Info">
@@ -200,24 +205,24 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="isp_crm_helpdesk">
-        <field name="name">Helpdesk</field>
-        <field name="res_model">isp_crm_module.helpdesk</field>
+    <record model="ir.actions.act_window" id="isp_crm_helpdesk_td">
+        <field name="name">Helpdesk Technical Department</field>
+        <field name="res_model">isp_crm_module.helpdesk_td</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="domain" eval=""/>
-        <field name="search_view_id" ref="isp_crm_module.helpdesk_ticket_search"/>
+        <field name="search_view_id" ref="isp_crm_module.helpdesk_td_ticket_search"/>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
-                Welcome to ISP CRM Helpdesk. Click to create a new ticket.
+                Welcome to ISP CRM Helpdesk Technical Department. Click to create a new ticket.
             </p>
         </field>
     </record>
 
     <menuitem
-            id="isp_crm_hd_menu"
-            name="Helpdesk Ticket"
+            id="isp_crm_hd_td_menu"
+            name="Technical Department Ticket"
             parent="isp_crm_hd"
-            action="isp_crm_helpdesk"
+            action="isp_crm_helpdesk_td"
     />
 
 </odoo>

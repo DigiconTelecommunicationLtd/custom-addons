@@ -15,5 +15,11 @@
         parent="crm.crm_menu_config"
      />
 
+    <!--ISP CRM Helpdesk TD Configuration-->
+    <menuitem
+        id="isp_crm_hd_td_config"
+        name="Helpdesk TD Configuration"
+        parent="crm.crm_menu_config"
+     />
 
 </odoo>
