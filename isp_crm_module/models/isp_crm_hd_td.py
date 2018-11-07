@@ -69,6 +69,7 @@ class HelpdeskTD(models.Model):
     customer_feedback = fields.Text('Feedback')
     color = fields.Integer()
     cancel_request_from_sd = fields.Selection(CANCEL_REQUEST_SD, string="Cancel Request from SD")
+    level_change_time = fields.Date(string='Level Change Time', default=datetime.datetime.now())
 
     @api.model
     def create(self, vals):
@@ -167,6 +168,7 @@ class HelpdeskTD(models.Model):
                 if helpdesk_td_ticket_complexity:
                     helpdesk_td_ticket.update({
                         'complexity': helpdesk_td_ticket_complexity,
+                        'level_change_time': datetime.datetime.now(),
                     })
                 else:
                     helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
@@ -182,6 +184,7 @@ class HelpdeskTD(models.Model):
                     )
                     helpdesk_td_ticket.update({
                         'complexity': helpdesk_td_ticket_complexity,
+                        'level_change_time': datetime.datetime.now(),
                     })
                 return True
             else:
@@ -198,6 +201,7 @@ class HelpdeskTD(models.Model):
                 if helpdesk_td_ticket_complexity:
                     helpdesk_td_ticket.update({
                         'complexity': helpdesk_td_ticket_complexity,
+                        'level_change_time': datetime.datetime.now(),
                     })
                 else:
                     helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
@@ -213,6 +217,7 @@ class HelpdeskTD(models.Model):
                     )
                     helpdesk_td_ticket.update({
                         'complexity': helpdesk_td_ticket_complexity,
+                        'level_change_time':datetime.datetime.now(),
                     })
                 return True
             else:
