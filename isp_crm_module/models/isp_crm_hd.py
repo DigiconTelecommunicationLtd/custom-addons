@@ -20,10 +20,10 @@ AVAILABLE_RATINGS = [
     ('2', 'Excellent'),
 ]
 AVAILABLE_STAGES = [
-    ('0', 'New'),
-    ('1', 'Doing'),
-    ('2', 'TD'),
-    ('3', 'Done'),
+    ('New', 'New'),
+    ('Doing', 'Doing'),
+    ('TD', 'TD'),
+    ('Done', 'Done'),
 ]
 
 TD_FLAGS = [
@@ -80,7 +80,7 @@ class Helpdesk(models.Model):
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
-            vals['default_stages'] = '0'
+            vals['default_stages'] = 'New'
             vals['td_flags'] = '0'
             helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', 'L-1')])
             if helpdesk_ticket_complexity:
@@ -124,19 +124,36 @@ class Helpdesk(models.Model):
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
-        for helpdesk_ticket in self:
-            if self.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_ticket.name)]).default_stages =='3':
-                raise UserError('System does not allow you to change stage after resolving the ticket.')
-            if self.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_ticket.name)]).td_flags =='1':
-                raise UserError('Can not change stage. Ticket is not resolved by TD.')
-            if self.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_ticket.name)]).td_flags =='2':
-                raise UserError('Can not change stage. Ticket is not resolved by SD.')
+        if self.default_stages != 'Done' and self.td_flags == '3':
+            raise UserError('System does not allow you to change stage after resolving the ticket.')
+        if self.td_flags == '1':
+            raise UserError('Can not change stage. Ticket is not resolved by TD.')
+        if self.td_flags == '2':
+            raise UserError('Can not change stage. Ticket is not resolved by SD.')
+
+        if self.default_stages == 'New':
+            self.update({
+                    'color': 1,
+                })
+        if self.default_stages == 'Doing':
+            self.update({
+                    'color': 3,
+                })
+        if self.default_stages == 'Done':
+            self.update({
+                    'color': 11,
+                })
+        if self.default_stages == 'TD':
+            self.update({
+                    'color': 4,
+                })
 
     @api.onchange('td_flags')
     def _onchange_td_flags(self):
-        for helpdesk_ticket in self:
-            if self.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_ticket.name)]).td_flags == '2':
-                helpdesk_ticket.color = 3
+        if self.td_flags == '2':
+            self.update({
+                'color': 10,
+            })
 
     def get_customer_address_str(self, customer):
         address_str = ""
@@ -157,97 +174,96 @@ class Helpdesk(models.Model):
 
     @api.multi
     def action_send_ticket_to_td(self):
-        for helpdesk_ticket in self:
-            helpdesk_ticket.update({
-                'td_flags': '1',
-                'default_stages': '2',
-            })
+        self.update({
+            'td_flags': '1',
+            'default_stages': 'TD',
+            'color': 4,
+        })
 
-            helpdesk_td_problem = helpdesk_ticket.env['isp_crm_module.helpdesk_td_problem'].search([('name', '=', helpdesk_ticket.problem.name)])
-            if helpdesk_td_problem :
-                pass
-            else:
-                helpdesk_td_problem = helpdesk_ticket.env['isp_crm_module.helpdesk_td_problem'].create(
+        helpdesk_td_problem = self.env['isp_crm_module.helpdesk_td_problem'].search([('name', '=', self.problem.name)])
+        if helpdesk_td_problem :
+            pass
+        else:
+            helpdesk_td_problem = self.env['isp_crm_module.helpdesk_td_problem'].create(
 
-                    {
+                {
 
-                        'name': helpdesk_ticket.problem.name,
+                    'name': self.problem.name,
 
-                    }
+                }
 
-                )
+            )
 
-            helpdesk_td_type = helpdesk_ticket.env['isp_crm_module.helpdesk_td_type'].search(
-                [('name', '=', helpdesk_ticket.type.name)])
-            if helpdesk_td_type:
-                pass
-            else:
-                helpdesk_td_type = helpdesk_ticket.env['isp_crm_module.helpdesk_td_type'].create(
+        helpdesk_td_type = self.env['isp_crm_module.helpdesk_td_type'].search(
+            [('name', '=', self.type.name)])
+        if helpdesk_td_type:
+            pass
+        else:
+            helpdesk_td_type = self.env['isp_crm_module.helpdesk_td_type'].create(
 
-                    {
+                {
 
-                        'name': helpdesk_ticket.type.name,
+                    'name': self.type.name,
 
-                    }
+                }
 
-                )
+            )
 
-            helpdesk_td_ticket_complexity = helpdesk_ticket.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                [('name', '=', helpdesk_ticket.complexity.name)])
-            if helpdesk_td_ticket_complexity:
-                pass
-            else:
-                helpdesk_td_ticket_complexity = helpdesk_ticket.env['isp_crm_module.helpdesk_td_ticket_complexity'].create(
+        helpdesk_td_ticket_complexity = self.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
+            [('name', '=', self.complexity.name)])
+        if helpdesk_td_ticket_complexity:
+            pass
+        else:
+            helpdesk_td_ticket_complexity = self.env['isp_crm_module.helpdesk_td_ticket_complexity'].create(
 
-                    {
+                {
 
-                        'name': helpdesk_ticket.complexity.name,
-                        'time_limit': helpdesk_ticket.complexity.time_limit,
+                    'name': self.complexity.name,
+                    'time_limit': self.complexity.time_limit,
 
-                    }
+                }
 
-                )
+            )
 
-            helpdesk_ticket.env['isp_crm_module.helpdesk_td'].create(
-            {
-                'name': 'New',
-                'problem': helpdesk_td_problem.id,
-                'type': helpdesk_td_type.id,
-                'helpdesk_ticket':helpdesk_ticket.id,
-                'description': helpdesk_ticket.description,
-                'customer': helpdesk_ticket.customer.id,
-                'customer_address': helpdesk_ticket.customer_address,
-                'complexity': helpdesk_td_ticket_complexity.id,
-                'priority': helpdesk_ticket.priority,
-                'customer_rating': helpdesk_ticket.customer_rating,
-                'customer_feedback': helpdesk_ticket.customer_feedback,
-                'color': helpdesk_ticket.color,
+        self.env['isp_crm_module.helpdesk_td'].create(
+        {
+            'name': 'New',
+            'problem': helpdesk_td_problem.id,
+            'type': helpdesk_td_type.id,
+            'helpdesk_ticket':self.id,
+            'description': self.description,
+            'customer': self.customer.id,
+            'customer_address': self.customer_address,
+            'complexity': helpdesk_td_ticket_complexity.id,
+            'priority': self.priority,
+            'customer_rating': self.customer_rating,
+            'customer_feedback': self.customer_feedback,
+            'color': 1,
 
-            }
+        }
         )
 
         return True
 
     @api.multi
     def action_cancel_ticket_to_td(self):
-        for helpdesk_ticket in self:
-            if helpdesk_ticket.td_flags == '1':
-                helpdesk_ticket.update({
-                    'td_flags': '0',
-                    'default_stages': '1',
-                })
-                helpdesk_ticket.env['isp_crm_module.helpdesk_td'].search(
-                        [('helpdesk_ticket', '=', helpdesk_ticket.id)]).unlink()
+        if self.td_flags == '1':
+            self.update({
+                'td_flags': '0',
+                'default_stages': 'Doing',
+            })
+            self.env['isp_crm_module.helpdesk_td'].search(
+                    [('helpdesk_ticket', '=', self.id)]).unlink()
         return True
 
     @api.multi
     def action_resolved_by_sd(self):
-        for helpdesk_ticket in self:
-            if helpdesk_ticket.td_flags == '2':
-                helpdesk_ticket.update({
-                    'td_flags': '3',
-                    'default_stages': '3',
-                    'sd_resolved_by':self.env.uid,
-                })
+        if self.td_flags == '2':
+            self.update({
+                'td_flags': '3',
+                'default_stages': 'Done',
+                'sd_resolved_by':self.env.uid,
+                'color':11,
+            })
 
         return True
