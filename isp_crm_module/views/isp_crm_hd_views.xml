@@ -94,7 +94,7 @@
                         type="object"
                         help="Send Ticket to Technical Department"
                         class="oe_highlight"
-                        attrs="{'invisible': [('default_stages', '!=', '1')]}"
+                        attrs="{'invisible': [('default_stages', '!=', 'Doing')]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button
@@ -106,7 +106,7 @@
                         attrs="{'invisible': [('td_flags', '!=', '2')]}"
                         confirm="Are you sure you want to continue?"
                     />
-                    <field name="default_stages" widget="statusbar" clickable="True"/>
+                    <field name="default_stages" widget="statusbar"/>
                 </header>
                 <sheet>
                     <div class="oe_title">

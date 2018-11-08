@@ -18,9 +18,9 @@ AVAILABLE_RATINGS = [
     ('2', 'Excellent'),
 ]
 AVAILABLE_STAGES = [
-    ('0', 'New'),
-    ('1', 'Doing'),
-    ('2', 'Done'),
+    ('New', 'New'),
+    ('Doing', 'Doing'),
+    ('Done', 'Done'),
 ]
 
 
@@ -67,18 +67,17 @@ class HelpdeskTD(models.Model):
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
     customer_rating = fields.Selection(AVAILABLE_RATINGS, string="Rating")
     customer_feedback = fields.Text('Feedback')
-    color = fields.Integer()
+    color = fields.Integer(default=1)
     cancel_request_from_sd = fields.Selection(CANCEL_REQUEST_SD, string="Cancel Request from SD")
     level_change_time = fields.Date(string='Level Change Time', default=datetime.datetime.now())
+    is_marked_done = fields.Boolean()
 
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk_td') or '/'
-            vals['default_stages'] = '0'
-            # self.team_leader = self.assigned_to and self.assigned_to.parent_id
-            # self.team = self.assigned_to.department_id
-            # self.customer_address = self.get_customer_address_str(customer=self.customer)
+            vals['default_stages'] = 'New'
+            vals['is_marked_done'] = False
         newrecord = super(HelpdeskTD, self).create(vals)
         self.env['isp_crm_module.helpdesk_td_ticket_history'].create(
             {
@@ -96,13 +95,22 @@ class HelpdeskTD(models.Model):
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
-        for helpdesk_td_ticket in self:
-            if self.env['isp_crm_module.helpdesk_td'].search([('name', '=', helpdesk_td_ticket.name)]).default_stages == '1':
-                if helpdesk_td_ticket.env['isp_crm_module.helpdesk'].search([('name', '=', helpdesk_td_ticket.helpdesk_ticket.name)]).td_flags != '2':
-                    raise UserError('System does not allow you to change stage without resolving the ticket.')
+        if self.default_stages == 'Done' and self.is_marked_done is False:
+            raise UserError('System does not allow you to change stage without resolving the ticket.')
+        if self.default_stages != 'Done' and self._origin.is_marked_done is True:
+            raise UserError('System does not allow you to change stage after resolving the ticket.')
 
-            if self.env['isp_crm_module.helpdesk_td'].search([('name', '=', helpdesk_td_ticket.name)]).default_stages == '2':
-                raise UserError('System does not allow you to change stage after resolving the ticket.')
+        if self.default_stages == 'New' and self._origin.is_marked_done is False:
+            self.update({
+                    'color': 1,
+                })
+        if self.default_stages == 'Doing' and self._origin.is_marked_done is False:
+            if self._origin.assigned_to:
+                self.update({
+                        'color': 3,
+                    })
+            else:
+                raise UserError('You must assign someone before changing stage.')
 
     @api.onchange('assigned_to')
     def _onchange_assigned_to(self):
@@ -128,97 +136,87 @@ class HelpdeskTD(models.Model):
 
     @api.multi
     def action_mark_done_ticket_td(self):
-        for helpdesk_ticket_td in self:
-            helpdesk_ticket_td.update({
-                'default_stages': '2',
-            })
+        self.update({
+            'default_stages': 'Done',
+            'color':10,
+            'is_marked_done': True,
+        })
+        self.helpdesk_ticket.update(
 
-            helpdesk_ticket = helpdesk_ticket_td.env['isp_crm_module.helpdesk'].search(
-                [('name', '=', helpdesk_ticket_td.helpdesk_ticket.name)])
-            if helpdesk_ticket:
-                helpdesk_td_problem = helpdesk_ticket.update(
+            {
 
-                    {
+                'td_flags': '2',
+                'color':10,
 
-                        'td_flags': '2',
+            }
 
-                    }
-
-                )
-            else:
-                pass
-
+        )
         return True
 
     @api.multi
     def action_cancel_ticket_td(self):
-        for helpdesk_ticket in self:
-            if helpdesk_ticket.td_flags == '1':
-                helpdesk_ticket.update({
-                    'default_stages': '3',
-                })
+        if self.td_flags == '1':
+            self.update({
+                'default_stages': 'Done',
+            })
         return True
 
     @api.multi
     def action_assign_complexity_l2_td(self):
-        for helpdesk_td_ticket in self:
-            if helpdesk_td_ticket.assigned_to:
-                helpdesk_td_ticket_complexity = helpdesk_td_ticket.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                    [('name', '=', 'L-2')])
-                if helpdesk_td_ticket_complexity:
-                    helpdesk_td_ticket.update({
-                        'complexity': helpdesk_td_ticket_complexity,
-                        'level_change_time': datetime.datetime.now(),
-                    })
-                else:
-                    helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
-                        'isp_crm_module.helpdesk_td_ticket_complexity'].create(
-
-                        {
-
-                            'name': 'L-2',
-                            'time_limit': '16 Hours',
-
-                        }
-
-                    )
-                    helpdesk_td_ticket.update({
-                        'complexity': helpdesk_td_ticket_complexity,
-                        'level_change_time': datetime.datetime.now(),
-                    })
-                return True
+        if self.assigned_to:
+            helpdesk_td_ticket_complexity = self.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
+                [('name', '=', 'L-2')])
+            if helpdesk_td_ticket_complexity:
+                self.update({
+                    'complexity': helpdesk_td_ticket_complexity,
+                    'level_change_time': datetime.datetime.now(),
+                })
             else:
-                raise UserError('You must assign the ticket before assigning the complexity level')
+                helpdesk_td_ticket_complexity = self.env[
+                    'isp_crm_module.helpdesk_td_ticket_complexity'].create(
+
+                    {
+
+                        'name': 'L-2',
+                        'time_limit': '16 Hours',
+
+                    }
+
+                )
+                self.update({
+                    'complexity': helpdesk_td_ticket_complexity,
+                    'level_change_time': datetime.datetime.now(),
+                })
+        else:
+            raise UserError('You must assign the ticket before assigning the complexity level')
 
 
     @api.multi
     def action_assign_complexity_l3_td(self):
-        for helpdesk_td_ticket in self:
-            if helpdesk_td_ticket.assigned_to:
-                helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
-                    'isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                    [('name', '=', 'L-3')])
-                if helpdesk_td_ticket_complexity:
-                    helpdesk_td_ticket.update({
-                        'complexity': helpdesk_td_ticket_complexity,
-                        'level_change_time': datetime.datetime.now(),
-                    })
-                else:
-                    helpdesk_td_ticket_complexity = helpdesk_td_ticket.env[
-                        'isp_crm_module.helpdesk_td_ticket_complexity'].create(
-
-                        {
-
-                            'name': 'L-3',
-                            'time_limit': '24 Hours',
-
-                        }
-
-                    )
-                    helpdesk_td_ticket.update({
-                        'complexity': helpdesk_td_ticket_complexity,
-                        'level_change_time':datetime.datetime.now(),
-                    })
-                return True
+        if self.assigned_to:
+            helpdesk_td_ticket_complexity = self.env[
+                'isp_crm_module.helpdesk_td_ticket_complexity'].search(
+                [('name', '=', 'L-3')])
+            if helpdesk_td_ticket_complexity:
+                self.update({
+                    'complexity': helpdesk_td_ticket_complexity,
+                    'level_change_time': datetime.datetime.now(),
+                })
             else:
-                raise UserError('You must assign the ticket before assigning the complexity level')
+                helpdesk_td_ticket_complexity = self.env[
+                    'isp_crm_module.helpdesk_td_ticket_complexity'].create(
+
+                    {
+
+                        'name': 'L-3',
+                        'time_limit': '24 Hours',
+
+                    }
+
+                )
+                self.update({
+                    'complexity': helpdesk_td_ticket_complexity,
+                    'level_change_time':datetime.datetime.now(),
+                })
+        else:
+            raise UserError('You must assign the ticket before assigning the complexity level')
