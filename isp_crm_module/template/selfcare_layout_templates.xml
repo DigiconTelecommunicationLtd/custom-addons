@@ -899,7 +899,7 @@
                                             <t t-esc="ticket.description"/>
                                         </td>
                                         <td>
-                                            <t t-esc="ticket.stage"/>
+                                            <t t-esc="ticket.default_stages"/>
                                         </td>
                                         <td>
                                             <span t-field="ticket.create_date" t-field-options='{"format": "dd-MM-Y"}' />
