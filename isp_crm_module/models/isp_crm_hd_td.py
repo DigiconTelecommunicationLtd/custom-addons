@@ -95,7 +95,7 @@ class HelpdeskTD(models.Model):
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
-        if self.default_stages == 'Done' and self._origin.is_marked_done is False:
+        if self.default_stages == 'Done' and self.is_marked_done is False:
             raise UserError('System does not allow you to change stage without resolving the ticket.')
         if self.default_stages != 'Done' and self._origin.is_marked_done is True:
             raise UserError('System does not allow you to change stage after resolving the ticket.')
@@ -141,7 +141,6 @@ class HelpdeskTD(models.Model):
             'color':10,
             'is_marked_done': True,
         })
-        print(self.is_marked_done)
         self.helpdesk_ticket.update(
 
             {
