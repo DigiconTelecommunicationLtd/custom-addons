@@ -243,8 +243,8 @@ class ServiceRequest(models.Model):
 
             template_obj = self.env['isp_crm_module.service_request'].sudo().search([('name', '=', 'Send Service Request Mail')],
                                                                     limit=1)
-            self.mail_to = 'uselsmail4me@gmail.com'
-            self.mail_cc = 'uselsmail4me@cg-bd.com'
+            self.mail_to = customer.email
+            self.mail_cc = customer.email
             body = template_obj.body_html
             body = body.replace('--userid--', customer_subs_id)
             body = body.replace('--password--', cust_password)
@@ -257,7 +257,7 @@ class ServiceRequest(models.Model):
                     'body_html': body,
                     'email_to': self.mail_to,
                     'email_cc': self.mail_cc,
-                    'email_from': customer.email,
+                    'email_from': 'mime@cgbd.com',
                 }
                 create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
