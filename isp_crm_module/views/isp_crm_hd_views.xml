@@ -106,6 +106,13 @@
                         attrs="{'invisible': [('td_flags', '!=', '2')]}"
                         confirm="Are you sure you want to continue?"
                     />
+                    <button string="Send Email"
+                        type="object"
+                        name="action_btn_send_email"
+                        class="oe_highlight"
+                        attrs="{'invisible': True}"
+                        confirm="Are you sure you want to Send email to students?"
+                    />
                     <field name="default_stages" widget="statusbar"/>
                 </header>
                 <sheet>

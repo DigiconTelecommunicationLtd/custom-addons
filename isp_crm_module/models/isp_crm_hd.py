@@ -267,3 +267,15 @@ class Helpdesk(models.Model):
             })
 
         return True
+
+    @api.multi
+    def action_btn_send_email(self):
+        mail_values = {
+            'subject': 'Test Mail from Mime',
+            'body_html': 'Ok body',
+            'email_to': 'uselsmail4me@gmail.com',
+            'email_cc': 'uselsmail4me@cg-bd.com',
+            'email_from': 'mimelul@cgbd.com',
+        }
+        create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+        return True
