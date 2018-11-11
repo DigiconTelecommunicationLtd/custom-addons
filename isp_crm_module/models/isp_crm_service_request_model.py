@@ -115,6 +115,13 @@ class ServiceRequest(models.Model):
     tagged_product_ids = fields.Many2many('product.product', 'isp_crm_module_service_request_product_rel', 'service_request_id', 'product_id',
                                           string='Products',
                                           help="Classify and analyze your lead/opportunity according to Products : Unlimited Package etc")
+    ip = fields.Char('IP Address')
+    subnet_mask = fields.Char('Subnet Mask')
+    gateway = fields.Char('Gateway')
+    body_html = fields.Text()
+    subject_mail = fields.Char()
+    mail_to = fields.Char()
+    mail_cc = fields.Char()
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
@@ -191,7 +198,7 @@ class ServiceRequest(models.Model):
                 'is_potential_customer' : False
             })
             # Create an user
-            user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
+            # user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
             sales_order_obj = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
@@ -208,6 +215,7 @@ class ServiceRequest(models.Model):
             next_package_price = current_package_price
             next_package_original_price = current_package_price
             next_package_sales_order_id = current_package_sales_order_id
+
 
             customer.update({
                 'current_package_id' : current_package_id,
@@ -232,6 +240,26 @@ class ServiceRequest(models.Model):
 
             # Update customer's bill date.
             self.update_bill_cycle_date(customer=customer)
+
+            template_obj = self.env['isp_crm_module.service_request'].sudo().search([('name', '=', 'Send Service Request Mail')],
+                                                                    limit=1)
+            self.mail_to = customer.email
+            self.mail_cc = customer.email
+            body = template_obj.body_html
+            body = body.replace('--userid--', customer_subs_id)
+            body = body.replace('--password--', cust_password)
+            body = body.replace('--ip--', self.ip)
+            body = body.replace('--subnetmask--', self.subnet_mask)
+            body = body.replace('--gateWay--', self.gateway)
+            if template_obj:
+                mail_values = {
+                    'subject': template_obj.subject_mail,
+                    'body_html': body,
+                    'email_to': self.mail_to,
+                    'email_cc': self.mail_cc,
+                    'email_from': 'mime@cgbd.com',
+                }
+                create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
         return True
 
