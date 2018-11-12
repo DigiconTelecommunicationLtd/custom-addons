@@ -216,7 +216,23 @@
             <p>This is just a quick note to let you know, we’ve received your email & created a ticket <strong>--ticketnumber--</strong></p>
             <p>A member of our contact centre team will investigate & follow up with you shortly to resolve your issues & answer your queries.</p>
             <p></p>
-            <p>We appreciate your patience. Thanks for being with MIME”</p>
+            <p>We appreciate your patience. Thanks for being with MIME</p>
+
+        ]]>
+
+        </field>
+    </record>
+
+    <record id="send_helpdesk_ticket_closing_mail_template" model="isp_crm_module.mail">
+        <field name="name">Helpdesk Ticket Closing Mail</field>
+        <field name="body_html"><![CDATA[
+
+            <p><strong>Dear Valued Client,</strong></p>
+            <p>We believe your issue Ticket Number <strong>(--ticketnumber--)</strong> has been resolved and we are closing the ticket.</p>
+            <p>If you still face the same issue or you need additional assistance, please call our Contact Center right away at 09612363693 or write us at contact@MIME.com. We’re here to serve you 24/7.</p>
+            <p>Regards,</p>
+            <p>MIME</p>
+            <p>Please don't reply to this message unless for some reason you do not feel this ticket needs to be closed.</p>
 
         ]]>
 

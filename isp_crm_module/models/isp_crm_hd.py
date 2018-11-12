@@ -268,6 +268,12 @@ class Helpdesk(models.Model):
                 'color':11,
             })
 
+            template_obj = self.env['isp_crm_module.mail'].sudo().search(
+                [('name', '=', 'Helpdesk Ticket Closing Mail')],
+                limit=1)
+            subject_mail = "Mime Ticket Resolved"
+            self.action_send_email(subject_mail, self.customer_email, self.name, template_obj)
+
         return True
 
     @api.multi
