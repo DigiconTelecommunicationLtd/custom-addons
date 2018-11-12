@@ -181,6 +181,7 @@ class ServiceRequest(models.Model):
 
     @api.multi
     def action_make_service_request_done(self):
+        inv = self.env['isp_crm.cron_job'].update_customer_package_monthly()
         for service_req in self:
             service_req.update({
                 'is_done': True,
