@@ -75,7 +75,6 @@ class Helpdesk(models.Model):
     td_flags = fields.Selection(TD_FLAGS, string="Status")
     sd_resolved_by = fields.Many2one('hr.employee', string='Resolved By', store=True)
 
-
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
@@ -87,16 +86,13 @@ class Helpdesk(models.Model):
                 vals['complexity'] = helpdesk_ticket_complexity.id
             else:
                 helpdesk_ticket_complexity = helpdesk_ticket_complexity.env['isp_crm_module.helpdesk_ticket_complexity'].create(
-
                     {
-
                         'name': 'L-1',
                         'time_limit': '8 Hours',
-
                     }
-
                 )
                 vals['complexity'] = helpdesk_ticket_complexity.id
+
         newrecord = super(Helpdesk, self).create(vals)
         self.env['isp_crm_module.helpdesk_ticket_history'].create(
             {
@@ -105,6 +101,12 @@ class Helpdesk(models.Model):
                 'ticket_id': newrecord.id
             }
         )
+
+        template_obj = self.env['isp_crm_module.mail'].sudo().search(
+            [('name', '=', 'Helpdesk Ticket Creation Mail')],
+            limit=1)
+        subject_mail = "Mime New Ticket Creation"
+        self.action_send_email(subject_mail,newrecord.customer_email,newrecord.name,template_obj)
 
         return newrecord
 
@@ -266,16 +268,30 @@ class Helpdesk(models.Model):
                 'color':11,
             })
 
+            template_obj = self.env['isp_crm_module.mail'].sudo().search(
+                [('name', '=', 'Helpdesk Ticket Closing Mail')],
+                limit=1)
+            subject_mail = "Mime Ticket Resolved"
+            self.action_send_email(subject_mail, self.customer_email, self.name, template_obj)
+
         return True
 
     @api.multi
     def action_btn_send_email(self):
-        mail_values = {
-            'subject': 'Test Mail from Mime',
-            'body_html': 'Ok body',
-            'email_to': 'uselsmail4me@gmail.com',
-            'email_cc': 'uselsmail4me@cg-bd.com',
-            'email_from': 'mimelul@cgbd.com',
-        }
-        create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+        return True
+
+    @api.multi
+    def action_send_email(self, subject, mailto,ticketnumber, template_obj):
+        body = template_obj.body_html
+        body = body.replace('--ticketnumber--', ticketnumber)
+        if template_obj:
+            mail_values = {
+                'subject': subject,
+                'body_html': body,
+                'email_to': mailto,
+                'email_cc': '',
+                'email_from': 'mime@cgbd.com',
+            }
+            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+
         return True

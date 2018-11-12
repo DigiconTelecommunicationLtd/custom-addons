@@ -37,3 +37,4 @@ from . import isp_crm_hd_td_ticket_complexity
 from . import isp_crm_hd_td_ticket_history
 from . import isp_crm_hd_td_type
 from . import isp_crm_hd_td_solution
+from . import isp_crm_mail
