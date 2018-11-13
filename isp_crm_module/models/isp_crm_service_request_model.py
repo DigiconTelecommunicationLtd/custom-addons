@@ -9,7 +9,7 @@ from odoo import http
 from odoo import api, fields, models, _
 from odoo.exceptions import Warning
 from odoo.tools import email_split
-
+import base64
 
 AVAILABLE_PRIORITIES = [
         ('0', 'Normal'),
@@ -118,10 +118,6 @@ class ServiceRequest(models.Model):
     ip = fields.Char('IP Address')
     subnet_mask = fields.Char('Subnet Mask')
     gateway = fields.Char('Gateway')
-    body_html = fields.Text()
-    subject_mail = fields.Char()
-    mail_to = fields.Char()
-    mail_cc = fields.Char()
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
@@ -241,25 +237,22 @@ class ServiceRequest(models.Model):
             # Update customer's bill date.
             self.update_bill_cycle_date(customer=customer)
 
-            template_obj = self.env['isp_crm_module.service_request'].sudo().search([('name', '=', 'Send Service Request Mail')],
-                                                                    limit=1)
-            self.mail_to = customer.email
-            self.mail_cc = customer.email
-            body = template_obj.body_html
-            body = body.replace('--userid--', customer_subs_id)
-            body = body.replace('--password--', cust_password)
-            body = body.replace('--ip--', self.ip)
-            body = body.replace('--subnetmask--', self.subnet_mask)
-            body = body.replace('--gateWay--', self.gateway)
-            if template_obj:
-                mail_values = {
-                    'subject': template_obj.subject_mail,
-                    'body_html': body,
-                    'email_to': self.mail_to,
-                    'email_cc': self.mail_cc,
-                    'email_from': 'mime@cgbd.com',
-                }
-                create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+            template_obj = self.env['mail.template'].sudo().search([('name', '=', 'Send_Service_Request_Mail')], limit=1)
+            invoice = self.env['account.invoice'].sudo().search([])[-1]
+            pdf = self.env.ref('isp_invoice_module.isp_account_invoices').render_qweb_pdf(invoice.id,data=invoice)
+
+            # save pdf as attachment
+            ATTACHMENT_NAME = "Test Attachment Name"
+            attachment = self.env['ir.attachment'].create({
+                'name': ATTACHMENT_NAME,
+                'type': 'binary',
+                'datas_fname': ATTACHMENT_NAME + '.pdf',
+                'store_fname': ATTACHMENT_NAME,
+                'datas': base64.encodestring(pdf[0]),
+                'mimetype': 'application/x-pdf'
+            })
+
+            self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,self.ip,self.subnet_mask,self.gateway,template_obj,attachment)
 
         return True
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="isp_crm_module.mail_service_request_template" model="mail.template">
+        <field name="name">Send_Service_Request_Mail</field>
+        <field name="subject">Service Request Test Mail</field>
+        <field name="body_html"><![CDATA[
+
+            <p><strong>Dear Customer,</strong></p>
+
+            <p>It is apleasure for us that you have selected MIME services, please check below for UserName and Password, (Use these credentials to login to the customer portal).</p>
+            <p>Customer Portal URL: localhost://selfcare.com/login</p>
+            <p>Your User ID is:<strong> --userid--</strong></p>
+            <p>Your Password is:<strong> --password--</strong></p>
+            <p>Your IP :<strong> --ip--</strong></p>
+            <p>SubnetMask:<strong> --subnetmask--</strong></p>
+            <p>GateWay:<strong> --gateWay--</strong></p>
+
+            <p>Thanks,</p>
+            <p>Team, MIME.</p>
+
+        ]]>
+
+        </field>
+    </record>
+</odoo>

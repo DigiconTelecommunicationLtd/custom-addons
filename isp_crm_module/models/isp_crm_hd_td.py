@@ -189,13 +189,14 @@ class HelpdeskTD(models.Model):
                 })
 
             template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                [('name', '=', 'Helpdesk Ticket Maintenance Mail')],
+                [('name', '=', 'Helpdesk_Ticket_Complexity_Mail')],
                 limit=1)
+            # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
             subject_mail = "Mime Ticket Update Notice"
             hour = self.env[
                 'isp_crm_module.helpdesk_td_ticket_complexity'].search(
                 [('name', '=', 'L-2')]).time_limit
-            self.action_send_email(subject_mail, self.customer_email, self.name, template_obj, hour)
+            self.env['isp_crm_module.mail'].action_td_send_email(subject_mail, self.customer_email, self.name, template_obj, hour)
         else:
             raise UserError('You must assign the ticket before assigning the complexity level')
 
@@ -229,30 +230,15 @@ class HelpdeskTD(models.Model):
                 })
 
             template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                [('name', '=', 'Helpdesk Ticket Maintenance Mail')],
+                [('name', '=', 'Helpdesk_Ticket_Complexity_Mail')],
                 limit=1)
+            # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
             subject_mail = "Mime Ticket Update Notice"
             hour = self.env[
                 'isp_crm_module.helpdesk_td_ticket_complexity'].search(
                 [('name', '=', 'L-3')]).time_limit
-            self.action_send_email(subject_mail, self.customer_email, self.name, template_obj,hour)
+            self.env['isp_crm_module.mail'].action_td_send_email(subject_mail, self.customer_email, self.name, template_obj,hour)
 
         else:
             raise UserError('You must assign the ticket before assigning the complexity level')
 
-    @api.multi
-    def action_send_email(self, subject, mailto, ticketnumber, template_obj,hour):
-        body = template_obj.body_html
-        body = body.replace('--ticketnumber--', ticketnumber)
-        body = body.replace('--hour--', hour)
-        if template_obj:
-            mail_values = {
-                'subject': subject,
-                'body_html': body,
-                'email_to': mailto,
-                'email_cc': '',
-                'email_from': 'mime@cgbd.com',
-            }
-            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
-
-        return True
