@@ -103,8 +103,9 @@ class Helpdesk(models.Model):
         )
 
         template_obj = self.env['isp_crm_module.mail'].sudo().search(
-            [('name', '=', 'Helpdesk Ticket Creation Mail')],
+            [('name', '=', 'Helpdesk_Ticket_Creation_Mail')],
             limit=1)
+        # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_creation'].sudo().search([],limit=1)
         subject_mail = "Mime New Ticket Creation"
         self.action_send_email(subject_mail,newrecord.customer_email,newrecord.name,template_obj)
 
@@ -269,8 +270,9 @@ class Helpdesk(models.Model):
             })
 
             template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                [('name', '=', 'Helpdesk Ticket Closing Mail')],
+                [('name', '=', 'Helpdesk_Ticket_Closing_Mail')],
                 limit=1)
+            # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_closing'].sudo().search([],limit=1)
             subject_mail = "Mime Ticket Resolved"
             self.action_send_email(subject_mail, self.customer_email, self.name, template_obj)
 

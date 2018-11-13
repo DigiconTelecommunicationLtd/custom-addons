@@ -205,22 +205,6 @@
         </field>
     </record>
 
-    <record id="send_helpdesk_ticket_maintenance_mail_template" model="isp_crm_module.mail">
-        <field name="name">Helpdesk Ticket Maintenance Mail</field>
-        <field name="body_html"><![CDATA[
-
-            <p><strong>Dear Valued Client,</strong></p>
-            <p>Thanks for contacting MIME!</p>
-            <p>This is just a quick note to let you know, your ticket <strong>--ticketnumber--</strong> has been forwarded to our technical department team. It may take <strong>--hour--</strong> to resolve your issue.</p>
-            <p>We will reach to you know as soon as your issue is resolved.</p>
-            <p></p>
-            <p>We appreciate your patience. Thanks for being with MIME</p>
-
-        ]]>
-
-        </field>
-    </record>
-
     <record model="ir.actions.act_window" id="isp_crm_helpdesk_td">
         <field name="name">Helpdesk Technical Department</field>
         <field name="res_model">isp_crm_module.helpdesk_td</field>

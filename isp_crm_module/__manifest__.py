@@ -37,6 +37,8 @@
         'views/isp_crm_opportunity_views.xml',
         'views/isp_crm_customer_views.xml',
         'views/isp_crm_change_package_views.xml',
+        'template/isp_crm_mail_template/isp_crm_hd_mail_template.xml',
+        'template/isp_crm_mail_template/isp_crm_service_request_mail_template.xml',
         'views/isp_crm_hd_menu_list.xml',
         'views/isp_crm_hd_type.xml',
         'views/isp_crm_hd_problem.xml',

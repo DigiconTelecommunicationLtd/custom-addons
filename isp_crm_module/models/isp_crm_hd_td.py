@@ -189,8 +189,9 @@ class HelpdeskTD(models.Model):
                 })
 
             template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                [('name', '=', 'Helpdesk Ticket Maintenance Mail')],
+                [('name', '=', 'Helpdesk_Ticket_Complexity_Mail')],
                 limit=1)
+            # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
             subject_mail = "Mime Ticket Update Notice"
             hour = self.env[
                 'isp_crm_module.helpdesk_td_ticket_complexity'].search(
@@ -229,8 +230,9 @@ class HelpdeskTD(models.Model):
                 })
 
             template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                [('name', '=', 'Helpdesk Ticket Maintenance Mail')],
+                [('name', '=', 'Helpdesk_Ticket_Complexity_Mail')],
                 limit=1)
+            # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
             subject_mail = "Mime Ticket Update Notice"
             hour = self.env[
                 'isp_crm_module.helpdesk_td_ticket_complexity'].search(
