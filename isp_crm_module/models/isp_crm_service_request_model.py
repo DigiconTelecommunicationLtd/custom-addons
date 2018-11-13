@@ -252,26 +252,7 @@ class ServiceRequest(models.Model):
                 'mimetype': 'application/x-pdf'
             })
 
-            self.send_email(customer.email,customer_subs_id,cust_password,template_obj,attachment)
-
-        return True
-
-    def send_email(self, mailto,userid,password,template_obj,attachment):
-        body = template_obj.body_html
-        body = body.replace('--userid--', userid)
-        body = body.replace('--password--', password)
-        body = body.replace('--ip--', self.ip)
-        body = body.replace('--subnetmask--', self.subnet_mask)
-        body = body.replace('--gateWay--', self.gateway)
-        if template_obj:
-            mail_values = {
-                'subject': template_obj.subject,
-                'body_html': body,
-                'email_to': mailto,
-                'email_from': 'mime@cgbd.com',
-                'attachment_ids': [(6, 0, [attachment.id])],
-            }
-            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+            self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,self.ip,self.subnet_mask,self.gateway,template_obj,attachment)
 
         return True
 

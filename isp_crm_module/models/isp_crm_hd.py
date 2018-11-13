@@ -107,7 +107,7 @@ class Helpdesk(models.Model):
             limit=1)
         # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_creation'].sudo().search([],limit=1)
         subject_mail = "Mime New Ticket Creation"
-        self.action_send_email(subject_mail,newrecord.customer_email,newrecord.name,template_obj)
+        self.env['isp_crm_module.mail'].action_send_email(subject_mail,newrecord.customer_email,newrecord.name,template_obj)
 
         return newrecord
 
@@ -274,7 +274,7 @@ class Helpdesk(models.Model):
                 limit=1)
             # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_closing'].sudo().search([],limit=1)
             subject_mail = "Mime Ticket Resolved"
-            self.action_send_email(subject_mail, self.customer_email, self.name, template_obj)
+            self.env['isp_crm_module.mail'].action_send_email(subject_mail, self.customer_email, self.name, template_obj)
 
         return True
 
@@ -282,18 +282,3 @@ class Helpdesk(models.Model):
     def action_btn_send_email(self):
         return True
 
-    @api.multi
-    def action_send_email(self, subject, mailto,ticketnumber, template_obj):
-        body = template_obj.body_html
-        body = body.replace('--ticketnumber--', ticketnumber)
-        if template_obj:
-            mail_values = {
-                'subject': subject,
-                'body_html': body,
-                'email_to': mailto,
-                'email_cc': '',
-                'email_from': 'mime@cgbd.com',
-            }
-            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
-
-        return True
