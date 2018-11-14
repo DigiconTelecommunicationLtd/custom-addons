@@ -180,7 +180,6 @@ class ServiceRequest(models.Model):
 
     @api.multi
     def action_make_service_request_done(self):
-        inv = self.env['isp_crm.cron_job'].update_customer_package_monthly()
         for service_req in self:
             service_req.update({
                 'is_done': True,
@@ -195,7 +194,7 @@ class ServiceRequest(models.Model):
                 'is_potential_customer' : False
             })
             # Create an user
-            # user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
+            user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
             sales_order_obj = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
@@ -310,7 +309,14 @@ class ServiceRequest(models.Model):
     def create_invoice_for_customer(self, customer):
         sales_order_line_list = []
         sales_order_line = None
-        sales_order_obj = self.env['sale.order'].search([('partner_id', '=', customer.id)], order='create_date asc', limit=1)
+        sales_order_obj = self.env['sale.order'].search(
+                [
+                    ('partner_id', '=', customer.id),
+                    ('state', '=', 'sale'),
+                    ('confirmation_date', '!=', None),
+                ],
+                order='create_date asc',
+                limit=1)
         if len(sales_order_obj) > 0:
             sales_order_line_list = [order_line for order_line in sales_order_obj.order_line if order_line.product_id.default_code != OTC_PRODUCT_CODE]
         else:
@@ -345,7 +351,7 @@ class ServiceRequest(models.Model):
         }
         return invoice_line_data
 
-    def send_invoice_to_customer(self, invoice):
+    def send_invoice_to_customer_111(self, invoice):
         # self.ensure_one()
         template = self.env.ref('account.email_template_edi_invoice', False)
         compose_form = self.env.ref('mail.email_compose_message_wizard_form', False)

@@ -17,7 +17,6 @@ class CronJobModel(models.Model):
 
     name = fields.Char("name", required=False)
 
-
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
         package_end_date_obj = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
@@ -27,7 +26,6 @@ class CronJobModel(models.Model):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
         package_start_date_obj = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
         return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
-
 
     def _send_mail_to_customer_before_some_days(self, customer, invoice):
         """
@@ -62,7 +60,6 @@ class CronJobModel(models.Model):
             'datas': base64.encodestring(pdf[0]),
             'mimetype': 'application/x-pdf'
         })
-
         if template_obj:
             mail_values = {
                 'subject': template_obj.subject_mail,
@@ -154,7 +151,6 @@ class CronJobModel(models.Model):
                 print("Mail Sent for customer:- " + customer.name)
             else:
                 print("Some Error is occurred.")
-
 
     @api.model
     def td_change_color_for_pending_tickets_in_l2_l3(self):

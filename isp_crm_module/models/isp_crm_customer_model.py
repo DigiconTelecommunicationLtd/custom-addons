@@ -56,6 +56,10 @@ class Customer(models.Model):
     next_package_original_price = fields.Float('Next Package Original Price',
                                                digits=dp.get_precision('Product Price'), default=0.0)
     next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order')
+    body_html = fields.Text()
+    subject_mail = fields.Char()
+    mail_to = fields.Char()
+    mail_cc = fields.Char()
 
 
     @api.model
