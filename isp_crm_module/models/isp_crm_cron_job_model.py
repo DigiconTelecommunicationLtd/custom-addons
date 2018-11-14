@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 
 from odoo import models, fields, api
 from datetime import timezone, timedelta
@@ -44,7 +45,7 @@ class CronJobModel(models.Model):
             diff = today-d1
             hours = diff.total_seconds() / 3600
             if ticket.complexity.id == helpdesk_td_ticket_complexity_l2.id:
-                if hours > 16.00:
+                if hours > float(int(re.search(r'\d+', str(helpdesk_td_ticket_complexity_l2.time_limit)).group())):
                     ticket.update(
                         {
                             'color': 3,
@@ -53,7 +54,7 @@ class CronJobModel(models.Model):
                 else:
                     print("No need to update color")
             else:
-                if hours > 24.00:
+                if hours > float(int(re.search(r'\d+', str(helpdesk_td_ticket_complexity_l3.time_limit)).group())):
                     ticket.update(
                         {
                             'color': 3,
