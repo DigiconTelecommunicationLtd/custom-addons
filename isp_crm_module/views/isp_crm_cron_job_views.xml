@@ -14,8 +14,7 @@
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
         </record>
-
-<<<<<<< 948d008a3d1c8f31eaaa74a2cebdb6e876f5234c
+        <!--Cron job for changing color while the time is up for an 'l2' or 'l3' TD issue-->
         <record forcecreate="True" id="isp_crm_cron_job_td_pending_tickets_l2_l3_change_color" model="ir.cron">
             <field name="name">Pending_Tickets_L2_L3_Change_Color</field>
             <field name="model_id" ref="model_isp_crm_cron_job"/>
@@ -28,7 +27,7 @@
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
         </record>
-=======
+
         <!--Cron job for updating the user package after bill cycle-->
         <record forcecreate="True" id="isp_crm_cron_job_update_user_package_for_next_bill_cycle" model="ir.cron">
             <field name="name">Update User Package for Next Bill Cycle</field>
@@ -42,7 +41,5 @@
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
         </record>
-
->>>>>>> added function for update package info in mothend cron-job
     </data>
 </odoo>
