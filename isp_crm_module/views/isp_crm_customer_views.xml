@@ -77,11 +77,12 @@
                 <page string="Technical Information">
                     <group>
                         <group>
-                            <field name="current_package_id" string="Package ID" readonly="1"/>
+                            <field name="current_package_id" string="Package ID"/>
                             <field name="current_package_end_date" string="Valid Till" readonly="1"/>
                             <field name="service_type" string="Service Type"/>
                             <field name="connection_type" string="Connection Type"/>
                             <field name="connection_media" string="Connection Media"/>
+                            <field name="current_package_end_date" string="current_package_end_date "/>
                         </group>
                     </group>
                 </page>
@@ -103,6 +104,32 @@
         <field name="res_model">res.partner</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[('is_potential_customer', '=', False), ('customer', '=', True)]</field>
+    </record>
+
+
+    <!--7 days before bill cycle date-->
+    <record id="isp_crm_mail_template_for_sending_invoice" model="res.partner">
+        <field name="name">sending_invoice_for_warning_the_customer</field>
+        <field name="subject_mail">Invoice of next bill cycle</field>
+        <field name="body_html"><![CDATA[
+
+            <p><strong>Dear Valued Customer,</strong></p>
+
+            <p>Here is a Invoice attached for your next Bill cycle</p>
+            <p><strong>Customer ID : </strong>--customer_id--</p>
+            <p><strong>Package : </strong> --package--</p>
+            <p><strong>Price : </strong> --price--</p>
+            <p><strong>Invoice Number : </strong> --invoice_number--</p>
+            <p><strong>Last Payment Date : </strong> --last_payment_date--</p>
+
+
+            <p>Customer Portal URL: localhost://selfcare.com/login</p>
+            <p>Thanks,</p>
+            <p>Team, MIME.</p>
+
+        ]]>
+
+        </field>
     </record>
 
     <!--adding fields in customer filter-->
