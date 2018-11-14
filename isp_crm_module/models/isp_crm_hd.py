@@ -144,12 +144,17 @@ class Helpdesk(models.Model):
                 })
         if self.default_stages == 'Done':
             self.update({
+                    'td_flags': '3',
                     'color': 11,
                 })
+            template_obj = self.env['isp_crm_module.mail'].sudo().search(
+                [('name', '=', 'Helpdesk_Ticket_Closing_Mail')],
+                limit=1)
+            subject_mail = "Mime Ticket Resolved"
+            self.env['isp_crm_module.mail'].action_send_email(subject_mail, self._origin.customer_email, self._origin.name,
+                                                              template_obj)
         if self.default_stages == 'TD':
-            self.update({
-                    'color': 4,
-                })
+            raise UserError('You can not drag the ticket to TD stage unless you assign it to TD by action.')
 
     @api.onchange('td_flags')
     def _onchange_td_flags(self):

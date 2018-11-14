@@ -69,7 +69,7 @@ class HelpdeskTD(models.Model):
     customer_feedback = fields.Text('Feedback')
     color = fields.Integer(default=1)
     cancel_request_from_sd = fields.Selection(CANCEL_REQUEST_SD, string="Cancel Request from SD")
-    level_change_time = fields.Date(string='Level Change Time', default=datetime.datetime.now())
+    level_change_time = fields.Datetime(string='Level Change Time', default=datetime.datetime.now())
     is_marked_done = fields.Boolean()
 
     @api.model
@@ -104,10 +104,10 @@ class HelpdeskTD(models.Model):
             self.update({
                     'color': 1,
                 })
-        if self.default_stages == 'Doing' and self._origin.is_marked_done is False:
+        if self.default_stages == 'Doing' and self._origin.is_marked_done is False and self.color != 3:
             if self._origin.assigned_to:
                 self.update({
-                        'color': 3,
+                        'color': 8,
                     })
             else:
                 raise UserError('You must assign someone before changing stage.')
