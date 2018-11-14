@@ -14,16 +14,16 @@
         <record id="seq_helpdesk" model="ir.sequence">
             <field name="name">Helpdesk</field>
             <field name="code">isp_crm_module.helpdesk</field>
-            <field name="prefix">T%(y)s%(month)s%(day)s</field>
-            <field name="padding">4</field>
+            <field name="prefix">%(y)s%(month)s%(day)s</field>
+            <field name="padding">3</field>
         </record>
 
         <!-- Sequences for helpdesk technical department-->
         <record id="seq_helpdesk_td" model="ir.sequence">
             <field name="name">Helpdesk TD</field>
             <field name="code">isp_crm_module.helpdesk_td</field>
-            <field name="prefix">T%(y)s%(month)s%(day)s</field>
-            <field name="padding">4</field>
+            <field name="prefix">TD%(y)s%(month)s%(day)s</field>
+            <field name="padding">3</field>
         </record>
 
         <!--Sequences for lead or opportunity-->

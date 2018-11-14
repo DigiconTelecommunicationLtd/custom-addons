@@ -44,7 +44,7 @@ class Helpdesk(models.Model):
 
     name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
     problem = fields.Many2one('isp_crm_module.helpdesk_problem',string="Problem", required=True, translate=True, ondelete='set null',help='Ticket Problem.')
-    type = fields.Many2one('isp_crm_module.helpdesk_type', string='Type', ondelete='set null',
+    type = fields.Many2one('isp_crm_module.helpdesk_type', string='Type', required=True, ondelete='set null',
                                   help='Ticket Type.')
     helpdesk_td_ticket = fields.Many2one('isp_crm_module.helpdesk_td', string="Helpdesk TD Ticket", required=False, translate=True,
                                      ondelete='set null', help='Helpdesk TD Ticket.')
@@ -78,6 +78,10 @@ class Helpdesk(models.Model):
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
+            if vals.get('type') and vals.get('problem'):
+                pass
+            else:
+                raise UserError('Failed to create ticket as one or many mandatory fields are empty.')
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
             vals['default_stages'] = 'New'
             vals['td_flags'] = '0'
