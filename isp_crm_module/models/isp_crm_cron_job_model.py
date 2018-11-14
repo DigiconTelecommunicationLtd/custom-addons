@@ -153,6 +153,7 @@ class CronJobModel(models.Model):
             else:
                 print("Some Error is occurred.")
 
+
     @api.model
     def td_change_color_for_pending_tickets_in_l2_l3(self):
         today = datetime.now()
