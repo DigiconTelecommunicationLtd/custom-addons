@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 import re
 
@@ -228,6 +227,41 @@ class CronJobModel(models.Model):
         return customer
 
 
+    def _update_customer_package_info(self, customer):
+        """
+        Updates customer's package info for next bil cycle
+        :param customer: for whom the changes applies
+        :return: customer obj
+        """
+        current_package_id = customer.next_package_id.id
+        current_package_price = customer.next_package_price
+        current_package_original_price = customer.next_package_id.unit_price
+        current_package_sales_order_id = customer.next_package_sales_order_id
+        current_package_start_date = customer.next_package_start_date
+        current_package_end_date = self._get_next_package_end_date(given_date=current_package_start_date)
+
+        next_package_id = current_package_id
+        next_package_price = current_package_price
+        next_package_original_price = current_package_original_price
+        next_package_sales_order_id = current_package_sales_order_id
+        next_package_start_date = customer._get_next_package_start_date(given_date=current_package_start_date)
+
+        customer.update({
+            'current_package_id' : current_package_id,
+            'current_package_price' : current_package_price,
+            'current_package_original_price' : current_package_original_price,
+            'current_package_sales_order_id' : current_package_sales_order_id,
+            'current_package_start_date' : current_package_start_date,
+            'current_package_end_date' : current_package_end_date,
+            'next_package_id' : next_package_id,
+            'next_package_price' : next_package_price,
+            'next_package_original_price' : next_package_original_price,
+            'next_package_sales_order_id' : next_package_sales_order_id,
+            'next_package_start_date' : next_package_start_date,
+        })
+        return customer
+
+    @api.model
     def update_customer_package_for_next_bill_cycle(self):
         today = datetime.today()
 
