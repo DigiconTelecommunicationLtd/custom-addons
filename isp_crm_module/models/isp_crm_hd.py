@@ -78,10 +78,6 @@ class Helpdesk(models.Model):
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
-            if vals.get('type') and vals.get('problem'):
-                pass
-            else:
-                raise UserError('Failed to create ticket as one or many mandatory fields are empty.')
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
             vals['default_stages'] = 'New'
             vals['td_flags'] = '0'
