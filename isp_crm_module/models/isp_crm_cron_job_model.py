@@ -131,6 +131,14 @@ class CronJobModel(models.Model):
             created_invoice_obj.action_invoice_open()
             return created_invoice_obj
 
+    def create_customer_invoice_status(self, customer, invoice):
+        customer_invoice_status_obj = self.env['isp_crm_module.customer_invoice_status'].search([])
+        customer_invoice_status_obj.create({
+            'customer_id' : customer.id,
+            'invoice_id' : invoice.id,
+        })
+        return customer_invoice_status_obj
+
     @api.model
     def send_customer_invoice_in_email(self):
         """
@@ -140,12 +148,13 @@ class CronJobModel(models.Model):
         """
         today = datetime.today()
         after_threshold_days_date =  today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
-        customers_list = self.env['res.partner'].search([('customer', '=', True),('current_package_end_date', '=', str(after_threshold_days_date.date()))])
+        customers_list = self.env['res.partner'].search([('customer', '=', True), ('current_package_end_date', '=', str(after_threshold_days_date.date()))])
         service_request_obj = self.env['isp_crm_module.service_request']
 
         for customer in customers_list:
             print("Creating Invoice for customer:- " + customer.name)
             invoice = self._get_next_months_invoice(customer=customer)
+            customer_invoice_status = self.create_customer_invoice_status(customer=customer, invoice=invoice)
             mail_sent = self._send_mail_to_customer_before_some_days(customer=customer, invoice=invoice)
             if mail_sent:
                 print("Mail Sent for customer:- " + customer.name)

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="isp_crm_module_customer_invoice_status_search" model="ir.ui.view">
+        <field name="problem">Ticket - Search</field>
+        <field name="model">isp_crm_module.customer_invoice_status</field>
+        <field name="arch" type="xml">
+            <search string="Customer Invoice Search">
+                <field name="name"/>
+                <filter
+                        string="Today"
+                        name="isp_crm_customer_invoice_today_filter"
+                        domain="[('customer_current_package_end_date','=', datetime.datetime.today().strftime('%Y-%m-%d'))]"
+                        help="Todays Filter"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_customer_invoice_status_tree" model="ir.ui.view">
+        <field name="problem">isp_crm_module.customer_invoice_status.tree</field>
+        <field name="model">isp_crm_module.customer_invoice_status</field>
+        <field name="arch" type="xml">
+            <tree string="Customer Invoice Status">
+                <!--customer info-->
+                <field name="customer_id"/>
+                <field name="customer_mobile"/>
+                <field name="customer_current_package_name"/>
+                <field name="customer_current_package_start_date"/>
+                <field name="customer_current_package_end_date"/>
+                <field name="customer_current_package_price"/>
+                <!--invoice info-->
+                <field name="invoice_number"/>
+                <field name="invoice_amount_total"/>
+                <field name="invoice_state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="isp_crm_module_customer_invoice_status_action" model="ir.actions.act_window">
+        <field name="name">Customer Invoice Status</field>
+        <field name="res_model">isp_crm_module.customer_invoice_status</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+                'search_default_isp_crm_customer_invoice_today_filter': 1,
+        }</field>
+        <field name="search_view_id" ref="isp_crm_module_customer_invoice_status_search" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Help Text
+            </p>
+        </field>
+    </record>
+
+</odoo>

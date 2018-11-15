@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <odoo>
     <!--Change menu name to opportunity-->
-    <menuitem id="crm.menu_crm_opportunities"
-              action="isp_crm_lead_opportunities_tree_view"
-              name="Opportunities"
-              parent="crm.crm_menu_pipeline"
-              sequence="2"/>
+    <menuitem
+        id="crm.menu_crm_opportunities"
+        action="isp_crm_lead_opportunities_tree_view"
+        name="Opportunities"
+        parent="crm.crm_menu_pipeline"
+        sequence="2"/>
 
     <!--Service request menu-->
     <menuitem
@@ -23,10 +24,11 @@
         parent="crm.crm_menu_pipeline"/>
 
     <!--Custom configuration menu-->
-    <menuitem id="menu_isp_crm_configuration"
-              name="ISP CRM Configuraitons"
-              parent="crm.crm_menu_config"
-              sequence="25"/>
+    <menuitem
+        id="menu_isp_crm_configuration"
+        name="ISP CRM Configuraitons"
+        parent="crm.crm_menu_config"
+        sequence="25"/>
 
     <menuitem
         id="menu_isp_crm_module_problem_act"
@@ -57,6 +59,14 @@
         name="Teams"
         sequence="3"
         action="isp_crm_module_team_action"
+        parent="menu_isp_crm_configuration"
+        groups="base.group_no_one"/>
+
+    <menuitem
+        id="menu_isp_crm_module_customer_invoice_status_act"
+        name="Customer Invoice Status"
+        sequence="4"
+        action="isp_crm_module_customer_invoice_status_action"
         parent="menu_isp_crm_configuration"
         groups="base.group_no_one"/>
 

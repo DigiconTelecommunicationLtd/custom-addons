@@ -21,5 +21,4 @@
         name="Helpdesk TD Configuration"
         parent="crm.crm_menu_config"
      />
-
 </odoo>
