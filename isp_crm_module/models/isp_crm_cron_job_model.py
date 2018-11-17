@@ -3,6 +3,7 @@ import re
 
 from odoo import models, fields, api
 from datetime import timezone, timedelta
+from odoo.exceptions import Warning, UserError
 import datetime
 
 DEFAULT_THRESHOLD_DAYS = 7
@@ -35,9 +36,12 @@ class CronJobModel(models.Model):
             [('name', '=', 'L-2')], limit=1)
         helpdesk_td_ticket_complexity_l3 = self.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
             [('name', '=', 'L-3')], limit=1)
-        tickets_list = self.env['isp_crm_module.helpdesk_td'].search(
-            [('default_stages', '!=', 'Done'),'|',('complexity', '=', helpdesk_td_ticket_complexity_l2.id),
-             ('complexity', '=', helpdesk_td_ticket_complexity_l3.id)])
+        if helpdesk_td_ticket_complexity_l2 and helpdesk_td_ticket_complexity_l3:
+            tickets_list = self.env['isp_crm_module.helpdesk_td'].search(
+                [('default_stages', '!=', 'Done'),'|',('complexity', '=', helpdesk_td_ticket_complexity_l2.id),
+                 ('complexity', '=', helpdesk_td_ticket_complexity_l3.id)])
+        else:
+            raise UserError('Complexity level not set correctly.')
         for ticket in tickets_list:
             level_lastUpdated = ticket.level_change_time
             fmt = '%Y-%m-%d %H:%M:%S'

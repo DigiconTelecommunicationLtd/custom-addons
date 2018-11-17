@@ -7,9 +7,10 @@ import logging
 from passlib.context import CryptContext
 from odoo import http
 from odoo import api, fields, models, _
-from odoo.exceptions import Warning
+from odoo.exceptions import Warning, UserError
 from odoo.tools import email_split
 import base64
+import ctypes
 
 AVAILABLE_PRIORITIES = [
         ('0', 'Normal'),
@@ -252,7 +253,9 @@ class ServiceRequest(models.Model):
                 'mimetype': 'application/x-pdf'
             })
 
-            self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,self.ip,self.subnet_mask,self.gateway,template_obj,attachment)
+            if self.ip is False or self.subnet_mask is False or self.gateway is False:
+                raise UserError('Please give all the technical information to mark done this ticket.')
+            self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj,attachment)
 
         return True
 
