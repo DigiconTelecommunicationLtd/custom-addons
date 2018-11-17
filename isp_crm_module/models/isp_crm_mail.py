@@ -52,9 +52,9 @@ class Team(models.Model):
         body = template_obj.body_html
         body = body.replace('--userid--', userid)
         body = body.replace('--password--', password)
-        body = body.replace('--ip--', ip)
-        body = body.replace('--subnetmask--', subnet_mask)
-        body = body.replace('--gateWay--', gateway)
+        body = body.replace('--ip--', str(ip))
+        body = body.replace('--subnetmask--', str(subnet_mask))
+        body = body.replace('--gateWay--', str(gateway))
         if template_obj:
             mail_values = {
                 'subject': template_obj.subject,
