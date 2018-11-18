@@ -64,7 +64,7 @@ class Opportunity(models.Model):
     def onchange_mobile(self):
         if self.mobile:
             if len(self.mobile) < 15:
-                if re.match("^([0-9]+-)*[0-9]+$", self.mobile) == None:
+                if re.match("^[+]*([0-9]+-)*[0-9]+$", self.mobile) == None:
                     raise UserError(_('Please Enter a Valid Mobile Number!'))
             else:
                 raise UserError(_('Mobile number is too long!'))

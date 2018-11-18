@@ -16,7 +16,7 @@
         </record>
 
         <record forcecreate="True" id="isp_crm_cron_job_td_pending_tickets_l2_l3_change_color" model="ir.cron">
-            <field name="name">Pending_Tickets_L2_L3_Change_Color</field>
+            <field name="name">Pending Tickets L2 L3 Change Color</field>
             <field name="model_id" ref="model_isp_crm_cron_job"/>
             <field name="state">code</field>
             <field name="model" eval="'isp_crm.cron_job'" />
