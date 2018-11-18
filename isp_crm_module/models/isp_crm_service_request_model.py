@@ -182,8 +182,11 @@ class ServiceRequest(models.Model):
     @api.multi
     def action_make_service_request_done(self):
         for service_req in self:
+            # update the stage of this service request to done
+            last_stage_obj = self.env['isp_crm_module.stage'].search([], order='sequence desc', limit=1)
             service_req.update({
                 'is_done': True,
+                'stage': last_stage_obj.id,
             })
             customer = service_req.customer
             customer_subs_id = customer.subscriber_id
@@ -253,6 +256,7 @@ class ServiceRequest(models.Model):
                 'mimetype': 'application/x-pdf'
             })
 
+            # showing warning for not setting ip, subnetmask and gateway
             if self.ip is False or self.subnet_mask is False or self.gateway is False:
                 raise UserError('Please give all the technical information to mark done this ticket.')
             self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj,attachment)
