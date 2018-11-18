@@ -182,8 +182,11 @@ class ServiceRequest(models.Model):
     @api.multi
     def action_make_service_request_done(self):
         for service_req in self:
+            # update the stage of this service request to done
+            last_stage_obj = self.env['isp_crm_module.stage'].search([], order='sequence desc', limit=1)
             service_req.update({
                 'is_done': True,
+                'stage': last_stage_obj.id,
             })
             customer = service_req.customer
             customer_subs_id = customer.subscriber_id
@@ -195,7 +198,7 @@ class ServiceRequest(models.Model):
                 'is_potential_customer' : False
             })
             # Create an user
-            # user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
+            user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
             # invoice generation
             invoice_generated = self.create_invoice_for_customer(customer=customer)
             sales_order_obj = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
@@ -253,6 +256,7 @@ class ServiceRequest(models.Model):
                 'mimetype': 'application/x-pdf'
             })
 
+            # showing warning for not setting ip, subnetmask and gateway
             if self.ip is False or self.subnet_mask is False or self.gateway is False:
                 raise UserError('Please give all the technical information to mark done this ticket.')
             self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj,attachment)
@@ -312,7 +316,14 @@ class ServiceRequest(models.Model):
     def create_invoice_for_customer(self, customer):
         sales_order_line_list = []
         sales_order_line = None
-        sales_order_obj = self.env['sale.order'].search([('partner_id', '=', customer.id)], order='create_date asc', limit=1)
+        sales_order_obj = self.env['sale.order'].search(
+                [
+                    ('partner_id', '=', customer.id),
+                    ('state', '=', 'sale'),
+                    ('confirmation_date', '!=', None),
+                ],
+                order='create_date asc',
+                limit=1)
         if len(sales_order_obj) > 0:
             sales_order_line_list = [order_line for order_line in sales_order_obj.order_line if order_line.product_id.default_code != OTC_PRODUCT_CODE]
         else:
@@ -347,7 +358,7 @@ class ServiceRequest(models.Model):
         }
         return invoice_line_data
 
-    def send_invoice_to_customer(self, invoice):
+    def send_invoice_to_customer_111(self, invoice):
         # self.ensure_one()
         template = self.env.ref('account.email_template_edi_invoice', False)
         compose_form = self.env.ref('mail.email_compose_message_wizard_form', False)
