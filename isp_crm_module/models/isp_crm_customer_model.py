@@ -74,7 +74,7 @@ class Customer(models.Model):
 
         if vals.get('email'):
             if len(vals.get('email')) < 256:
-                if re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$", vals.get('email')) == None:
+                if re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$", vals.get('email')) is None:
                     validated = False
                     raise UserError(_('Please Enter a Valid Email Address!'))
 
@@ -84,7 +84,7 @@ class Customer(models.Model):
 
         if vals.get('mobile'):
             if len(vals.get('mobile')) < 15:
-                if re.match("^([0-9]+-)*[0-9]+$", vals.get('mobile')) == None:
+                if re.match("^[+]*([0-9]+-)*[0-9]+$", vals.get('mobile')) is None:
                     validated = False
                     raise UserError(_('Please Enter a Valid Mobile Number!'))
             else:
@@ -93,7 +93,7 @@ class Customer(models.Model):
 
         if vals.get('phone'):
             if len(vals.get('phone')) < 15:
-                if re.match("^([0-9]+-)*[0-9]+$", vals.get('phone')) == None:
+                if re.match("^([0-9]+-)*[0-9]+$", vals.get('phone')) is None:
                     validated = False
                     raise UserError(_('Please Enter a Valid Phone Number!'))
             else:
@@ -102,6 +102,33 @@ class Customer(models.Model):
 
         if validated:
             return super(Customer, self).create(vals)
+
+    @api.onchange('email')
+    def onchange_email(self):
+        if self.email:
+            if len(self.email) < 256:
+                if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$", self.email) is None:
+                    raise UserError(_('Please Enter a Valid Email Address!'))
+            else:
+                raise UserError(_('Email Address is too long!'))
+
+    @api.onchange('mobile')
+    def onchange_mobile(self):
+        if self.mobile:
+            if len(self.mobile) < 15:
+                if re.match("^[+]*([0-9]+-)*[0-9]+$", self.mobile) is None:
+                    raise UserError(_('Please Enter a Valid Mobile Number!'))
+            else:
+                raise UserError(_('Mobile number is too long!'))
+
+    @api.onchange('phone')
+    def onchange_phone(self):
+        if self.phone:
+            if len(self.phone) < 15:
+                if re.match("^([0-9]+-)*[0-9]+$", self.phone) is None:
+                    raise UserError(_('Please Enter a Valid Phone Number!'))
+            else:
+                raise UserError(_('Phone number is too long!'))
 
     @api.multi
     def action_view_customer_service_request(self):
