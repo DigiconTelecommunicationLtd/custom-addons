@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record  id="helpdesk_default_complexity_one" model="isp_crm_module.helpdesk_ticket_complexity">
+        <field name="name">L-1</field>
+        <field name="time_limit">8 Hours</field>
+    </record>
+    <record id="helpdesk_default_complexity_two" model="isp_crm_module.helpdesk_td_ticket_complexity">
+        <field name="name">L-2</field>
+        <field name="time_limit">16 Hours</field>
+    </record>
+    <record id="helpdesk_default_complexity_three" model="isp_crm_module.helpdesk_td_ticket_complexity">
+        <field name="name">L-3</field>
+        <field name="time_limit">24 Hours</field>
+    </record>
+</odoo>

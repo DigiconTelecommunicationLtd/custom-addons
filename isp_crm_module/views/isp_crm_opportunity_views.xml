@@ -64,7 +64,6 @@
     </record>
     <!--End of the section-->
 
-
     <!--Adding a button in opportunity for creating service request-->
     <record model="ir.ui.view" id="view_add_button_in_opportunity">
         <field name="name">view.add.button.in.opportunity</field>
