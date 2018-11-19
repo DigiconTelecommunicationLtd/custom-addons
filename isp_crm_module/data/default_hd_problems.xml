@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record  id="default_helpdesk_problem_package_change" model="isp_crm_module.helpdesk_problem">
+        <field name="name">Package Change</field>
+    </record>
+</odoo>
