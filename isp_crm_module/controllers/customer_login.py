@@ -231,6 +231,11 @@ class SelfcareController(PaymentController):
 
     @http.route("/selfcare/change-package", methods=["GET"], website=True)
     def selfcare_change_package_get(self, **kw):
+        """
+        Creates tickets for changing the plans
+        :param kw:
+        :return: view for showing the plans list
+        """
         context = {}
         content_header = "Packages List"
         template = "isp_crm_module.template_selfcare_login_main"
@@ -280,9 +285,11 @@ class SelfcareController(PaymentController):
                 pack_change_problem_obj = request.env['isp_crm_module.helpdesk_problem'].sudo().search([('name', 'like', 'Package Change')], limit=1)
 
                 description = "Change the plan \nFrom : " + logged_in_user.partner_id.current_package_id.name + "\nTo : " + package_obj.name
+                ticket_type_obj = request.env['isp_crm_module.helpdesk_type'].sudo().search([('name', 'like', 'Package Change')], limit=1)
                 ticket_obj = request.env['isp_crm_module.helpdesk'].sudo().search([])
                 created_ticket = ticket_obj.create({
                     'customer': logged_in_user.partner_id.id,
+                    'type': ticket_type_obj.id,
                     'problem': pack_change_problem_obj.id,
                     'description': description,
                 })
