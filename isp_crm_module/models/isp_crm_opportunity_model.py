@@ -20,6 +20,8 @@ class Opportunity(models.Model):
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)
     tagged_product_ids = fields.Many2many('product.product', 'crm_lead_product_rel', 'lead_id', 'product_id', string='Products', help="Classify and analyze your lead/opportunity according to Products : Unlimited Package etc")
     emergency_contact_name = fields.Char(string='Emergency Contact Name', required=False)
+    is_customer_deferred = fields.Boolean("Is Customer Deferred", default=False)
+    invoice_state = fields.Char('Invoice State')
     referred_by = fields.Many2one('res.partner', string='Referred By')
 
 
@@ -41,14 +43,19 @@ class Opportunity(models.Model):
         for lead in self:
             # TODO Arif: `invoice_status` will be added later. Now checking status will be `confirm_sale`
             sale_confirmed = False
-            for order in lead.order_ids:
-                if order.state == 'sale':
-                    sale_confirmed = True
-                    break
-            if not sale_confirmed:
-                raise UserError(_("This Opportunity's Sale has not been confirmed.\n Confirm Sale First."))
-            else:
-                super(Opportunity, lead).action_set_won()
+
+            # Check if invoice is paid .
+            customer = self.partner_id.id
+            if customer:
+                check_customer = self.env['res.partner'].search([('id', '=', customer)], limit=1)
+                if check_customer:
+                    invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="date_invoice desc", limit=1)
+                    if invoices:
+                        if invoices.state == 'paid':
+                            self.invoice_state = invoices.state
+                            super(Opportunity, lead).action_set_won()
+                        else:
+                            raise UserError(_("This Opportunity's Invoice has not been paid.\n Confirm payment first."))
         return True
 
     @api.onchange('email_from')
@@ -83,7 +90,23 @@ class Opportunity(models.Model):
         if vals.get('opportunity_seq_id', 'New') == 'New':
             sequence_id = self.env['ir.sequence'].next_by_code('crm.lead') or '/'
             vals['opportunity_seq_id'] = sequence_id
-
+            # Check if customer is deferred .
+            customer_id = vals.get('partner_id')
+            if customer_id:
+                check_customer = self.env['res.partner'].search([('id', '=', customer_id)], limit=1)
+                if check_customer:
+                    deferred = check_customer.is_deferred
+                    if deferred:
+                        vals['is_customer_deferred'] = True
+                        vals['probability'] = 100
+                    else:
+                        # If customer is not paid then check if invoice is paid .
+                        invoices = self.env['account.invoice'].search([('partner_id', '=', customer_id)],
+                                                                      order="date_invoice desc", limit=1)
+                        if invoices:
+                            if invoices.state == 'paid':
+                                self.invoice_state = invoices.state
+                                vals['probability'] = 100
         if (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
             raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
 

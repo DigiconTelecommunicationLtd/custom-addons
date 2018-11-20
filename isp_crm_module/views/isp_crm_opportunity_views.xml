@@ -75,11 +75,12 @@
             </xpath>
             <xpath  expr="//form/header/field[@name='stage_id']" position="before">
                 <field name="is_service_request_created" invisible="1"/>
+                <field name="is_customer_deferred" invisible="1"/>
                 <button
                     name="action_create_new_service_request"
                     string="Create Service Request"
                     type="object"
-                    attrs="{'invisible': ['|', ('is_service_request_created', '=', True), ('probability', '&lt;', 100)]}"
+                    attrs="{'invisible': ['|', '|', ('is_service_request_created', '=', True), ('probability', '&lt;', 100),('is_customer_deferred', '=', False),'|', ('is_service_request_created', '=', True), ('probability', '&lt;', 100)]}"
                 />
             </xpath>
             <xpath  expr="//form/sheet/div/h1/field[@name='name']" position="before">
