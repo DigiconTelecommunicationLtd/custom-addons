@@ -104,7 +104,7 @@ class Opportunity(models.Model):
                         vals['is_customer_deferred'] = True
                         vals['probability'] = 100
                     else:
-                        # If customer is not paid then check if invoice is paid .
+                        # If customer is not deferred then check if invoice is paid .
                         invoices = self.env['account.invoice'].search([('partner_id', '=', customer_id)],
                                                                       order="date_invoice desc", limit=1)
                         if invoices:
