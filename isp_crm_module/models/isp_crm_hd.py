@@ -33,6 +33,21 @@ TD_FLAGS = [
     ('3', 'Resolved'),
 ]
 
+"""Constants representing complexity levels of helpdesk ticket"""
+
+complexity_level_one = [
+    ('Name', 'L-1'),
+    ('Time', '8 Hours'),
+]
+complexity_level_two = [
+    ('Name', 'L-2'),
+    ('Time', '16 Hours'),
+]
+complexity_level_three = [
+    ('Name', 'L-3'),
+    ('Time', '24 Hours'),
+]
+
 class Helpdesk(models.Model):
     """
     Model for different type of Problems.
@@ -81,14 +96,14 @@ class Helpdesk(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
             vals['default_stages'] = 'New'
             vals['td_flags'] = '0'
-            helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', 'L-1')])
+            helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', complexity_level_one[0][1])])
             if helpdesk_ticket_complexity:
                 vals['complexity'] = helpdesk_ticket_complexity.id
             else:
                 helpdesk_ticket_complexity = helpdesk_ticket_complexity.env['isp_crm_module.helpdesk_ticket_complexity'].create(
                     {
-                        'name': 'L-1',
-                        'time_limit': '8 Hours',
+                        'name': complexity_level_one[0][1],
+                        'time_limit': complexity_level_one[1][1],
                     }
                 )
                 vals['complexity'] = helpdesk_ticket_complexity.id
@@ -117,7 +132,7 @@ class Helpdesk(models.Model):
 
     @api.model
     def _default_complexity(self):
-        complexity_ids = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', 'L-1')])
+        complexity_ids = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', complexity_level_one[0][1])])
         return complexity_ids
 
     @api.onchange('assigned_to')

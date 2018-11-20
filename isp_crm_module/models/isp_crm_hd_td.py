@@ -29,6 +29,20 @@ CANCEL_REQUEST_SD = [
     ('1', 'True'),
 ]
 
+"""Constants representing complexity levels of helpdesk Technical Department ticket"""
+
+complexity_level_one = [
+    ('Name', 'L-1'),
+    ('Time', '8 Hours'),
+]
+complexity_level_two = [
+    ('Name', 'L-2'),
+    ('Time', '16 Hours'),
+]
+complexity_level_three = [
+    ('Name', 'L-3'),
+    ('Time', '24 Hours'),
+]
 
 class HelpdeskTD(models.Model):
     """
@@ -165,7 +179,7 @@ class HelpdeskTD(models.Model):
     def action_assign_complexity_l2_td(self):
         if self.assigned_to:
             helpdesk_td_ticket_complexity = self.env['isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                [('name', '=', 'L-2')])
+                [('name', '=', complexity_level_two[0][1])])
             if helpdesk_td_ticket_complexity:
                 self.update({
                     'complexity': helpdesk_td_ticket_complexity,
@@ -177,8 +191,8 @@ class HelpdeskTD(models.Model):
 
                     {
 
-                        'name': 'L-2',
-                        'time_limit': '16 Hours',
+                        'name': complexity_level_two[0][1],
+                        'time_limit': complexity_level_two[1][1],
 
                     }
 
@@ -195,7 +209,7 @@ class HelpdeskTD(models.Model):
             subject_mail = "Mime Ticket Update Notice"
             hour = self.env[
                 'isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                [('name', '=', 'L-2')]).time_limit
+                [('name', '=', complexity_level_two[0][1])]).time_limit
             self.env['isp_crm_module.mail'].action_td_send_email(subject_mail, self.customer_email, self.name, template_obj, hour)
         else:
             raise UserError('You must assign the ticket before assigning the complexity level')
@@ -206,7 +220,7 @@ class HelpdeskTD(models.Model):
         if self.assigned_to:
             helpdesk_td_ticket_complexity = self.env[
                 'isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                [('name', '=', 'L-3')])
+                [('name', '=', complexity_level_three[0][1])])
             if helpdesk_td_ticket_complexity:
                 self.update({
                     'complexity': helpdesk_td_ticket_complexity,
@@ -218,8 +232,8 @@ class HelpdeskTD(models.Model):
 
                     {
 
-                        'name': 'L-3',
-                        'time_limit': '24 Hours',
+                        'name': complexity_level_three[0][1],
+                        'time_limit': complexity_level_three[1][1],
 
                     }
 
@@ -236,7 +250,7 @@ class HelpdeskTD(models.Model):
             subject_mail = "Mime Ticket Update Notice"
             hour = self.env[
                 'isp_crm_module.helpdesk_td_ticket_complexity'].search(
-                [('name', '=', 'L-3')]).time_limit
+                [('name', '=', complexity_level_three[0][1])]).time_limit
             self.env['isp_crm_module.mail'].action_td_send_email(subject_mail, self.customer_email, self.name, template_obj,hour)
 
         else:
