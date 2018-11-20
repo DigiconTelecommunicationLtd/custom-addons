@@ -2,6 +2,7 @@
 import string
 import random
 import uuid
+import json
 from odoo import http
 from odoo.tools.translate import _
 from passlib.context import CryptContext
@@ -121,7 +122,17 @@ class SelfcareController(PaymentController):
             if request.httprequest.method == 'POST':
                 amount = request.params["amount"]
                 service_type = request.params["service_type"]
-                response_content = self.initiate_session(customer=logged_in_user, amount=amount, transaction_id="12345")
+                transaction_id = service_type + "_" + amount
+                if int(service_type) == int(1):
+                    invoice_number = request.params["invoice_number"]
+                    invoice_id = request.params["invoice_id"]
+                    request.session['invoice_id'] = invoice_id
+                    invoice_obj = request.env['account.invoice'].search(
+                            [('id', '=', invoice_id), ('state', '=', 'open')], limit=1)
+                    amount = invoice_obj.amount_total
+                    transaction_id = invoice_obj.number
+
+                response_content = self.initiate_session(customer=logged_in_user, amount=amount, transaction_id=transaction_id)
                 if response_content['status'] == "SUCCESS":
                     template = "isp_crm_module.template_selfcare_user_make_payment"
                     request.session['payment_session_id'] = response_content['sessionkey']
@@ -341,6 +352,25 @@ class SelfcareController(PaymentController):
         context['success_msg'] = success_msg
 
         return request.render(template, context)
+
+    @http.route("/selfcare/get-invoice/", auth='user', type='http', website=True)
+    def selfcare_get_customer_invoice(self, **kw):
+        context = {}
+        content_header = ""
+        customer_obj = request.env['account.invoice']
+        user_id = request.env.context.get('uid')
+        logged_in_user = request.env['res.users'].sudo().browse(user_id)
+        invoice_obj = request.env['account.invoice'].search([('partner_id', '=', logged_in_user.partner_id.id), ('state', '=', 'open')], limit=1)
+
+        context['customer_id'] = logged_in_user.partner_id.id
+        context['invoice'] = {
+            'id' : invoice_obj.id,
+            'name' : invoice_obj.name,
+            'number' : invoice_obj.number,
+            'amount_total' : invoice_obj.amount_total,
+        }
+
+        return json.dumps(context)
 
     @http.route("/selfcare", methods=["GET"], website=True)
     def selfcare_home(self, **kw):

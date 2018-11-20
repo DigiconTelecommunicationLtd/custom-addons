@@ -69,7 +69,7 @@
         <script src="/isp_crm_module/static/src/lib/dist/js/adminlte.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="/isp_crm_module/static/src/lib/dist/js/demo.js"></script>
-        <!-- Page script -->
+        <!--Page Script-->
         <script>
             $(function () {
             //Initialize Select2 Elements
@@ -137,7 +137,8 @@
                 })
             })
         </script>
-
+        <!-- Custom js script -->
+        <script src="/isp_crm_module/static/src/js/custom.js"></script>
     </template>
     <!--end js-->
 
@@ -427,7 +428,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-list"></i>
                                         </div>
-                                        <select name="service_type" class="form-control pull-right">
+                                        <select name="service_type" class="form-control pull-right" id="payment_service_type">
                                             <option value=""> Select </option>
                                             <t t-foreach="service_list" t-as="service">
                                                 <option t-att-value="service.id">
@@ -438,14 +439,16 @@
                                     </div>
                                 </td>
                             </tr>
+                            <tr id="show_invoice_info">
+                            </tr>
                             <tr>
-                                <th>Service Type</th>
+                                <th>Amount</th>
                                 <td>
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-dollar"></i>
                                         </div>
-                                        <input type="text" name="amount" class="form-control pull-right"/>
+                                        <input type="text" name="amount" class="form-control pull-right" id="payment_bill_amount"/>
                                     </div>
                                 </td>
                             </tr>
@@ -699,7 +702,6 @@
                             <t t-esc="success_msg" />
                         </div>
                     </t>
-                    <!---->
                     <form role="form" action="/selfcare/ticket/create" method="POST">
                         <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
 
