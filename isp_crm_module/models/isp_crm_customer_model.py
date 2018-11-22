@@ -131,6 +131,33 @@ class Customer(models.Model):
             else:
                 raise UserError(_('Phone number is too long!'))
 
+    @api.onchange('is_deferred')
+    def onchange_is_deferred(self):
+        all_partner_ids = []
+        opportunity = False
+        for partner in self:
+            all_partner_ids = partner.search([('customer', '=', True)])
+        if self.is_deferred:
+            for partner in all_partner_ids:
+                if partner.id == self._origin.id:
+                    opportunity = self.env['crm.lead'].search([('partner_id', '=', partner.id)])
+                    # Show 'Create service request' button in opportunity .
+                    if opportunity:
+                        opportunity.write({
+                            'is_customer_deferred': True,
+                            'probability': 100,
+                        })
+        else:
+            for partner in all_partner_ids:
+                if partner.id == self._origin.id:
+                    opportunity = self.env['crm.lead'].search([('partner_id', '=', partner.id)])
+                    # Remove 'Create service request' button in opportunity .
+                    if opportunity:
+                        opportunity.write({
+                            'is_customer_deferred': False,
+                            'probability': 98,
+                        })
+
     @api.multi
     def action_view_customer_service_request(self):
         self.ensure_one()
