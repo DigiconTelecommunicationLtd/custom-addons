@@ -53,20 +53,13 @@ class Opportunity(models.Model):
                     if invoices:
                         if invoices.state == 'paid':
                             self.invoice_state = invoices.state
+                            super(Opportunity, lead).action_set_won()
                         else:
                             raise UserError(_("This Opportunity's invoice has not been paid.\n Confirm payment first."))
                     else:
                         raise UserError(_("This Opportunity's invoice has not been created yet. Please create the invoice first ."))
                 else:
                     raise UserError(_("Customer not found."))
-
-            for order in lead.order_ids:
-                if order.state == 'sale':
-                    sale_confirmed = True
-                    break
-            if not sale_confirmed:
-                raise UserError(_("This Opportunity's Sale has not been confirmed.\n Confirm Sale First."))
-            super(Opportunity, lead).action_set_won()
         return True
 
     @api.onchange('email_from')
