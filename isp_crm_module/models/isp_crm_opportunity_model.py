@@ -60,6 +60,8 @@ class Opportunity(models.Model):
                         raise UserError(_("This Opportunity's Sale has not been confirmed.\n Confirm Sale First."))
                 else:
                     raise UserError(_("Customer not found."))
+            else:
+                raise UserError(_("Customer not found."))
         return True
 
     @api.onchange('email_from')
