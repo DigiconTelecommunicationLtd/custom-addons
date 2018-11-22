@@ -55,9 +55,9 @@ class Opportunity(models.Model):
                             self.invoice_state = invoices.state
                             super(Opportunity, lead).action_set_won()
                         else:
-                            raise UserError(_("This Opportunity's Invoice has not been paid.\n Confirm payment first."))
+                            raise UserError(_("This opportunity's invoice has not been paid.\n Confirm payment first."))
                     else:
-                        raise UserError(_("This Opportunity's Sale has not been confirmed.\n Confirm Sale First."))
+                        raise UserError(_("Please create an invoice first ."))
                 else:
                     raise UserError(_("Customer not found."))
             else:
