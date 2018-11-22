@@ -20,6 +20,13 @@ class SelfcareController(PaymentController):
     DEFAULT_LOGOUT_ROUTE = "/selfcare/logout"
     DEFAULT_PRODUCT_CATEGORY = "Package"
     DEFAULT_PROFILE_CHANGE_NAME = "Profile Change"
+    DEFAULT_JOURNAL_NAME = "Bank"
+    DEFAULT_PARTNER_TYPE = "customer"
+    DEFAULT_RECEIVE_MONEY_PAYMENT_TYPE = "inbound"
+    DEFAULT_PAYMENT_METHOD_TYPE = "inbound"
+    DEFAULT_PAYMENT_METHOD_CODE = "manual"
+    DEFAULT_INVOICE_STATE = "open"
+
 
     def _redirect_if_not_login(self, req):
         if req.env.context.get('uid') is None:
@@ -82,11 +89,48 @@ class SelfcareController(PaymentController):
 
         if self._redirect_if_not_login(req=request):
             if request.httprequest.method == 'POST':
-                data = request.params
+                invoice_number = False
+                invoice_ids = False
+                data = dict(request.params)
+                session_id = request.session['payment_session_id']
+                customer_id = request.session['customer_id']
+                invoice_id = request.session['invoice_id']  if ('invoice_id' in request.session) else False
+                if invoice_id:
+                    # get invoice object and properties
+                    invoice_obj = request.env['account.invoice'].sudo().search([('id', '=', invoice_id)], limit=1)
+                    invoice_number = invoice_obj.number
+                    invoice_ids = invoice_obj.ids
+
+                # customer object
+                customer_obj = request.env['res.partner'].sudo().search([('id', '=', customer_id)], limit=1)
+                # get journal id
+                journal_obj = request.env['account.journal'].sudo().search([('name', '=', self.DEFAULT_JOURNAL_NAME)], limit=1)
+                # get payment_method id
+                payment_method_obj = request.env['account.payment.method'].sudo().search(
+                        [('code', '=', self.DEFAULT_PAYMENT_METHOD_CODE), ('payment_type', '=', self.DEFAULT_PAYMENT_METHOD_TYPE)], limit=1)
+                # register payment
+                payment_obj = request.env['account.payment'].sudo().search([])
+                created_payment_obj = payment_obj.create({
+                    'payment_method_id' : payment_method_obj.id,
+                    'payment_type' : self.DEFAULT_RECEIVE_MONEY_PAYMENT_TYPE,
+                    'partner_type' : self.DEFAULT_PARTNER_TYPE,
+                    'partner_id' : customer_id,
+                    'amount' : float(data['amount']),
+                    'communication' : invoice_number if invoice_number else None,
+                    'journal_id' : journal_obj.id,
+                    'invoice_ids': [(6, 0, invoice_ids)] if invoice_ids else None,
+                })
+                # make payment
+                if invoice_id:
+                    created_payment_obj.action_validate_invoice_payment()
+                else:
+                    created_payment_obj.post()
+
             user_id = request.env.context.get('uid')
             logged_in_user = request.env['res.users'].sudo().browse(user_id)
             context['user'] = logged_in_user
-
+        # removing invoice from sesssion
+        # del request.session['invoice_id'] if invoice_id else None
         context['content_header'] = content_header
         return request.render(template, context)
 
@@ -135,6 +179,7 @@ class SelfcareController(PaymentController):
                 response_content = self.initiate_session(customer=logged_in_user, amount=amount, transaction_id=transaction_id)
                 if response_content['status'] == "SUCCESS":
                     template = "isp_crm_module.template_selfcare_user_make_payment"
+                    request.session['customer_id'] = logged_in_user.partner_id.id
                     request.session['payment_session_id'] = response_content['sessionkey']
                     context['cards'] = response_content["desc"]
                     context['redirect_gateway'] = response_content["redirectGatewayURL"]
@@ -360,7 +405,7 @@ class SelfcareController(PaymentController):
         customer_obj = request.env['account.invoice']
         user_id = request.env.context.get('uid')
         logged_in_user = request.env['res.users'].sudo().browse(user_id)
-        invoice_obj = request.env['account.invoice'].search([('partner_id', '=', logged_in_user.partner_id.id), ('state', '=', 'open')], limit=1)
+        invoice_obj = request.env['account.invoice'].search([('partner_id', '=', logged_in_user.partner_id.id), ('state', '=', self.DEFAULT_INVOICE_STATE)], limit=1)
 
         context['customer_id'] = logged_in_user.partner_id.id
         context['invoice'] = {
