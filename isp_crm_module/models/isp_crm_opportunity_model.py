@@ -115,7 +115,7 @@ class Opportunity(models.Model):
                             raise UserError(_("No invoice found for this customer."))
                 else:
                     raise UserError(_("Customer not found."))
-                
+
         if (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
             raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
 
