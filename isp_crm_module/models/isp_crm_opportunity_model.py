@@ -60,6 +60,8 @@ class Opportunity(models.Model):
                         raise UserError(_("This Opportunity's invoice has not been created yet. Please create the invoice first ."))
                 else:
                     raise UserError(_("Customer not found."))
+            else:
+                raise UserError(_("Customer not found."))
         return True
 
     @api.onchange('email_from')
