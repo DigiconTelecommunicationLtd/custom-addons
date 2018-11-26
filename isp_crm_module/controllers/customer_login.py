@@ -129,16 +129,16 @@ class SelfcareController(PaymentController):
                     created_payment_obj.post()
 
                 today = datetime.today()
-                customers_current_package_end_date_obj = datetime.strptime(customer_obj.current_package_start_date, self.DEFAULT_DATE_FORMAT)
+                customers_current_package_end_date_obj = datetime.strptime(customer_obj.current_package_end_date, self.DEFAULT_DATE_FORMAT)
 
                 if today > customers_current_package_end_date_obj:
                     start_date = today.strftime(self.DEFAULT_DATE_FORMAT)
-                else:
-                    start_date = customers_current_package_end_date_obj.strftime(self.DEFAULT_DATE_FORMAT)
+                    # update the bill cycle
+                    updated_customer_info = customer_obj.update_current_bill_cycle_info(customer=customer_obj,
+                                                                                        start_date=start_date)
+                    updated_customer_info = customer_obj.update_next_bill_cycle_info(customer=customer_obj,
+                                                                                     start_date=start_date)
 
-                # update the bill cycle
-                updated_customer_info = customer_obj.update_current_bill_cycle_info(customer=customer_obj, start_date=start_date)
-                updated_customer_info = customer_obj.update_next_bill_cycle_info(customer=customer_obj, start_date=start_date)
 
             user_id = request.env.context.get('uid')
             logged_in_user = request.env['res.users'].sudo().browse(user_id)
