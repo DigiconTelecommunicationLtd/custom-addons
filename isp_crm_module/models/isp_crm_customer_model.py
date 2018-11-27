@@ -4,7 +4,7 @@
 
 from ast import literal_eval
 from odoo import api, fields, models, _
-from datetime import datetime
+from datetime import datetime, timedelta
 from odoo.exceptions import Warning, UserError
 import re
 import odoo.addons.decimal_precision as dp
@@ -15,6 +15,9 @@ GENDERS = [
     ('others', _('Others')),
 ]
 
+DEFAULT_MONTH_DAYS = 30
+DEFAULT_NEXT_MONTH_DAYS = 31
+DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
 class Customer(models.Model):
     """Inherits res.partner and adds Customer info in partner form"""
