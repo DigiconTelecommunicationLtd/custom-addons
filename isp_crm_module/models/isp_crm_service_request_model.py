@@ -232,7 +232,7 @@ class ServiceRequest(models.Model):
 
             template_obj = self.env['mail.template'].sudo().search([('name', '=', 'Send_Service_Request_Mail')], limit=1)
             invoice = self.env['account.invoice'].sudo().search([])[-1]
-            pdf = self.env.ref('isp_invoice_module.isp_account_invoices').render_qweb_pdf(invoice.id,data=invoice)
+            pdf = invoice_generated # self.env.ref('isp_invoice_module.isp_account_invoices').render_qweb_pdf(invoice.id,data=invoice)
 
             # save pdf as attachment
             ATTACHMENT_NAME = "Test Attachment Name"
@@ -316,7 +316,7 @@ class ServiceRequest(models.Model):
         if len(sales_order_obj) > 0:
             sales_order_line_list = [order_line for order_line in sales_order_obj.order_line if order_line.product_id.default_code != OTC_PRODUCT_CODE]
         else:
-            print('You Have To create a Sales Order First.')
+            raise UserError(_('You Have To create a Sales Order First.'))
 
         if len(sales_order_line_list) > 0:
             sales_order_line = sales_order_line_list[0]
@@ -333,7 +333,7 @@ class ServiceRequest(models.Model):
             else:
                 return created_invoice_obj
         else:
-            print('You Have To create a Sales Order First.')
+            raise UserError(_('You Have To create a Sales Order First.'))
 
 
     def _create_invoice_line_from_sales_order_line(self, sales_order_line):
