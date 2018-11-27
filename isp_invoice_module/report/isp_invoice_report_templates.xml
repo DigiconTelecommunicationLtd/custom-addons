@@ -91,7 +91,7 @@
                                     <tr style="border:none;">
                                         <th>Address</th>
                                         <td style="padding-left:5px;">
-                                            House - 000, Road - 17/F, Area - 05 , Tejgaon , Dhaka - 1232
+                                            <span t-field="o.partner_id.contact_address"/>
                                         </td>
                                     </tr>
                                 </table>
