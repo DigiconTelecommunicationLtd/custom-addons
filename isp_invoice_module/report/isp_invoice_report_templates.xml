@@ -4,8 +4,11 @@
         <div class="header">
             <div class="row">
                 <div class="col-xs-3 mb4">
-                    <img src="isp_invoice_module/static/src/assets/images/logo.png" style="max-height: 65px;"/>
+                    <img src="isp_invoice_module/static/src/assets/images/logo.png" style="max-height: 85px;"/>
                 </div>
+            </div>
+            <div class="text-center" style="margin-bottom:10%;padding-left:10px;">
+                <u><h3>Invoice</h3></u>
             </div>
         </div>
 
@@ -76,10 +79,26 @@
             <t t-foreach="docs" t-as="o">
                 <t t-call="isp_invoice_module.external_layout_custom">
                     <div class="page">
-                        <div class="text-center" style="margin-bottom:2%;">
-                            <u><h3>Invoice</h3></u>
+                        <div class="row" style="padding-left:10px;padding-top:8%;">
+                             <div class="col-xs-6">
+                                <table name="invoice_customer_table" style="border:none;">
+                                    <tr style="border:none;">
+                                        <th>Name</th>
+                                        <td style="padding-left:5px;">
+                                            <span t-field="o.partner_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="border:none;">
+                                        <th>Address</th>
+                                        <td style="padding-left:5px;">
+                                            <span t-field="o.partner_id.contact_address"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                        <div class="row">
+                        <br/>
+                        <div class="row" style="padding-left:10px;">
                             <div class="col-xs-6">
                                 <table class="table table-bordered table-condensed" name="invoice_customer_table">
                                     <tbody class="invoice_tbody">
@@ -87,12 +106,6 @@
                                             <th>Customer ID</th>
                                             <td>
                                                 <span t-field="o.partner_id.subscriber_id"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Customer Name</th>
-                                            <td>
-                                                <span t-field="o.partner_id.name"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -128,7 +141,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="padding-left:10px;">
                             <div class="col-xs-6">
                                 <table class="table table-bordered table-condensed" name="invoice_table">
                                     <tbody class="invoice_tbody">
@@ -170,81 +183,83 @@
                                 </table>
                             </div>
                         </div>
-                        <table class="table table-bordered table-condensed" name="invoice_line_table">
-                            <thead>
-                                <tr>
-                                    <th>SL</th>
-                                    <th>Description</th>
-                                    <th>Location</th>
-                                    <th class="hidden">Source Document</th>
-                                    <th class="text-right">Quantity in Mbps</th>
-                                    <th t-if="display_discount" class="text-right">Disc.(%)</th>
-                                    <th class="text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody class="invoice_tbody">
-                                <tr t-foreach="o.invoice_line_ids" t-as="l">
-                                    <td>
-                                        <span t-esc="l_index + 1"/>
-                                    </td>
-                                    <td>
-                                        <span t-field="l.name"/>
-                                    </td>
-                                    <td>DTC-CGHQ</td>
-                                    <td class="hidden">
-                                        <span t-field="l.origin"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-field="l.quantity"/>
-                                        <span t-field="l.uom_id" groups="product.group_uom"/>
-                                    </td>
-                                    <td t-if="display_discount" class="text-right">
-                                        <span t-field="l.discount"/>
-                                    </td>
-                                    <td class="text-right" id="subtotal">
-                                        <span t-field="l.price_subtotal"
-                                              t-field-options='{"widget": "False"}'/>
-                                    </td>
-                                </tr>
+                        <div style="padding-left:10px;">
+                            <table class="table table-bordered table-condensed" name="invoice_line_table">
+                                <thead>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Description</th>
+                                        <th>Location</th>
+                                        <th class="hidden">Source Document</th>
+                                        <th class="text-right">Quantity in Mbps</th>
+                                        <th t-if="display_discount" class="text-right">Disc.(%)</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody">
+                                    <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                        <td>
+                                            <span t-esc="l_index + 1"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="l.name"/>
+                                        </td>
+                                        <td>DTC-CGHQ</td>
+                                        <td class="hidden">
+                                            <span t-field="l.origin"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="l.quantity"/>
+                                            <span t-field="l.uom_id" groups="product.group_uom"/>
+                                        </td>
+                                        <td t-if="display_discount" class="text-right">
+                                            <span t-field="l.discount"/>
+                                        </td>
+                                        <td class="text-right" id="subtotal">
+                                            <span t-field="l.price_subtotal"
+                                                  t-field-options='{"widget": "False"}'/>
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <td class="text-right pull-right" colspan="4">
-                                        <strong>Subtotal</strong>
-                                    </td>
-                                    <td class="text-right pull-right">
-                                        <span t-field="o.amount_untaxed"
-                                              t-field-options='{"widget": "False"}'/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right pull-right" colspan="4">
-                                        <strong>VAT</strong>
-                                    </td>
-                                    <td class="text-right pull-right">
-                                        Including
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right pull-right" colspan="4">
-                                        <strong>Total</strong>
-                                    </td>
-                                    <td class="text-right pull-right">
-                                        <span t-field="o.amount_total"
-                                              t-field-options='{"widget": "False"}'/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right pull-right" colspan="4">
-                                        <strong>Previous Dues</strong>
-                                    </td>
-                                    <td class="text-right pull-right">
-                                        <span t-field="o.residual"
-                                              t-field-options='{"widget": "False"}'/>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="clearfix">
+                                    <tr>
+                                        <td class="text-right pull-right" colspan="4">
+                                            <strong>Subtotal</strong>
+                                        </td>
+                                        <td class="text-right pull-right">
+                                            <span t-field="o.amount_untaxed"
+                                                  t-field-options='{"widget": "False"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right pull-right" colspan="4">
+                                            <strong>VAT</strong>
+                                        </td>
+                                        <td class="text-right pull-right">
+                                            Including
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right pull-right" colspan="4">
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td class="text-right pull-right">
+                                            <span t-field="o.amount_total"
+                                                  t-field-options='{"widget": "False"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right pull-right" colspan="4">
+                                            <strong>Previous Dues</strong>
+                                        </td>
+                                        <td class="text-right pull-right">
+                                            <span t-field="o.residual"
+                                                  t-field-options='{"widget": "False"}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix" style="padding-left:10px;">
                             <table class="table table-condensed" name="invoice_total_table">
                                 <tbody>
                                     <tr style="border:1px solid #dddddd;">
@@ -262,7 +277,7 @@
                                 <p>In Word: Taka <t t-esc="o.convert(o.amount_total)"></t> </p>
                             </div>
                         </div>
-                        <div>
+                        <div style="padding-left:10px;">
                             <u>
                                 <strong>Payment Instructions:</strong>
                             </u>
