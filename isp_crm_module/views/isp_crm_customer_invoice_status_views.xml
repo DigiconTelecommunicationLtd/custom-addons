@@ -7,10 +7,10 @@
             <search string="Customer Invoice Search">
                 <field name="name"/>
                 <filter
-                        string="Today"
-                        name="isp_crm_customer_invoice_today_filter"
-                        domain="[('customer_current_package_end_date','=', datetime.datetime.today().strftime('%Y-%m-%d'))]"
-                        help="Todays Filter"/>
+                    string="Today"
+                    name="isp_crm_customer_invoice_today_filter"
+                    domain="[('customer_current_package_end_date','=', context_today().strftime('%Y-%m-%d'))]"
+                    help="Todays Filter"/>
             </search>
         </field>
     </record>

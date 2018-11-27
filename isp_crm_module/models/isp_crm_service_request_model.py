@@ -193,53 +193,42 @@ class ServiceRequest(models.Model):
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
             encrypted = "abcd1234"
 
-
+            # updating customer's potentiality
             customer.update({
                 'is_potential_customer' : False
             })
+
             # Create an user
             user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
+
             # invoice generation
-            invoice_generated = self.create_invoice_for_customer(customer=customer)
-            sales_order_obj = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
-            current_package_id = invoice_generated.invoice_line_ids[0].product_id.id
-            current_package_price = invoice_generated.invoice_line_ids[0].price_unit
-            current_package_original_price = current_package_price
-            current_package_start_date = fields.Date.today()
-            current_package_end_date = self._get_next_package_end_date(given_date=current_package_start_date)
-            current_package_sales_order_id = sales_order_obj.id
+            invoice_generated               = self.create_invoice_for_customer(customer=customer)
+            sales_order_obj                 = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
+            current_package_id              = invoice_generated.invoice_line_ids[0].product_id.id
+            current_package_price           = invoice_generated.invoice_line_ids[0].price_unit
+            current_package_start_date      = fields.Date.today()
+            current_package_sales_order_id  = sales_order_obj.id
 
-            # next package start date will be today + 31 days
-            next_package_id = current_package_id
-            next_package_start_date = self._get_next_package_start_date(given_date=current_package_start_date)
-            next_package_price = current_package_price
-            next_package_original_price = current_package_price
-            next_package_sales_order_id = current_package_sales_order_id
+            # updating current package info
+            customer.update_current_bill_cycle_info(
+                customer=customer,
+                start_date=current_package_start_date,
+                product_id=current_package_id,
+                price=current_package_price,
+                sales_order_id=current_package_sales_order_id
+            )
+            # updating next package info
+            customer.update_next_bill_cycle_info(
+                customer=customer,
+            )
 
-
-            customer.update({
-                'current_package_id' : current_package_id,
-                'current_package_price' : current_package_price,
-                'current_package_original_price' : current_package_original_price,
-                'current_package_start_date' : current_package_start_date,
-                'current_package_end_date' : current_package_end_date,
-                'current_package_sales_order_id' : current_package_sales_order_id,
-                'next_package_id' : next_package_id,
-                'next_package_start_date' : next_package_start_date,
-                'next_package_price' : next_package_price,
-                'next_package_original_price' : next_package_original_price,
-                'next_package_sales_order_id' : next_package_sales_order_id,
-            })
-
+            # updating opportunity
             opportunity = service_req.opportunity_id
             opportunity.update({
                 'color' : 10,
                 'current_service_request_id': service_req.name,
                 'current_service_request_status': 'Done',
             })
-
-            # Update customer's bill date.
-            self.update_bill_cycle_date(customer=customer)
 
             template_obj = self.env['mail.template'].sudo().search([('name', '=', 'Send_Service_Request_Mail')], limit=1)
             invoice = self.env['account.invoice'].sudo().search([])[-1]

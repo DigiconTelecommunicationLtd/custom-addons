@@ -62,6 +62,81 @@ class Customer(models.Model):
     mail_to = fields.Char()
     mail_cc = fields.Char()
 
+
+    def _get_next_package_end_date(self, given_date):
+        """
+        Returns date of after adding DEFAULT_MONTH_DAYS days
+        :param given_date: start_date of the package
+        :return: date str
+        """
+        given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
+        package_end_date_obj    = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
+        return package_end_date_obj.strftime(DEFAULT_DATE_FORMAT)
+
+    def _get_next_package_start_date(self, given_date):
+        """
+        Returns date of after adding DEFAULT_NEXT_MONTH_DAYS days
+        :param given_date: start_date of the package
+        :return: date str
+        """
+        given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
+        package_start_date_obj  = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
+        return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
+
+    def update_current_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False, sales_order_id=False):
+        """
+        Updates current month's package and bill cycle info of given customer
+        :param customer: package user
+        :param start_date: start date of the package
+        :param product_id: package id
+        :param price: price of the package
+        :param sales_order_id: sales order id of the package
+        :return: updated customer
+        """
+        current_package_id              = product_id if product_id else customer.current_package_id
+        current_package_price           = price if price else customer.current_package_price
+        current_package_original_price  = current_package_price
+        current_package_start_date      = start_date if start_date else datetime.today().strftime(DEFAULT_DATE_FORMAT)
+        current_package_end_date        = self._get_next_package_end_date(given_date=current_package_start_date)
+        current_package_sales_order_id  = sales_order_id if sales_order_id else customer.current_package_sales_order_id
+
+        customer.update({
+            'current_package_id'             : current_package_id,
+            'current_package_price'          : current_package_price,
+            'current_package_original_price' : current_package_original_price,
+            'current_package_start_date'     : current_package_start_date,
+            'current_package_end_date'       : current_package_end_date,
+            'current_package_sales_order_id' : current_package_sales_order_id,
+        })
+        return customer
+
+
+    def update_next_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False, sales_order_id=False):
+        """
+        Updates next month's package and bill cycle info of given customer
+        :param customer: package user
+        :param start_date: start date of the package
+        :param product_id: package id
+        :param price: price of the package
+        :param sales_order_id: sales order id of the package
+        :return: updated customer
+        """
+        next_package_id             = product_id if product_id else customer.current_package_id
+        next_package_start_date     = start_date if start_date else self._get_next_package_start_date(given_date=customer.current_package_start_date)
+        next_package_price          = price if price else customer.current_package_price
+        next_package_original_price = price if price else customer.current_package_original_price
+        next_package_sales_order_id = sales_order_id if sales_order_id else customer.current_package_sales_order_id
+
+        customer.update({
+            'next_package_id'             : next_package_id,
+            'next_package_start_date'     : next_package_start_date,
+            'next_package_price'          : next_package_price,
+            'next_package_original_price' : next_package_original_price,
+            'next_package_sales_order_id' : next_package_sales_order_id,
+        })
+        return customer
+
+
     @api.model
     def create(self, vals):
         if vals.get('subscriber_id', 'New') == 'New':

@@ -249,5 +249,12 @@ class CronJobModel(models.Model):
                 ('date_due', '=', today), ('state', '=', 'paid')
             ], limit=1)
             # TODO(Arif): if paid then update the current package from next package and update the package valid till date.
-            self._update_customer_package_info(customer=customer)
+            # if current_month_invoice:
+            #     self._update_customer_package_info(customer=customer)
+            # else:
+            #     pass
+
+            list_of_acccount_moves = [{'name' : acc.name, 'ref' : acc.ref, 'amount' : acc.amount} for acc in self.env['account.move'].search([('partner_id', '=', customer.id)])]
+            print("hello")
+
         return current_month_invoice

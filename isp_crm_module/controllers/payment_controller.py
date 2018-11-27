@@ -13,6 +13,7 @@ class PaymentController(BaseController):
     STORE_NAME = 'testmime24q9'
     STORE_PWD = 'mime5bc41d233a312@ssl'
     DEFAULT_CURRENCY = 'BDT'
+    BASE_URL = "http://localhost:8069/"
 
 
     def _make_data_dict(self, user_info):
@@ -22,9 +23,9 @@ class PaymentController(BaseController):
             'total_amount': user_info["amount"],
             'currency': self.DEFAULT_CURRENCY,
             'tran_id': user_info["transaction_id"],
-            'success_url': "http://10.10.16.6:8069/selfcare/make-payment/success",
-            'fail_url': "http://10.10.16.6:8069/selfcare/make-payment/failure",
-            'cancel_url': "http://10.10.16.6:8069/selfcare/make-payment/failure",
+            'success_url': self.BASE_URL + "selfcare/make-payment/success",
+            'fail_url': self.BASE_URL + "selfcare/make-payment/failure",
+            'cancel_url': self.BASE_URL + "selfcare/make-payment/failure",
             'cus_name': user_info["customer"].name,
             'cus_email': user_info["customer"].email,
             'cus_add1': "",
@@ -49,7 +50,7 @@ class PaymentController(BaseController):
         user_info = {}
         user_info["customer"] = customer
         user_info["amount"] = amount
-        user_info["transaction_id"] = amount
+        user_info["transaction_id"] = transaction_id
 
         data = self._make_data_dict(user_info=user_info)
         response = requests.post(url=self.INITIATION_URL, data=data)
