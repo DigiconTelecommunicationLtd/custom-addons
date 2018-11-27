@@ -129,7 +129,8 @@ class Opportunity(models.Model):
         for opportunity in self:
             first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
             service_req_obj = self.env['isp_crm_module.service_request'].search([])
-
+            confirmed_sale_order_id = ""
+            sale_order_line_obj = ""
             for order in opportunity.order_ids:
                 if order.state == 'sale':
                     confirmed_sale_order_id = order.id

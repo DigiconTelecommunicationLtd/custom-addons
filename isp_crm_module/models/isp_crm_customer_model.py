@@ -62,7 +62,6 @@ class Customer(models.Model):
     mail_to = fields.Char()
     mail_cc = fields.Char()
 
-
     @api.model
     def create(self, vals):
         if vals.get('subscriber_id', 'New') == 'New':
