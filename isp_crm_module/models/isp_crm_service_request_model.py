@@ -230,9 +230,10 @@ class ServiceRequest(models.Model):
                 'current_service_request_status': 'Done',
             })
 
+            # Generate Dynamic Invoice and Send in mail.
             template_obj = self.env['mail.template'].sudo().search([('name', '=', 'Send_Service_Request_Mail')], limit=1)
-            invoice = self.env['account.invoice'].sudo().search([])[-1]
-            pdf = invoice_generated # self.env.ref('isp_invoice_module.isp_account_invoices').render_qweb_pdf(invoice.id,data=invoice)
+            invoice      = self.env['account.invoice'].sudo().search([])[-1]
+            pdf          = self.env.ref('sale.action_report_saleorder').render_qweb_pdf([sales_order_obj.id])
 
             # save pdf as attachment
             ATTACHMENT_NAME = "Test Attachment Name"
