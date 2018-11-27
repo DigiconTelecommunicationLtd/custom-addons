@@ -29,10 +29,10 @@ class CustomerInvoice(models.Model):
     customer_company = fields.Char(string="Company", related='customer_id.parent_id.name', store=True)
     customer_current_package_id = fields.Many2one(compute="_compute_package_info", string="Package ID")
     customer_current_package_name = fields.Char(compute="_compute_package_info", string="Package")
-    customer_current_package_start_date = fields.Date(compute="_compute_package_info", string="Start date")
-    customer_current_package_end_date = fields.Date(compute="_compute_package_info", string="End Date")
-    customer_current_package_price = fields.Float(compute="_compute_package_info", string="Price")
-    customer_current_package_original_price = fields.Float(compute="_compute_package_info", string="Original Price")
+    customer_current_package_start_date = fields.Date(related='customer_id.current_package_start_date', store=True, string="Start date")
+    customer_current_package_end_date = fields.Date(related='customer_id.current_package_end_date', store=True, string="End Date")
+    customer_current_package_price = fields.Float(related="customer_id.current_package_price", store=True, string="Price")
+    customer_current_package_original_price = fields.Float(related="customer_id.current_package_original_price", store=True, string="Original Price")
 
     # invoice info
     invoice_id = fields.Many2one('account.invoice', string="Invoice", track_visibility='onchange', )
