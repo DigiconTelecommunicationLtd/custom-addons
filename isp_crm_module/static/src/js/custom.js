@@ -56,6 +56,18 @@ $(document).ready(function() {
         });
     };
 
+
+    var getCustomerPackageModalMsg = function (current_package_name, next_package_name) {
+        /*
+        Returns Message that will show on the modal of package change
+        */
+        var msg = "";
+        msg += "You want to change the Current Plan (<strong>" + current_package_name +"</strong>)";
+        msg += " to <strong>" + next_package_name +"</strong>.";
+
+        return msg;
+    }
+
     $("select#payment_service_type").on('change', function(){
         var type_id = $(this).val()
         var show_inv_dom = $("tr#show_invoice_info")
@@ -66,5 +78,41 @@ $(document).ready(function() {
             show_inv_dom.attr('style', "display : none;");
         }
     });
+
+
+    // remove attr in change the plan modal
+    $('input#idImmediately').on('click', function(){
+        var activation_date_obj = $('input#idPackageActivationDate');
+        activation_date_obj.removeAttr('disabled').select();
+    });
+
+    $('input#idNextBillCycle').on('click', function(){
+        var activation_date_obj = $('input#idPackageActivationDate');
+        activation_date_obj.attr('disabled', 1)
+    });
+
+
+
+
+    $('button.change_to_package_info').on('click', function(){
+        var this_obj_id = $(this).attr('data-id');
+        var this_obj_name = $(this).attr('data-name');
+        var user_current_package_name = $('input#idUserCurrentPackageName').val();
+        var modal_msg_id_obj = $('p#idShowPackageChangeModalMsg');
+        var package_modal_msg = '';
+
+        // showing packages names in modal
+        package_modal_msg = getCustomerPackageModalMsg(user_current_package_name, this_obj_name);
+        modal_msg_id_obj.html(package_modal_msg);
+    });
+
+
+
+
+
+    //Date picker
+    $('input#idPackageActivationDate').datepicker({
+      autoclose: true
+    })
 
 });
