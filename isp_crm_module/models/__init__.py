@@ -39,3 +39,4 @@ from . import isp_crm_hd_td_type
 from . import isp_crm_hd_td_solution
 from . import isp_crm_mail
 from . import isp_crm_customer_invoice_status_model
+from . import isp_crm_invoice_model

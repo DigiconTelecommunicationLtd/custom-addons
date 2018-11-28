@@ -36,6 +36,19 @@ $(document).ready(function() {
         $("input#payment_bill_amount").val(invoiceAmount).attr('readonly', 1);
     }
 
+
+    var getPackageChangeSuccessMsg = function () {
+        /*
+        Returns Package Change success msg
+        */
+        var msg = "";
+        msg += '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
+        msg += '<h4><i class="icon fa fa-check"></i> Success</h4>';
+        msg += 'Your Package change request enlisted Successfully';
+
+        return msg;
+    }
+
     var getCustomerInvoiceInfo = function () {
         /*
         Make a get call to the server to retrieve the customer and invoice info
@@ -51,6 +64,34 @@ $(document).ready(function() {
                     showInvoiceInfo(res.invoice.id, res.invoice.number, res.invoice.amount_total)
                 } else {
                     showInvoiceError()
+                }
+            }
+        });
+    };
+
+
+
+
+    var postPackageChangeInfo = function (csrf_token, next_package_id, change_from, date) {
+        /*
+        Make a post call to the server to change the plan
+        */
+        url = BASE_URL + "/selfcare/change-package/" + next_package_id
+        $.ajax({
+            url: url,
+            method: "POST",
+            data : {
+                'csrf_token' : csrf_token,
+                'change_package_from' : change_from,
+                'date' : date,
+            },
+            success: function(result){
+                var res = JSON.parse(result);
+                if (res['response']) {
+                    var show_success_msg = getPackageChangeSuccessMsg()
+                    $('div#idShowPackageChangeSuccessMsg').show();
+                    $('div#idShowPackageChangeSuccessMsg').html(show_success_msg);
+                    $('button#idSubmitChangePackage').removeAttr('disabled');
                 }
             }
         });
@@ -85,34 +126,54 @@ $(document).ready(function() {
         var activation_date_obj = $('input#idPackageActivationDate');
         activation_date_obj.removeAttr('disabled').select();
     });
-
+    // disable the datepicker
     $('input#idNextBillCycle').on('click', function(){
         var activation_date_obj = $('input#idPackageActivationDate');
         activation_date_obj.attr('disabled', 1)
     });
 
-
-
-
+    // showing modal messages
     $('button.change_to_package_info').on('click', function(){
         var this_obj_id = $(this).attr('data-id');
         var this_obj_name = $(this).attr('data-name');
         var user_current_package_name = $('input#idUserCurrentPackageName').val();
         var modal_msg_id_obj = $('p#idShowPackageChangeModalMsg');
+        var show_package_success_msg = $('div#idShowPackageChangeSuccessMsg').hide();
         var package_modal_msg = '';
+
+        // change to package id
+        var change_to_package_id = $('input#idChangeToPackageId').val(this_obj_id);
 
         // showing packages names in modal
         package_modal_msg = getCustomerPackageModalMsg(user_current_package_name, this_obj_name);
         modal_msg_id_obj.html(package_modal_msg);
     });
 
+    // submit the data to change the plan or package
+    $('button#idSubmitChangePackage').on('click', function(event){
+        event.preventDefault();
+        $(this).attr('disabled', 1);
+        var csrf_token = $('input#idCSRFToken').val();
+        var data_json = $("form#idChangePackageForm").serializeArray();
 
+        // post the data to url
+        csrf_token = data_json[0]['value'];
+        next_package_id = data_json[1]['value'];
+        change_from = data_json[2]['value'];
+        date = (data_json[2]['value'] == 'immediately') ? data_json[3]['value'] : '';
+
+        postPackageChangeInfo(csrf_token, next_package_id, change_from, date);
+        $(this).removeAttr('disabled');
+    });
 
 
 
     //Date picker
     $('input#idPackageActivationDate').datepicker({
-      autoclose: true
-    })
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+        changeMonth: true,
+        changeYear: true
+    });
 
 });

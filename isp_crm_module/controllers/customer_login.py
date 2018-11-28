@@ -3,6 +3,7 @@ import string
 import random
 import uuid
 import json
+from datetime import datetime, timedelta
 from odoo import http
 from odoo.tools.translate import _
 from passlib.context import CryptContext
@@ -26,6 +27,8 @@ class SelfcareController(PaymentController):
     DEFAULT_PAYMENT_METHOD_TYPE = "inbound"
     DEFAULT_PAYMENT_METHOD_CODE = "manual"
     DEFAULT_INVOICE_STATE = "open"
+    DEFAULT_CHANGE_FROM = "immediately"
+    DEFAULT_DATE_FORMAT = "%Y-%m-%d"
 
 
     def _redirect_if_not_login(self, req):
@@ -352,9 +355,17 @@ class SelfcareController(PaymentController):
             success_msg = ""
             if request.httprequest.method == 'POST':
                 package_obj = request.env['product.product'].sudo().search([('id', '=', package_id)])
+                post_data = request.params
                 pack_change_problem_obj = request.env['isp_crm_module.helpdesk_problem'].sudo().search([('name', 'like', 'Package Change')], limit=1)
 
                 description = "Change the plan \nFrom : " + logged_in_user.partner_id.current_package_id.name + "\nTo : " + package_obj.name
+
+                if post_data['change_package_from'] == self.DEFAULT_CHANGE_FROM:
+                    description += "\nFrom Date : " + post_data['date']
+                else:
+                    description += "\nFrom Next Bill Cycle"
+
+
                 ticket_type_obj = request.env['isp_crm_module.helpdesk_type'].sudo().search([('name', 'like', 'Package Change')], limit=1)
                 ticket_obj = request.env['isp_crm_module.helpdesk'].sudo().search([])
                 created_ticket = ticket_obj.create({
@@ -374,7 +385,9 @@ class SelfcareController(PaymentController):
         context['products'] = products
         context['success_msg'] = success_msg
 
-        return request.render(template, context)
+        return json.dumps({
+            "response" : True
+        })
 
     @http.route("/selfcare/profile/update", methods=["GET", "POST"], website=True)
     def selfcare_profile_update(self, **kw):
@@ -419,7 +432,7 @@ class SelfcareController(PaymentController):
         customer_obj = request.env['account.invoice']
         user_id = request.env.context.get('uid')
         logged_in_user = request.env['res.users'].sudo().browse(user_id)
-        invoice_obj = request.env['account.invoice'].search([('partner_id', '=', logged_in_user.partner_id.id), ('state', '=', self.DEFAULT_INVOICE_STATE)], limit=1)
+        invoice_obj = request.env['account.invoice'].search([('partner_id', '=', logged_in_user.partner_id.id), ('state', '=', self.DEFAULT_INVOICE_STATE)], order='create_date desc', limit=1)
 
         context['customer_id'] = logged_in_user.partner_id.id
         context['invoice'] = {

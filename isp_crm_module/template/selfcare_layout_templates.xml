@@ -965,11 +965,7 @@
                 <div class="box-body">
                     <!--Info Table-->
                     <t t-if='success_msg'>
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <h4><i class="icon fa fa-check"></i> Success</h4>
-                            <t t-esc="success_msg" />
-                        </div>
+
                     </t>
                     <!--Showing user's current package in modal-->
                     <input type="hidden" id="idUserCurrentPackageName" t-att-value="user.current_package_id.name"/>
@@ -1047,8 +1043,9 @@
                         </button>
                         <h4 class="modal-title">Change The Plan</h4>
                     </div>
-                    <form role="form" t-attf-action="/selfcare/change-package/" method="POST">
+                    <form role="form" t-attf-action="/selfcare/change-package/" method="POST" id="idChangePackageForm">
                         <div class="modal-body">
+                            <div class="alert alert-success alert-dismissible" id="idShowPackageChangeSuccessMsg"></div>
                             <div class="">
                                 <p id="idShowPackageChangeModalMsg"></p>
                             </div>
@@ -1056,8 +1053,8 @@
                                 <strong>When do you want to Change the Plan?</strong>
                             </p>
 
-                            <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
-                            <input type="hidden" name="change_to_package_id" value="" id="changeToPackageId"/>
+                            <input type="hidden" name="csrf_token" t-att-value="csrf_token" id="idCSRFToken"/>
+                            <input type="hidden" name="change_to_package_id" value="" id="idChangeToPackageId"/>
                             <!-- radio -->
                             <div class="form-group">
                                 <div class="radio">
@@ -1083,7 +1080,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Change the Plan</button>
+                            <button type="submit" class="btn btn-primary" id="idSubmitChangePackage">Change the Plan</button>
                         </div>
                     </form>
                 </div>

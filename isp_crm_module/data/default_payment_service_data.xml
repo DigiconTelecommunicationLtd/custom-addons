@@ -26,6 +26,10 @@
     </record>
     <record  id="default_selfcare_payment_service_others" model="isp_crm_module.selfcare_payment_service">
         <field name="id">7</field>
+        <field name="name">Package Change</field>
+    </record>
+    <record  id="default_selfcare_payment_service_others" model="isp_crm_module.selfcare_payment_service">
+        <field name="id">8</field>
         <field name="name">Others</field>
     </record>
 </odoo>
