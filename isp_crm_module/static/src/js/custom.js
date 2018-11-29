@@ -152,7 +152,8 @@ $(document).ready(function() {
     // submit the data to change the plan or package
     $('button#idSubmitChangePackage').on('click', function(event){
         event.preventDefault();
-        $(this).attr('disabled', 1);
+        $('button#idSubmitChangePackage').attr('disabled', 1);
+
         var csrf_token = $('input#idCSRFToken').val();
         var data_json = $("form#idChangePackageForm").serializeArray();
 
@@ -163,7 +164,7 @@ $(document).ready(function() {
         date = (data_json[2]['value'] == 'immediately') ? data_json[3]['value'] : '';
 
         postPackageChangeInfo(csrf_token, next_package_id, change_from, date);
-        $(this).removeAttr('disabled');
+//        $('button#idSubmitChangePackage').removeAttr('disabled');
     });
 
 
