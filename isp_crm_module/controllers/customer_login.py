@@ -29,6 +29,7 @@ class SelfcareController(PaymentController):
     DEFAULT_INVOICE_STATE = "open"
     DEFAULT_CHANGE_FROM = "immediately"
     DEFAULT_DATE_FORMAT = "%Y-%m-%d"
+    SERVICE_TYPE_ID_LIST = [1,8]
 
 
     def _redirect_if_not_login(self, req):
@@ -184,7 +185,7 @@ class SelfcareController(PaymentController):
                 amount = request.params["amount"]
                 service_type = request.params["service_type"]
                 transaction_id = service_type + "_" + amount
-                if int(service_type) == int(1):
+                if int(service_type) in self.SERVICE_TYPE_ID_LIST:
                     invoice_number = request.params["invoice_number"]
                     invoice_id = request.params["invoice_id"]
                     request.session['invoice_id'] = invoice_id
@@ -425,23 +426,30 @@ class SelfcareController(PaymentController):
 
         return request.render(template, context)
 
-    @http.route("/selfcare/get-invoice/", auth='user', type='http', website=True)
-    def selfcare_get_customer_invoice(self, **kw):
+    @http.route("/selfcare/get-invoice/<int:service_type_id>", auth='user', type='http', website=True)
+    def selfcare_get_customer_invoice(self, service_type_id, **kw):
         context = {}
         content_header = ""
         customer_obj = request.env['account.invoice']
         user_id = request.env.context.get('uid')
         logged_in_user = request.env['res.users'].sudo().browse(user_id)
-        invoice_obj = request.env['account.invoice'].search([('partner_id', '=', logged_in_user.partner_id.id), ('state', '=', self.DEFAULT_INVOICE_STATE)], order='create_date desc', limit=1)
+        invoice_obj = request.env['account.invoice'].search([
+                ('partner_id', '=', logged_in_user.partner_id.id),
+                ('state', '=', self.DEFAULT_INVOICE_STATE),
+                ('payment_service_id', '=', service_type_id),
+            ],
+            order='create_date desc',
+            limit=1
+        )
 
         context['customer_id'] = logged_in_user.partner_id.id
         context['invoice'] = {
-            'id' : invoice_obj.id,
-            'name' : invoice_obj.name,
-            'number' : invoice_obj.number,
-            'amount_total' : invoice_obj.amount_total,
+            'id'                : invoice_obj.id,
+            'name'              : invoice_obj.name,
+            'number'            : invoice_obj.number,
+            'amount_total'      : invoice_obj.amount_total,
+            'in_service_type'   : True if int(service_type_id) in self.SERVICE_TYPE_ID_LIST else False
         }
-
         return json.dumps(context)
 
     @http.route("/selfcare", methods=["GET"], website=True)

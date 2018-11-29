@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
+<odoo>
     <record  id="default_selfcare_payment_service_monthly_bill" model="isp_crm_module.selfcare_payment_service">
         <field name="id">1</field>
         <field name="name">Monthly bill</field>
@@ -25,11 +25,11 @@
         <field name="name">Hardware</field>
     </record>
     <record  id="default_selfcare_payment_service_others" model="isp_crm_module.selfcare_payment_service">
-        <field name="id">7</field>
+        <field name="id">8</field>
         <field name="name">Package Change</field>
     </record>
     <record  id="default_selfcare_payment_service_others" model="isp_crm_module.selfcare_payment_service">
-        <field name="id">8</field>
+        <field name="id">7</field>
         <field name="name">Others</field>
     </record>
 </odoo>

@@ -3,7 +3,7 @@ $(document).ready(function() {
     Custom functions and views of portal keeps here
     **/
     BASE_URL = window.location.origin
-    ERROR_MSG = "Sorry, You don't have any unpaid monthly bill!!!"
+    ERROR_MSG = "Sorry, You don't have any unpaid bill!!!"
 
     var showInvoiceError = function () {
         var invoice_error = "<th></th>";
@@ -15,6 +15,7 @@ $(document).ready(function() {
             invoice_error += '</span>';
         invoice_error += "</td>";
         $("tr#show_invoice_info").html(invoice_error);
+        $("input#payment_bill_amount").val('').removeAttr('readonly');
     }
     var showInvoiceInfo = function (invoiceId, invoiceNumber, invoiceAmount) {
         /*
@@ -49,21 +50,26 @@ $(document).ready(function() {
         return msg;
     }
 
-    var getCustomerInvoiceInfo = function () {
+    var getCustomerInvoiceInfo = function (type_id) {
         /*
         Make a get call to the server to retrieve the customer and invoice info
         */
-        url = BASE_URL + "/selfcare/get-invoice"
+        url = BASE_URL + "/selfcare/get-invoice/" + type_id
         $.ajax({
             url: url,
             method: "GET",
             success: function(result){
                 var res = JSON.parse(result);
-                console.log(res)
-                if (res.invoice.id) {
+                console.log(res);
+                if ((res.invoice.id)) {
                     showInvoiceInfo(res.invoice.id, res.invoice.number, res.invoice.amount_total)
                 } else {
-                    showInvoiceError()
+                    if (res.invoice.in_service_type){
+                        showInvoiceError();
+                    } else {
+                        $("tr#show_invoice_info").attr('style', "display : none;");
+                        $("input#payment_bill_amount").val('').removeAttr('readonly');
+                    }
                 }
             }
         });
@@ -112,12 +118,9 @@ $(document).ready(function() {
     $("select#payment_service_type").on('change', function(){
         var type_id = $(this).val()
         var show_inv_dom = $("tr#show_invoice_info")
-        if (type_id == 1) {
-            show_inv_dom.attr('style', "display : all;");
-            getCustomerInvoiceInfo()
-        } else {
-            show_inv_dom.attr('style', "display : none;");
-        }
+        show_inv_dom.attr('style', "display : all;");
+        getCustomerInvoiceInfo(type_id);
+//        $("tr#show_invoice_info").attr('style', "display : none;");
     });
 
 
