@@ -965,12 +965,11 @@
                 <div class="box-body">
                     <!--Info Table-->
                     <t t-if='success_msg'>
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <h4><i class="icon fa fa-check"></i> Success</h4>
-                            <t t-esc="success_msg" />
-                        </div>
+
                     </t>
+                    <!--Showing user's current package in modal-->
+                    <input type="hidden" id="idUserCurrentPackageName" t-att-value="user.current_package_id.name"/>
+
                     <t t-if='products'>
                         <table class="table table-condensed table-bordered table-striped">
                             <tbody>
@@ -1010,10 +1009,14 @@
                                                 </b>
                                             </t>
                                             <t t-else="">
-                                                <form role="form" t-attf-action="/selfcare/change-package/#{product.id}" method="POST">
-                                                    <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
-                                                    <button type="submit" class="btn btn-sm btn-info" onclick="return confirm('Are you sure you want to change plan?');">Change Plan</button>
-                                                </form>
+                                                <button type="button"
+                                                        class="btn btn-sm btn-info change_to_package_info"
+                                                        t-att-data-id="product.id"
+                                                        t-att-data-name="product.name"
+                                                        data-toggle="modal"
+                                                        data-target="#modal-default">
+                                                    Change Plan
+                                                </button>
                                             </t>
                                         </td>
                                     </tr>
@@ -1030,6 +1033,66 @@
             <!-- /.box -->
         </div>
         <!-- /.col-md -->
+        <!--Modal Box-->
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">x</span>
+                        </button>
+                        <h4 class="modal-title">Change The Plan</h4>
+                    </div>
+                    <form role="form" t-attf-action="/selfcare/change-package/" method="POST" id="idChangePackageForm">
+                        <div class="modal-body">
+                            <div class="alert alert-success alert-dismissible" id="idShowPackageChangeSuccessMsg"></div>
+                            <div class="">
+                                <p id="idShowPackageChangeModalMsg"></p>
+                            </div>
+                            <p>
+                                <strong>When do you want to Change the Plan?</strong>
+                            </p>
+
+                            <input type="hidden" name="csrf_token" t-att-value="csrf_token" id="idCSRFToken"/>
+                            <input type="hidden" name="change_to_package_id" value="" id="idChangeToPackageId"/>
+                            <!-- radio -->
+                            <div class="form-group">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="change_package_from" id="idImmediately" value="immediately"/>
+                                        From the following date
+                                    </label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" name="package_activation_date" class="form-control pull-right" id="idPackageActivationDate" disabled="1"/>
+                                    </div>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="change_package_from" id="idNextBillCycle" value="next_bill_cycle"  checked="1"/>
+                                        From the next Bill cycle
+                                    </label>
+                                </div>
+                            </div>
+                            <!---->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="idSubmitChangePackage">Change the Plan</button>
+                        </div>
+                    </form>
+                </div>
+            <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <!--End of modal box-->
+
+
+
     </template>
 
     <!--Package List Template-->
