@@ -185,6 +185,7 @@ class SelfcareController(PaymentController):
                 amount = request.params["amount"]
                 service_type = request.params["service_type"]
                 transaction_id = service_type + "_" + amount
+                base_url = request.httprequest.url_root
                 if int(service_type) in self.SERVICE_TYPE_ID_LIST:
                     invoice_number = request.params["invoice_number"]
                     invoice_id = request.params["invoice_id"]
@@ -194,7 +195,7 @@ class SelfcareController(PaymentController):
                     amount = invoice_obj.amount_total
                     transaction_id = invoice_obj.number
 
-                response_content = self.initiate_session(customer=logged_in_user, amount=amount, transaction_id=transaction_id)
+                response_content = self.initiate_session(base_url=base_url, customer=logged_in_user, amount=amount, transaction_id=transaction_id)
                 if response_content['status'] == "SUCCESS":
                     template = "isp_crm_module.template_selfcare_user_make_payment"
                     request.session['customer_id'] = logged_in_user.partner_id.id
@@ -467,5 +468,6 @@ class SelfcareController(PaymentController):
             context['customer_id'] = logged_in_user.subscriber_id
             context['image'] = logged_in_user.image
             context['content_header'] = content_header
-
+            # base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            print(request.httprequest.url_root)
         return request.render(template, context)

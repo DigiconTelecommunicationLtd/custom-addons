@@ -16,16 +16,16 @@ class PaymentController(BaseController):
     BASE_URL = "http://localhost:8069/"
 
 
-    def _make_data_dict(self, user_info):
+    def _make_data_dict(self, base_url, user_info):
         return {
             'store_id': self.STORE_ID,
             'store_passwd': self.STORE_PWD,
             'total_amount': user_info["amount"],
             'currency': self.DEFAULT_CURRENCY,
             'tran_id': user_info["transaction_id"],
-            'success_url': self.BASE_URL + "selfcare/make-payment/success",
-            'fail_url': self.BASE_URL + "selfcare/make-payment/failure",
-            'cancel_url': self.BASE_URL + "selfcare/make-payment/failure",
+            'success_url': base_url + "selfcare/make-payment/success",
+            'fail_url': base_url + "selfcare/make-payment/failure",
+            'cancel_url': base_url + "selfcare/make-payment/failure",
             'cus_name': user_info["customer"].name,
             'cus_email': user_info["customer"].email,
             'cus_add1': "",
@@ -46,13 +46,13 @@ class PaymentController(BaseController):
             'multi_card_name': "mastercard, visacard, amexcard ",
         }
 
-    def initiate_session(self, customer, amount, transaction_id):
+    def initiate_session(self, base_url, customer, amount, transaction_id):
         user_info = {}
         user_info["customer"] = customer
         user_info["amount"] = amount
         user_info["transaction_id"] = transaction_id
 
-        data = self._make_data_dict(user_info=user_info)
+        data = self._make_data_dict(base_url=base_url, user_info=user_info)
         response = requests.post(url=self.INITIATION_URL, data=data)
         response_content = json.loads(response.content.decode('utf-8'))
         return response_content
