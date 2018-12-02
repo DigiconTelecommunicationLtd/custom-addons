@@ -61,7 +61,7 @@ class Team(models.Model):
                 'body_html': body,
                 'email_to': mailto,
                 'email_from': 'mime@cgbd.com',
-                'attachment_ids': [(6, 0, [attachment.id])],
+                # 'attachment_ids': [(6, 0, [attachment.id])],
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 

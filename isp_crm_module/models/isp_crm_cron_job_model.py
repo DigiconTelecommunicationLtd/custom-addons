@@ -255,6 +255,5 @@ class CronJobModel(models.Model):
             #     pass
 
             list_of_acccount_moves = [{'name' : acc.name, 'ref' : acc.ref, 'amount' : acc.amount} for acc in self.env['account.move'].search([('partner_id', '=', customer.id)])]
-            print("hello")
 
         return current_month_invoice

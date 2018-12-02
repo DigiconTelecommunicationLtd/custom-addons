@@ -8,6 +8,7 @@ class HelpdeskTicketHistory(models.Model):
     """
     _name = "isp_crm_module.helpdesk_ticket_history"
     _description = "Helpdesk Ticket History"
+    _order = "create_date desc, id"
 
     ticket_id = fields.Many2one('isp_crm_module.helpdesk', string='Ticket', ondelete='set null',
                                 help='Ticket of the problem to solve.')

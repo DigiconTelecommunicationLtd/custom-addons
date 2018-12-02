@@ -54,6 +54,7 @@ class Helpdesk(models.Model):
     """
     _name = "isp_crm_module.helpdesk"
     _description = "Helpdesk"
+    _order = "create_date desc, id"
     _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 
