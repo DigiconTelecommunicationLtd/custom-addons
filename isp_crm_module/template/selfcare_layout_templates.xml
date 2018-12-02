@@ -979,54 +979,53 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="box box-primary">
                 <div class="box-header">
-                  <h3 class="box-title">
-                      <t t-esc="content_header"/>
-                  </h3>
                 </div>
                 <div class="box-body">
-                    <!--Info Table-->
-                    <t t-if='tickets'>
-
-                        <table class="table table-condensed table-bordered table-striped">
-                            <tbody>
-                                <tr>
-                                    <th>Ticket#</th>
-                                    <th>Problem Type</th>
-                                    <th>Description</th>
-                                    <th>Current Stage</th>
-                                    <th>
-                                        Created
-                                        (dd-mm-yyyy)
-                                    </th>
-                                </tr>
-                                <t t-foreach="tickets" t-as="ticket">
+                    <div>
+                        <!--Info Table-->
+                        <t t-if='tickets'>
+                            <table class="table table-condensed table-bordered table-striped"  style="height:150px">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <t t-esc="ticket.name"/>
-                                        </td>
-                                        <td>
-                                            <t t-esc="ticket.problem.name"/>
-                                        </td>
-                                        <td>
-                                            <t t-esc="ticket.description"/>
-                                        </td>
-                                        <td>
-                                            <t t-esc="ticket.default_stages"/>
-                                        </td>
-                                        <td>
-                                            <span t-field="ticket.create_date" t-field-options='{"format": "dd-MM-Y"}' />
-                                        </td>
+                                        <th class="text-center" style="width: 15% !important">Ticket#</th>
+                                        <th class="text-center" style="width: 5% !important">Problem Type</th>
+                                        <th class="text-center" style="width: 60% !important">Description</th>
+                                        <th class="text-center" style="width: 5% !important">Current Stage</th>
+                                        <th class="text-center" style="width: 15% !important">
+                                            Created
+                                        </th>
                                     </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                        <div t-if="pager" class="o_portal_pager text-center">
-                          <t t-call="website.pager"/>
-                        </div>
-                    </t>
-                    <t t-else="">
-                        <h3>There are no tickets!!!</h3>
-                    </t>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="tickets" t-as="ticket">
+                                        <tr>
+                                            <td style="width: 15% !important">
+                                                <t t-esc="ticket.name"/>
+                                            </td>
+                                            <td style="width: 5% !important">
+                                                <t t-esc="ticket.problem.name"/>
+                                            </td>
+                                            <td style="width: 60% !important">
+                                                <t t-esc="ticket.description"/>
+                                            </td>
+                                            <td style="width: 5% !important">
+                                                <t t-esc="ticket.default_stages"/>
+                                            </td>
+                                            <td style="width: 15% !important">
+                                                <span t-field="ticket.create_date" t-field-options='{"format": "dd-MM-Y"}' />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div t-if="pager" class="o_portal_pager text-center">
+                              <t t-call="website.pager"/>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <h3>There are no tickets!!!</h3>
+                        </t>
+                    </div>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -1041,6 +1040,15 @@
         </head>
 
         <body class="hold-transition skin-blue sidebar-mini">
+            <style>
+                thead, tbody { display: block; }
+
+                tbody {
+                    height: 500px;       /* Just for the demo          */
+                    overflow-y: auto;    /* Trigger vertical scroll    */
+                    overflow-x: hidden;  /* Hide the horizontal scroll */
+                }
+            </style>
             <div class="wrapper">
                 <t t-call="isp_crm_module.template_selfcare_main_header"/>
                 <t t-call="isp_crm_module.template_selfcare_sidebar"/>
