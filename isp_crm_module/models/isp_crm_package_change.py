@@ -15,6 +15,7 @@ class ChangePackage(models.Model):
 
     STATES = [
         ('draft', 'Draft'),
+        ('invoice_paid', 'Invoice Paid'),
         ('validated', 'Validated'),
         ('canceled', 'Canceled'),
     ]
@@ -34,6 +35,7 @@ class ChangePackage(models.Model):
     validated_by_id = fields.Many2one('hr.employee', string='Validated By', index=True, track_visibility='onchange')
     canceled_by_id = fields.Many2one('hr.employee', string='Canceled By', index=True, track_visibility='onchange')
     state = fields.Selection(STATES, string="State", default='draft')
+    is_invoice_paid = fields.Boolean("Is Invoice Paid", default=False)
 
     @api.multi
     def action_make_package_change_validated(self):
