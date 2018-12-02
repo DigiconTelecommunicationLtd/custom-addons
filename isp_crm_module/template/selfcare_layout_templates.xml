@@ -910,6 +910,9 @@
                                 </t>
                             </tbody>
                         </table>
+                        <div t-if="pager" class="o_portal_pager text-center">
+                          <t t-call="website.pager"/>
+                        </div>
                     </t>
                     <t t-else="">
                         <h3>There are no tickets!!!</h3>

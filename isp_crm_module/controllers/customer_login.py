@@ -30,6 +30,7 @@ class SelfcareController(PaymentController):
     DEFAULT_CHANGE_FROM = "immediately"
     DEFAULT_DATE_FORMAT = "%Y-%m-%d"
     SERVICE_TYPE_ID_LIST = [1,8]
+    ITEMS_PER_PAGE = 10
 
 
     def _redirect_if_not_login(self, req):
@@ -283,8 +284,8 @@ class SelfcareController(PaymentController):
 
         return request.render(template, context)
 
-    @http.route("/selfcare/ticket/list", methods=["GET"], website=True)
-    def selfcare_ticket_list(self, **kw):
+    @http.route(["/selfcare/ticket/list/", "/selfcare/ticket/list/page/<int:page>"], methods=["GET"], website=True)
+    def selfcare_ticket_list(self, page=1, **kw):
         context = {}
         content_header = "Tickets List"
         template = "isp_crm_module.template_selfcare_login_main"
@@ -294,13 +295,28 @@ class SelfcareController(PaymentController):
             template = "isp_crm_module.template_selfcare_user_ticket_list"
             user_id = request.env.context.get('uid')
             logged_in_user = request.env['res.users'].sudo().browse(user_id)
-            tickets_list = request.env['isp_crm_module.helpdesk'].sudo().search([('customer', '=', logged_in_user.partner_id.id)])
+            ticket_obj = request.env['isp_crm_module.helpdesk']
+            domain = [('customer', '=', logged_in_user.partner_id.id)]
+
+
+
+            tickets_list_count = ticket_obj.sudo().search_count(domain)
+            pager = request.website.pager(
+                url="/selfcare/ticket/list/",
+                total=tickets_list_count,
+                page=page,
+                step=self.ITEMS_PER_PAGE
+            )
+            tickets_list = ticket_obj.sudo().search(
+                    domain, order='create_date desc',
+                    limit=self.ITEMS_PER_PAGE, offset=pager['offset'])
 
         context['user'] = logged_in_user
         context['full_name'] = logged_in_user.name.title()
         context['customer_id'] = logged_in_user.subscriber_id
         context['content_header'] = content_header
         context['tickets'] = tickets_list
+        context['pager'] = pager
 
         return request.render(template, context)
 
@@ -468,6 +484,4 @@ class SelfcareController(PaymentController):
             context['customer_id'] = logged_in_user.subscriber_id
             context['image'] = logged_in_user.image
             context['content_header'] = content_header
-            # base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-            print(request.httprequest.url_root)
         return request.render(template, context)
