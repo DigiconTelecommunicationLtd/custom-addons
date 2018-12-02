@@ -107,15 +107,6 @@ class SelfcareController(PaymentController):
                     invoice_number = invoice_obj.number
                     invoice_ids = invoice_obj.ids
 
-                    # Updating the package change info
-                    if invoice_obj.payment_service_id.id == self.PAYMENT_SERVICE_TYPE_ID:
-                        last_package_change_obj = request.env['isp_crm_module.change_package'].sudo().search([('customer_id', '=', customer_id)], order='create_date desc', limit=1)
-                        if last_package_change_obj:
-                            last_package_change_obj.update({
-                                'state' : 'invoice_paid',
-                                'is_invoice_paid' : True
-                            })
-
                 # customer object
                 customer_obj = request.env['res.partner'].sudo().search([('id', '=', customer_id)], limit=1)
                 # get journal id
