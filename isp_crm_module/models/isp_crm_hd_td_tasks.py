@@ -8,6 +8,7 @@ class HelpdeskTDTasks(models.Model):
     """
     _name = "isp_crm_module.helpdesk_td_tasks"
     _description = "Helpdesk TD Solution"
+    _order = "create_date desc, id"
 
     name = fields.Text('Description')
     problem = fields.Many2one('isp_crm_module.helpdesk_td', string='Problem', ondelete='set null',

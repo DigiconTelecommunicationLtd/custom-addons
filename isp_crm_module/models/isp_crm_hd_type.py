@@ -8,6 +8,7 @@ class HelpdeskType(models.Model):
     """
     _name = "isp_crm_module.helpdesk_type"
     _description = "Helpdesk Type"
+    _order = "create_date desc, id"
 
     name = fields.Char('Name', required=True, translate=True)
     color = fields.Integer()

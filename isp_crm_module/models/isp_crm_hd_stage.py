@@ -8,6 +8,7 @@ class HelpdeskStage(models.Model):
     """
     _name = "isp_crm_module.helpdesk_stage"
     _description = "Helpdesk Stage"
+    _order = "create_date desc, id"
 
     name = fields.Char('Stage Name', required=True, translate=True)
     sequence = fields.Integer('Sequence', default=1, help="Used to order stages. Lower is better.")

@@ -50,6 +50,7 @@ class HelpdeskTD(models.Model):
     """
     _name = "isp_crm_module.helpdesk_td"
     _description = "Helpdesk Technical Department"
+    _order = "create_date desc, id"
     _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 

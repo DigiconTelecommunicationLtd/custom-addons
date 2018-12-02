@@ -229,18 +229,38 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li>
+
+                    <!--Profile tree-->
+                    <li class="treeview">
                         <a href="/selfcare/profile">
                             <i class="fa fa-user">  </i>
-                            <span>User Profile</span>
+                            <span>Profile</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
                         </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="/selfcare/profile">
+                                    <i class="fa fa-user">  </i>
+                                    <span>User Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/selfcare/change/password">
+                                    <i class="fa fa-key">  </i>
+                                    <span>Change Password</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/selfcare/profile/update">
+                                    <i class="fa fa-user">  </i>
+                                    <span>User Profile Update</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li>
-                        <a href="/selfcare/profile/update">
-                            <i class="fa fa-user">  </i>
-                            <span>User Profile Update</span>
-                        </a>
-                    </li>
+
                     <!--Ticket tree-->
                     <li class="treeview">
                         <a href="/selfcare/ticket/create">
@@ -833,6 +853,65 @@
         </div>
         <!-- /.col-md -->
     </template>
+    <!--Change Password Form-->
+    <template id="template_selfcare_change_password">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">
+
+                  </h3>
+                </div>
+                <div class="box-body">
+                    <!---->
+                    <t t-if='error'>
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-check"></i> Error</h4>
+                            <t t-esc="error" />
+                        </div>
+                    </t>
+                    <!---->
+                    <form role="form" action="/selfcare/change/password" method="POST">
+                        <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
+
+                        <!--Info Table-->
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Old Password</th>
+                                    <td>
+                                        <input type="password" name="old_password" class="form-control pull-right" required="1"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>New Password</th>
+                                    <td>
+                                        <input type="password" name="new_password" class="form-control pull-right" required="1"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Confirm New Password</th>
+                                    <td>
+                                        <input type="password" name="confirm_new_password" class="form-control pull-right" required="1"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
     <!--Profile Update list Template-->
     <template id="template_selfcare_user_profile_update">
         <head>
@@ -856,6 +935,37 @@
                     <section class="content">
                         <div class="row">
                             <t t-call="isp_crm_module.template_selfcare_profile_update"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
+    <!--Change Password Template-->
+    <template id="template_selfcare_change_user_password">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_change_password"/>
                         </div>
                     </section>
                 </div>
