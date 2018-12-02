@@ -445,6 +445,7 @@ class SelfcareController(PaymentController):
 
     @http.route("/selfcare/get-invoice/<int:service_type_id>", auth='user', type='http', website=True)
     def selfcare_get_customer_invoice(self, service_type_id, **kw):
+
         context = {}
         content_header = ""
         customer_obj = request.env['account.invoice']
@@ -469,12 +470,30 @@ class SelfcareController(PaymentController):
         }
         return json.dumps(context)
 
+    @http.route("/selfcare", methods=["GET"], website=True)
+    def selfcare_home(self, **kw):
+        context = {}
+        content_header = "Hellllooooo Template"
+
+        template = "isp_crm_module.template_selfcare_login_main"
+        if self._redirect_if_not_login(req=request):
+            user_id = request.env.context.get('uid')
+            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            template = "isp_crm_module.template_selfcare_main_layout"
+            context['user'] = logged_in_user
+            context['full_name'] = logged_in_user.name.title()
+            context['customer_id'] = logged_in_user.subscriber_id
+            context['image'] = logged_in_user.image
+            context['content_header'] = content_header
+
+        return request.render(template, context)
+
     @http.route("/selfcare/change/password", methods=["GET", "POST"], website=True)
     def selfcare_change_password(self, **kw):
         """
         Change password of a user .
         :param kw:
-        :return:
+        :return: view for change_password
         """
         context = {}
         success_msg = ''
@@ -493,7 +512,8 @@ class SelfcareController(PaymentController):
                 new_password = request.params['new_password']
                 confirm_new_password = request.params['confirm_new_password']
 
-                find_user = request.env['res.users'].sudo()._login('isp_crm_customer_profile', 'tahseen.anam@cg-bd.com', old_password)
+                find_user = request.env['res.users'].sudo()._login('isp_crm_customer_profile', 'tahseen.anam@cg-bd.com',
+                                                                   old_password)
 
                 if new_password == confirm_new_password:
                     if find_user:
