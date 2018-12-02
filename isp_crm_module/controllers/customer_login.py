@@ -495,24 +495,24 @@ class SelfcareController(PaymentController):
         :param kw:
         :return: view for change_password
         """
-        context = {}
-        success_msg = ''
-        content_header = "Change Password"
-        template = "isp_crm_module.template_selfcare_login_main"
-        template_name = True
-        logged_in_user = ""
+        context         = {}
+        success_msg     = ''
+        content_header  = "Change Password"
+        template        = "isp_crm_module.template_selfcare_login_main"
+        template_name   = True
+        logged_in_user  = ""
 
         if self._redirect_if_not_login(req=request):
-            template = "isp_crm_module.template_selfcare_change_user_password"
-            user_id = request.env.context.get('uid')
-            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            template        = "isp_crm_module.template_selfcare_change_user_password"
+            user_id         = request.env.context.get('uid')
+            logged_in_user  = request.env['res.users'].sudo().browse(user_id)
 
             if request.httprequest.method == 'POST':
-                old_password = request.params['old_password']
-                new_password = request.params['new_password']
-                confirm_new_password = request.params['confirm_new_password']
+                old_password            = request.params['old_password']
+                new_password            = request.params['new_password']
+                confirm_new_password    = request.params['confirm_new_password']
 
-                find_user = request.env['res.users'].sudo()._login('isp_crm_customer_profile', 'tahseen.anam@cg-bd.com',
+                find_user               = request.env['res.users'].sudo()._login('isp_crm_customer_profile', 'tahseen.anam@cg-bd.com',
                                                                    old_password)
 
                 if new_password == confirm_new_password:
@@ -524,19 +524,19 @@ class SelfcareController(PaymentController):
                     else:
                         context['error'] = _("Old Password does not match .")
                 else:
-                    context['error'] = _("Confirm Password does not match with New Password .")
-                    context['csrf_token'] = request.csrf_token()
-                    context['user'] = logged_in_user
-                    context['full_name'] = logged_in_user.name.title()
-                    context['customer_id'] = logged_in_user.subscriber_id
-                    context['content_header'] = content_header
+                    context['error']            = _("Confirm Password does not match with New Password .")
+                    context['csrf_token']       = request.csrf_token()
+                    context['user']             = logged_in_user
+                    context['full_name']        = logged_in_user.name.title()
+                    context['customer_id']      = logged_in_user.subscriber_id
+                    context['content_header']   = content_header
                     return request.render(template, context)
 
-        context['csrf_token'] = request.csrf_token()
-        context['user'] = logged_in_user
-        context['full_name'] = logged_in_user.name.title()
-        context['customer_id'] = logged_in_user.subscriber_id
-        context['content_header'] = content_header
+        context['csrf_token']       = request.csrf_token()
+        context['user']             = logged_in_user
+        context['full_name']        = logged_in_user.name.title()
+        context['customer_id']      = logged_in_user.subscriber_id
+        context['content_header']   = content_header
 
         return request.render(template, context)
 
