@@ -30,6 +30,7 @@ class SelfcareController(PaymentController):
     DEFAULT_CHANGE_FROM = "immediately"
     DEFAULT_DATE_FORMAT = "%Y-%m-%d"
     SERVICE_TYPE_ID_LIST = [1,8]
+    PAYMENT_SERVICE_TYPE_ID = 8
     ITEMS_PER_PAGE = 10
 
 
@@ -357,51 +358,68 @@ class SelfcareController(PaymentController):
 
     @http.route("/selfcare/change-package/<int:package_id>", methods=["POST"], website=True)
     def selfcare_change_package(self, package_id=None, **kw):
-        context = {}
-        content_header = "Packages List"
-        template = "isp_crm_module.template_selfcare_login_main"
-        template_name = True
-        products = []
+        context         = {}
+        content_header  = "Packages List"
+        template        = "isp_crm_module.template_selfcare_login_main"
+        template_name   = True
+        products        = []
 
         if self._redirect_if_not_login(req=request):
-            template = "isp_crm_module.template_selfcare_user_package_list"
-            user_id = request.env.context.get('uid')
-            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            template        = "isp_crm_module.template_selfcare_user_package_list"
+            user_id         = request.env.context.get('uid')
+            logged_in_user  = request.env['res.users'].sudo().browse(user_id)
             product_cat_obj = request.env['product.category'].sudo().search([('name', '=', self.DEFAULT_PRODUCT_CATEGORY)], limit=1)
-            products = request.env['product.product'].sudo().search([('categ_id', '=', product_cat_obj.id)])
-            description = ""
-            success_msg = ""
+            products        = request.env['product.product'].sudo().search([('categ_id', '=', product_cat_obj.id)])
+            description     = ""
+            success_msg     = ""
+            active_from     = ""
             if request.httprequest.method == 'POST':
-                package_obj = request.env['product.product'].sudo().search([('id', '=', package_id)])
-                post_data = request.params
+                package_obj             = request.env['product.product'].sudo().search([('id', '=', package_id)])
+                post_data               = request.params
                 pack_change_problem_obj = request.env['isp_crm_module.helpdesk_problem'].sudo().search([('name', 'like', 'Package Change')], limit=1)
 
                 description = "Change the plan \nFrom : " + logged_in_user.partner_id.current_package_id.name + "\nTo : " + package_obj.name
 
                 if post_data['change_package_from'] == self.DEFAULT_CHANGE_FROM:
                     description += "\nFrom Date : " + post_data['date']
+                    active_from  = post_data['date']
                 else:
-                    description += "\nFrom Next Bill Cycle"
+                    description += "\nFrom Next Bill Cycle."
+                    active_from  = logged_in_user.partner_id.next_package_start_date
+
 
 
                 ticket_type_obj = request.env['isp_crm_module.helpdesk_type'].sudo().search([('name', 'like', 'Package Change')], limit=1)
                 ticket_obj = request.env['isp_crm_module.helpdesk'].sudo().search([])
                 created_ticket = ticket_obj.create({
-                    'customer': logged_in_user.partner_id.id,
-                    'type': ticket_type_obj.id,
-                    'problem': pack_change_problem_obj.id,
-                    'description': description,
+                    'customer'      : logged_in_user.partner_id.id,
+                    'type'          : ticket_type_obj.id,
+                    'problem'       : pack_change_problem_obj.id,
+                    'description'   : description,
                 })
+
+                # Creating a Package change obj
+                package_change_obj = request.env['isp_crm_module.change_package'].sudo().search([])
+                created_package_change = package_change_obj.create({
+                    'ticket_ref'        : created_ticket.name,
+                    'customer_id'       : logged_in_user.partner_id.id,
+                    'from_package_id'   : logged_in_user.partner_id.current_package_id.id,
+                    'to_package_id'     : package_obj.id,
+                    'active_from'       : active_from
+                })
+
+                # TODO (Arif) : Have to create a customer invoice status object upon discussion with alam bro
+
                 success_msg = "Your Package change request Successfully enlisted."
 
-        context['csrf_token'] = request.csrf_token()
-        context['user'] = logged_in_user
-        context['partner'] = logged_in_user.partner_id
-        context['full_name'] = logged_in_user.name.title()
-        context['customer_id'] = logged_in_user.subscriber_id
-        context['content_header'] = content_header
-        context['products'] = products
-        context['success_msg'] = success_msg
+        context['csrf_token']       = request.csrf_token()
+        context['user']             = logged_in_user
+        context['partner']          = logged_in_user.partner_id
+        context['full_name']        = logged_in_user.name.title()
+        context['customer_id']      = logged_in_user.subscriber_id
+        context['content_header']   = content_header
+        context['products']         = products
+        context['success_msg']      = success_msg
 
         return json.dumps({
             "response" : True
