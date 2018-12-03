@@ -752,7 +752,7 @@
                             </tbody>
                         </table>
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary" id="CreateTicket">Create Ticket</button>
+                            <button type="submit" class="btn btn-primary" id="createTicket">Create Ticket</button>
                             <a href="/selfcare/ticket/list" class="btn btn-info pull-right">
                                 Tickets List
                             </a>
