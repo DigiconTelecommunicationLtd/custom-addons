@@ -35,6 +35,8 @@
           <!-- AdminLTE Skins. Choose a skin from the css/skins
                folder instead of downloading all of them to reduce the load. -->
           <link rel="stylesheet" href="/isp_crm_module/static/src/lib/dist/css/skins/_all-skins.min.css"/>
+          <!-- Custom style -->
+          <link rel="stylesheet" href="/isp_crm_module/static/src/css/custom.css"/>
     </template>
     <!--end of css-->
 
@@ -744,13 +746,13 @@
                                 <tr>
                                     <th>Description Of Problem</th>
                                     <td>
-                                        <textarea name="description" class="form-control pull-right" required="1"></textarea>
+                                        <textarea name="description" class="form-control pull-right" required="1" style="resize:none;"></textarea>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Create Ticket</button>
+                            <button type="submit" class="btn btn-primary" id="create-ticket">Create Ticket</button>
                             <a href="/selfcare/ticket/list" class="btn btn-info pull-right">
                                 Tickets List
                             </a>
@@ -984,7 +986,7 @@
                     <div>
                         <!--Info Table-->
                         <t t-if='tickets'>
-                            <table class="table table-condensed table-bordered table-striped"  style="height:150px">
+                            <table class="table table-condensed table-bordered table-striped fixed_headers"  style="height:150px">
                                 <thead>
                                     <tr>
                                         <th class="text-center" style="width: 15% !important">Ticket#</th>

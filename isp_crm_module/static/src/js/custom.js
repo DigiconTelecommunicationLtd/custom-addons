@@ -152,22 +152,10 @@ $(document).ready(function() {
         modal_msg_id_obj.html(package_modal_msg);
     });
 
-    // submit the data to change the plan or package
-    $('button#idSubmitChangePackage').on('click', function(event){
-        event.preventDefault();
-        $('button#idSubmitChangePackage').attr('disabled', 1);
-
-        var csrf_token = $('input#idCSRFToken').val();
-        var data_json = $("form#idChangePackageForm").serializeArray();
-
-        // post the data to url
-        csrf_token = data_json[0]['value'];
-        next_package_id = data_json[1]['value'];
-        change_from = data_json[2]['value'];
-        date = (data_json[2]['value'] == 'immediately') ? data_json[3]['value'] : '';
-
-        postPackageChangeInfo(csrf_token, next_package_id, change_from, date);
-//        $('button#idSubmitChangePackage').removeAttr('disabled');
+    // Click event of 'Create Ticket' button of 'Customer Profile'
+    $('button#create-ticket').on('click', function(event){
+        // Disable the button for multiple click event.
+        $('button#create-ticket').attr('disabled', 1);
     });
 
 
