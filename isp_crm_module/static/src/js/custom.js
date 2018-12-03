@@ -171,9 +171,9 @@ $(document).ready(function() {
    });
 
     // Click event of 'Create Ticket' button of 'Customer Profile'
-    $('button#create-ticket').on('click', function(event){
+    $('button#CreateTicket').on('click', function(event){
         // Disable the button for multiple click event.
-        $('button#create-ticket').attr('disabled', 1);
+        $('button#CreateTicket').attr('disabled', 1);
     });
 
 
