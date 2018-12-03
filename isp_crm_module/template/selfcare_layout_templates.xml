@@ -1136,7 +1136,7 @@
                                                         t-att-data-name="product.name"
                                                         data-toggle="modal"
                                                         data-target="#modal-default">
-                                                    Change Plan
+                                                    Change Package
                                                 </button>
                                             </t>
                                         </td>
@@ -1162,7 +1162,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">x</span>
                         </button>
-                        <h4 class="modal-title">Change The Plan</h4>
+                        <h4 class="modal-title">Change The Package</h4>
                     </div>
                     <form role="form" t-attf-action="/selfcare/change-package/" method="POST" id="idChangePackageForm">
                         <div class="modal-body">
