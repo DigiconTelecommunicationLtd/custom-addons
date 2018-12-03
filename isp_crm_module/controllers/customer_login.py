@@ -530,7 +530,7 @@ class SelfcareController(PaymentController):
                 new_password            = request.params['new_password']
                 confirm_new_password    = request.params['confirm_new_password']
 
-                find_user               = request.env['res.users'].sudo()._login('isp_crm_customer_profile', 'tahseen.anam@cg-bd.com',
+                find_user               = request.env['res.users'].sudo()._login('isp_crm_customer_profile', logged_in_user.login,
                                                                    old_password)
 
                 if new_password == confirm_new_password:
