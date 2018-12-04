@@ -198,7 +198,8 @@ class ServiceRequest(models.Model):
 
             # updating customer's potentiality
             customer.update({
-                'is_potential_customer' : False
+                'is_potential_customer' : False,
+                'subscriber_id' : customer_subs_id
             })
 
             # Create an user
