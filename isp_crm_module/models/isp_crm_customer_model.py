@@ -142,12 +142,6 @@ class Customer(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals.get('subscriber_id', 'New') == 'New':
-            customer_type = "MR" if self.company_type == 'person' else "MC"
-            sequence = self.env['ir.sequence'].next_by_code('res.partner')
-            sequence_str = customer_type + sequence
-            vals['subscriber_id'] = sequence_str
-
         validated = True
 
         if vals.get('email'):

@@ -1,5 +1,3 @@
 .fixed_headers {
   /**make table can scroll**/
-  max-height: 200px!important;
-  overflow: auto;
 }
