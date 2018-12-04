@@ -189,13 +189,17 @@ class ServiceRequest(models.Model):
                 'stage': last_stage_obj.id,
             })
             customer = service_req.customer
-            customer_subs_id = customer.subscriber_id
+            customer_type = "MR" if customer.company_type == 'person' else "MC"
+            sequence = self.env['ir.sequence'].next_by_code('res.partner')
+            sequence_str = customer_type + sequence
+            customer_subs_id = sequence_str
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
             encrypted = "abcd1234"
 
             # updating customer's potentiality
             customer.update({
-                'is_potential_customer' : False
+                'is_potential_customer' : False,
+                'subscriber_id' : customer_subs_id
             })
 
             # Create an user

@@ -746,7 +746,7 @@
                                 <tr>
                                     <th>Description Of Problem</th>
                                     <td>
-                                        <textarea name="description" class="form-control pull-right" required="1" style="resize:none;"></textarea>
+                                        <textarea name="description" class="form-control pull-right" required="1" maxlength="350" placeholder="Maximum 350 characters" style="resize:none;"></textarea>
                                     </td>
                                 </tr>
                             </tbody>
