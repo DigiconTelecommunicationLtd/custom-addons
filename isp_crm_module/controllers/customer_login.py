@@ -533,7 +533,12 @@ class SelfcareController(PaymentController):
                 find_user               = request.env['res.users'].sudo()._login('isp_crm_customer_profile', logged_in_user.login,
                                                                    old_password)
 
-                if new_password == confirm_new_password:
+                if new_password == old_password:
+                    if find_user:
+                        context['error'] = _("New Password is same as Old Password.")
+                    else:
+                        context['error'] = _("Old Password does not match .")
+                elif new_password == confirm_new_password:
                     if find_user:
                         logged_in_user._set_password(new_password)
                         request.session.logout(keep_db=True)
