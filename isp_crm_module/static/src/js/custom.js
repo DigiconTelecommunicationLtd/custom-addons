@@ -186,4 +186,20 @@ $(document).ready(function() {
         changeYear: true
     });
 
+    // Highlight the menu item clicked.
+    var url = window.location.pathname;
+    url = url.substring(url.indexOf('/'));
+
+    $('.sidebar-menu-item').each(function() {
+        var href = $(this).attr('href');
+        if (url == href) {
+            $(this).parent().attr("class","active");
+            // Expand menu if expandable.
+            if ($(this).parent().parent().parent().attr('class') == "treeview"){
+                $(this).parent().parent().show();
+                $(this).parent().parent().parent().attr("class","treeview menu-open");
+            }
+        }
+    });
+
 });
