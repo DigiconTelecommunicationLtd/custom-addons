@@ -186,4 +186,18 @@ $(document).ready(function() {
         changeYear: true
     });
 
+    var url = window.location.pathname;
+    url = url.substring(url.indexOf('/'));
+
+    $('.sidebar-menu-item').each(function() {
+        var href = $(this).attr('href');
+        if (url == href) {
+            $(this).parent().attr("class","active");
+            if ($(this).parent().parent().parent().attr('class') == "treeview"){
+                $(this).parent().parent().show();
+                $(this).parent().parent().parent().attr("class","treeview menu-open");
+            }
+        }
+    });
+
 });

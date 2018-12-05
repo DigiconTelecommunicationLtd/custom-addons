@@ -225,8 +225,8 @@
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">Selfcare</li>
-                    <li class="active">
-                        <a href="/selfcare">
+                    <li>
+                        <a href="/selfcare" class="sidebar-menu-item">
                             <i class="fa fa-dashboard">  </i>
                             <span>Dashboard</span>
                         </a>
@@ -243,19 +243,19 @@
                         </a>
                         <ul class="treeview-menu">
                             <li>
-                                <a href="/selfcare/profile">
+                                <a href="/selfcare/profile" class="sidebar-menu-item">
                                     <i class="fa fa-user">  </i>
                                     <span>User Profile</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/selfcare/change/password">
+                                <a href="/selfcare/change/password" class="sidebar-menu-item">
                                     <i class="fa fa-key">  </i>
                                     <span>Change Password</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/selfcare/profile/update">
+                                <a href="/selfcare/profile/update" class="sidebar-menu-item">
                                     <i class="fa fa-user">  </i>
                                     <span>User Profile Update</span>
                                 </a>
@@ -273,8 +273,8 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/selfcare/ticket/create">Create a Ticket</a></li>
-                            <li><a href="/selfcare/ticket/list">Ticket History</a></li>
+                            <li><a href="/selfcare/ticket/create" class="sidebar-menu-item">Create a Ticket</a></li>
+                            <li><a href="/selfcare/ticket/list" class="sidebar-menu-item">Ticket History</a></li>
                         </ul>
                     </li>
                     <!--Payment tree-->
@@ -287,13 +287,13 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/selfcare/payment">Payment</a></li>
-                            <li><a href="/selfcare/payment-history">Payment History</a></li>
+                            <li><a href="/selfcare/payment" class="sidebar-menu-item">Payment</a></li>
+                            <li><a href="/selfcare/payment-history" class="sidebar-menu-item">Payment History</a></li>
                         </ul>
                     </li>
 
                     <li>
-                        <a href="/selfcare/change-package">
+                        <a href="/selfcare/change-package" class="sidebar-menu-item">
                         <i class="fa fa-exchange"></i>
                         <span>
                             Change Package
