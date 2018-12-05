@@ -96,27 +96,6 @@ class Opportunity(models.Model):
         if vals.get('opportunity_seq_id', 'New') == 'New':
             sequence_id = self.env['ir.sequence'].next_by_code('crm.lead') or '/'
             vals['opportunity_seq_id'] = sequence_id
-            # Check if customer is deferred .
-            customer_id = vals.get('partner_id')
-            if customer_id:
-                check_customer = self.env['res.partner'].search([('id', '=', customer_id)], limit=1)
-                if check_customer:
-                    deferred = check_customer.is_deferred
-                    if deferred:
-                        vals['is_customer_deferred'] = True
-                        vals['probability'] = 100
-                    else:
-                        # If customer is not deferred then check if invoice is paid .
-                        invoices = self.env['account.invoice'].search([('partner_id', '=', customer_id)],
-                                                                      order="date_invoice desc", limit=1)
-                        if invoices:
-                            if invoices.state == 'paid':
-                                self.invoice_state = invoices.state
-                                vals['probability'] = 100
-                        else:
-                            raise UserError(_("No invoice found for this customer."))
-                else:
-                    raise UserError(_("Customer not found."))
 
         if (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
             raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
