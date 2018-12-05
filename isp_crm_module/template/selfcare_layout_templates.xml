@@ -322,7 +322,7 @@
                 <div class="content-wrapper" style="min-height: 901px;">
                     <section class="content-header" id="section_id_selfcare_content_header">
                         <!--inherited content header goes here-->
-                        <h1>Hellllooo</h1>
+                        <h1>Ola! Coment va tu?</h1>
                     </section>
                     <section class="content">
                         <div class="row" id="div_id_selfcare_content">
@@ -724,7 +724,7 @@
                             <t t-esc="success_msg" />
                         </div>
                     </t>
-                    <form role="form" action="/selfcare/ticket/create" method="POST">
+                    <form id="ticketCreateForm" role="form" action="/selfcare/ticket/create" method="POST">
                         <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
 
                         <!--Info Table-->

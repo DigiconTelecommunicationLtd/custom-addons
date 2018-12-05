@@ -174,6 +174,29 @@ $(document).ready(function() {
     $('button#createTicket').on('click', function(event){
         // Disable the button for multiple click event.
         $('button#createTicket').attr('disabled', 1);
+
+        var isChromium = window.chrome;
+        var winNav = window.navigator;
+        var vendorName = winNav.vendor;
+        var isOpera = typeof window.opr !== "undefined";
+        var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+        var isIOSChrome = winNav.userAgent.match("CriOS");
+
+        if (isIOSChrome) {
+           // is Google Chrome on IOS
+           document.getElementById('ticketCreateForm').submit();
+        } else if(
+          isChromium !== null &&
+          typeof isChromium !== "undefined" &&
+          vendorName === "Google Inc." &&
+          isOpera === false &&
+          isIEedge === false
+        ) {
+           // is Google Chrome
+           document.getElementById('ticketCreateForm').submit();
+        } else {
+           // not Google Chrome
+        }
     });
 
 
