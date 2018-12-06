@@ -994,7 +994,7 @@
                                         <th class="text-center" style="width: 5% !important">Problem Type</th>
                                         <th class="text-center" style="width: 60% !important">Description</th>
                                         <th class="text-center" style="width: 5% !important">Current Stage</th>
-                                        <th class="text-center" style="width: 45% !important">
+                                        <th class="text-center" style="width: 15% !important">
                                             Created
                                         </th>
                                     </tr>
