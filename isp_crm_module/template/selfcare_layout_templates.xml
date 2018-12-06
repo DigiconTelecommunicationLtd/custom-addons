@@ -712,7 +712,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                   <h3 class="box-title">
-                      <t t-esc="content_header"/>
+
                   </h3>
                 </div>
                 <div class="box-body">
@@ -733,7 +733,7 @@
                                 <tr>
                                     <th>Problems List</th>
                                     <td>
-                                        <select name="problem_id" class="form-control pull-right" required="1">
+                                        <select id="problemList" name="problem_id" class="form-control pull-right" required="1">
                                             <option value=""> Select Your Problem </option>
                                             <t t-foreach="problems_list" t-as="problem">
                                                 <option t-att-value="problem.id">
@@ -746,7 +746,7 @@
                                 <tr>
                                     <th>Description Of Problem</th>
                                     <td>
-                                        <textarea name="description" class="form-control pull-right" required="1" maxlength="350" placeholder="Maximum 350 characters" style="resize:none;"></textarea>
+                                        <textarea id="description" name="description" class="form-control pull-right" required="1" maxlength="350" placeholder="Maximum 350 characters" style="resize:none;"></textarea>
                                     </td>
                                 </tr>
                             </tbody>
@@ -824,7 +824,8 @@
                                 <tr>
                                     <th>Problems List</th>
                                     <td>
-                                        <select name="problem_id" class="form-control pull-right" required="1" readonly="1">
+                                        <select name="problem_id" class="form-control pull-right" required="1">
+                                            <option value=""> Select Your Problem </option>
                                             <t t-foreach="problems_list" t-as="problem">
                                                 <option t-att-value="problem.id" select="1">
                                                     <t t-esc="problem.name"/>
@@ -836,7 +837,7 @@
                                 <tr>
                                     <th>Description Of Problem</th>
                                     <td>
-                                        <textarea name="description" class="form-control pull-right" required="1"></textarea>
+                                        <textarea name="description" class="form-control pull-right" required="1" maxlength="350" placeholder="Maximum 350 characters" style="resize:none;"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1010,7 +1011,7 @@
                                             <td style="width: 60% !important">
                                                 <t t-esc="ticket.description"/>
                                             </td>
-                                            <td style="width: 5% !important">
+                                            <td style="width: 7% !important">
                                                 <t t-esc="ticket.default_stages"/>
                                             </td>
                                             <td style="width: 15% !important">
