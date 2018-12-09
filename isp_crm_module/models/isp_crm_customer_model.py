@@ -15,6 +15,11 @@ GENDERS = [
     ('others', _('Others')),
 ]
 
+ACTIVE_STATES = [
+    ('active', _('Active')),
+    ('inactive', _('Inactive')),
+]
+
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
@@ -60,6 +65,7 @@ class Customer(models.Model):
                                                digits=dp.get_precision('Product Price'), default=0.0)
     next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order')
     is_deferred = fields.Boolean("Is Deferred", default=False)
+    active_status = fields.Selection(ACTIVE_STATES, string='Active Status', required=False, help="Active Status of Current Bill Cycle", default='active')
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
