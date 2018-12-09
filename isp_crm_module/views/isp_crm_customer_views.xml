@@ -57,7 +57,6 @@
             </xpath>
             <field name="function" position="replace">
                 <field name="function" string="Designation" />
-                <field name="is_deferred" string="Is Deferred" />
             </field>
             <field name="website" position="replace">
                 <field name="website" invisible="1" />

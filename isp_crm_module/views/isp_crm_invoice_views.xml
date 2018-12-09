@@ -9,6 +9,23 @@
             <xpath expr="//group/group/field[@name='payment_term_id']" position="after" >
                 <field name="payment_service_id" required="True"/>
             </xpath>
+            <!-- Check if invoice is deferred -->
+            <xpath expr="//group/group/field[@name='date_invoice']" position="before" >
+                <field name="is_deferred" string="Is Deferred" />
+            </xpath>
         </field>
     </record>
+
+    <!--  deferred filter for invoices -->
+    <record id="isp_crm_module.view_account_invoice_filter" model="ir.ui.view">
+        <field name="name">view.account.invoice.filter</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/filter[@name='late']" position="after" >
+                <filter name="deferred" string="Deferred" domain="[('is_deferred', '=', 'True')]"/>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
