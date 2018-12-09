@@ -33,26 +33,16 @@ class CustomerInvoice(models.Model):
     customer_current_package_end_date = fields.Date(related='customer_id.current_package_end_date', store=True, string="End Date")
     customer_current_package_price = fields.Float(related="customer_id.current_package_price", store=True, string="Price")
     customer_current_package_original_price = fields.Float(related="customer_id.current_package_original_price", store=True, string="Original Price")
+    customer_active_status= fields.Selection(related="customer_id.active_status", store=True, string="Active Status")
 
-    # invoice info
-    invoice_id = fields.Many2one('account.invoice', string="Invoice", track_visibility='onchange', )
-    invoice_number = fields.Char(related='invoice_id.number', store=True, string="Number")
-    invoice_amount_total = fields.Float(compute="_compute_invoice_attributes", string="Amount")
-    invoice_date_invoice = fields.Date(related='invoice_id.date_invoice', store=True, string="Date Invoiced")
-    invoice_date_due = fields.Date(related='invoice_id.date_due', store=True, string="Due Date")
-    invoice_state = fields.Char(compute="_compute_invoice_attributes", string="Status")
 
     def _compute_package_info(self):
         for record in self:
             # record.customer_subs_id = self.customer_id.subscriber_id
+            # record.active_status = record.customer_id.active_status
             record.customer_current_package_id = record.customer_id.current_package_id.id
             record.customer_current_package_name = record.customer_id.current_package_id.name
             record.customer_current_package_start_date =record.customer_id.current_package_start_date
             record.customer_current_package_end_date = record.customer_id.current_package_end_date
             record.customer_current_package_price = record.customer_id.current_package_price
             record.customer_current_package_original_price = record.customer_id.current_package_original_price
-
-    def _compute_invoice_attributes(self):
-        for record in self:
-            record.invoice_amount_total = record.invoice_id.amount_total
-            record.invoice_state = record.invoice_id.state

@@ -19,7 +19,7 @@
         <field name="problem">isp_crm_module.customer_invoice_status.tree</field>
         <field name="model">isp_crm_module.customer_invoice_status</field>
         <field name="arch" type="xml">
-            <tree string="Customer Invoice Status">
+            <tree decoration-danger="customer_active_status == 'inactive'" string="Customer Invoice Status">
                 <!--customer info-->
                 <field name="customer_id"/>
                 <field name="customer_mobile"/>
@@ -27,16 +27,13 @@
                 <field name="customer_current_package_start_date"/>
                 <field name="customer_current_package_end_date"/>
                 <field name="customer_current_package_price"/>
-                <!--invoice info-->
-                <field name="invoice_number"/>
-                <field name="invoice_amount_total"/>
-                <field name="invoice_state"/>
+                <field name="customer_active_status"/>
             </tree>
         </field>
     </record>
 
     <record id="isp_crm_module_customer_invoice_status_action" model="ir.actions.act_window">
-        <field name="name">Customer Invoice Status</field>
+        <field name="name">Customer Status</field>
         <field name="res_model">isp_crm_module.customer_invoice_status</field>
         <field name="view_mode">tree</field>
         <field name="domain">[]</field>
