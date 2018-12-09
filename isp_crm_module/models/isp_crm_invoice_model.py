@@ -16,6 +16,7 @@ class ISPCRMInvoice(models.Model):
     _inherit = 'account.invoice'
 
     payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type', default=1)
+    is_deferred = fields.Boolean("Is Deferred", default=False)
 
     @api.multi
     def action_invoice_paid(self):
@@ -30,3 +31,30 @@ class ISPCRMInvoice(models.Model):
                 })
         super(ISPCRMInvoice, self).action_invoice_paid()
         return True
+
+    @api.onchange('is_deferred')
+    def onchange_is_deferred(self):
+        all_partner_ids = []
+        opportunity = False
+
+        all_partner_ids = self.env['res.partner'].search([('customer', '=', True)])
+        if self.is_deferred:
+            for partner in all_partner_ids:
+                if partner.id == self.partner_id.id:
+                    opportunity = self.env['crm.lead'].search([('partner_id', '=', partner.id)])
+                    # Show 'Create service request' button in opportunity .
+                    if opportunity:
+                        opportunity.write({
+                            'is_customer_deferred': True,
+                            'probability': 100,
+                        })
+        else:
+            for partner in all_partner_ids:
+                if partner.id == self.partner_id.id:
+                    opportunity = self.env['crm.lead'].search([('partner_id', '=', partner.id)])
+                    # Remove 'Create service request' button in opportunity .
+                    if opportunity:
+                        opportunity.write({
+                            'is_customer_deferred': False,
+                            'probability': 98,
+                        })
