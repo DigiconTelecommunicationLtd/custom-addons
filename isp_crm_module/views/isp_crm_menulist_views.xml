@@ -67,7 +67,9 @@
         name="Customer Invoice Status"
         sequence="4"
         action="isp_crm_module_customer_invoice_status_action"
-        parent="menu_isp_crm_configuration"/>
+        parent="menu_isp_crm_configuration"
+        groups="base.group_no_one"
+    />
 
     <!--Potential Customer menu-->
     <menuitem id="isp_crm_menu_potential_customer"
