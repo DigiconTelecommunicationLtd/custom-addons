@@ -802,7 +802,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                   <h3 class="box-title">
-                      <t t-esc="content_header"/>
+                      
                   </h3>
                 </div>
                 <div class="box-body">
