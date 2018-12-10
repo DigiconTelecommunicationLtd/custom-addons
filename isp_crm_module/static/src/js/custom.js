@@ -204,7 +204,39 @@ $(document).ready(function() {
         }
     });
 
+    // Click event of 'Update User Profile' button of 'Customer Profile'
+    $('button#updateUserProfileButton').on('click', function(event){
+        problem = document.getElementById("problemList").value;
+        description = document.getElementById("profileUpdateDescription").value;
+        // Check if problem and description are given by the user.
+        if(problem.length > 0 && description.length > 0){
+            // Disable the button for multiple click event.
+            $('button#updateUserProfileButton').attr('disabled', 1);
 
+            var isChromium = window.chrome;
+            var winNav = window.navigator;
+            var vendorName = winNav.vendor;
+            var isOpera = typeof window.opr !== "undefined";
+            var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+            var isIOSChrome = winNav.userAgent.match("CriOS");
+
+            if (isIOSChrome) {
+               // is Google Chrome on IOS
+               document.getElementById('updateProfileForm').submit();
+            } else if(
+              isChromium !== null &&
+              typeof isChromium !== "undefined" &&
+              vendorName === "Google Inc." &&
+              isOpera === false &&
+              isIEedge === false
+            ) {
+               // is Google Chrome
+               document.getElementById('updateProfileForm').submit();
+            } else {
+               // not Google Chrome
+            }
+        }
+    });
 
     //Date picker
     $('input#idPackageActivationDate').datepicker({

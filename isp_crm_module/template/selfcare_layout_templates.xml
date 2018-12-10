@@ -322,7 +322,7 @@
                 <div class="content-wrapper" style="min-height: 901px;">
                     <section class="content-header" id="section_id_selfcare_content_header">
                         <!--inherited content header goes here-->
-                        <h1>Ola! Coment va tu?</h1>
+                        <h1>O teri! ap phirse agaya ? ata maji satakli</h1>
                     </section>
                     <section class="content">
                         <div class="row" id="div_id_selfcare_content">
@@ -802,7 +802,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                   <h3 class="box-title">
-                      
+
                   </h3>
                 </div>
                 <div class="box-body">
@@ -815,7 +815,7 @@
                         </div>
                     </t>
                     <!---->
-                    <form role="form" action="/selfcare/profile/update" method="POST">
+                    <form id="updateProfileForm" role="form" action="/selfcare/profile/update" method="POST">
                         <input type="hidden" name="csrf_token" t-att-value="csrf_token" />
 
                         <!--Info Table-->
@@ -824,7 +824,7 @@
                                 <tr>
                                     <th>Problems List</th>
                                     <td>
-                                        <select name="problem_id" class="form-control pull-right" required="1">
+                                        <select id="problemList" name="problem_id" class="form-control pull-right" required="1">
                                             <option value=""> Select Your Problem </option>
                                             <t t-foreach="problems_list" t-as="problem">
                                                 <option t-att-value="problem.id" select="1">
@@ -837,13 +837,13 @@
                                 <tr>
                                     <th>Description Of Problem</th>
                                     <td>
-                                        <textarea name="description" class="form-control pull-right" required="1" maxlength="350" placeholder="Maximum 350 characters" style="resize:none;"></textarea>
+                                        <textarea id="profileUpdateDescription" name="description" class="form-control pull-right" required="1" maxlength="350" placeholder="Maximum 350 characters" style="resize:none;"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th></th>
                                     <td>
-                                        <button type="submit" class="btn btn-primary">Create Profile Update Ticket</button>
+                                        <button type="submit" id="updateUserProfileButton" class="btn btn-primary">Create Profile Update Ticket</button>
                                     </td>
                                 </tr>
                             </tbody>
