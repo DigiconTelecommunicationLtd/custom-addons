@@ -278,6 +278,36 @@
         </field>
     </record>
 
+    <!--Adding emergency contact name, email, phone and mobile fields in opportunity form-->
+    <record model="ir.ui.view" id="view_add_fields_in_opportunity_form">
+        <field name="name">view.add.fields.in.opportunity.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_create_opportunity_simplified" />
+        <field name="arch" type="xml">
+            <xpath expr="//group/group/field[@name='partner_id']" position="after">
+                <!--<field name="partner_name"/>-->
+                <field name="contact_name"/>
+                <!--<field name="title"/>-->
+                <!--<field name="street"/>-->
+                <!--<field name="street2"/>-->
+                <!--<field name="city"/>-->
+                <!--<field name="state_id"/>-->
+                <!--<field name="country_id"/>-->
+                <field name="email_from"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <!--<field name="zip"/>-->
+                <!--<field name="function"/>-->
+                <!--<field name="website"/>-->
+            </xpath>
+            <!--Making priority field invisible in opportunity form-->
+            <xpath expr="//group/group/field[@name='priority']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
     <menuitem
         id="crm.crm_menu_root"
         name="CRM"
