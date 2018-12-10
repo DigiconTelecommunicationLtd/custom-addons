@@ -65,6 +65,7 @@ class Customer(models.Model):
                                                digits=dp.get_precision('Product Price'), default=0.0)
     next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order')
     active_status = fields.Selection(ACTIVE_STATES, string='Active Status', required=False, help="Active Status of Current Bill Cycle", default='active')
+    is_deferred = fields.Boolean("Is Deferred", default=False)
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
