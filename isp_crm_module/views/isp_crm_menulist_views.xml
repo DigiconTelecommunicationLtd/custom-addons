@@ -68,7 +68,7 @@
         sequence="4"
         action="isp_crm_module_customer_invoice_status_action"
         parent="menu_isp_crm_configuration"
-        groups="base.group_no_one"
+        groups="base.group_user"
     />
 
     <!--Potential Customer menu-->
