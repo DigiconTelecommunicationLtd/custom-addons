@@ -27,11 +27,10 @@ class CronJobModel(models.Model):
         package_start_date_obj = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
         return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
 
-    def _send_mail_to_customer_before_some_days(self, customer, invoice):
+    def _send_mail_to_customer_before_some_days(self, customer):
         """
         Sending mail to the customers which bill cycle date will end next week
         :param customer: to whom the mail is to be sent
-        :param invoice: invoice info which will be sent
         :return: boolean response
         """
         template_obj = self.env['res.partner'].sudo().search(
@@ -41,25 +40,21 @@ class CronJobModel(models.Model):
         self.mail_cc = customer.email
         body = template_obj.body_html
         body = body.replace('--customer_id--', str(customer.subscriber_id))
-        body = body.replace('--invoice_number--', str(invoice.number))
         body = body.replace('--package--', str(customer.next_package_id.name or ""))
         body = body.replace('--price--', str(customer.next_package_price))
-        body = body.replace('--last_payment_date--', str(invoice.date_due))
-
-        # Creating attachment file of the invoice
-        pdf = self.env.ref('account.account_invoices').render_qweb_pdf(invoice.id, data=invoice)
+        body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
 
         # save pdf as attachment
-        ATTACHMENT_NAME = customer.name + "_" + invoice.number
+        ATTACHMENT_NAME = customer.name
 
-        attachment = self.env['ir.attachment'].create({
-            'name': ATTACHMENT_NAME,
-            'type': 'binary',
-            'datas_fname': ATTACHMENT_NAME + '.pdf',
-            'store_fname': ATTACHMENT_NAME,
-            'datas': base64.encodestring(pdf[0]),
-            'mimetype': 'application/x-pdf'
-        })
+        # attachment = self.env['ir.attachment'].create({
+        #     'name': ATTACHMENT_NAME,
+        #     'type': 'binary',
+        #     'datas_fname': ATTACHMENT_NAME + '.pdf',
+        #     'store_fname': ATTACHMENT_NAME,
+        #     'datas': base64.encodestring(pdf[0]),
+        #     'mimetype': 'application/x-pdf'
+        # })
         if template_obj:
             mail_values = {
                 'subject': template_obj.subject_mail,
@@ -67,7 +62,7 @@ class CronJobModel(models.Model):
                 'email_to': self.mail_to,
                 'email_cc': self.mail_cc,
                 'email_from': 'mime@cgbd.com',
-                'attachment_ids': [(6, 0, [attachment.id])],
+                # 'attachment_ids': [(6, 0, [attachment.id])],
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
         return create_and_send_email
@@ -131,11 +126,10 @@ class CronJobModel(models.Model):
             created_invoice_obj.action_invoice_open()
             return created_invoice_obj
 
-    def create_customer_invoice_status(self, customer, invoice):
+    def create_customer_invoice_status(self, customer):
         customer_invoice_status_obj = self.env['isp_crm_module.customer_invoice_status'].search([])
         customer_invoice_status_obj.create({
             'customer_id' : customer.id,
-            'invoice_id' : invoice.id,
         })
         return customer_invoice_status_obj
 
@@ -148,14 +142,14 @@ class CronJobModel(models.Model):
         """
         today = datetime.today()
         after_threshold_days_date =  today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
-        customers_list = self.env['res.partner'].search([('customer', '=', True), ('current_package_end_date', '=', str(after_threshold_days_date.date()))])
+        # ('current_package_end_date', '=', str(after_threshold_days_date.date()))
+        customers_list = self.env['res.partner'].search([('customer', '=', True), ])
         service_request_obj = self.env['isp_crm_module.service_request']
 
         for customer in customers_list:
             print("Creating Invoice for customer:- " + customer.name)
-            invoice = self._get_next_months_invoice(customer=customer)
-            customer_invoice_status = self.create_customer_invoice_status(customer=customer, invoice=invoice)
-            mail_sent = self._send_mail_to_customer_before_some_days(customer=customer, invoice=invoice)
+            customer_invoice_status = self.create_customer_invoice_status(customer=customer)
+            mail_sent = self._send_mail_to_customer_before_some_days(customer=customer)
             if mail_sent:
                 print("Mail Sent for customer:- " + customer.name)
             else:
