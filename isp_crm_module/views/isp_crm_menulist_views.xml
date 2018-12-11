@@ -85,6 +85,16 @@
         parent="crm.crm_menu_root"
         sequence="3"/>
 
+    <!--Customer Package history-->
+    <menuitem
+        id="menu_isp_crm_module_customer_package_history_act"
+        name="Customer Package History"
+        sequence="4"
+        action="isp_crm_module_customer_package_history_action"
+        parent="menu_isp_crm_configuration"
+        groups="base.group_user"
+    />
+
     <!--Deleting the Default custmer menu-->
     <delete model="ir.ui.menu" id="crm.res_partner_menu_crm" />
 

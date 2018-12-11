@@ -15,9 +15,9 @@ class CustomerPackageHistory(models.Model):
                                track_visibility='onchange')
     package_id = fields.Many2one('product.product', string='Package', domain=[('sale_ok', '=', True)],
                                       change_default=True, ondelete='restrict')
-    package_start_date = fields.Datetime('Package Start Date', readonly=True, default=None)
-    package_end_date = fields.Datetime('Package End Date', readonly=True, default=None)
-    package_price = fields.Float("Package's Price", required=True,
+    start_date = fields.Date('Package Start Date', default=None)
+    end_date = fields.Date('Package End Date', default=None)
+    price = fields.Float("Package's Price", required=True,
                                       digits=dp.get_precision('Product Price'), default=0.0)
-    package_original_price = fields.Float("Package's Original Price", required=True,
+    original_price = fields.Float("Package's Original Price", required=True,
                                                digits=dp.get_precision('Product Price'), default=0.0)
