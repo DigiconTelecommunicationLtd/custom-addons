@@ -248,6 +248,14 @@ class CronJobModel(models.Model):
             # else:
             #     pass
 
+            # TODO (Arif): Have to check the balance
+            # Adding the package change history
+            package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
+            created_package_history = package_history_obj.set_package_change_history(customer)
+
+
+
+
             list_of_acccount_moves = [{'name' : acc.name, 'ref' : acc.ref, 'amount' : acc.amount} for acc in self.env['account.move'].search([('partner_id', '=', customer.id)])]
 
         return current_month_invoice
