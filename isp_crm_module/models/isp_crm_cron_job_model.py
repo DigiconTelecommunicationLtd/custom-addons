@@ -42,7 +42,7 @@ class CronJobModel(models.Model):
         body = body.replace('--customer_id--', str(customer.subscriber_id))
         body = body.replace('--package--', str(customer.next_package_id.name or ""))
         body = body.replace('--price--', str(customer.next_package_price))
-        body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
+        body = body.replace('--last_payment_date--', str(customer.current_package_end_date.strftime("%d-%m-%Y")))
 
         # Creating attachment file of the invoice
         sales_order_obj = self.env['sale.order'].search([], order='create_date asc', limit=1)
@@ -67,7 +67,7 @@ class CronJobModel(models.Model):
                 'email_to': self.mail_to,
                 'email_cc': self.mail_cc,
                 'email_from': 'mime@cgbd.com',
-                # 'attachment_ids': [(6, 0, [attachment.id])],
+                'attachment_ids': [(6, 0, [attachment.id])],
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
         return create_and_send_email
