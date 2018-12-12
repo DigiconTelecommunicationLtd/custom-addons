@@ -50,7 +50,6 @@ class CustomerPackageHistory(models.Model):
         Sets package changes history for a customer
         :param customer: Customer for whom the package history has to create
         :return: package history object
-
         """
         today = datetime.today().strftime('%Y-%m-%d')
         package_history_obj = self.env['isp_crm_module.customer_package_history']
