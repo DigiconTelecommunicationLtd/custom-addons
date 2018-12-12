@@ -215,23 +215,27 @@ class ServiceRequest(models.Model):
 
             # updating current package info
             customer.update_current_bill_cycle_info(
-                customer=customer,
-                start_date=current_package_start_date,
-                product_id=current_package_id,
-                price=current_package_price,
-                sales_order_id=current_package_sales_order_id
+                customer        = customer,
+                start_date      = current_package_start_date,
+                product_id      = current_package_id,
+                price           = current_package_price,
+                sales_order_id  = current_package_sales_order_id
             )
             # updating next package info
             customer.update_next_bill_cycle_info(
-                customer=customer,
+                customer = customer,
             )
+
+            # Adding the package change history
+            package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
+            created_package_history = package_history_obj.set_package_change_history(customer)
 
             # updating opportunity
             opportunity = service_req.opportunity_id
             opportunity.update({
-                'color' : 10,
-                'current_service_request_id': service_req.name,
-                'current_service_request_status': 'Done',
+                'color'                             : 10,
+                'current_service_request_id'        : service_req.name,
+                'current_service_request_status'    : 'Done',
             })
 
             # Generate Dynamic Invoice and Send in mail.

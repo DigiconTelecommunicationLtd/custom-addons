@@ -120,7 +120,6 @@
             <p><strong>Customer ID : </strong>--customer_id--</p>
             <p><strong>Package : </strong> --package--</p>
             <p><strong>Price : </strong> --price--</p>
-            <p><strong>Invoice Number : </strong> --invoice_number--</p>
             <p><strong>Last Payment Date : </strong> --last_payment_date--</p>
 
 
