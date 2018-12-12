@@ -23,6 +23,7 @@ class Opportunity(models.Model):
     is_customer_deferred = fields.Boolean("Is Customer Deferred", default=False)
     invoice_state = fields.Char('Invoice State')
     referred_by = fields.Many2one('res.partner', string='Referred By')
+    assigned_rm = fields.Many2one('hr.employee', string='RM', store=True)
 
 
     def get_opportunity_address_str(self, opportunity):
