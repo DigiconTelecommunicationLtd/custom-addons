@@ -62,6 +62,7 @@
         'views/isp_crm_cron_job_views.xml',
         'views/isp_crm_invoice_views.xml',
         'views/isp_crm_customer_invoice_status_views.xml',
+        'views/isp_crm_package_history_views.xml',
         'views/isp_crm_menulist_views.xml',
         'template/new_ticket_page.xml',
         'template/customer_profile_ticket.xml',
