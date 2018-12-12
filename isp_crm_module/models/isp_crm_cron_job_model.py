@@ -147,13 +147,9 @@ class CronJobModel(models.Model):
         """
         today = datetime.today()
         after_threshold_days_date =  today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
-<<<<<<< 92b9667f6b79ef505d845d7b65718cf8dbb5d5b2
-        # ('current_package_end_date', '=', str(after_threshold_days_date.date()))
-        customers_list = self.env['res.partner'].search([('customer', '=', True), ])
-=======
         #, ('current_package_end_date', '=', str(after_threshold_days_date.date()))
         customers_list = self.env['res.partner'].search([('customer', '=', True)])
->>>>>>> ISP-133 done
+
         service_request_obj = self.env['isp_crm_module.service_request']
 
         for customer in customers_list:
