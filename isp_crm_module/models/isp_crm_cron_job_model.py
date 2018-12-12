@@ -44,17 +44,22 @@ class CronJobModel(models.Model):
         body = body.replace('--price--', str(customer.next_package_price))
         body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
 
-        # save pdf as attachment
-        ATTACHMENT_NAME = customer.name
+        # Creating attachment file of the invoice
+        sales_order_obj = self.env['sale.order'].search([], order='create_date asc', limit=1)
+        pdf = self.env.ref('isp_crm_module.action_report_receipt_attachment').render_qweb_pdf([sales_order_obj[0].id])
 
-        # attachment = self.env['ir.attachment'].create({
-        #     'name': ATTACHMENT_NAME,
-        #     'type': 'binary',
-        #     'datas_fname': ATTACHMENT_NAME + '.pdf',
-        #     'store_fname': ATTACHMENT_NAME,
-        #     'datas': base64.encodestring(pdf[0]),
-        #     'mimetype': 'application/x-pdf'
-        # })
+        # save pdf as attachment
+        # ATTACHMENT_NAME = customer.name + "_" + invoice.number
+        ATTACHMENT_NAME = customer.name
+        attachment = self.env['ir.attachment'].create({
+            'name': ATTACHMENT_NAME,
+            'type': 'binary',
+            'datas_fname': ATTACHMENT_NAME + '.pdf',
+            'store_fname': ATTACHMENT_NAME,
+            'datas': base64.encodestring(pdf[0]),
+            'mimetype': 'application/x-pdf'
+        })
+
         if template_obj:
             mail_values = {
                 'subject': template_obj.subject_mail,
@@ -142,8 +147,13 @@ class CronJobModel(models.Model):
         """
         today = datetime.today()
         after_threshold_days_date =  today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
+<<<<<<< 92b9667f6b79ef505d845d7b65718cf8dbb5d5b2
         # ('current_package_end_date', '=', str(after_threshold_days_date.date()))
         customers_list = self.env['res.partner'].search([('customer', '=', True), ])
+=======
+        #, ('current_package_end_date', '=', str(after_threshold_days_date.date()))
+        customers_list = self.env['res.partner'].search([('customer', '=', True)])
+>>>>>>> ISP-133 done
         service_request_obj = self.env['isp_crm_module.service_request']
 
         for customer in customers_list:

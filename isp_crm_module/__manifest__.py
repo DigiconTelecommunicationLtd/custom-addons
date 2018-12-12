@@ -71,6 +71,7 @@
         'template/customer_packages/customer_packages_list_api.xml',
         'template/selfcare_layout_templates.xml',
         'template/selfcare_login_templates.xml',
+        'template/isp_crm_mail_template/isp_crm_cron_job_receipt_attachment_template.xml',
         'data/default_stages_data.xml',
     ],
     # only loaded in demonstration mode
