@@ -58,8 +58,8 @@ class Helpdesk(models.Model):
     _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 
-    name = fields.Char('Request Name', required=True, index=True, copy=False, default='New')
-    problem = fields.Many2one('isp_crm_module.helpdesk_problem',string="Problem", required=True, translate=True, ondelete='set null',help='Ticket Problem.')
+    name = fields.Char('Request Name', required=False, index=True, copy=False, default='New')
+    problem = fields.Many2one('isp_crm_module.helpdesk_problem',string="Problem", required=False, translate=True, ondelete='set null',help='Ticket Problem.')
     type = fields.Many2one('isp_crm_module.helpdesk_type', string='Type', required=False, ondelete='set null',
                                   help='Ticket Type.')
     helpdesk_td_ticket = fields.Many2one('isp_crm_module.helpdesk_td', string="Helpdesk TD Ticket", required=False, translate=True,
