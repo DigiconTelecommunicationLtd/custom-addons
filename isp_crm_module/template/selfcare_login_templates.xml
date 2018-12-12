@@ -78,6 +78,13 @@
                         <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                     </div>
                     <!-- /.col -->
+                    <div class="col-xs-8">
+                        <div class="checkbox icheck">
+                            <label>
+                                <a href="">Forgot Password</a>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </form>
             <!--<a href="#">I forgot my password</a><br>-->
