@@ -42,7 +42,10 @@ class CronJobModel(models.Model):
         body = body.replace('--customer_id--', str(customer.subscriber_id))
         body = body.replace('--package--', str(customer.next_package_id.name or ""))
         body = body.replace('--price--', str(customer.next_package_price))
-        body = body.replace('--last_payment_date--', str(customer.current_package_end_date.strftime("%d-%m-%Y")))
+        if customer.current_package_end_date:
+            body = body.replace('--last_payment_date--', str(datetime.strptime(str(customer.current_package_end_date),'%Y-%m-%d').strftime("%d-%m-%Y")))
+        else:
+            body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
 
         # Creating attachment file of the invoice
         sales_order_obj = self.env['sale.order'].search([], order='create_date asc', limit=1)
