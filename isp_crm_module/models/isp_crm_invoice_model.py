@@ -42,19 +42,23 @@ class ISPCRMInvoice(models.Model):
             for partner in all_partner_ids:
                 if partner.id == self.partner_id.id:
                     opportunity = self.env['crm.lead'].search([('partner_id', '=', partner.id)])
+                    last_stage = self.env['crm.stage'].search([], order="sequence asc")[-1]
                     # Show 'Create service request' button in opportunity .
                     if opportunity:
                         opportunity.write({
                             'is_customer_deferred': True,
                             'probability': 100,
+                            'stage_id': last_stage.id,
                         })
         else:
             for partner in all_partner_ids:
                 if partner.id == self.partner_id.id:
                     opportunity = self.env['crm.lead'].search([('partner_id', '=', partner.id)])
+                    first_stage = self.env['crm.stage'].search([], order="sequence asc")[0]
                     # Remove 'Create service request' button in opportunity .
                     if opportunity:
                         opportunity.write({
                             'is_customer_deferred': False,
                             'probability': 98,
+                            'stage_id': first_stage.id,
                         })
