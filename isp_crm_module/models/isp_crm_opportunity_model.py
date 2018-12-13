@@ -52,15 +52,11 @@ class Opportunity(models.Model):
                 if check_customer:
                     invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="date_invoice desc", limit=1)
                     if invoices:
-                        if invoices.is_deferred:
+                        if invoices.is_deferred or invoices.state == 'paid':
                             self.invoice_state = invoices.state
                             super(Opportunity, lead).action_set_won()
                         else:
-                            if invoices.state == 'paid':
-                                self.invoice_state = invoices.state
-                                super(Opportunity, lead).action_set_won()
-                            else:
-                                raise UserError(_("This Opportunity's invoice has not been paid.\n Confirm payment first."))
+                            raise UserError(_("This Opportunity's invoice is neither paid nor deferred."))
                     else:
                         raise UserError(_("This Opportunity's invoice has not been created yet. Please create the invoice first ."))
                 else:
