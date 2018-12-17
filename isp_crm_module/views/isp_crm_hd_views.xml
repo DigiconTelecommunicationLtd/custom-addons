@@ -117,11 +117,11 @@
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <h1><field name="problem" string="Name" placeholder="Problem"/></h1>
+                        <h1><field name="problem" string="Name" placeholder="Problem" attrs="{'required': True}"/></h1>
                     </div>
                     <group>
                         <group>
-                            <field name="type"/>
+                            <field name="type" attrs="{'required': True}"/>
                         </group>
                         <group>
                             <field name="complexity" readonly="1" options="{'no_create_edit': True}"/>

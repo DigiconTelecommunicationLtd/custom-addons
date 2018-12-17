@@ -28,7 +28,7 @@
             <form string="Helpdesk TD Type List">
                 <sheet>
                     <group>
-                        <field name="name"/>
+                        <field name="name" attrs="{'required': True}"/>
                     </group>
                 </sheet>
             </form>
