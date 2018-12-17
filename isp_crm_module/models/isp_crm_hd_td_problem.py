@@ -10,5 +10,5 @@ class HelpdeskTDProblems(models.Model):
     _description = "Helpdesk TD Type"
     _order = "create_date desc, id"
 
-    name = fields.Char('Name', required=True, translate=True)
+    name = fields.Char('Name', translate=True)
     color = fields.Integer()
