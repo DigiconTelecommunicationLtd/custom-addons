@@ -12,6 +12,8 @@ DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
+INVOICE_PAID_STATUS = 'paid'
+
 class CronJobModel(models.Model):
     _name = 'isp_crm.cron_job'
 
@@ -278,7 +280,7 @@ class CronJobModel(models.Model):
         present = datetime.now()
         for invoice in invoices:
             if invoice.date_due:
-                if present.date() > datetime.strptime(invoice.date_due, "%Y-%m-%d").date():
-                    message = "Invoice\'s due date is over. Customer ID: '"+str(invoice.partner_id) + "'"
+                if present.date() > datetime.strptime(invoice.date_due, "%Y-%m-%d").date() and invoice.state != INVOICE_PAID_STATUS:
+                    message = "Invoice\'s due date is over. Custome's name: '"+str(invoice.partner_id.name) + "' and Customer's Subscriber ID: '"+str(invoice.partner_id.subscriber_id)+"'"
                     invoice.user_id.notify_info(message)
 
