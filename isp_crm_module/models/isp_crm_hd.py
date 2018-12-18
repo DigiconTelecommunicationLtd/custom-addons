@@ -23,6 +23,7 @@ AVAILABLE_STAGES = [
     ('New', 'New'),
     ('Doing', 'Doing'),
     ('TD', 'TD'),
+    ('RM', 'RM'),
     ('Done', 'Done'),
 ]
 
@@ -31,6 +32,7 @@ TD_FLAGS = [
     ('1', 'Sent to TD'),
     ('2', 'Marked Done by TD'),
     ('3', 'Resolved'),
+    ('4', 'Sent to RM'),
 ]
 
 # Constants representing complexity levels of helpdesk ticket
@@ -96,7 +98,7 @@ class Helpdesk(models.Model):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
             vals['default_stages'] = 'New'
-            vals['td_flags'] = '0'
+            vals['td_flags'] = TD_FLAGS[0][0]
             helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
             if helpdesk_ticket_complexity:
                 vals['complexity'] = helpdesk_ticket_complexity.id
@@ -117,7 +119,6 @@ class Helpdesk(models.Model):
                 'ticket_id': newrecord.id
             }
         )
-
         template_obj = self.env['isp_crm_module.mail'].sudo().search(
             [('name', '=', 'Helpdesk_Ticket_Creation_Mail')],
             limit=1)
@@ -143,12 +144,14 @@ class Helpdesk(models.Model):
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
-        if self.default_stages != 'Done' and self.td_flags == '3':
+        if self.default_stages != 'Done' and self.td_flags == TD_FLAGS[3]:
             raise UserError('System does not allow you to change stage after resolving the ticket.')
-        if self.td_flags == '1':
+        if self.td_flags == TD_FLAGS[1]:
             raise UserError('Can not change stage. Ticket is not resolved by TD.')
-        if self.td_flags == '2':
+        if self.td_flags == TD_FLAGS[2]:
             raise UserError('Can not change stage. Ticket is not resolved by SD.')
+        if self.default_stages !='RM' and self.td_flags == TD_FLAGS[4]:
+            raise UserError('System does not allow you to drag ticket from RM stage.')
 
         if self.default_stages == 'New':
             self.update({
@@ -158,9 +161,9 @@ class Helpdesk(models.Model):
             self.update({
                     'color': 3,
                 })
-        if self.default_stages == 'Done':
+        if self.default_stages == 'Done' and self.td_flags == TD_FLAGS[4]:
             self.update({
-                    'td_flags': '3',
+                    'td_flags': TD_FLAGS[3][0],
                     'color': 11,
                 })
             template_obj = self.env['isp_crm_module.mail'].sudo().search(
@@ -169,12 +172,17 @@ class Helpdesk(models.Model):
             subject_mail = "Mime Ticket Resolved"
             self.env['isp_crm_module.mail'].action_send_email(subject_mail, self._origin.customer_email, self._origin.name,
                                                               template_obj)
+        elif self.default_stages == 'Done' and self.td_flags != TD_FLAGS[4]:
+            raise UserError('You can not drag the ticket to Done stage unless it is resolved by RM.')
         if self.default_stages == 'TD':
             raise UserError('You can not drag the ticket to TD stage unless you assign it to TD by action.')
+        if self.default_stages == 'RM':
+            if self.td_flags != TD_FLAGS[3]:
+                raise UserError('You can not drag the ticket to RM stage unless you assign it to RM by action.')
 
     @api.onchange('td_flags')
     def _onchange_td_flags(self):
-        if self.td_flags == '2':
+        if self.td_flags == TD_FLAGS[2]:
             self.update({
                 'color': 10,
             })
@@ -197,9 +205,18 @@ class Helpdesk(models.Model):
         self.customer_address = self.get_customer_address_str(customer=self.customer)
 
     @api.multi
+    def action_send_ticket_to_rm(self):
+        self.update({
+            'td_flags': TD_FLAGS[4][0],
+            'default_stages': 'RM',
+            'color': 7,
+        })
+        return True
+
+    @api.multi
     def action_send_ticket_to_td(self):
         self.update({
-            'td_flags': '1',
+            'td_flags': TD_FLAGS[1][0],
             'default_stages': 'TD',
             'color': 4,
         })
@@ -271,9 +288,9 @@ class Helpdesk(models.Model):
 
     @api.multi
     def action_cancel_ticket_to_td(self):
-        if self.td_flags == '1':
+        if self.td_flags == TD_FLAGS[1]:
             self.update({
-                'td_flags': '0',
+                'td_flags': TD_FLAGS[0][0],
                 'default_stages': 'Doing',
             })
             self.env['isp_crm_module.helpdesk_td'].search(
@@ -282,20 +299,38 @@ class Helpdesk(models.Model):
 
     @api.multi
     def action_resolved_by_sd(self):
-        if self.td_flags == '2':
+        if self.td_flags == TD_FLAGS[2]:
             self.update({
-                'td_flags': '3',
-                'default_stages': 'Done',
+                'td_flags': TD_FLAGS[4][0],
+                'default_stages': 'RM',
                 'sd_resolved_by':self.env.uid,
-                'color':11,
+                'color':7,
             })
 
-            template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                [('name', '=', 'Helpdesk_Ticket_Closing_Mail')],
-                limit=1)
-            # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_closing'].sudo().search([],limit=1)
-            subject_mail = "Mime Ticket Resolved"
-            self.env['isp_crm_module.mail'].action_send_email(subject_mail, self.customer_email, self.name, template_obj)
+        return True
+
+    @api.multi
+    def action_resolved_by_rm(self):
+        customer = self.customer
+        if customer:
+            get_opportunity = customer.opportunity_ids[0]
+            if get_opportunity:
+                assigned_rm = get_opportunity.assigned_rm
+                if assigned_rm:
+                    if assigned_rm != self.env.uid:
+                        raise UserError('This ticket can only be resolved by the assigned RM.')
+        self.update({
+            'td_flags': TD_FLAGS[3][0],
+            'default_stages': 'Done',
+            'color': 11,
+        })
+
+        template_obj = self.env['isp_crm_module.mail'].sudo().search(
+            [('name', '=', 'Helpdesk_Ticket_Closing_Mail')],
+            limit=1)
+        # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_closing'].sudo().search([],limit=1)
+        subject_mail = "Mime Ticket Resolved"
+        self.env['isp_crm_module.mail'].action_send_email(subject_mail, self.customer_email, self.name, template_obj)
 
         return True
 
