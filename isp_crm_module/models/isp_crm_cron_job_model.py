@@ -270,6 +270,10 @@ class CronJobModel(models.Model):
         return current_month_invoice
 
     def send_notification_after_invoice_due_date(self):
+        """
+        Function to send notification to user if invoice's due date is over.
+        :return:
+        """
         invoices = self.env['account.invoice'].search([])
         present = datetime.now()
         for invoice in invoices:
