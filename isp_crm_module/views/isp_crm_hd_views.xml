@@ -29,7 +29,7 @@
                             <div class="oe_kanban_content">
                                 <div class="o_kanban_record_top">
                                     <div class="o_kanban_record_headings">
-                                        <h6><field name="td_flags" attrs="{'invisible': [('td_flags', '=', '0')]}"/></h6><br/>
+                                        <h6><field name="td_flags" attrs="{'invisible': ['|',('td_flags', '=', '0'),('td_flags', '=', '4')]}"/></h6><br/>
                                         <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
                                         <strong class="o_kanban_record_title"><field name="problem"/></strong><br/>
                                         <strong class="o_kanban_record_title"><field name="type"/></strong><br/>
@@ -98,12 +98,30 @@
                         confirm="Are you sure you want to continue?"
                     />
                     <button
+                        name="action_send_ticket_to_rm"
+                        string="Resolve and Send to RM"
+                        type="object"
+                        help="Ticket is resolved and Send Ticket to RM"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('default_stages', '!=', 'Doing')]}"
+                        confirm="Are you sure you want to continue?"
+                    />
+                    <button
                         name="action_resolved_by_sd"
-                        string="Is Resolved"
+                        string="Resolve and Send to RM"
                         type="object"
                         help="Is Resolved"
                         class="oe_highlight"
                         attrs="{'invisible': [('td_flags', '!=', '2')]}"
+                        confirm="Are you sure you want to continue?"
+                    />
+                    <button
+                        name="action_resolved_by_rm"
+                        string="Resolve"
+                        type="object"
+                        help="Resolve and Send ticket to Done stage"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('default_stages', '!=', 'RM')]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button string="Send Email"
