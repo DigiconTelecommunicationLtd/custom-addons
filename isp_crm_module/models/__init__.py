@@ -41,3 +41,4 @@ from . import isp_crm_mail
 from . import isp_crm_customer_invoice_status_model
 from . import isp_crm_invoice_model
 from . import isp_crm_package_history_model
+from . import isp_crm_notify_user

@@ -31,3 +31,5 @@ class ISPCRMInvoice(models.Model):
                 })
         super(ISPCRMInvoice, self).action_invoice_paid()
         return True
+
+

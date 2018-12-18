@@ -268,3 +268,13 @@ class CronJobModel(models.Model):
             list_of_acccount_moves = [{'name' : acc.name, 'ref' : acc.ref, 'amount' : acc.amount} for acc in self.env['account.move'].search([('partner_id', '=', customer.id)])]
 
         return current_month_invoice
+
+    def send_notification_after_invoice_due_date(self):
+        invoices = self.env['account.invoice'].search([])
+        present = datetime.now()
+        for invoice in invoices:
+            if invoice.date_due:
+                if present.date() > datetime.strptime(invoice.date_due, "%Y-%m-%d").date():
+                    message = "Invoice\'s due date is over. Customer ID: '"+str(invoice.partner_id) + "'"
+                    invoice.user_id.notify_info(message)
+
