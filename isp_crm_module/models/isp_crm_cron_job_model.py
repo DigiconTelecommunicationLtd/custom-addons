@@ -280,7 +280,7 @@ class CronJobModel(models.Model):
         present = datetime.now()
         for invoice in invoices:
             if invoice.date_due:
-                if present.date() > datetime.strptime(invoice.date_due, "%Y-%m-%d").date() and invoices.state == INVOICE_PAID_STATUS:
+                if present.date() > datetime.strptime(invoice.date_due, "%Y-%m-%d").date() and invoices.state != INVOICE_PAID_STATUS:
                     message = "Invoice\'s due date is over. Customer ID: '"+str(invoice.partner_id) + "'"
                     invoice.user_id.notify_info(message)
 
