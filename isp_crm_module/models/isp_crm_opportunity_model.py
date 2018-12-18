@@ -9,6 +9,7 @@ from . import isp_crm_service_request_model
 
 
 DEFAULT_PROBLEM = "There are some Problem"
+INVOICE_PAID_STATUS = 'paid'
 
 class Opportunity(models.Model):
     _inherit = 'crm.lead'
@@ -52,7 +53,7 @@ class Opportunity(models.Model):
                 if check_customer:
                     invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="date_invoice desc", limit=1)
                     if invoices:
-                        if invoices.is_deferred or invoices.state == 'paid':
+                        if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
                             self.invoice_state = invoices.state
                             super(Opportunity, lead).action_set_won()
                         else:
