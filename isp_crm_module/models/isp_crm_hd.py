@@ -32,7 +32,8 @@ TD_FLAGS = [
     ('1', 'Sent to TD'),
     ('2', 'Marked Done by TD'),
     ('3', 'Resolved'),
-    ('4', 'Sent to RM'),
+    ('4', 'Pending in RM'),
+    ('5', 'Confirmed by RM'),
 ]
 
 # Constants representing complexity levels of helpdesk ticket
@@ -144,13 +145,15 @@ class Helpdesk(models.Model):
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
-        if self.default_stages != 'Done' and self.td_flags == TD_FLAGS[3]:
+        if self.default_stages != 'Done' and self.td_flags == TD_FLAGS[3][0]:
             raise UserError('System does not allow you to change stage after resolving the ticket.')
-        if self.td_flags == TD_FLAGS[1]:
+        if self.td_flags == TD_FLAGS[1][0]:
             raise UserError('Can not change stage. Ticket is not resolved by TD.')
-        if self.td_flags == TD_FLAGS[2]:
+        if self.td_flags == TD_FLAGS[2][0]:
             raise UserError('Can not change stage. Ticket is not resolved by SD.')
-        if self.default_stages !='RM' and self.td_flags == TD_FLAGS[4]:
+        if self.default_stages !='RM' and self.td_flags == TD_FLAGS[4][0]:
+            raise UserError('System does not allow you to drag ticket from RM stage.')
+        elif self.default_stages !='RM' and self.td_flags == TD_FLAGS[5][0]:
             raise UserError('System does not allow you to drag ticket from RM stage.')
 
         if self.default_stages == 'New':
@@ -161,7 +164,7 @@ class Helpdesk(models.Model):
             self.update({
                     'color': 3,
                 })
-        if self.default_stages == 'Done' and self.td_flags == TD_FLAGS[4]:
+        if self.default_stages == 'Done' and self.td_flags == TD_FLAGS[5][0]:
             self.update({
                     'td_flags': TD_FLAGS[3][0],
                     'color': 11,
@@ -172,17 +175,17 @@ class Helpdesk(models.Model):
             subject_mail = "Mime Ticket Resolved"
             self.env['isp_crm_module.mail'].action_send_email(subject_mail, self._origin.customer_email, self._origin.name,
                                                               template_obj)
-        elif self.default_stages == 'Done' and self.td_flags != TD_FLAGS[4]:
+        elif self.default_stages == 'Done' and self.td_flags != TD_FLAGS[5][0]:
             raise UserError('You can not drag the ticket to Done stage unless it is resolved by RM.')
         if self.default_stages == 'TD':
             raise UserError('You can not drag the ticket to TD stage unless you assign it to TD by action.')
         if self.default_stages == 'RM':
-            if self.td_flags != TD_FLAGS[3]:
+            if self.td_flags != TD_FLAGS[3][0]:
                 raise UserError('You can not drag the ticket to RM stage unless you assign it to RM by action.')
 
     @api.onchange('td_flags')
     def _onchange_td_flags(self):
-        if self.td_flags == TD_FLAGS[2]:
+        if self.td_flags == TD_FLAGS[2][0]:
             self.update({
                 'color': 10,
             })
@@ -288,7 +291,7 @@ class Helpdesk(models.Model):
 
     @api.multi
     def action_cancel_ticket_to_td(self):
-        if self.td_flags == TD_FLAGS[1]:
+        if self.td_flags == TD_FLAGS[1][0]:
             self.update({
                 'td_flags': TD_FLAGS[0][0],
                 'default_stages': 'Doing',
@@ -299,7 +302,7 @@ class Helpdesk(models.Model):
 
     @api.multi
     def action_resolved_by_sd(self):
-        if self.td_flags == TD_FLAGS[2]:
+        if self.td_flags == TD_FLAGS[2][0]:
             self.update({
                 'td_flags': TD_FLAGS[4][0],
                 'default_stages': 'RM',
@@ -320,6 +323,14 @@ class Helpdesk(models.Model):
                     if assigned_rm != self.env.uid:
                         raise UserError('This ticket can only be resolved by the assigned RM.')
         self.update({
+            'td_flags': TD_FLAGS[5][0],
+        })
+
+        return True
+
+    @api.multi
+    def action_final_resolved_by_sd(self):
+        self.update({
             'td_flags': TD_FLAGS[3][0],
             'default_stages': 'Done',
             'color': 11,
@@ -332,7 +343,13 @@ class Helpdesk(models.Model):
         subject_mail = "Mime Ticket Resolved"
         self.env['isp_crm_module.mail'].action_send_email(subject_mail, self.customer_email, self.name, template_obj)
 
-        return True
+    @api.multi
+    def action_not_resolved(self):
+        self.update({
+            'td_flags': TD_FLAGS[0][0],
+            'default_stages': 'Doing',
+            'color': 3,
+        })
 
     @api.multi
     def action_btn_send_email(self):
