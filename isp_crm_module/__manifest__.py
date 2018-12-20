@@ -63,6 +63,7 @@
         'views/isp_crm_invoice_views.xml',
         'views/isp_crm_customer_invoice_status_views.xml',
         'views/isp_crm_package_history_views.xml',
+        'views/isp_crm_payment_views.xml',
         'views/isp_crm_menulist_views.xml',
         'views/isp_crm_notify_user.xml',
         'template/new_ticket_page.xml',
