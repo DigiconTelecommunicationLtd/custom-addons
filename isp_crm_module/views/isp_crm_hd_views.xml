@@ -29,7 +29,7 @@
                             <div class="oe_kanban_content">
                                 <div class="o_kanban_record_top">
                                     <div class="o_kanban_record_headings">
-                                        <h6><field name="td_flags" attrs="{'invisible': ['|',('td_flags', '=', '0'),('td_flags', '=', '4')]}"/></h6><br/>
+                                        <h6><field name="td_flags" attrs="{'invisible': [('td_flags', '=', '0')]}"/></h6><br/>
                                         <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
                                         <strong class="o_kanban_record_title"><field name="problem"/></strong><br/>
                                         <strong class="o_kanban_record_title"><field name="type"/></strong><br/>
@@ -117,11 +117,29 @@
                     />
                     <button
                         name="action_resolved_by_rm"
-                        string="Resolve"
+                        string="Resolve by RM"
                         type="object"
-                        help="Resolve and Send ticket to Done stage"
+                        help="Resolve by RM"
                         class="oe_highlight"
-                        attrs="{'invisible': [('default_stages', '!=', 'RM')]}"
+                        attrs="{'invisible': ['|',('default_stages', '!=', 'RM'),('td_flags', '=', '5')]}"
+                        confirm="Are you sure you want to continue?"
+                    />
+                    <button
+                        name="action_final_resolved_by_sd"
+                        string="Resolve by SD"
+                        type="object"
+                        help="Resolve by SD"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|',('default_stages', '!=', 'RM'),('td_flags', '!=', '5')]}"
+                        confirm="Are you sure you want to continue?"
+                    />
+                    <button
+                        name="action_not_resolved"
+                        string="Not Resolved"
+                        type="object"
+                        help="Not Resolved"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|',('default_stages', '!=', 'RM'),('td_flags', '=', '5')]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button string="Send Email"

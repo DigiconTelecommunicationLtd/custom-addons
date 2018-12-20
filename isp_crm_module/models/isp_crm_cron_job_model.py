@@ -285,10 +285,4 @@ class CronJobModel(models.Model):
                     invoice.user_id.notify_info(message)
 
 
-                    # change of the input is 3. so delC = 3. change of the position is 4. so delV = 4 .
-
-                    # So to change position 2 unit, you need to change input 3 unit.
-                    # So to change position 6 unit, you need to change input 6 times 3/2 unit.
-
-
 
