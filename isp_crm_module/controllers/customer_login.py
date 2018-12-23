@@ -75,12 +75,16 @@ class SelfcareController(PaymentController):
         template      = "isp_crm_module.template_selfcare_forget_password_main"
         context       = {}
         success_msg   = ''
+
         if request.httprequest.method == 'POST':
             old_uid = request.uid
             login   = request.params['login']
+
             if login == "New":
                 raise UserError('Invalid data provided. Please provide a valid id or email address.')
+
             check_user = request.env['res.partner'].sudo().search(['|', ('email', '=', str(login)), ('subscriber_id', '=', str(login))], limit=1)
+
             # Check if user exist.
             if check_user:
                 # Get the template of the mail.
@@ -89,6 +93,7 @@ class SelfcareController(PaymentController):
                     limit=1)
                 if template_obj:
                     email_to = check_user.email
+
                     if email_to:
                         request.env['isp_crm_module.mail'].send_reset_password_link_email(check_user, email_to, template_obj)
                         success_msg = 'Reset Password Link sent successfully. Please check your email.'
@@ -98,6 +103,7 @@ class SelfcareController(PaymentController):
                     context['error'] = _('Mail template not found.')
             else:
                 context['error'] = _('No user found with that ID.')
+
         context['success_msg'] = _(success_msg)
         return request.render(template, context)
 
@@ -108,27 +114,33 @@ class SelfcareController(PaymentController):
         :param kw:
         :return:
         """
-        template    = 'isp_crm_module.template_selfcare_reset_password_main'
+        template       = 'isp_crm_module.template_selfcare_reset_password_main'
         login_template = 'isp_crm_module.template_selfcare_login_main'
-        context     = {}
-        success_msg = ''
-        url = "http://localhost:8069"+str(request.httprequest.full_path).split("?")[0]
-        check_link = request.env['isp_crm_module.temporary_links'].sudo().search([('link', '=', url)], limit=1)
+        context        = {}
+        success_msg    = ''
+        url            = "http://localhost:8069"+str(request.httprequest.full_path).split("?")[0]
+        check_link     = request.env['isp_crm_module.temporary_links'].sudo().search([('link', '=', url)], limit=1)
+
         if check_link:
             pass
         else:
             context['error'] = _('Invalid reset password link provided')
             return request.render(login_template, context)
+
         if request.httprequest.method == 'POST':
             if check_link:
                 check_user = request.env['res.users'].sudo().search([('partner_id', '=', check_link.name.id)], limit=1)
+
                 if check_user:
                     new_password         = request.params['new_password']
                     confirm_new_password = request.params['confirm_new_password']
+
                     if new_password == confirm_new_password :
                         check_user._set_password(new_password)
-                        success_msg = 'Successfully reset password'
+
+                        success_msg            = 'Successfully reset password'
                         context['success_msg'] = _(success_msg)
+                        
                         return request.render(login_template, context)
                     else:
                         context['error'] = _("Could not reset password.")
@@ -136,6 +148,7 @@ class SelfcareController(PaymentController):
                     context['error'] = _("User not found.")
             else:
                 context['error'] = _("Reset password link is invalid")
+
         context['success_msg'] = _(success_msg)
         return request.render(template, context)
 
