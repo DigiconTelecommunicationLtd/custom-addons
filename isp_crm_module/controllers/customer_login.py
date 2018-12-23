@@ -91,6 +91,7 @@ class SelfcareController(PaymentController):
                 template_obj = request.env['mail.template'].sudo().search(
                     [('name', '=', 'Send_Reset_Password_Link')],
                     limit=1)
+
                 if template_obj:
                     email_to = check_user.email
 
