@@ -124,7 +124,8 @@ class SelfcareController(PaymentController):
         if check_link:
             pass
         else:
-            context['error'] = _('Invalid reset password link provided')
+            context['error']       = _('Invalid reset password link provided')
+            context['success_msg'] = _(success_msg)
             return request.render(login_template, context)
 
         if request.httprequest.method == 'POST':
@@ -140,7 +141,9 @@ class SelfcareController(PaymentController):
 
                         success_msg            = 'Successfully reset password'
                         context['success_msg'] = _(success_msg)
-                        
+
+                        # Delete the link
+                        check_link.unlink()
                         return request.render(login_template, context)
                     else:
                         context['error'] = _("Could not reset password.")
