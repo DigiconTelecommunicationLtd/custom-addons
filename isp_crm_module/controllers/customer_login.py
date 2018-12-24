@@ -72,9 +72,10 @@ class SelfcareController(PaymentController):
         :return:
         """
         # Get the template of the form.
-        template      = "isp_crm_module.template_selfcare_forget_password_main"
-        context       = {}
-        success_msg   = ''
+        template       = "isp_crm_module.template_selfcare_forget_password_main"
+        login_template = 'isp_crm_module.template_selfcare_login_main'
+        context        = {}
+        success_msg    = ''
 
         if request.httprequest.method == 'POST':
             old_uid = request.uid
@@ -98,6 +99,8 @@ class SelfcareController(PaymentController):
                     if email_to:
                         request.env['isp_crm_module.mail'].send_reset_password_link_email(check_user, email_to, template_obj)
                         success_msg = 'Reset Password Link sent successfully. Please check your email.'
+                        context['success_msg'] = _(success_msg)
+                        return request.render(login_template, context)
                     else:
                         context['error'] = _('Could not find any email address for this user.')
                 else:
