@@ -296,9 +296,14 @@ class CronJobModel(models.Model):
         for link in links:
             link_creation_time = datetime.strptime(link.create_date, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H-%M")
             link_creation_time = datetime.strptime(link_creation_time, "%Y-%m-%d %H-%M")
-            difference = str(present - link_creation_time)
-            hour = int(difference.split(":")[0])
-            min  = int(difference.split(":")[1])
+            time_difference         = str(present - link_creation_time)
+            hour               = int(time_difference.split(":")[0])
+            min                = int(time_difference.split(":")[1])
+
+            # check if link is expired or not
+            if hour > 0 or min > 10 :
+                # Delete the expired link
+                link.unlink()
 
 
 
