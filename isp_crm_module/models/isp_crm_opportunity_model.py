@@ -11,6 +11,11 @@ from . import isp_crm_service_request_model
 DEFAULT_PROBLEM = "There are some Problem"
 INVOICE_PAID_STATUS = 'paid'
 
+CUSTOMER_TYPE = [
+    ('retail', _('Retail')),
+    ('corporate', _('Corporate')),
+]
+
 class Opportunity(models.Model):
     _inherit = 'crm.lead'
     _description = "Team of ISP CRM Opportunity."
@@ -25,6 +30,7 @@ class Opportunity(models.Model):
     invoice_state = fields.Char('Invoice State')
     referred_by = fields.Many2one('res.partner', string='Referred By')
     assigned_rm = fields.Many2one('hr.employee', string='RM', store=True)
+    lead_type = fields.Selection(CUSTOMER_TYPE, string='Type', required=False,  help="Lead and Opportunity Type", default='retail')
 
 
     def get_opportunity_address_str(self, opportunity):

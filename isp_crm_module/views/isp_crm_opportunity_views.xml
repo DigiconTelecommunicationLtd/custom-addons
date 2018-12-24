@@ -296,6 +296,7 @@
                 <field name="email_from"/>
                 <field name="phone"/>
                 <field name="mobile"/>
+                <field name="lead_type" widget="radio"/>
                 <!--<field name="zip"/>-->
                 <!--<field name="function"/>-->
                 <!--<field name="website"/>-->
@@ -316,6 +317,9 @@
         <field name="arch" type="xml">
             <xpath expr="//group/group/field[@name='partner_id']" position="before">
                 <field name="assigned_rm"/>
+            </xpath>
+            <xpath expr="//group/group/field[@name='mobile']" position="after">
+                <field name="lead_type" widget="radio"/>
             </xpath>
         </field>
     </record>
