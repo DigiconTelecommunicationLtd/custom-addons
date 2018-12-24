@@ -30,7 +30,7 @@ class Opportunity(models.Model):
     invoice_state = fields.Char('Invoice State')
     referred_by = fields.Many2one('res.partner', string='Referred By')
     assigned_rm = fields.Many2one('hr.employee', string='RM', store=True)
-    lead_type = fields.Selection(CUSTOMER_TYPE, string='Type', required=False,  help="Lead and Opportunity Type", default='retail')
+    lead_type = fields.Selection(CUSTOMER_TYPE, string='Type', required=False,  help="Lead and Opportunity Type")
 
 
     def get_opportunity_address_str(self, opportunity):

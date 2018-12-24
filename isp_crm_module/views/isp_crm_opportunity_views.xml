@@ -296,6 +296,7 @@
                 <field name="email_from"/>
                 <field name="phone"/>
                 <field name="mobile"/>
+                <br/>
                 <field name="lead_type" widget="radio"/>
                 <!--<field name="zip"/>-->
                 <!--<field name="function"/>-->
@@ -304,6 +305,20 @@
             <!--Making priority field invisible in opportunity form-->
             <xpath expr="//group/group/field[@name='priority']" position="attributes">
                 <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
+    <!--Adding Type field in Opportunity kanban form-->
+    <record model="ir.ui.view" id="view_add_fields_in_opportunity_kanban_form">
+        <field name="name">view.add.fields.in.opportunity.kanban.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <xpath expr="//group/group/field[@name='date_deadline']" position="after">
+                <br/>
+                <field name="lead_type" widget="radio"/>
             </xpath>
         </field>
     </record>
@@ -319,6 +334,7 @@
                 <field name="assigned_rm"/>
             </xpath>
             <xpath expr="//group/group/field[@name='mobile']" position="after">
+                <br/>
                 <field name="lead_type" widget="radio"/>
             </xpath>
         </field>
