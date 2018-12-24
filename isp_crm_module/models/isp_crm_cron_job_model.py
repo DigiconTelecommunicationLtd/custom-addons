@@ -284,5 +284,27 @@ class CronJobModel(models.Model):
                     message = "Invoice\'s due date is over. Custome's name: '"+str(invoice.partner_id.name) + "' and Customer's Subscriber ID: '"+str(invoice.partner_id.subscriber_id)+"'"
                     invoice.user_id.notify_info(message)
 
+    def delete_expired_reset_password_links(self):
+        """
+        Delete reset password links if expired.
+        :return:
+        """
+        present = datetime.now().strftime("%Y-%m-%d %H-%M")
+        present = datetime.strptime(present, "%Y-%m-%d %H-%M")
+        links   = self.env['isp_crm_module.temporary_links'].search([])
+
+        for link in links:
+            link_creation_time = datetime.strptime(link.create_date, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H-%M")
+            link_creation_time = datetime.strptime(link_creation_time, "%Y-%m-%d %H-%M")
+            time_difference         = str(present - link_creation_time)
+            hour               = int(time_difference.split(":")[0])
+            min                = int(time_difference.split(":")[1])
+
+            # check if link is expired or not
+            if hour > 0 or min > 10 :
+                # Delete the expired link
+                link.unlink()
+
+
 
 

@@ -169,12 +169,6 @@ class Helpdesk(models.Model):
                     'td_flags': TD_FLAGS[3][0],
                     'color': 11,
                 })
-            template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                [('name', '=', 'Helpdesk_Ticket_Closing_Mail')],
-                limit=1)
-            subject_mail = "Mime Ticket Resolved"
-            self.env['isp_crm_module.mail'].action_send_email(subject_mail, self._origin.customer_email, self._origin.name,
-                                                              template_obj)
         elif self.default_stages == 'Done' and self.td_flags != TD_FLAGS[5][0]:
             raise UserError('You can not drag the ticket to Done stage unless it is resolved by RM.')
         if self.default_stages == 'TD':
@@ -345,6 +339,15 @@ class Helpdesk(models.Model):
 
     @api.multi
     def action_not_resolved(self):
+        customer = self.customer
+        if customer:
+            get_opportunity = customer.opportunity_ids[0]
+            if get_opportunity:
+                assigned_rm = get_opportunity.assigned_rm
+                if assigned_rm:
+                    if assigned_rm != self.env.uid:
+                        raise UserError('This ticket can only be resolved by the assigned RM.')
+
         self.update({
             'td_flags': TD_FLAGS[0][0],
             'default_stages': 'Doing',

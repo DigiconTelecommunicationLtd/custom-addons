@@ -4,6 +4,7 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 class Team(models.Model):
     _name = 'isp_crm_module.mail'
@@ -66,5 +67,28 @@ class Team(models.Model):
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
         return True
+
+    def send_reset_password_link_email(self, user, mailto, template_obj):
+        random_number = self.env['isp_crm_module.temporary_links'].randomString(10)
+        link = "http://localhost:8069/selfcare/reset/password/"+str(random_number)
+        temporary_link = self.env['isp_crm_module.temporary_links'].sudo().create({
+
+            'name': user.id,
+            'link': link
+        })
+        if temporary_link:
+            body = template_obj.body_html
+            body = body.replace('--passowrd-reset-link--', link)
+            if template_obj:
+                mail_values={
+                    'subject': template_obj.subject,
+                    'body_html': body,
+                    'email_to': mailto,
+                    'email_from': 'mime@cgbd.com',
+                }
+                create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
+            return True
+        else:
+            raise UserError('Could not create temporary link to reset password.')
 
 

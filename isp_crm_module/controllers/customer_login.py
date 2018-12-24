@@ -6,6 +6,7 @@ import json
 from datetime import datetime, timedelta
 from odoo import http
 from odoo.tools.translate import _
+from odoo.exceptions import UserError
 from passlib.context import CryptContext
 from odoo.http import content_disposition, dispatch_rpc, request, \
     serialize_exception as _serialize_exception, Response
@@ -19,6 +20,7 @@ class SelfcareController(PaymentController):
     DEFAULT_LOGIN_REDIRECT = "/selfcare"
     DEFAULT_LOGIN_ROUTE = "/selfcare/login"
     DEFAULT_LOGOUT_ROUTE = "/selfcare/logout"
+    DEFAULT_FORGET_PASSWORD_ROUTE = "/selfcare/forget/password"
     DEFAULT_PRODUCT_CATEGORY = "Package"
     DEFAULT_PROFILE_CHANGE_NAME = "Profile Change"
     DEFAULT_JOURNAL_NAME = "Bank"
@@ -49,6 +51,7 @@ class SelfcareController(PaymentController):
     def selfcare_login(self, **kw):
         template = "isp_crm_module.template_selfcare_login_main"
         context = {}
+        success_msg = ''
         if request.httprequest.method == 'POST':
             old_uid = request.uid
             uid = request.session.authenticate(request.session.db, request.params['login'], request.params['password'])
@@ -58,7 +61,99 @@ class SelfcareController(PaymentController):
                 return self._login_redirect(uid=uid, redirect=redirect)
             request.uid = old_uid
             context['error'] = _("Wrong login/password")
+        context['success_msg'] = _(success_msg)
+        return request.render(template, context)
 
+    @http.route('/selfcare/forget/password/', auth='public', methods=["GET", "POST"], website=True, csrf=False)
+    def selfcare_forget_password(self, **kw):
+        """
+        Action to do when user clicks on forget password button.
+        :param kw:
+        :return:
+        """
+        # Get the template of the form.
+        template      = "isp_crm_module.template_selfcare_forget_password_main"
+        context       = {}
+        success_msg   = ''
+
+        if request.httprequest.method == 'POST':
+            old_uid = request.uid
+            login   = request.params['login']
+
+            if login == "New":
+                raise UserError('Invalid data provided. Please provide a valid id or email address.')
+
+            check_user = request.env['res.partner'].sudo().search(['|', ('email', '=', str(login)), ('subscriber_id', '=', str(login))], limit=1)
+
+            # Check if user exist.
+            if check_user:
+                # Get the template of the mail.
+                template_obj = request.env['mail.template'].sudo().search(
+                    [('name', '=', 'Send_Reset_Password_Link')],
+                    limit=1)
+
+                if template_obj:
+                    email_to = check_user.email
+
+                    if email_to:
+                        request.env['isp_crm_module.mail'].send_reset_password_link_email(check_user, email_to, template_obj)
+                        success_msg = 'Reset Password Link sent successfully. Please check your email.'
+                    else:
+                        context['error'] = _('Could not find any email address for this user.')
+                else:
+                    context['error'] = _('Mail template not found.')
+            else:
+                context['error'] = _('No user found with that ID.')
+
+        context['success_msg'] = _(success_msg)
+        return request.render(template, context)
+
+    @http.route('/selfcare/reset/password/<string:variable>', auth='public', methods=["GET", "POST"], website=True, csrf=False)
+    def selfcare_reset_password(self, **kw):
+        """
+        Password reset action to perform after user clicks on the reset password link from his/her mail.
+        :param kw:
+        :return:
+        """
+        template       = 'isp_crm_module.template_selfcare_reset_password_main'
+        login_template = 'isp_crm_module.template_selfcare_login_main'
+        context        = {}
+        success_msg    = ''
+        url            = "http://localhost:8069"+str(request.httprequest.full_path).split("?")[0]
+        check_link     = request.env['isp_crm_module.temporary_links'].sudo().search([('link', '=', url)], limit=1)
+
+        if check_link:
+            pass
+        else:
+            context['error']       = _('Invalid reset password link provided')
+            context['success_msg'] = _(success_msg)
+            return request.render(login_template, context)
+
+        if request.httprequest.method == 'POST':
+            if check_link:
+                check_user = request.env['res.users'].sudo().search([('partner_id', '=', check_link.name.id)], limit=1)
+
+                if check_user:
+                    new_password         = request.params['new_password']
+                    confirm_new_password = request.params['confirm_new_password']
+
+                    if new_password == confirm_new_password :
+                        check_user._set_password(new_password)
+
+                        success_msg            = 'Successfully reset password'
+                        context['success_msg'] = _(success_msg)
+
+                        # Delete the link
+                        check_link.unlink()
+                        return request.render(login_template, context)
+                    else:
+                        context['error'] = _("Could not reset password.")
+                else:
+                    context['error'] = _("User not found.")
+            else:
+                context['error'] = _("Reset password link is invalid")
+
+        context['success_msg'] = _(success_msg)
         return request.render(template, context)
 
     @http.route('/selfcare/logout', methods=["GET"], auth="public", website=True)
