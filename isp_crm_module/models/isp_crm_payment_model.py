@@ -11,6 +11,7 @@ import odoo.addons.decimal_precision as dp
 
 DEFAULT_BANK_ACCOUNT_CODE = '101401'
 DEFAULT_UNEARNED_REVENUE_ACCOUNT_CODE = '100001'
+DEFAULT_REVENUE_ACCOUNT_CODE = '111111'
 DEFAULT_PAYMENT_INVOICE = 'account.payment.customer.invoice'
 
 class ISPCRMPayment(models.Model):
@@ -25,6 +26,22 @@ class ISPCRMPayment(models.Model):
         string='Payment Service Type'
     )
     is_advance = fields.Boolean("Is Advance", default=False)
+
+    customer_id = fields.Char(string="Customer ID")
+    customer_name = fields.Char(string="Customer Name")
+    package_name = fields.Char(string="Package Name")
+    bill_start_date = fields.Char(string="Bill Start Date")
+    bill_end_date = fields.Char(string="Bill End Date")
+    bill_amount = fields.Char(string="Bill amount")
+    received_amount = fields.Char(string="Received amount")
+    deducted_amount = fields.Char(string="Deducted amount")
+    bill_payment_date = fields.Char(string="Bill payment date")
+    card_type = fields.Char(string="Card type")
+    card_number= fields.Char(string="Card number")
+
+    """
+    Billing status
+    """
 
     @api.multi
     def post(self):
@@ -91,4 +108,50 @@ class ISPCRMPayment(models.Model):
             created_unearned_revenue_move_line.update({
                 'payment_id': rec.id
             })
+
+            rec.partner_id.get_customer_balance(customer_id=rec.partner_id.id)
         return True
+
+    def customer_bill_adjustment(self, customer, package_price):
+        """
+        Creates new account move line to adjust the balance
+        of the customer according to the given package price
+        :param customer: customer Object
+        :param package_price: price of the package
+        :return: True if all operations are ok
+        """
+        # account object
+        account_obj = self.env['account.account']
+        # creating the move
+        acc_move = self.env['account.move'].create(self._get_move_vals())
+
+        # account move line
+        aml_obj = self.env['account.move.line'].with_context(check_move_validity=False)
+
+        # creating unearned revenue move line
+        unearned_revenue_acc_obj = account_obj.search([('code', 'like', DEFAULT_UNEARNED_REVENUE_ACCOUNT_CODE)],
+                                                      limit=1)
+        sequence_code = DEFAULT_PAYMENT_INVOICE
+        name = 'Customer Payment'
+        created_unearned_revenue_move_line = aml_obj.create({
+            'move_id': acc_move.id,
+            'partner_id': customer.id,
+            'name': name,
+            'account_id': unearned_revenue_acc_obj.id,
+            'debit': package_price,
+        })
+
+        # creating revenue move line
+        revenue_acc_obj = account_obj.search([('code', 'like', DEFAULT_REVENUE_ACCOUNT_CODE)],
+                                                      limit=1)
+        sequence_code = DEFAULT_PAYMENT_INVOICE
+        name = 'Customer Payment'
+        created_unearned_revenue_move_line = aml_obj.create({
+            'move_id': acc_move.id,
+            'partner_id': customer.id,
+            'name': name,
+            'account_id': revenue_acc_obj.id,
+            'debit': package_price,
+        })
+        return True
+

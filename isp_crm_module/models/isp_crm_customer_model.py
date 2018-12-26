@@ -23,6 +23,7 @@ ACTIVE_STATES = [
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
+DEFAULT_ACCOUNT_CODE = '100001'
 
 class Customer(models.Model):
     """Inherits res.partner and adds Customer info in partner form"""
@@ -73,7 +74,7 @@ class Customer(models.Model):
     mail_cc = fields.Char()
 
 
-    def _get_next_package_end_date(self, given_date):
+    def _get_package_end_date(self, given_date):
         """
         Returns date of after adding DEFAULT_MONTH_DAYS days
         :param given_date: start_date of the package
@@ -103,12 +104,12 @@ class Customer(models.Model):
         :param sales_order_id: sales order id of the package
         :return: updated customer
         """
-        current_package_id              = product_id if product_id else customer.current_package_id
+        current_package_id              = product_id if product_id else customer.current_package_id.id
         current_package_price           = price if price else customer.current_package_price
         current_package_original_price  = current_package_price
         current_package_start_date      = start_date if start_date else datetime.today().strftime(DEFAULT_DATE_FORMAT)
-        current_package_end_date        = self._get_next_package_end_date(given_date=current_package_start_date)
-        current_package_sales_order_id  = sales_order_id if sales_order_id else customer.current_package_sales_order_id
+        current_package_end_date        = self._get_package_end_date(given_date=current_package_start_date)
+        current_package_sales_order_id  = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
 
         customer.update({
             'current_package_id'             : current_package_id,
@@ -131,11 +132,11 @@ class Customer(models.Model):
         :param sales_order_id: sales order id of the package
         :return: updated customer
         """
-        next_package_id             = product_id if product_id else customer.current_package_id
+        next_package_id             = product_id if product_id else customer.current_package_id.id
         next_package_start_date     = start_date if start_date else self._get_next_package_start_date(given_date=customer.current_package_start_date)
         next_package_price          = price if price else customer.current_package_price
         next_package_original_price = price if price else customer.current_package_original_price
-        next_package_sales_order_id = sales_order_id if sales_order_id else customer.current_package_sales_order_id
+        next_package_sales_order_id = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
 
         customer.update({
             'next_package_id'             : next_package_id,
@@ -240,4 +241,42 @@ class Customer(models.Model):
             customer_service_req_object = self.env['isp_crm_module.service_request'].search([('customer', '=', partner.id)])
             total_instllation_charge =  sum(req.amount_total for req in customer_service_req_object)
             partner.total_installation_charge = total_instllation_charge
+
+    def get_customer_balance(self, customer_id, start_date=None, end_date=None):
+        """
+        Returns the customer's balance.
+        :param customer_id: id of the customer
+        :param start_date: from the date the balance checking starts
+        :param end_date: to the date the balance checking ends
+        :return: balance of the given customer
+        """
+        # Account
+        unearned_account_obj =  self.env['account.account'].search([
+            ('code', 'like', DEFAULT_ACCOUNT_CODE),
+        ], limit=1)
+
+        total_debit = 0.0
+        total_credit = 0.0
+        if start_date is None:
+            start_date = self.current_package_start_date
+        if end_date is None:
+            end_date = self.current_package_end_date
+
+        move_line_obj = self.env['account.move.line']
+        domain = [
+            ('account_id', '=', unearned_account_obj.id),
+            ('partner_id', '=', customer_id),
+            ('create_date', '>=', start_date),
+            ('create_date', '<', end_date),
+        ]
+        acc_move_lines = move_line_obj.search(domain, order='create_date desc')
+        if len(acc_move_lines):
+            for line in acc_move_lines:
+                total_debit += line.debit
+                total_credit += line.credit
+
+        balance = 0.0 if (total_debit - total_credit) == 0.0 else total_debit - total_credit
+        return balance
+
+
 

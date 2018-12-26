@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <record  id="account_default_unearned_revenue" model="account.account">
+    <record id="account_default_unearned_revenue" model="account.account">
         <field name="code">100001</field>
         <field name="name">Un-earned Revenue</field>
         <field name="user_type_id">7</field>
+    </record>
+    <record id="account_default_revenue" model="account.account">
+        <field name="code">111111</field>
+        <field name="name">Revenue</field>
+        <field name="user_type_id">14</field>
     </record>
 </odoo>
