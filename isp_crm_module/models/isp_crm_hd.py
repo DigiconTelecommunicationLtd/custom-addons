@@ -310,12 +310,10 @@ class Helpdesk(models.Model):
     def action_resolved_by_rm(self):
         customer = self.customer
         if customer:
-            get_opportunity = customer.opportunity_ids[0]
-            if get_opportunity:
-                assigned_rm = get_opportunity.assigned_rm
-                if assigned_rm:
-                    if assigned_rm != self.env.uid:
-                        raise UserError('This ticket can only be resolved by the assigned RM.')
+            get_assigned_rm_from_customer = customer.assigned_rm
+            if get_assigned_rm_from_customer:
+                if get_assigned_rm_from_customer != self.env.uid:
+                    raise UserError('This ticket can only be resolved by the assigned RM.')
         self.update({
             'td_flags': TD_FLAGS[5][0],
         })
@@ -341,12 +339,10 @@ class Helpdesk(models.Model):
     def action_not_resolved(self):
         customer = self.customer
         if customer:
-            get_opportunity = customer.opportunity_ids[0]
-            if get_opportunity:
-                assigned_rm = get_opportunity.assigned_rm
-                if assigned_rm:
-                    if assigned_rm != self.env.uid:
-                        raise UserError('This ticket can only be resolved by the assigned RM.')
+            get_assigned_rm_from_customer = customer.assigned_rm
+            if get_assigned_rm_from_customer:
+                if get_assigned_rm_from_customer != self.env.uid:
+                    raise UserError('This ticket can only be resolved by the assigned RM.')
 
         self.update({
             'td_flags': TD_FLAGS[0][0],

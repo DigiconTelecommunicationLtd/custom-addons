@@ -51,6 +51,7 @@
                 <field name="identifier_mobile" widget="phone"/>
                 <field name="identifier_phone" widget="phone"/>
                 <field name="identifier_nid" />
+                <field name="assigned_rm"/>
             </field>
             <xpath expr="//group/label" position="replace">
                 <label for="street" string="Connection Address"/>
