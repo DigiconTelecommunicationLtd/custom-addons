@@ -119,7 +119,7 @@
                         name="action_resolved_by_rm"
                         string="Solve by RM"
                         type="object"
-                        help="Solved by RM"
+                        help="Done"
                         class="oe_highlight"
                         attrs="{'invisible': ['|',('default_stages', '!=', 'RM'),('td_flags', '=', '5')]}"
                         confirm="Are you sure you want to continue?"
