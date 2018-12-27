@@ -379,7 +379,12 @@
                         <li class="list-group-item">
                             <b>Status</b>
                             <b class="pull-right text-info">
-                                <t t-esc="user.current_package_end_date" />
+                                <t t-if="user.active_status == 'inactive'">
+                                    <span class="text-danger">Inactive</span>
+                                </t>
+                                <t t-else="">
+                                    <span>Active</span>
+                                </t>
                             </b>
                         </li>
                     </ul>
