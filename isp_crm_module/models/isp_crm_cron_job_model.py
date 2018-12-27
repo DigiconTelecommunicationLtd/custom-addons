@@ -4,7 +4,7 @@ import re
 import base64
 from odoo import models, fields, api
 from odoo.exceptions import Warning, UserError
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, date
 
 DEFAULT_THRESHOLD_DAYS = 7
 
@@ -243,10 +243,13 @@ class CronJobModel(models.Model):
 
     @api.model
     def update_customer_package_for_next_bill_cycle(self):
-        today = datetime.today()
+        today = date.today()
+        tomorrow = date.today() + timedelta(days=1)
         # TODO (Arif) : find the customers list to be updated for next month
-        customers_list = self.env['res.partner'].search([('customer', '=', True)])
-        # , ('current_package_end_date', '=', today)
+        customers_list = self.env['res.partner'].search([
+            ('customer', '=', True),
+            ('next_package_start_date', '=', tomorrow)
+        ])
         # TODO (Arif) : for each customer
         for customer in customers_list:
             # Get customer balance

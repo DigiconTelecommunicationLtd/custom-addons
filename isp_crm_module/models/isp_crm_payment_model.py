@@ -13,6 +13,7 @@ DEFAULT_BANK_ACCOUNT_CODE = '101401'
 DEFAULT_UNEARNED_REVENUE_ACCOUNT_CODE = '100001'
 DEFAULT_REVENUE_ACCOUNT_CODE = '111111'
 DEFAULT_PAYMENT_INVOICE = 'account.payment.customer.invoice'
+DEFAULT_BANK_JOURNAL_SHORTCODE = 'BNK1'
 
 class ISPCRMPayment(models.Model):
     """Inherits account.payment and adds Functionality in account payment"""
@@ -118,10 +119,14 @@ class ISPCRMPayment(models.Model):
         :param package_price: price of the package
         :return: True if all operations are ok
         """
+        # get Journal
+        bank_journal_obj = self.env['account.journal'].search([('code', '=', DEFAULT_BANK_JOURNAL_SHORTCODE)], limit=1)
         # account object
         account_obj = self.env['account.account']
         # creating the move
-        acc_move = self.env['account.move'].create(self._get_move_vals())
+        acc_move = self.env['account.move'].create({
+            'journal_id' : bank_journal_obj.id
+        })
 
         # account move line
         aml_obj = self.env['account.move.line'].with_context(check_move_validity=False)
