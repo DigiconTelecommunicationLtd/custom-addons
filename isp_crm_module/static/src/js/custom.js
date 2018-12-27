@@ -240,11 +240,12 @@ $(document).ready(function() {
 
     //Date picker
     $('input#idPackageActivationDate').datepicker({
+        minDate: new Date(),
         autoclose: true,
         format: 'yyyy-mm-dd',
         changeMonth: true,
         changeYear: true
-    });
+    }).datepicker("setDate", new Date());
 
     // Highlight the menu item clicked.
     var url = window.location.pathname;

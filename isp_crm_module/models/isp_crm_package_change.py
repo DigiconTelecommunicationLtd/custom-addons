@@ -15,7 +15,7 @@ class ChangePackage(models.Model):
 
     STATES = [
         ('draft', 'Draft'),
-        ('invoice_paid', 'Invoice Paid'),
+        ('paid', 'Paid'),
         ('validated', 'Validated'),
         ('canceled', 'Canceled'),
     ]
@@ -32,10 +32,11 @@ class ChangePackage(models.Model):
     to_package_id = fields.Many2one('product.product', string='Change To Package', domain=[('sale_ok', '=', True)],
                                       change_default=True, ondelete='restrict')
     active_from = fields.Date('Will Active From', default=_tomorrow_date)
-    validated_by_id = fields.Many2one('hr.employee', string='Validated By', index=True, track_visibility='onchange')
-    canceled_by_id = fields.Many2one('hr.employee', string='Canceled By', index=True, track_visibility='onchange')
+    validated_by_id = fields.Many2one('res.users', string='Validated By', index=True, track_visibility='onchange')
+    canceled_by_id = fields.Many2one('res.users', string='Canceled By', index=True, track_visibility='onchange')
     state = fields.Selection(STATES, string="State", default='draft')
-    is_invoice_paid = fields.Boolean("Is Invoice Paid", default=False)
+    customer_balance = fields.Float(string="Customer Balance", compute="_get_customer_balance")
+    is_paid = fields.Boolean("Is Paid", default=False)
 
     @api.multi
     def action_make_package_change_validated(self):
@@ -44,15 +45,15 @@ class ChangePackage(models.Model):
             pack_change_obj.customer_id.update({
                 'next_package_id' : pack_change_obj.to_package_id.id,
                 'next_package_start_date' : pack_change_obj.active_from,
-                'next_package_price' : pack_change_obj.to_package_id.list_price,
-                'next_package_original_price' : pack_change_obj.to_package_id.list_price,
+                'next_package_price' : pack_change_obj.to_package_id.price,
+                'next_package_original_price' : pack_change_obj.to_package_id.price,
             })
-            # TODO (Arif) : create a sales_order for this package
-
-            # TODO (Arif) : create an invoice for this customer
             # TODO (Arif) : send a mail to this customer
-            pack_change_obj.validated_by_id = self.env.user.id
-            pack_change_obj.state = 'validated'
+            pack_change_obj.update({
+                'validated_by_id' : self.env.user.id,
+                'state' : 'validated',
+
+            })
         return True
 
     @api.multi
@@ -62,3 +63,15 @@ class ChangePackage(models.Model):
             pack_change_obj.state = 'canceled'
         return True
 
+    @api.multi
+    @api.depends('customer_id')
+    def _get_customer_balance(self):
+        for rec in self:
+            balance = rec.customer_id.get_customer_balance(customer_id=rec.customer_id.id)
+            rec.customer_balance = abs(balance) if balance < 0 else 0.0
+            if rec.customer_balance > rec.to_package_id.price:
+                rec.write({
+                    'is_paid' : True
+                })
+
+        return True
