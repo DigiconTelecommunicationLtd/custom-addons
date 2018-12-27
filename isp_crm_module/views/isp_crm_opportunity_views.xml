@@ -286,7 +286,7 @@
         <field name="arch" type="xml">
             <xpath expr="//group/group/field[@name='partner_id']" position="after">
                 <!--<field name="partner_name"/>-->
-                <field name="contact_name"/>
+                <field name="emergency_contact_name"/>
                 <!--<field name="title"/>-->
                 <!--<field name="street"/>-->
                 <!--<field name="street2"/>-->
@@ -370,6 +370,9 @@
         <field name="arch" type="xml">
             <xpath expr="//tree/field[@name='name']" position="after">
                 <field name="assigned_rm"/>
+            </xpath>
+            <xpath expr="//tree/field[@name='contact_name']" position="replace">
+                <field name="emergency_contact_name"/>
             </xpath>
         </field>
     </record>
