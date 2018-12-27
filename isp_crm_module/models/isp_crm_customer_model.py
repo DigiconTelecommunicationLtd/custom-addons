@@ -66,6 +66,7 @@ class Customer(models.Model):
     next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order')
     active_status = fields.Selection(ACTIVE_STATES, string='Active Status', required=False, help="Active Status of Current Bill Cycle", default='active')
     is_deferred = fields.Boolean("Is Deferred", default=False)
+    assigned_rm = fields.Many2one('hr.employee', string='RM', store=True)
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
@@ -149,7 +150,9 @@ class Customer(models.Model):
     @api.model
     def create(self, vals):
         validated = True
-
+        name = vals.get('name')
+        rm  = self.env['crm.lead'].search([('name', '=', name)], order='create_date desc', limit=1)
+        vals['assigned_rm'] = rm.assigned_rm.id
         if vals.get('email'):
             if len(vals.get('email')) < 256:
                 if re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$", vals.get('email')) is None:

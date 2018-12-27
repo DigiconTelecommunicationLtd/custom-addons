@@ -117,9 +117,9 @@
                     />
                     <button
                         name="action_resolved_by_rm"
-                        string="Resolve by RM"
+                        string="Solve by RM"
                         type="object"
-                        help="Resolve by RM"
+                        help="Done"
                         class="oe_highlight"
                         attrs="{'invisible': ['|',('default_stages', '!=', 'RM'),('td_flags', '=', '5')]}"
                         confirm="Are you sure you want to continue?"
@@ -135,7 +135,7 @@
                     />
                     <button
                         name="action_not_resolved"
-                        string="Not Resolved"
+                        string="Not Solved"
                         type="object"
                         help="Not Resolved"
                         class="oe_highlight"

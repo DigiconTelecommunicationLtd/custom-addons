@@ -291,14 +291,19 @@
                             <li><a href="/selfcare/payment-history" class="sidebar-menu-item">Payment History</a></li>
                         </ul>
                     </li>
-
-                    <li>
-                        <a href="/selfcare/change-package" class="sidebar-menu-item">
-                        <i class="fa fa-exchange"></i>
-                        <span>
-                            Change Package
-                        </span>
+                    <!-- package tree -->
+                    <li class="treeview">
+                        <a href="/selfcare/change-package">
+                            <i class="fa fa-exchange"></i>
+                            <span>Package</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
                         </a>
+                        <ul class="treeview-menu">
+                            <li><a href="/selfcare/change-package" class="sidebar-menu-item">Change Package</a></li>
+                            <li><a href="/selfcare/package/history" class="sidebar-menu-item">Package History</a></li>
+                        </ul>
                     </li>
                 </ul>
                 <!-- /.sidebar-menu -->
@@ -1249,5 +1254,126 @@
             </div>
         </body>
     </template>
+
+    <!-- Package History List Content Template -->
+    <template id="template_selfcare_package_history_list">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header">
+                </div>
+                <div class="box-body">
+                    <div>
+                        <!--Info Table-->
+                        <t t-if='packages'>
+                            <table class="table table-condensed table-bordered table-striped fixed_headers"  style="height:150px">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 15% !important">Package</th>
+                                        <th class="text-center" style="width: 30% !important">Start Date</th>
+                                        <th class="text-center" style="width: 30% !important">End Date</th>
+                                        <th class="text-center" style="width: 15% !important">Price</th>
+                                        <th class="text-center" style="width: 15% !important">
+                                            Original Price
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="packages" t-as="package">
+                                        <tr>
+                                            <td style="width: 15% !important">
+                                                <t t-if="package.package_id.name">
+                                                    <t t-esc="package.package_id.name"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>Name Not Available</span>
+                                                </t>
+
+                                            </td>
+                                            <td style="width: 30% !important">
+                                                <t t-if="package.start_date">
+                                                    <t t-esc="package.start_date" t-field-options='{"format": "dd-MM-Y"}'/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>Date Not Available</span>
+                                                </t>
+                                            </td>
+                                            <td style="width: 30% !important">
+                                                <t t-if="package.end_date">
+                                                    <t t-esc="package.end_date" t-field-options='{"format": "dd-MM-Y"}'/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>Date Not Available</span>
+                                                </t>
+                                            </td>
+                                            <td style="width: 15% !important">
+                                                <t t-if="package.price==0.0">
+                                                    <span>0.00</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-esc="package.price"/>
+                                                </t>
+                                            </td>
+                                            <td style="width: 15% !important">
+                                                <span t-field="package.original_price"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div t-if="pager" class="o_portal_pager text-center">
+                              <t t-call="website.pager"/>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <h3>There are no packages for this customer!!!</h3>
+                        </t>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+    <!-- Package History List Main Template-->
+    <template id="template_main_selfcare_package_history_list">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <style>
+                thead, tbody { display: block; }
+
+                tbody {
+                    height: 500px;       /* Just for the demo          */
+                    overflow-y: auto;    /* Trigger vertical scroll    */
+                    overflow-x: hidden;  /* Hide the horizontal scroll */
+                }
+            </style>
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_package_history_list"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+
 
 </odoo>

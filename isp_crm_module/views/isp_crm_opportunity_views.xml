@@ -296,6 +296,7 @@
                 <field name="email_from"/>
                 <field name="phone"/>
                 <field name="mobile"/>
+                <br/>
                 <field name="lead_type" widget="radio"/>
                 <!--<field name="zip"/>-->
                 <!--<field name="function"/>-->
@@ -309,7 +310,21 @@
     </record>
     <!--End of the section-->
 
-    <!--Adding RM field in leads form-->
+    <!--Adding Type field in Opportunity kanban form-->
+    <record model="ir.ui.view" id="view_add_fields_in_opportunity_kanban_form">
+        <field name="name">view.add.fields.in.opportunity.kanban.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <xpath expr="//group/group/field[@name='date_deadline']" position="after">
+                <br/>
+                <field name="lead_type" widget="radio"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
+    <!--Adding RM, Lead_Type fields in leads form-->
     <record model="ir.ui.view" id="view_add_fields_in_leads_form">
         <field name="name">view.add.fields.in.leads.form</field>
         <field name="model">crm.lead</field>
@@ -319,7 +334,29 @@
                 <field name="assigned_rm"/>
             </xpath>
             <xpath expr="//group/group/field[@name='mobile']" position="after">
+                <br/>
                 <field name="lead_type" widget="radio"/>
+            </xpath>
+            <xpath expr="//group/group/field[@name='team_id']" position="replace">
+            </xpath>
+            <xpath expr="//group/group/field[@name='user_id']" position="before">
+                <field name="team_id" widget="selection" domain="[('use_leads','=',True)]" can_create="true" can_write="true" modifiers="{}"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
+
+    <!--Updating CRM Lead_to_Opportunity form-->
+    <record model="ir.ui.view" id="view_update_convert_leads_to_opportunity_form">
+        <field name="name">view.convert.leads.to.opportunity.form</field>
+        <field name="model">crm.lead2opportunity.partner</field>
+        <field name="inherit_id" ref="crm.view_crm_lead2opportunity_partner" />
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='team_id']" position="replace">
+            </xpath>
+            <xpath expr="//group/field[@name='user_id']" position="before">
+                <field name="team_id" widget="selection"/>
             </xpath>
         </field>
     </record>
