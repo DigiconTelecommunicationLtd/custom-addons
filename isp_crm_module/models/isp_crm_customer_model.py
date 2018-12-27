@@ -152,6 +152,16 @@ class Customer(models.Model):
         validated = True
         name = vals.get('name')
         rm  = self.env['crm.lead'].search([('name', '=', name)], order='create_date desc', limit=1)
+
+        # Update expected revenue
+        products = self.env['crm.lead'].search([('name', '=', name)], order='create_date desc', limit=1).tagged_product_ids
+        price = 0.00
+        for product in products:
+            price = price + product.price
+        rm.update({
+            'planned_revenue': price,
+        })
+
         vals['assigned_rm'] = rm.assigned_rm.id
         if vals.get('email'):
             if len(vals.get('email')) < 256:
