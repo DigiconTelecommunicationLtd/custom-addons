@@ -662,6 +662,43 @@ class SelfcareController(PaymentController):
         return request.render(template, context)
 
 
+    @http.route(["/selfcare/package/history", "/selfcare/package/history/page/<int:page>"], methods=["GET"], website=True)
+    def selfcare_package_history(self, page=1, **kw):
+        """
+        Show Customer Package History in customer portal
+        :param page:
+        :param kw:
+        :return:
+        """
+        context        = {}
+        template       = "isp_crm_module.template_selfcare_login_main"
+        content_header = "Package History"
+
+        if self._redirect_if_not_login(req=request):
+            template            = "isp_crm_module.template_main_selfcare_package_history_list"
+            user_id             = request.env.context.get('uid')
+            logged_in_user      = request.env['res.users'].sudo().browse(user_id)
+            package_obj         = request.env['isp_crm_module.customer_package_history']
+            domain              = [('customer_id', '=', logged_in_user.partner_id.id)]
+            package_list_count  = package_obj.sudo().search_count(domain)
+            pager               = request.website.pager(
+                url='/selfcare/package/history/',
+                total = package_list_count,
+                page = page,
+                step = self.ITEMS_PER_PAGE
+            )
+            package_history_list = package_obj.sudo().search(domain, order='create_date desc', limit=self.ITEMS_PER_PAGE, offset=pager['offset'])
+
+        context['user']             = logged_in_user
+        context['full_name']        = logged_in_user.name.title()
+        context['customer_id']      = logged_in_user.subscriber_id
+        context['content_header']   = content_header
+        context['packages']         = package_history_list
+        context['pager']            = pager
+
+        return request.render(template, context)
+
+
     @http.route("/selfcare", methods=["GET"], website=True)
     def selfcare_home(self, **kw):
         context = {}
