@@ -266,8 +266,6 @@ class Customer(models.Model):
         domain = [
             ('account_id', '=', unearned_account_obj.id),
             ('partner_id', '=', customer_id),
-            ('create_date', '>=', start_date),
-            ('create_date', '<', end_date),
         ]
         acc_move_lines = move_line_obj.search(domain, order='create_date desc')
         if len(acc_move_lines):

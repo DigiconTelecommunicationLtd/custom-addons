@@ -432,9 +432,9 @@
         <div class="col-md-4 col-md-offset-4">
             <div class="box box-primary">
                 <div class="box-header">
-                  <h3 class="box-title">
-                      <t t-esc="content_header"/>
-                  </h3>
+                  <!--<h3 class="box-title">-->
+                      <!--<t t-esc="content_header"/>-->
+                  <!--</h3>-->
                 </div>
                 <div class="box-body">
                     <form role="form" action="/selfcare/payment" method="POST">
@@ -450,7 +450,13 @@
                             <tr>
                                 <th>Package</th>
                                 <td>
-                                    <t t-esc="user.package_id.name"/>
+                                    <t t-esc="user.current_package_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Balance</th>
+                                <td>
+                                    <t t-esc="customer_balance"/>
                                 </td>
                             </tr>
                             <tr>
@@ -471,8 +477,8 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr id="show_invoice_info">
-                            </tr>
+                            <!--<tr id="show_invoice_info">-->
+                            <!--</tr>-->
                             <tr>
                                 <th>Amount</th>
                                 <td>

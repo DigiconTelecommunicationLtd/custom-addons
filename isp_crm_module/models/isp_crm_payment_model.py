@@ -37,11 +37,9 @@ class ISPCRMPayment(models.Model):
     deducted_amount = fields.Char(string="Deducted amount")
     bill_payment_date = fields.Char(string="Bill payment date")
     card_type = fields.Char(string="Card type")
-    card_number= fields.Char(string="Card number")
-
-    """
-    Billing status
-    """
+    card_number = fields.Char(string="Card number")
+    billing_status = fields.Char(string="Billing status")
+    full_response = fields.Text(string="Full Response")
 
     @api.multi
     def post(self):
