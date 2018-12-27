@@ -208,6 +208,14 @@ class Helpdesk(models.Model):
             'default_stages': 'RM',
             'color': 7,
         })
+        # Send notification to assigned RM
+        notification_message = "You have got new helpdesk ticket, Ticket ID: "+ str(self.name)
+        customer = self.customer
+        if customer:
+            get_assigned_rm_from_customer = customer.assigned_rm
+            if get_assigned_rm_from_customer:
+                get_user = self.env['res.users'].search([('id','=', get_assigned_rm_from_customer.id)])
+                get_user.notify_info(notification_message)
         return True
 
     @api.multi

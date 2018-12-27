@@ -24,6 +24,8 @@
         <field name="arch" type="xml">
             <xpath expr="//search/filter[@name='late']" position="after" >
                 <filter name="deferred" string="Deferred" domain="[('is_deferred', '=', 'True')]"/>
+                <filter name="retail" string="Retail" domain="[('partner_id.opportunity_ids.lead_type', '=', 'retail')]"/>
+                <filter name="corporate" string="Corporate" domain="[('partner_id.opportunity_ids.lead_type', '=', 'corporate')]"/>
             </xpath>
         </field>
     </record>
