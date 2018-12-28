@@ -25,6 +25,7 @@
                 <field name="to_package_id"/>
                 <field name="active_from"/>
                 <field name="state"/>
+                <field name="is_paid"/>
                 <field name="validated_by_id"/>
                 <field name="canceled_by_id"/>
             </tree>
@@ -38,7 +39,7 @@
         <field name="arch" type="xml">
             <form string="Change Package">
                 <header>
-                    <field name="is_invoice_paid" invisible="1"/>
+                    <field name="is_paid" invisible="1"/>
                     <!--attrs="{'invisible': [('state', '=', 'validated')]}"-->
                     <!--attrs="{'invisible': [('state', '=', 'canceled')]}"-->
                     <button
@@ -47,7 +48,7 @@
                         type="object"
                         help="Validate"
                         class="oe_highlight"
-                        attrs="{'invisible': ['&amp;', ('state', '!=', 'invoice_paid')]}"
+                        attrs="{'invisible': [('state', '=', 'validated')]}"
                     />
                     <button
                         name="action_make_package_change_canceled"

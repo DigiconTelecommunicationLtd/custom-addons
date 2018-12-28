@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Show payments forms changes here by inheriting payment form view-->
+    <record id="isp_crm_module.view_inherit_account_payment_form" model="ir.ui.view">
+        <field name="name">view.inherit.account.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_method_code" position="after">
+                <field name="service_type_id"/>
+                <field name="is_advance"/>
+            </field>
+        </field>
+    </record>
+</odoo>

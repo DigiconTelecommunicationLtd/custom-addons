@@ -34,6 +34,8 @@ class SelfcareController(PaymentController):
     SERVICE_TYPE_ID_LIST = [1,8]
     PAYMENT_SERVICE_TYPE_ID = 8
     ITEMS_PER_PAGE = 10
+    ACTIVE_STATUS_INACTIVE = 'inactive'
+    ACTIVE_STATUS_ACTIVE = 'active'
 
 
     def _redirect_if_not_login(self, req):
@@ -193,20 +195,24 @@ class SelfcareController(PaymentController):
 
         if self._redirect_if_not_login(req=request):
             if request.httprequest.method == 'POST':
-                invoice_number = False
-                invoice_ids = False
+                user_id = request.env.context.get('uid')
+                logged_in_user = request.env['res.users'].sudo().browse(user_id)
+                # invoice_number = False
+                # invoice_ids = False
                 data = dict(request.params)
                 session_id = request.session['payment_session_id']
                 customer_id = request.session['customer_id']
-                invoice_id = request.session['invoice_id']  if ('invoice_id' in request.session) else False
-                if invoice_id:
-                    # get invoice object and properties
-                    invoice_obj = request.env['account.invoice'].sudo().search([('id', '=', invoice_id)], limit=1)
-                    invoice_number = invoice_obj.number
-                    invoice_ids = invoice_obj.ids
+                service_type = request.session['service_type']
+
+                # invoice_id = request.session['invoice_id']  if ('invoice_id' in request.session) else False
+                # if invoice_id:
+                #     # get invoice object and properties
+                #     invoice_obj = request.env['account.invoice'].sudo().search([('id', '=', invoice_id)], limit=1)
+                #     invoice_number = invoice_obj.number
+                #     invoice_ids = invoice_obj.ids
 
                 # customer object
-                customer_obj = request.env['res.partner'].sudo().search([('id', '=', customer_id)], limit=1)
+                customer_obj = logged_in_user.partner_id
                 # get journal id
                 journal_obj = request.env['account.journal'].sudo().search([('name', '=', self.DEFAULT_JOURNAL_NAME)], limit=1)
                 # get payment_method id
@@ -218,37 +224,65 @@ class SelfcareController(PaymentController):
                 # TODO (Arif) : Add other info in this reponse of payments
                 created_payment_obj = payment_obj.create({
                     'payment_method_id' : payment_method_obj.id,
-                    'payment_type' : self.DEFAULT_RECEIVE_MONEY_PAYMENT_TYPE,
-                    'partner_type' : self.DEFAULT_PARTNER_TYPE,
-                    'partner_id' : customer_id,
-                    'amount' : float(data['amount']),
-                    'communication' : invoice_number if invoice_number else None,
-                    'journal_id' : journal_obj.id,
-                    'invoice_ids': [(6, 0, invoice_ids)] if invoice_ids else None,
+                    'payment_type'      : self.DEFAULT_RECEIVE_MONEY_PAYMENT_TYPE,
+                    'partner_type'      : self.DEFAULT_PARTNER_TYPE,
+                    'partner_id'        : customer_id,
+                    'currency_id'       : customer_obj.currency_id.id,
+                    'amount'            : float(data['amount']),
+                    # 'communication'     : invoice_number if invoice_number else None,
+                    'journal_id'        : journal_obj.id,
+                    'service_type_id'   : service_type,
+                    'is_advance'        : True,
                 })
+                created_payment_obj.post()
+                # updating the payment object with card info
+                created_payment_obj.update({
+                    'customer_id'       : customer_obj.subscriber_id,
+                    'customer_name'     : customer_obj.name,
+                    'package_name'      : customer_obj.current_package_id.name,
+                    'bill_start_date'   : str(customer_obj.current_package_start_date),
+                    'bill_end_date'     : str(customer_obj.current_package_end_date),
+                    'bill_amount'       : data['amount'],
+                    'received_amount'   : data['store_amount'],
+                    'deducted_amount'   : float(float(data['amount']) - float(data['store_amount'])),
+                    'bill_payment_date' : data['tran_date'],
+                    'card_type'         : data['card_type'],
+                    'card_number'       : data['card_no'],
+                    'billing_status'    : data['status'],
+                    'full_response'     : str(data),
+                })
+
+
                 # make payment
-                if invoice_id:
-                    created_payment_obj.action_validate_invoice_payment()
-                else:
-                    created_payment_obj.post()
+                # if invoice_id:
+                #     created_payment_obj.action_validate_invoice_payment()
+                # else:
+                #     created_payment_obj.post()
 
-                today = datetime.today()
-                customers_current_package_end_date_obj = datetime.strptime(customer_obj.current_package_end_date, self.DEFAULT_DATE_FORMAT)
+                # today = datetime.today()
+                # if customer_obj.current_package_end_date:
+                #     customers_current_package_end_date_obj = datetime.strptime(customer_obj.current_package_end_date, self.DEFAULT_DATE_FORMAT)
+                #
+                # if today > customers_current_package_end_date_obj:
+                #     start_date = today.strftime(self.DEFAULT_DATE_FORMAT)
+                #     # update the bill cycle
+                #     updated_customer_info = customer_obj.update_current_bill_cycle_info(customer=customer_obj,
+                #                                                                         start_date=start_date)
+                #     updated_customer_info = customer_obj.update_next_bill_cycle_info(customer=customer_obj,
 
-                if today > customers_current_package_end_date_obj:
-                    start_date = today.strftime(self.DEFAULT_DATE_FORMAT)
-                    # update the bill cycle
-                    updated_customer_info = customer_obj.update_current_bill_cycle_info(customer=customer_obj,
-                                                                                        start_date=start_date)
-                    updated_customer_info = customer_obj.update_next_bill_cycle_info(customer=customer_obj,
-                                                                                     start_date=start_date)
-
+                                                                                     # start_date=start_date)
+                # make user active
+                customer_balance = customer_obj.get_customer_balance(customer_id=customer_obj.id)
+                if (customer_balance < 0) and (abs(customer_balance) > customer_obj.current_package_price):
+                    if customer_obj.active_status == self.ACTIVE_STATUS_INACTIVE :
+                        customer_obj.update({
+                            'active_status' : self.ACTIVE_STATUS_ACTIVE
+                        })
 
             user_id = request.env.context.get('uid')
             logged_in_user = request.env['res.users'].sudo().browse(user_id)
             context['user'] = logged_in_user
-        # removing invoice from sesssion
-        # del request.session['invoice_id'] if invoice_id else None
+
         context['content_header'] = content_header
         return request.render(template, context)
 
@@ -286,20 +320,21 @@ class SelfcareController(PaymentController):
                 service_type = request.params["service_type"]
                 transaction_id = service_type + "_" + amount
                 base_url = request.httprequest.url_root
-                if int(service_type) in self.SERVICE_TYPE_ID_LIST:
-                    invoice_number = request.params["invoice_number"]
-                    invoice_id = request.params["invoice_id"]
-                    request.session['invoice_id'] = invoice_id
-                    invoice_obj = request.env['account.invoice'].search(
-                            [('id', '=', invoice_id), ('state', '=', 'open')], limit=1)
-                    amount = invoice_obj.amount_total
-                    transaction_id = invoice_obj.number
+                # if int(service_type) in self.SERVICE_TYPE_ID_LIST:
+                #     invoice_number = request.params["invoice_number"]
+                #     invoice_id = request.params["invoice_id"]
+                #     request.session['invoice_id'] = invoice_id
+                #     invoice_obj = request.env['account.invoice'].search(
+                #             [('id', '=', invoice_id), ('state', '=', 'open')], limit=1)
+                #     amount = invoice_obj.amount_total
+                #     transaction_id = invoice_obj.number
 
                 response_content = self.initiate_session(base_url=base_url, customer=logged_in_user, amount=amount, transaction_id=transaction_id)
                 if response_content['status'] == "SUCCESS":
                     template = "isp_crm_module.template_selfcare_user_make_payment"
                     request.session['customer_id'] = logged_in_user.partner_id.id
                     request.session['payment_session_id'] = response_content['sessionkey']
+                    request.session['service_type'] = service_type
                     context['cards'] = response_content["desc"]
                     context['redirect_gateway'] = response_content["redirectGatewayURL"]
 
@@ -335,10 +370,11 @@ class SelfcareController(PaymentController):
                     template_name = False
                     # return request.redirect(response_content["redirectGatewayURL"] + response_content["gw"]["mobilebanking"])
 
-
+            customer_balance = logged_in_user.partner_id.get_customer_balance(customer_id=logged_in_user.partner_id.id)
             context['user'] = logged_in_user
             context['full_name'] = logged_in_user.name.title()
             context['customer_id'] = logged_in_user.subscriber_id
+            context['customer_balance'] = abs(customer_balance) if customer_balance < 0 else 0.00
             context['image'] = logged_in_user.image
             context['content_header'] = content_header
             context['template_name'] = template_name

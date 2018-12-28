@@ -4,13 +4,14 @@ import re
 import base64
 from odoo import models, fields, api
 from odoo.exceptions import Warning, UserError
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, date
 
 DEFAULT_THRESHOLD_DAYS = 7
 
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
+CUSTOMER_INCATIVE_STATUS = 'inactive'
 
 INVOICE_PAID_STATUS = 'paid'
 
@@ -242,12 +243,17 @@ class CronJobModel(models.Model):
 
     @api.model
     def update_customer_package_for_next_bill_cycle(self):
-        today = datetime.today()
+        today = date.today()
+        tomorrow = date.today() + timedelta(days=1)
         # TODO (Arif) : find the customers list to be updated for next month
-        customers_list = self.env['res.partner'].search([('customer', '=', True)])
-        # , ('current_package_end_date', '=', today)
+        customers_list = self.env['res.partner'].search([
+            ('customer', '=', True),
+            ('next_package_start_date', '=', tomorrow)
+        ])
         # TODO (Arif) : for each customer
         for customer in customers_list:
+            # Get customer balance
+            customer_balance =  customer.get_customer_balance(customer_id=customer.id)
             # TODO (Arif) : find their recent invoice that paid
             current_month_invoice = self.env['account.invoice'].search([
                 ('partner_id', '=', customer.id),
@@ -304,7 +310,26 @@ class CronJobModel(models.Model):
             if hour > 0 or min > 10 :
                 # Delete the expired link
                 link.unlink()
-
-
-
-
+            if (customer_balance < 0) and (abs(customer_balance) >= customer.next_package_price):
+                # updating account moves of customer
+                payment_obj = self.env['account.payment']
+                payment_obj.customer_bill_adjustment(
+                    customer=customer,
+                    package_price=customer.next_package_price
+                )
+                # updating package info of customer
+                customer.update_current_bill_cycle_info(
+                    customer=customer,
+                    product_id=customer.next_package_id.id,
+                    price=customer.next_package_price,
+                    start_date=customer.next_package_start_date,
+                )
+                customer.update_next_bill_cycle_info(
+                    customer=customer
+                )
+                # Adding the package change history
+                package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
+                created_package_history = package_history_obj.set_package_change_history(customer)
+            else:
+                customer.active_status = CUSTOMER_INCATIVE_STATUS
+        return True
