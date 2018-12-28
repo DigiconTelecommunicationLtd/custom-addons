@@ -272,14 +272,14 @@ class CronJobModel(models.Model):
                     package_price=customer.next_package_price
                 )
                 # updating package info of customer
-                customer.update_current_bill_cycle_info(
+                updated_customer = customer.update_current_bill_cycle_info(
                     customer=customer,
                     product_id=customer.next_package_id.id,
                     price=customer.next_package_price,
                     start_date=customer.next_package_start_date,
                 )
-                customer.update_next_bill_cycle_info(
-                    customer=customer
+                updated_customer = updated_customer.update_next_bill_cycle_info(
+                    customer=updated_customer
                 )
                 # Adding the package change history
                 package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])

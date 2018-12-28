@@ -41,14 +41,12 @@ class ChangePackage(models.Model):
     @api.multi
     def action_make_package_change_validated(self):
         for pack_change_obj in self:
-            # TODO (Arif) : update customer's next package, price and activation date
             pack_change_obj.customer_id.update({
                 'next_package_id' : pack_change_obj.to_package_id.id,
                 'next_package_start_date' : pack_change_obj.active_from,
-                'next_package_price' : pack_change_obj.to_package_id.price,
-                'next_package_original_price' : pack_change_obj.to_package_id.price,
+                'next_package_price' : pack_change_obj.to_package_id.lst_price,
+                'next_package_original_price' : pack_change_obj.to_package_id.lst_price,
             })
-            # TODO (Arif) : send a mail to this customer
             pack_change_obj.update({
                 'validated_by_id' : self.env.user.id,
                 'state' : 'validated',

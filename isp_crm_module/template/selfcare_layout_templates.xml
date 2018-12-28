@@ -288,7 +288,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="/selfcare/payment" class="sidebar-menu-item">Payment</a></li>
-                            <li><a href="/selfcare/payment-history" class="sidebar-menu-item">Payment History</a></li>
+                            <li><a href="/selfcare/payment/history" class="sidebar-menu-item">Payment History</a></li>
                         </ul>
                     </li>
                     <!-- package tree -->
@@ -1385,6 +1385,129 @@
             </div>
         </body>
     </template>
+
+
+    <!---->
+    <!-- Payment History List Content Template -->
+    <template id="template_selfcare_payment_history_list">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header">
+                </div>
+                <div class="box-body">
+                    <div>
+                        <!--Info Table-->
+                        <t t-if='payments'>
+                            <table class="table table-condensed table-bordered table-striped fixed_headers"  style="height:150px">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 15% !important">#</th>
+                                        <th class="text-center" style="width: 30% !important">Service Type</th>
+                                        <th class="text-center" style="width: 30% !important">Billing Date</th>
+                                        <th class="text-center" style="width: 30% !important">Card Type</th>
+                                        <th class="text-center" style="width: 15% !important">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="i" t-value="init_val"/>
+                                    <t t-foreach="payments" t-as="payment">
+                                        <tr>
+                                            <td><span t-esc="i"/></td>
+                                            <td style="width: 15% !important">
+                                                <t t-if="payment.service_type_id.name">
+                                                    <t t-esc="payment.service_type_id.name"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>N/A</span>
+                                                </t>
+
+                                            </td>
+                                            <td style="width: 30% !important">
+                                                <t t-if="payment.bill_payment_date">
+                                                    <t t-esc="payment.bill_payment_date"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>N/A</span>
+                                                </t>
+                                            </td>
+                                            <td style="width: 30% !important">
+                                                <t t-if="payment.card_type">
+                                                    <t t-esc="payment.card_type"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>N/A</span>
+                                                </t>
+                                            </td>
+                                            <td style="width: 15% !important">
+                                                <t t-if="payment.bill_amount">
+                                                    <t t-esc="payment.bill_amount"/>
+                                                </t>
+                                                <t t-else="">
+                                                    N/A
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <t t-set="i" t-value="i+1"/>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div t-if="pager" class="o_portal_pager text-center">
+                              <t t-call="website.pager"/>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <h3>There are no Payment for this customer!!!</h3>
+                        </t>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md -->
+    </template>
+    <!-- Payment History List Main Template-->
+    <template id="template_main_selfcare_payment_history_list">
+        <head>
+            <t t-call="isp_crm_module.template_selfcare_layout_css"/>
+        </head>
+
+        <body class="hold-transition skin-blue sidebar-mini">
+            <style>
+                thead, tbody { display: block; }
+
+                tbody {
+                    height: 500px;       /* Just for the demo          */
+                    overflow-y: auto;    /* Trigger vertical scroll    */
+                    overflow-x: hidden;  /* Hide the horizontal scroll */
+                }
+            </style>
+            <div class="wrapper">
+                <t t-call="isp_crm_module.template_selfcare_main_header"/>
+                <t t-call="isp_crm_module.template_selfcare_sidebar"/>
+                <!--<t t-call="isp_crm_module.template_selfcare_content_wrapper"/>-->
+                <div class="content-wrapper" style="min-height: 901px;">
+                    <section class="content-header">
+                        <!--inherited content header goes here-->
+                        <h1 class="text text-center">
+                            <t t-if='content_header'>
+                                <t t-esc="content_header"/>
+                            </t>
+                        </h1>
+                    </section>
+                    <section class="content">
+                        <div class="row">
+                            <t t-call="isp_crm_module.template_selfcare_payment_history_list"/>
+                        </div>
+                    </section>
+                </div>
+                <t t-call="isp_crm_module.template_selfcare_layout_js"/>
+            </div>
+        </body>
+    </template>
+    <!---->
+
+
 
 
 </odoo>

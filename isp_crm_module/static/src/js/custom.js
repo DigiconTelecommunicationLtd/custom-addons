@@ -115,13 +115,13 @@ $(document).ready(function() {
         return msg;
     }
 
-    $("select#payment_service_type").on('change', function(){
-        var type_id = $(this).val()
-        var show_inv_dom = $("tr#show_invoice_info")
-        show_inv_dom.attr('style', "display : all;");
-        getCustomerInvoiceInfo(type_id);
+//    $("select#payment_service_type").on('change', function(){
+//        var type_id = $(this).val()
+//        var show_inv_dom = $("tr#show_invoice_info")
+//        show_inv_dom.attr('style', "display : all;");
+//        getCustomerInvoiceInfo(type_id);
 //        $("tr#show_invoice_info").attr('style', "display : none;");
-    });
+//    });
 
 
     // remove attr in change the plan modal
