@@ -753,3 +753,42 @@ class SelfcareController(PaymentController):
             context['image'] = logged_in_user.image
             context['content_header'] = content_header
         return request.render(template, context)
+
+    @http.route(["/selfcare/payment/history", "/selfcare/payment/history/page/<int:page>"], methods=["GET"],
+                website=True, auth='user')
+    def selfcare_payment_history(self, page=1, **kw):
+        """
+        Show Customer payment History in customer portal
+        :param page:
+        :param kw:
+        :return:
+        """
+        context = {}
+        template = "isp_crm_module.template_selfcare_login_main"
+        content_header = "Payment History"
+
+        if self._redirect_if_not_login(req=request):
+            template = "isp_crm_module.template_main_selfcare_payment_history_list"
+            user_id = request.env.context.get('uid')
+            logged_in_user = request.env['res.users'].sudo().browse(user_id)
+            payment_obj = request.env['account.payment']
+            domain = [('partner_id', '=', logged_in_user.partner_id.id)]
+            payment_list_count = payment_obj.sudo().search_count(domain)
+            pager = request.website.pager(
+                    url='/selfcare/payment/history/',
+                    total=payment_list_count,
+                    page=page,
+                    step=self.ITEMS_PER_PAGE
+            )
+            payment_history_list = payment_obj.sudo().search(domain, order='create_date desc',
+                                                             limit=self.ITEMS_PER_PAGE, offset=pager['offset'])
+
+        context['user'] = logged_in_user
+        context['full_name'] = logged_in_user.name.title()
+        context['customer_id'] = logged_in_user.subscriber_id
+        context['content_header'] = content_header
+        context['payments'] = payment_history_list
+        context['pager'] = pager
+        context['init_val'] = int(((page-1) * self.ITEMS_PER_PAGE) + 1)
+
+        return request.render(template, context)
