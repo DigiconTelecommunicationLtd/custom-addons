@@ -244,38 +244,51 @@ class CronJobModel(models.Model):
     @api.model
     def update_customer_package_for_next_bill_cycle(self):
         today = date.today()
-        tomorrow = date.today() + timedelta(days=1)
-        # TODO (Arif) : find the customers list to be updated for next month
+        tomorrow = (date.today() + timedelta(days=1)).strftime('%Y-%m-%d')
         customers_list = self.env['res.partner'].search([
             ('customer', '=', True),
             ('next_package_start_date', '=', tomorrow)
         ])
-        # TODO (Arif) : for each customer
         for customer in customers_list:
             # Get customer balance
             customer_balance =  customer.get_customer_balance(customer_id=customer.id)
-            # TODO (Arif) : find their recent invoice that paid
+            # find their recent invoice that paid
             current_month_invoice = self.env['account.invoice'].search([
                 ('partner_id', '=', customer.id),
                 ('date_due', '=', today), ('state', '=', 'paid')
             ], limit=1)
-            # TODO(Arif): if paid then update the current package from next package and update the package valid till date.
+            #
             # if current_month_invoice:
             #     self._update_customer_package_info(customer=customer)
             # else:
             #     pass
 
-            # TODO (Arif): Have to check the balance
-            # Adding the package change history
-            package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
-            created_package_history = package_history_obj.set_package_change_history(customer)
-
-
-
-
-            list_of_acccount_moves = [{'name' : acc.name, 'ref' : acc.ref, 'amount' : acc.amount} for acc in self.env['account.move'].search([('partner_id', '=', customer.id)])]
-
-        return current_month_invoice
+            # updating the customer active_status and package according to their balance
+            if (customer_balance < 0) and (abs(customer_balance) >= customer.next_package_price):
+                # updating account moves of customer
+                payment_obj = self.env['account.payment']
+                payment_obj.customer_bill_adjustment(
+                    customer=customer,
+                    package_price=customer.next_package_price
+                )
+                # updating package info of customer
+                customer.update_current_bill_cycle_info(
+                    customer=customer,
+                    product_id=customer.next_package_id.id,
+                    price=customer.next_package_price,
+                    start_date=customer.next_package_start_date,
+                )
+                customer.update_next_bill_cycle_info(
+                    customer=customer
+                )
+                # Adding the package change history
+                package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
+                created_package_history = package_history_obj.set_package_change_history(customer)
+            else:
+                customer.update({
+                    'active_status' : CUSTOMER_INCATIVE_STATUS
+                })
+        return True
 
     def send_notification_after_invoice_due_date(self):
         """
@@ -310,26 +323,4 @@ class CronJobModel(models.Model):
             if hour > 0 or min > 10 :
                 # Delete the expired link
                 link.unlink()
-            if (customer_balance < 0) and (abs(customer_balance) >= customer.next_package_price):
-                # updating account moves of customer
-                payment_obj = self.env['account.payment']
-                payment_obj.customer_bill_adjustment(
-                    customer=customer,
-                    package_price=customer.next_package_price
-                )
-                # updating package info of customer
-                customer.update_current_bill_cycle_info(
-                    customer=customer,
-                    product_id=customer.next_package_id.id,
-                    price=customer.next_package_price,
-                    start_date=customer.next_package_start_date,
-                )
-                customer.update_next_bill_cycle_info(
-                    customer=customer
-                )
-                # Adding the package change history
-                package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
-                created_package_history = package_history_obj.set_package_change_history(customer)
-            else:
-                customer.active_status = CUSTOMER_INCATIVE_STATUS
         return True
