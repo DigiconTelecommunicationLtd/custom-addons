@@ -125,7 +125,7 @@ class Opportunity(models.Model):
                     break
 
             service_req_data = {
-                'problem' : opportunity.description or DEFAULT_PROBLEM,
+                'problem' : opportunity.description or '',
                 'stage' : first_stage.id,
                 'customer' : opportunity.partner_id.id,
                 'customer_email' : opportunity.partner_id.email,
