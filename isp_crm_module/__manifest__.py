@@ -66,6 +66,7 @@
         'views/isp_crm_payment_views.xml',
         'views/isp_crm_menulist_views.xml',
         'views/isp_crm_notify_user.xml',
+        'views/isp_crm_customer_quotation.xml',
         'template/new_ticket_page.xml',
         'template/customer_profile_ticket.xml',
         'template/customer_profile/customer_profile.xml',
@@ -76,6 +77,7 @@
         'template/selfcare_forget_password_templates.xml',
         'template/isp_crm_mail_template/isp_crm_cron_job_receipt_attachment_template.xml',
         'template/isp_crm_mail_template/isp_crm_forget_password_mail_template.xml',
+        'template/isp_crm_corporate_customer_quotation_template.xml',
         'data/default_stages_data.xml',
     ],
     # only loaded in demonstration mode

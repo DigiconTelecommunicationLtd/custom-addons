@@ -44,3 +44,5 @@ from . import isp_crm_package_history_model
 from . import isp_crm_notify_user
 from . import isp_crm_temporary_links
 from . import isp_crm_payment_model
+from . import isp_crm_mime_pop
+from . import isp_crm_quotation

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<odoo>
+    <!--Adding RM, Lead_Type fields in leads form-->
+    <record model="ir.ui.view" id="view_add_otc_tab_in_quotation_form">
+        <field name="name">view.add.otc.tab.in.quotation.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook/page[2]" position="before">
+                <page string="OTC Information">
+                    <group>
+                        <group string="OTC Information" name="otc_information">
+                            <field name="foundation"/>
+                            <br/>
+                            <field name="connectivity_media" widget="radio"/>
+                            <br/>
+                            <field name="required_tower_height"/>
+                            <field name="backbone_provider"/>
+                            <br/>
+                            <field name="otc_price"/>
+                            <field name="discount"/>
+                            <field name="price_total"/>
+                            <field name="price_total_without_vat"/>
+                            <field name="govt_vat"/>
+                            <field name="govt_vat_in_amount"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
+</odoo>

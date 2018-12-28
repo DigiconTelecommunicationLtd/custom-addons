@@ -290,4 +290,27 @@ class ISPInvoice(models.Model):
         else:
             return converttoword(numlength, j, k, numword, digitstens1, digitstens2, digits, myVar, digit)
 
+class ISPCRMQuotation(models.Model):
+    """
+    Model for different type of Problems.
+    """
+    _inherit = "sale.order"
+    _description = "ISP CRM Quotation"
+
+    def convert(slef,numbertoconvert):
+        print(numbertoconvert)
+        number = numbertoconvert
+        number = str(number).split(".")
+        myVar = number[0]
+        numlength = len(str(myVar))
+        digit = str(myVar)[1]
+        if len(number) > 1:
+            numlength2 = len(str(number[1]))
+            # return converttopaisa(numlength2, numlength, j, k, numword, digitstens1, digitstens2, digits, myVar, number[1],
+            #                digit)
+            return converttoword(numlength, j, k, numword, digitstens1, digitstens2, digits, myVar, digit)
+
+        else:
+            return converttoword(numlength, j, k, numword, digitstens1, digitstens2, digits, myVar, digit)
+
 
