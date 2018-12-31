@@ -54,7 +54,7 @@
         </div>
     </template>
 
-    <template id="isp_crm_module.external_layout_custom">
+    <template id="isp_crm_module.external_layout_custom_for_customer_quotation">
         <!-- Multicompany -->
         <t t-if="not o and doc">
             <t t-set="o" t-value="doc"/>
@@ -73,7 +73,7 @@
     <template id="isp_crm_module.corporate_quotation_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="isp_invoice_module.external_layout_custom">
+                <t t-call="isp_crm_module.external_layout_custom_for_customer_quotation">
                     <div class="page">
                         <t t-if="o.partner_id.opportunity_ids.lead_type!='retail'">
                             <div class="row">
@@ -82,7 +82,7 @@
                                         <span>Ref: MIME/.../MPLS/20181024/01</span>
                                     </div>
                                     <div class="quote-date" style="float:right">
-                                        <span>Date: <span t-field="o.create_date"/></span>
+                                        <span>Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y')"/></span>
                                     </div>
                                 </div>
                             </div>
@@ -115,17 +115,17 @@
                     <div class="page">
                         <!-- Check if customer is retail or corporate -->
                         <t t-if="o.partner_id.opportunity_ids.lead_type!='retail'">
-                            <div class="row" style="padding-left:10px;padding-top:3%;">
-                                <div class="row">
-                                    <div class="ref-and-date" style="margin-bottom:5%;padding-left:20px;">
-                                        <div class="quote-ref" style="float:left">
-                                            <span>Ref: MIME/.../MPLS/20181024/01</span>
-                                        </div>
-                                        <div class="quote-date" style="float:right">
-                                            <span>Date: <span t-field="o.create_date"/></span>
-                                        </div>
+                            <div class="row">
+                                <div class="ref-and-date" style="margin-bottom:5%;padding-left:20px;">
+                                    <div class="quote-ref" style="float:left">
+                                        <span>Ref: MIME/.../MPLS/20181024/01</span>
+                                    </div>
+                                    <div class="quote-date" style="float:right">
+                                        <span>Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y')"/></span>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row" style="padding-left:10px;padding-top:3%;">
                                 <div class="text-center" style="margin-bottom:5%;padding-left:10px;">
                                     <u><h3>Financial Proposal for Dedicated Data Connectivity Service</h3></u>
                                 </div>
@@ -214,7 +214,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <br/>
                                 <div style="padding-left:10px;">
                                     <span>
                                         <strong>Note:</strong>
@@ -331,6 +330,16 @@
                         </t>
                         <!-- if retail customer -->
                         <t t-if="o.partner_id.opportunity_ids.lead_type=='retail'">
+                            <div class="row">
+                                <div class="ref-and-date" style="margin-bottom:5%;padding-left:20px;">
+                                    <div class="quote-ref" style="float:left">
+                                        <span>Ref: MIME/.../MPLS/20181024/01</span>
+                                    </div>
+                                    <div class="quote-date" style="float:right">
+                                        <span>Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y')"/></span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row" style="padding-left:10px;padding-top:3%;">
                                 <div class="text-center" style="margin-bottom:5%;padding-left:10px;">
                                     <u><h3>Financial Proposal for Dedicated Data Connectivity Service</h3></u>
