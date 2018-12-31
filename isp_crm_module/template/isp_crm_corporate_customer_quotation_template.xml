@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="isp_crm_module.external_layout_standard_custom_for_customer_quotation">
+        <div class="header">
+            <div class="row">
+                <div class="col-xs-3 mb4">
+                    <img src="isp_invoice_module/static/src/assets/images/logo.png" style="max-height: 85px;"/>
+                </div>
+            </div>
+        </div>
+        <div class="article o_report_layout_standard">
+            <t t-raw="0" />
+        </div>
+
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <table class="table table-condensed table-borderless" name="invoice_footer_left_table">
+                            <tbody class="invoice_footer_left_tbody">
+                                <tr>
+                                    <th class="text-left pull-left" style="border:none;">Digicon Telecommunications Limited</th>
+                                </tr>
+                                <tr>
+                                    <td class="text-left pull-left" style="border:none;">Awal Center(15th Floor),34,Kamal Ataturk,Banani C/A,Dhaka-1213</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left pull-left" style="border:none;">Tel: +88-02-9820310, 9820305 Fax: +88-20-9820312</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-condensed table-borderless" name="invoice_footer_right_table">
+                            <tbody class="invoice_footer_right_tbody">
+                                <tr>
+                                    <td style="border:none;"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right pull-right" style="border:none;"><strong>www.mime.com</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="text-muted">
+                    Page: <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="isp_crm_module.external_layout_custom_for_customer_quotation">
+        <!-- Multicompany -->
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id.sudo()"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <t t-call="isp_crm_module.external_layout_standard_custom_for_customer_quotation"><t t-raw="0"/></t>
+    </template>
+
+    <!-- Retail and corporate customer invoice template -->
+    <template id="isp_crm_module.corporate_quotation_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="isp_crm_module.external_layout_custom_for_customer_quotation">
+                    <div class="page">
+                        <t t-if="o.partner_id.opportunity_ids.lead_type!='retail'">
+                            <div class="row">
+                                <div class="ref-and-date" style="margin-bottom:5%;padding-left:10px;">
+                                    <div class="quote-ref" style="float:left">
+                                        <span>Ref: MIME/.../MPLS/20181024/01</span>
+                                    </div>
+                                    <div class="quote-date" style="float:right">
+                                        <span>Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y')"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px;padding-top:3%;page-break-after: always;">
+                                <p><span t-field="o.foundation"/>,</p>
+                                <p>34, Kamal Ataturk Avevue, Awal Center (18th Floor)</p>
+                                <p>Banani C/A, Dhaka, Bangladesh</p>
+                                <p>Attn: <span t-field="o.foundation"/></p>
+                                <div class="text-center" style="margin-bottom:5%;padding-left:10px;">
+                                    <u><h5>Proposal for Data Connectivity Solution</h5></u>
+                                </div>
+                                <p>Dear Sir,</p>
+                                <p>We are delighted to inform you that MIME has successfully established its name as synonym for robust network solution provider especially for the nation-wide
+                                 operators since its inception. MIME constantly dedicates its efforts towards better and more efficient network services for the clients.</p>
+                                <p>Based on your unique requirements, we are submitting our financial porposal, plan of implementation, considerations within protfolio of team members with proven experience.</p>
+                                <p>We believe that you will find our proposal is suitable to address your need considering security, quality of service and other concerns in a cost-efficient manner.</p>
+                                <p>Further more details please feel free to contact with us.</p>
+                                <br/>
+                                <p>Thanking you</p>
+                                <br/>
+                                <p><strong>Ahmed Anwar Hasan</strong></p>
+                                <p>VIce President, Business Development</p>
+                                <p>MIME</p>
+                                <P>34, Kamal Ataturk Avevue, Awal Center (15th Floor)</P>
+                                <P>Mobile:  Phone: </P>
+                                <p>E-mail:  Web: www.mime.com</p>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="page">
+                        <!-- Check if customer is retail or corporate -->
+                        <t t-if="o.partner_id.opportunity_ids.lead_type!='retail'">
+                            <div class="row">
+                                <div class="ref-and-date" style="margin-bottom:5%;padding-left:20px;">
+                                    <div class="quote-ref" style="float:left">
+                                        <span>Ref: MIME/.../MPLS/20181024/01</span>
+                                    </div>
+                                    <div class="quote-date" style="float:right">
+                                        <span>Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y')"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px;padding-top:3%;">
+                                <div class="text-center" style="margin-bottom:5%;padding-left:10px;">
+                                    <u><h3>Financial Proposal for Dedicated Data Connectivity Service</h3></u>
+                                </div>
+                                <div class="col-xs-6">
+                                    <u>One Time Cost (OTC) for Dedicated Data Connectivity Setup:</u>
+                                </div>
+                                <div style="padding-left:10px;margin-top:5%;">
+                                    <table class="table table-bordered table-condensed" name="invoice_line_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Foundation</th>
+                                                <th>Destination</th>
+                                                <th>Connectivity Media</th>
+                                                <th>Required Tower Height</th>
+                                                <th>Backbone Provider</th>
+                                                <th>OTC in BDT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="invoice_tbody">
+                                            <tr>
+                                                <td>
+                                                    <span t-field="o.foundation"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="o.partner_id.street"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="o.connectivity_media"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="o.required_tower_height"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="o.backbone_provider"/>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.otc_price"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="5">
+                                                    <strong>Regular</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.otc_price"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="5">
+                                                    <strong>Discount</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.discount"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="5">
+                                                    <strong>Total</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.price_total"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="5">
+                                                    <strong>Without VAT</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.price_total_without_vat"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="5">
+                                                    <strong>Govt. VAT</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.govt_vat_in_amount"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="padding-left:10px;">
+                                    <span>
+                                        <strong>Note:</strong>
+                                    </span>
+                                    <ul style="margin-top:2%;">
+                                        <li>Radio devices and related accessories, property of MIME.</li>
+                                        <li>Tower ownership will belong to <span t-field="o.foundation"/></li>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-6" style="width:100%;">
+                                    <u>Monthly Recurring Charge (MRC) for Dedicated Data Connectivity Setup:</u>
+                                </div>
+                                <div style="padding-left:10px;margin-top:5%;">
+                                    <table class="table table-bordered table-condensed" name="invoice_line_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Particulars</th>
+                                                <th>Per MBPS price in BDT</th>
+                                                <th>Required Bandwidth (Full Duplex)</th>
+                                                <th class="text-right">Total monthly charge in BDT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="invoice_tbody">
+                                            <tr t-foreach="o.order_line" t-as="l">
+                                                <td>
+                                                    <span t-field="l.name"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.price_unit"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.product_uom_qty"/>
+                                                </td>
+                                                <td class="text-right" id="subtotal">
+                                                    <span t-field="l.price_subtotal"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="3">
+                                                    <strong>Subtotal</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.amount_untaxed"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="3">
+                                                    <strong>Govt. VAT @ 5%</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    Including
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="3">
+                                                    <strong>Total</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.amount_total"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix" style="padding-left:10px;">
+                                    <table class="table table-condensed" name="invoice_total_table">
+                                        <tbody>
+                                            <tr style="border:1px solid #dddddd;">
+                                                <th>Total Outstanding</th>
+                                                <th>
+                                                    <span class="text-right pull-right">
+                                                        <strong>BDT </strong>
+                                                        <span t-field="o.amount_total" t-field-options='{"widget": "False"}'/>
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div id="inword">
+                                        <p>In Word: Taka <t t-esc="o.convert(o.amount_total)"></t> </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <div style="padding-left:10px;">
+                                <u>
+                                    <strong>Terms and Conditions:</strong>
+                                </u>
+                                <ol style="margin-top:2%; padding-left:20px;">
+                                    <li>Applicable VAT and GOVT. fees are included with this price.</li>
+                                    <li>MIME will start implementation immediately right after receiving the work order.</li>
+                                    <li>Monthly Service charges are to be paid within the 5th of the current month.</li>
+                                    <li>Implementation needs minimum <strong>10 working days</strong> from the date of receiving work order.</li>
+                                    <li>Fiber Optic, Radio Device, Media Converter, ONU and related accessories property of MIME.</li>
+                                </ol>
+                            </div>
+                            <br/>
+                            <div style="padding-left:10px;">
+                                <u>
+                                    <strong>Customer Responsibility:</strong>
+                                </u>
+                                <ol style="margin-top:2%; padding-left:20px;">
+                                    <li>To arrange necessary permission from BTRC, if required.</li>
+                                    <li>To arrange proper security of equipment's supplies and installed by MIME.</li>
+                                    <li>Grounding and surge protection and other electrical works.</li>
+                                    <li>To ensure smooth power supply.</li>
+                                    <li>To ensure normal temperature.</li>
+                                </ol>
+                            </div>
+                        </t>
+                        <!-- if retail customer -->
+                        <t t-if="o.partner_id.opportunity_ids.lead_type=='retail'">
+                            <div class="row">
+                                <div class="ref-and-date" style="margin-bottom:5%;padding-left:20px;">
+                                    <div class="quote-ref" style="float:left">
+                                        <span>Ref: MIME/.../MPLS/20181024/01</span>
+                                    </div>
+                                    <div class="quote-date" style="float:right">
+                                        <span>Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y')"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px;padding-top:3%;">
+                                <div class="text-center" style="margin-bottom:5%;padding-left:10px;">
+                                    <u><h3>Financial Proposal for Dedicated Data Connectivity Service</h3></u>
+                                </div>
+                                <div class="col-xs-6" style="width:100%;">
+                                    <u>Monthly Recurring Charge (MRC) for Dedicated Data Connectivity Setup:</u>
+                                </div>
+                                <div style="padding-left:10px;margin-top:5%;">
+                                    <table class="table table-bordered table-condensed" name="invoice_line_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Particulars</th>
+                                                <th>Per MBPS price in BDT</th>
+                                                <th>Required Bandwidth (Full Duplex)</th>
+                                                <th class="text-right">Total monthly charge in BDT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="invoice_tbody">
+                                            <tr t-foreach="o.order_line" t-as="l">
+                                                <td>
+                                                    <span t-field="l.name"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.price_unit"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.product_uom_qty"/>
+                                                </td>
+                                                <td class="text-right" id="subtotal">
+                                                    <span t-field="l.price_subtotal"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="3">
+                                                    <strong>Subtotal</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.amount_untaxed"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="3">
+                                                    <strong>Govt. VAT @ 5%</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    Including
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right pull-right" colspan="3">
+                                                    <strong>Total</strong>
+                                                </td>
+                                                <td class="text-right pull-right">
+                                                    <span t-field="o.amount_total"
+                                                          t-field-options='{"widget": "False"}'/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix" style="padding-left:10px;">
+                                    <table class="table table-condensed" name="invoice_total_table">
+                                        <tbody>
+                                            <tr style="border:1px solid #dddddd;">
+                                                <th>Total Outstanding</th>
+                                                <th>
+                                                    <span class="text-right pull-right">
+                                                        <strong>BDT </strong>
+                                                        <span t-field="o.amount_total" t-field-options='{"widget": "False"}'/>
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div id="inword">
+                                        <p>In Word: Taka <t t-esc="o.convert(o.amount_total)"></t> </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <div style="padding-left:10px;">
+                                <u>
+                                    <strong>Terms and Conditions:</strong>
+                                </u>
+                                <ol style="margin-top:2%; padding-left:20px;">
+                                    <li>Applicable VAT and GOVT. fees are included with this price.</li>
+                                    <li>MIME will start implementation immediately right after receiving the work order.</li>
+                                    <li>Monthly Service charges are to be paid within the 5th of the current month.</li>
+                                    <li>Implementation needs minimum <strong>10 working days</strong> from the date of receiving work order.</li>
+                                    <li>Fiber Optic, Radio Device, Media Converter, ONU and related accessories property of MIME.</li>
+                                </ol>
+                            </div>
+                            <br/>
+                            <div style="padding-left:10px;">
+                                <u>
+                                    <strong>Customer Responsibility:</strong>
+                                </u>
+                                <ol style="margin-top:2%; padding-left:20px;">
+                                    <li>To arrange necessary permission from BTRC, if required.</li>
+                                    <li>To arrange proper security of equipment's supplies and installed by MIME.</li>
+                                    <li>Grounding and surge protection and other electrical works.</li>
+                                    <li>To ensure smooth power supply.</li>
+                                    <li>To ensure normal temperature.</li>
+                                </ol>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <data>
+        <report
+            id="action_corporate_report_saleorder"
+            string="Corporate/Retail Quotation"
+            model="sale.order"
+            report_type="qweb-pdf"
+            file="sale.report_saleorder"
+            name="isp_crm_module.corporate_quotation_template"
+            print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+        />
+    </data>
+</odoo>
