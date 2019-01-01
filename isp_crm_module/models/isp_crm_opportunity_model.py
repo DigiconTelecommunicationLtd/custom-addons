@@ -29,7 +29,7 @@ class Opportunity(models.Model):
     is_customer_deferred = fields.Boolean("Is Customer Deferred", default=False)
     invoice_state = fields.Char('Invoice State')
     referred_by = fields.Many2one('res.partner', string='Referred By')
-    assigned_rm = fields.Many2one('hr.employee', string='RM', store=True)
+    assigned_rm = fields.Many2one('res.users', string='RM', store=True)
     lead_type = fields.Selection(CUSTOMER_TYPE, string='Type', required=False,  help="Lead and Opportunity Type")
 
 

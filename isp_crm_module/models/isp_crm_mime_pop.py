@@ -12,4 +12,4 @@ class MimePop(models.Model):
     _rec_name = 'name'
     _order = "create_date desc, name, id"
 
-    name = fields.Char(string="Pop Name", required=False, default='')
+    name = fields.Char(string="POP Name", required=False, default='')

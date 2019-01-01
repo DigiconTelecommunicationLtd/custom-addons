@@ -33,9 +33,9 @@ class CustomerQuotation(models.Model):
         """
         for order in self:
             total_price = float(order.otc_price) - float(order.discount)
-            without_vat = (total_price * 100.0)/105.0
             govt_vat = float(order.govt_vat)
             vat = (total_price * govt_vat)/100.0
+            without_vat = float(total_price) - float(vat)
             order.update({
                 'price_total': total_price,
                 'price_total_without_vat': without_vat,
