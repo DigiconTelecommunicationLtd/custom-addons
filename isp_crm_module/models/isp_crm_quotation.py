@@ -25,6 +25,8 @@ class CustomerQuotation(models.Model):
     price_total_without_vat = fields.Monetary(compute='_compute_total_amount',string='Total Price Without VAT (In BDT)', readonly=True, store=True)
     govt_vat = fields.Char(string='Govt. VAT (In Percentage)', required=False, readonly=False, default='5.0')
     govt_vat_in_amount = fields.Char(compute='_compute_total_amount', string='Govt. VAT (In Amount)', readonly=True, store=True)
+    lead_type = fields.Char(compute='_get_lead_type', string='Lead Type', readonly=True,
+                                     store=True)
 
     @api.depends('otc_price', 'discount')
     def _compute_total_amount(self):
@@ -39,5 +41,20 @@ class CustomerQuotation(models.Model):
             order.update({
                 'price_total': total_price,
                 'price_total_without_vat': without_vat,
-                'govt_vat_in_amount': vat,
+                'govt_vat_in_amount': str(vat),
+            })
+
+    @api.depends('partner_id')
+    def _get_lead_type(self):
+        """
+        Compute type of customer .(Corporate or Retail)
+        :return:
+        """
+
+        for order in self:
+            lead = order.env['crm.lead'].search([('name', '=', order.partner_id.name)], order='create_date desc', limit=1)
+            lead_type = lead.lead_type
+
+            order.update({
+                'lead_type': lead_type,
             })
