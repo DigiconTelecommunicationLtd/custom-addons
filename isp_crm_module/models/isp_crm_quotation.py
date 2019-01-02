@@ -18,7 +18,7 @@ class CustomerQuotation(models.Model):
     foundation = fields.Many2one('isp_crm_module.mime_pop', string='Foundation')
     connectivity_media = fields.Selection(CONNECTIVITY_MEDIA, string='Connectivity Media', required=False,  help="Connectivity Media")
     required_tower_height = fields.Char(string='Required Tower Height', required=False)
-    backbone_provider = fields.Char(string='Backbone Provider', required=False, default='MIME')
+    backbone_provider = fields.Many2one('isp_crm_module.backbone_provider', string='Backbone Provider')
     otc_price = fields.Char(string='Regular Price (In BDT)', required=False)
     discount = fields.Char(string='Discount (In BDT)', required=False)
     price_total = fields.Monetary(compute='_compute_total_amount', string='Total Price (In BDT)', readonly=True, store=True)
