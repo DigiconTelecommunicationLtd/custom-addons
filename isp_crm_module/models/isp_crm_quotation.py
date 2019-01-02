@@ -25,8 +25,7 @@ class CustomerQuotation(models.Model):
     price_total_without_vat = fields.Monetary(compute='_compute_total_amount',string='Total Price Without VAT (In BDT)', readonly=True, store=True)
     govt_vat = fields.Char(string='Govt. VAT (In Percentage)', required=False, readonly=False, default='5.0')
     govt_vat_in_amount = fields.Char(compute='_compute_total_amount', string='Govt. VAT (In Amount)', readonly=True, store=True)
-    lead_type = fields.Char(compute='_get_lead_type', string='Lead Type', readonly=True,
-                                     store=True)
+    lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
 
     @api.depends('otc_price', 'discount')
     def _compute_total_amount(self):

@@ -67,7 +67,7 @@ class Customer(models.Model):
     next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order')
     active_status = fields.Selection(ACTIVE_STATES, string='Active Status', required=False, help="Active Status of Current Bill Cycle", default='active')
     is_deferred = fields.Boolean("Is Deferred", default=False)
-    assigned_rm = fields.Many2one('res.users', string='RM', store=True)
+    assigned_rm = fields.Many2one('res.users', string='RM')
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
@@ -147,6 +147,16 @@ class Customer(models.Model):
         })
         return customer
 
+    @api.onchange('assigned_rm')
+    def onchange_assigned_rm(self):
+        if self.assigned_rm:
+            customer = self._origin.id
+            get_opportunities = self.env['crm.lead'].search([('partner_id', '=', customer)])
+            if get_opportunities:
+                for opportunity in get_opportunities:
+                    opportunity.update({
+                        'assigned_rm': self.assigned_rm,
+                    })
 
     @api.model
     def create(self, vals):
