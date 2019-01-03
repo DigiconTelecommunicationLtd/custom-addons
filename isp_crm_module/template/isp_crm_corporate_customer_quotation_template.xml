@@ -150,7 +150,7 @@
                                                     <span t-field="o.foundation"/>
                                                 </td>
                                                 <td>
-                                                    <span t-field="o.partner_id.street"/>
+                                                    <span t-field="o.destination"/>
                                                 </td>
                                                 <td>
                                                     <span t-field="o.connectivity_media"/>
@@ -159,7 +159,12 @@
                                                     <span t-field="o.required_tower_height"/>
                                                 </td>
                                                 <td>
-                                                    <span t-field="o.backbone_provider"/>
+                                                    <t t-if="o.backbone_provider">
+                                                        <span t-field="o.backbone_provider"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span>MIME</span>
+                                                    </t>
                                                 </td>
                                                 <td class="text-right pull-right">
                                                     <span t-field="o.otc_price"/>

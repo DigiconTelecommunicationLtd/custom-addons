@@ -149,6 +149,10 @@ class Customer(models.Model):
 
     @api.onchange('assigned_rm')
     def onchange_assigned_rm(self):
+        """
+        If user changes RM in customer form, then change RM to all related opportunities of the customer.
+        :return:
+        """
         if self.assigned_rm:
             customer = self._origin.id
             get_opportunities = self.env['crm.lead'].search([('partner_id', '=', customer)])
