@@ -14,9 +14,16 @@ class PaymentController(BaseController):
     STORE_PWD = 'mime5bc41d233a312@ssl'
     DEFAULT_CURRENCY = 'BDT'
     BASE_URL = "http://localhost:8069/"
+    
+    # INITIATION_URL = 'https://securepay.sslcommerz.com/gwprocess/v3/api.php'
+    # STORE_ID = 'digicontelecommunicationltdlive'
+    # STORE_NAME = 'DIGICONTELECOLTD'
+    # STORE_PWD = '5C173EC20E6A527353'
+    # DEFAULT_CURRENCY = 'BDT'
+    # BASE_URL = "http://localhost:8069/"
+    #
 
-
-    def _make_data_dict(self, base_url, user_info):
+    def _make_data_dict(self, base_url, customer, amount, transaction_id):
         return {
             'store_id': self.STORE_ID,
             'store_passwd': self.STORE_PWD,
