@@ -52,6 +52,7 @@ class ServiceRequest(models.Model):
     _description = "Service Request To be solved."
     _rec_name = 'name'
     _order = "create_date desc, name, id"
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 
     @api.depends('product_line.price_total')
     def _amount_all(self):

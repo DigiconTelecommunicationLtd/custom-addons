@@ -380,6 +380,22 @@
     </record>
     <!--End of the section-->
 
+    <!--Deactivate statusbar widget of opportunity form view-->
+    <record model="ir.ui.view" id="unclickable_opportunity_form_statusbar_widget">
+        <field name="name">unclickable.opportunity.form.statusbar.widget</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='stage_id']" position="replace">
+                <field name="stage_id" widget="statusbar"
+                            options="{'fold_field': 'fold'}"
+                            domain="['|', ('team_id', '=', team_id), ('team_id', '=', False)]"
+                            attrs="{'invisible': [('active', '=', False)]}" readonly="True"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
     <menuitem
         id="crm.crm_menu_root"
         name="CRM"
