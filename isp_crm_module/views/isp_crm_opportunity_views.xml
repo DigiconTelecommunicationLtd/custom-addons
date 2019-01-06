@@ -332,7 +332,7 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_leads" />
         <field name="arch" type="xml">
-            <xpath expr="//group/group/field[@name='partner_id']" position="before">
+            <xpath expr="//group/group/field[@name='partner_id']" position="replace">
                 <field name="assigned_rm"/>
             </xpath>
             <xpath expr="//group/group/field[@name='mobile']" position="after">
