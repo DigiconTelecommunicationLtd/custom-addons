@@ -10,6 +10,7 @@ class InvoiceRegisterPayment(models.Model):
     """Inherits account.payment"""
 
     _inherit = 'account.payment'
+    _order = "create_date desc, id"
 
     cheque_no = fields.Char(string='Cheque No')
     cheque_date = fields.Date('Cheque Date', default=None)
@@ -29,24 +30,24 @@ class InvoiceRegisterPayment(models.Model):
         bank_name = self.bank_name
         branch_name = self.branch_name
 
-        if self.is_dishonored:
+        if is_dishonored:
             self.update({
 
                 'state': 'draft',
-                'is_dishonored': self.is_dishonored,
-                'cheque_no': self.cheque_no,
-                'cheque_date': self.cheque_date,
-                'bank_name': self.bank_name,
-                'branch_name': self.branch_name,
+                'is_dishonored': is_dishonored,
+                'cheque_no': cheque_no,
+                'cheque_date': cheque_date,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
 
             })
         else:
             self.update({
 
-                'cheque_no': self.cheque_no,
-                'cheque_date': self.cheque_date,
-                'bank_name': self.bank_name,
-                'branch_name': self.branch_name,
+                'cheque_no': cheque_no,
+                'cheque_date': cheque_date,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
 
             })
 
