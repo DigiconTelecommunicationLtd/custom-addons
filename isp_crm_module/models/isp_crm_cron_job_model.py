@@ -72,7 +72,7 @@ class CronJobModel(models.Model):
                 'body_html': body,
                 'email_to': self.mail_to,
                 'email_cc': self.mail_cc,
-                'email_from': 'mime@cgbd.com',
+                'email_from': 'notice.mime@cg-bd.com',
                 'attachment_ids': [(6, 0, [attachment.id])],
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
@@ -153,19 +153,23 @@ class CronJobModel(models.Model):
         """
         today = datetime.today()
         after_threshold_days_date =  today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
-        #, ('current_package_end_date', '=', str(after_threshold_days_date.date()))
-        customers_list = self.env['res.partner'].search([('customer', '=', True)])
+        after_threshold_days_date_str = after_threshold_days_date.strftime("%Y-%m-%d")
+        customers_list = self.env['res.partner'].search([
+            ('customer', '=', True),
+            ('current_package_end_date', '=', after_threshold_days_date_str)
+        ])
 
         service_request_obj = self.env['isp_crm_module.service_request']
 
         for customer in customers_list:
             print("Creating Invoice for customer:- " + customer.name)
             customer_invoice_status = self.create_customer_invoice_status(customer=customer)
-            mail_sent = self._send_mail_to_customer_before_some_days(customer=customer)
-            if mail_sent:
-                print("Mail Sent for customer:- " + customer.name)
-            else:
-                print("Some Error is occurred.")
+            try:
+                print("mail sending.....")
+                mail_sent = self._send_mail_to_customer_before_some_days(customer=customer)
+                print("mail sent")
+            except Exception as ex:
+                print(ex)
 
 
     @api.model

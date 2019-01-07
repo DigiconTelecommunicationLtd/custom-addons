@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# Local Settings
+isp_crm_module/controllers/local_settings.py
+
 # C extensions
 *.so
 

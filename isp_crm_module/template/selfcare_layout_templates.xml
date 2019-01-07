@@ -466,7 +466,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-list"></i>
                                         </div>
-                                        <select name="service_type" class="form-control pull-right" id="payment_service_type">
+                                        <select name="service_type" class="form-control pull-right" id="payment_service_type" required="1">
                                             <option value=""> Select </option>
                                             <t t-foreach="service_list" t-as="service">
                                                 <option t-att-value="service.id">
@@ -484,9 +484,9 @@
                                 <td>
                                     <div class="input-group">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-dollar"></i>
+                                            Tk
                                         </div>
-                                        <input type="text" name="amount" class="form-control pull-right" id="payment_bill_amount"/>
+                                        <input type="text" name="amount" class="form-control pull-right" id="payment_bill_amount" required="1"/>
                                     </div>
                                 </td>
                             </tr>
@@ -1018,19 +1018,19 @@
                                 <tbody>
                                     <t t-foreach="tickets" t-as="ticket">
                                         <tr>
-                                            <td style="width: 15% !important">
+                                            <td class="text-center" style="width: 15% !important">
                                                 <t t-esc="ticket.name"/>
                                             </td>
-                                            <td style="width: 5% !important">
+                                            <td class="text-center" style="width: 5% !important">
                                                 <t t-esc="ticket.problem.name"/>
                                             </td>
-                                            <td style="width: 60% !important">
+                                            <td class="text-center" style="width: 60% !important">
                                                 <t t-esc="ticket.description"/>
                                             </td>
-                                            <td style="width: 7% !important">
+                                            <td class="text-center" style="width: 7% !important">
                                                 <t t-esc="ticket.default_stages"/>
                                             </td>
-                                            <td style="width: 15% !important">
+                                            <td class="text-center" style="width: 15% !important">
                                                 <span t-field="ticket.create_date" t-field-options='{"format": "dd-MM-Y"}' />
                                             </td>
                                         </tr>
