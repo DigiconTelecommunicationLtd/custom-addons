@@ -41,7 +41,11 @@ class ChangePackage(models.Model):
     @api.multi
     def action_make_package_change_validated(self):
         for pack_change_obj in self:
+            active_from_date_obj =  datetime.strptime(pack_change_obj.active_from, "%Y-%m-%d")
+            valid_till_date_obj = active_from_date_obj - timedelta(days=1)
+            valid_till_date_str = valid_till_date_obj.strftime('%Y-%m-%d')
             pack_change_obj.customer_id.update({
+                'current_package_end_date' : valid_till_date_str,
                 'next_package_id' : pack_change_obj.to_package_id.id,
                 'next_package_start_date' : pack_change_obj.active_from,
                 'next_package_price' : pack_change_obj.to_package_id.lst_price,
