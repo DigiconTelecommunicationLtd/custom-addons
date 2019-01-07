@@ -2,12 +2,9 @@
 __pycache__/
 *.py[cod]
 
-<<<<<<< 504c3f7a1e8abbb8da7d031c2151dc97c56587e0
-=======
 # Local Settings
 isp_crm_module/controllers/local_settings.py
 
->>>>>>> Added local settings in gitignore
 # C extensions
 *.so
 
