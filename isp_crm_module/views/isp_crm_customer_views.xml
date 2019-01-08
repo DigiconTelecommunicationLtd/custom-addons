@@ -79,7 +79,8 @@
                     <group>
                         <group>
                             <field name="current_package_id" string="Package ID"/>
-                            <field name="current_package_end_date" string="Valid Till" readonly="1"/>
+                            <!--readonly="1"-->
+                            <field name="current_package_end_date" string="Valid Till" />
                             <field name="active_status"/>
                             <field name="service_type" string="Service Type"/>
                             <field name="connection_type" string="Connection Type"/>

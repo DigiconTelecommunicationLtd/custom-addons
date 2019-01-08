@@ -156,7 +156,7 @@ class CronJobModel(models.Model):
         after_threshold_days_date_str = after_threshold_days_date.strftime("%Y-%m-%d")
         customers_list = self.env['res.partner'].search([
             ('customer', '=', True),
-            ('current_package_end_date', '=', after_threshold_days_date_str)
+            ('current_package_end_date', '=', after_threshold_days_date)
         ])
 
         service_request_obj = self.env['isp_crm_module.service_request']
@@ -248,7 +248,7 @@ class CronJobModel(models.Model):
     @api.model
     def update_customer_package_for_next_bill_cycle(self):
         today = date.today()
-        tomorrow = (date.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+        tomorrow = date.today() + timedelta(days=1)
         customers_list = self.env['res.partner'].search([
             ('customer', '=', True),
             ('next_package_start_date', '=', tomorrow)
