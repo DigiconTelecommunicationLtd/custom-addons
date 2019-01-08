@@ -1001,16 +1001,16 @@
                 </div>
                 <div class="box-body">
                     <div>
-                        <!--Info Table-->
+                        <!--Info Table fixed_headers style="height:150px"-->
                         <t t-if='tickets'>
-                            <table class="table table-condensed table-bordered table-striped fixed_headers"  style="height:150px">
+                            <table class="table table-condensed table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="text-center" style="width: 15% !important">Ticket#</th>
-                                        <th class="text-center" style="width: 5% !important">Problem Type</th>
-                                        <th class="text-center" style="width: 60% !important">Description</th>
-                                        <th class="text-center" style="width: 5% !important">Current Stage</th>
-                                        <th class="text-center" style="width: 15% !important">
+                                        <th class="text-center">Ticket#</th>
+                                        <th class="text-center">Problem Type</th>
+                                        <th class="text-center">Description</th>
+                                        <th class="text-center">Current Stage</th>
+                                        <th class="text-center">
                                             Created
                                         </th>
                                     </tr>
@@ -1018,19 +1018,19 @@
                                 <tbody>
                                     <t t-foreach="tickets" t-as="ticket">
                                         <tr>
-                                            <td class="text-center" style="width: 15% !important">
+                                            <td>
                                                 <t t-esc="ticket.name"/>
                                             </td>
-                                            <td class="text-center" style="width: 5% !important">
+                                            <td>
                                                 <t t-esc="ticket.problem.name"/>
                                             </td>
-                                            <td class="text-center" style="width: 60% !important">
+                                            <td>
                                                 <t t-esc="ticket.description"/>
                                             </td>
-                                            <td class="text-center" style="width: 7% !important">
+                                            <td>
                                                 <t t-esc="ticket.default_stages"/>
                                             </td>
-                                            <td class="text-center" style="width: 15% !important">
+                                            <td>
                                                 <span t-field="ticket.create_date" t-field-options='{"format": "dd-MM-Y"}' />
                                             </td>
                                         </tr>
@@ -1059,15 +1059,15 @@
         </head>
 
         <body class="hold-transition skin-blue sidebar-mini">
-            <style>
-                thead, tbody { display: block; }
+            <!--<style>-->
+                <!--thead, tbody { display: block; }-->
 
-                tbody {
-                    height: 500px;       /* Just for the demo          */
-                    overflow-y: auto;    /* Trigger vertical scroll    */
-                    overflow-x: hidden;  /* Hide the horizontal scroll */
-                }
-            </style>
+                <!--tbody {-->
+                    <!--height: 500px;       /* Just for the demo          */-->
+                    <!--overflow-y: auto;    /* Trigger vertical scroll    */-->
+                    <!--overflow-x: hidden;  /* Hide the horizontal scroll */-->
+                <!--}-->
+            <!--</style>-->
             <div class="wrapper">
                 <t t-call="isp_crm_module.template_selfcare_main_header"/>
                 <t t-call="isp_crm_module.template_selfcare_sidebar"/>
@@ -1274,16 +1274,16 @@
                 </div>
                 <div class="box-body">
                     <div>
-                        <!--Info Table-->
+                        <!--Info Table fixed_headers  style="height:150px" -->
                         <t t-if='packages'>
-                            <table class="table table-condensed table-bordered table-striped fixed_headers"  style="height:150px">
+                            <table class="table table-condensed table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="text-center" style="width: 15% !important">Package</th>
-                                        <th class="text-center" style="width: 30% !important">Start Date</th>
-                                        <th class="text-center" style="width: 30% !important">End Date</th>
-                                        <th class="text-center" style="width: 15% !important">Price</th>
-                                        <th class="text-center" style="width: 15% !important">
+                                        <th class="text-center">Package</th>
+                                        <th class="text-center">Start Date</th>
+                                        <th class="text-center">End Date</th>
+                                        <th class="text-center">Price</th>
+                                        <th class="text-center">
                                             Original Price
                                         </th>
                                     </tr>
@@ -1291,7 +1291,7 @@
                                 <tbody>
                                     <t t-foreach="packages" t-as="package">
                                         <tr>
-                                            <td style="width: 15% !important">
+                                            <td>
                                                 <t t-if="package.package_id.name">
                                                     <t t-esc="package.package_id.name"/>
                                                 </t>
@@ -1300,7 +1300,7 @@
                                                 </t>
 
                                             </td>
-                                            <td style="width: 30% !important">
+                                            <td>
                                                 <t t-if="package.start_date">
                                                     <t t-esc="package.start_date" t-field-options='{"format": "dd-MM-Y"}'/>
                                                 </t>
@@ -1308,7 +1308,7 @@
                                                     <span>Date Not Available</span>
                                                 </t>
                                             </td>
-                                            <td style="width: 30% !important">
+                                            <td>
                                                 <t t-if="package.end_date">
                                                     <t t-esc="package.end_date" t-field-options='{"format": "dd-MM-Y"}'/>
                                                 </t>
@@ -1316,7 +1316,7 @@
                                                     <span>Date Not Available</span>
                                                 </t>
                                             </td>
-                                            <td style="width: 15% !important">
+                                            <td>
                                                 <t t-if="package.price==0.0">
                                                     <span>0.00</span>
                                                 </t>
@@ -1324,7 +1324,7 @@
                                                     <t t-esc="package.price"/>
                                                 </t>
                                             </td>
-                                            <td style="width: 15% !important">
+                                            <td>
                                                 <span t-field="package.original_price"/>
                                             </td>
                                         </tr>
@@ -1353,15 +1353,15 @@
         </head>
 
         <body class="hold-transition skin-blue sidebar-mini">
-            <style>
-                thead, tbody { display: block; }
+            <!--<style>-->
+                <!--thead, tbody { display: block; }-->
 
-                tbody {
-                    height: 500px;       /* Just for the demo          */
-                    overflow-y: auto;    /* Trigger vertical scroll    */
-                    overflow-x: hidden;  /* Hide the horizontal scroll */
-                }
-            </style>
+                <!--tbody {-->
+                    <!--height: 500px;       /* Just for the demo          */-->
+                    <!--overflow-y: auto;    /* Trigger vertical scroll    */-->
+                    <!--overflow-x: hidden;  /* Hide the horizontal scroll */-->
+                <!--}-->
+            <!--</style>-->
             <div class="wrapper">
                 <t t-call="isp_crm_module.template_selfcare_main_header"/>
                 <t t-call="isp_crm_module.template_selfcare_sidebar"/>
@@ -1396,9 +1396,9 @@
                 </div>
                 <div class="box-body">
                     <div>
-                        <!--Info Table-->
+                        <!--Info Table  fixed_headers   style="height:150px"-->
                         <t t-if='payments'>
-                            <table class="table table-condensed table-bordered table-striped fixed_headers"  style="height:150px">
+                            <table class="table table-condensed table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th class="text-center" style="width: 15% !important">#</th>
@@ -1473,15 +1473,15 @@
         </head>
 
         <body class="hold-transition skin-blue sidebar-mini">
-            <style>
-                thead, tbody { display: block; }
+            <!--<style>-->
+                <!--thead, tbody { display: block; }-->
 
-                tbody {
-                    height: 500px;       /* Just for the demo          */
-                    overflow-y: auto;    /* Trigger vertical scroll    */
-                    overflow-x: hidden;  /* Hide the horizontal scroll */
-                }
-            </style>
+                <!--tbody {-->
+                    <!--height: 500px;       /* Just for the demo          */-->
+                    <!--overflow-y: auto;    /* Trigger vertical scroll    */-->
+                    <!--overflow-x: hidden;  /* Hide the horizontal scroll */-->
+                <!--}-->
+            <!--</style>-->
             <div class="wrapper">
                 <t t-call="isp_crm_module.template_selfcare_main_header"/>
                 <t t-call="isp_crm_module.template_selfcare_sidebar"/>
