@@ -378,24 +378,6 @@
                                                           t-field-options='{"widget": "False"}'/>
                                                 </td>
                                             </tr>
-
-                                            <tr>
-                                                <td class="text-right pull-right" colspan="3">
-                                                    <strong>Subtotal</strong>
-                                                </td>
-                                                <td class="text-right pull-right">
-                                                    <span t-field="o.amount_untaxed"
-                                                          t-field-options='{"widget": "False"}'/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right pull-right" colspan="3">
-                                                    <strong>Govt. VAT @ 5%</strong>
-                                                </td>
-                                                <td class="text-right pull-right">
-                                                    Including
-                                                </td>
-                                            </tr>
                                             <tr>
                                                 <td class="text-right pull-right" colspan="3">
                                                     <strong>Total</strong>
