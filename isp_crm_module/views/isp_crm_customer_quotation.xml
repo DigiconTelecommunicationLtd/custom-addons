@@ -6,8 +6,13 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
+            <xpath expr="//group/group/field[@name='partner_id']" position="after">
+                <field name="lead_type"/>
+                <field name="customer_po_no" filename="file_name"/>
+                <field name="file_name" invisible="1"/>
+            </xpath>
             <xpath expr="//sheet/notebook/page[2]" position="before">
-                <page string="OTC Information">
+                <page string="OTC Information" attrs ="{'invisible':[('lead_type','==', 'retail')]}">
                     <group>
                         <group string="OTC Information" name="otc_information">
                             <field name="foundation"/>

@@ -298,6 +298,7 @@
                 <field name="mobile"/>
                 <br/>
                 <field name="lead_type" widget="radio"/>
+                <field name="assigned_rm"/>
                 <!--<field name="zip"/>-->
                 <!--<field name="function"/>-->
                 <!--<field name="website"/>-->
@@ -319,6 +320,7 @@
             <xpath expr="//group/group/field[@name='date_deadline']" position="after">
                 <br/>
                 <field name="lead_type" widget="radio"/>
+                <field name="assigned_rm"/>
             </xpath>
         </field>
     </record>
@@ -330,7 +332,7 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_leads" />
         <field name="arch" type="xml">
-            <xpath expr="//group/group/field[@name='partner_id']" position="before">
+            <xpath expr="//group/group/field[@name='partner_id']" position="replace">
                 <field name="assigned_rm"/>
             </xpath>
             <xpath expr="//group/group/field[@name='mobile']" position="after">
@@ -373,6 +375,22 @@
             </xpath>
             <xpath expr="//tree/field[@name='contact_name']" position="replace">
                 <field name="emergency_contact_name"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
+    <!--Deactivate statusbar widget of opportunity form view-->
+    <record model="ir.ui.view" id="unclickable_opportunity_form_statusbar_widget">
+        <field name="name">unclickable.opportunity.form.statusbar.widget</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='stage_id']" position="replace">
+                <field name="stage_id" widget="statusbar"
+                            options="{'fold_field': 'fold'}"
+                            domain="['|', ('team_id', '=', team_id), ('team_id', '=', False)]"
+                            attrs="{'invisible': [('active', '=', False)]}" readonly="True"/>
             </xpath>
         </field>
     </record>

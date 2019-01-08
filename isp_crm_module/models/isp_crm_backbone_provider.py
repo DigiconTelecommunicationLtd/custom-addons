@@ -6,10 +6,10 @@ from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
-class MimePop(models.Model):
-    _name = 'isp_crm_module.mime_pop'
-    _description = "ISP CRM Mime Pop"
+class BackboneProvider(models.Model):
+    _name = 'isp_crm_module.backbone_provider'
+    _description = "ISP CRM Backbone Provider"
     _rec_name = 'name'
     _order = "create_date desc, name, id"
 
-    name = fields.Char(string="POP Name", required=False, default='')
+    name = fields.Char(string="Backbone Provider", required=False, default='MIME')

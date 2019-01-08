@@ -17,6 +17,7 @@ class ISPCRMInvoice(models.Model):
 
     payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type', default=1)
     is_deferred = fields.Boolean("Is Deferred", default=False)
+    customer_po_no = fields.Char(compute='_get_customer_po_no', string='Customer PO No')
 
     @api.multi
     def action_invoice_paid(self):
@@ -32,4 +33,24 @@ class ISPCRMInvoice(models.Model):
         super(ISPCRMInvoice, self).action_invoice_paid()
         return True
 
+    def _get_customer_po_no(self):
+        """
+        Get the customer PO No from sale.order
+        :return:
+        """
 
+        for invoice in self:
+            order = invoice.env['sale.order'].search([('name', '=', invoice.origin)], limit=1)
+            if order:
+                if order.customer_po_no:
+                    invoice.update({
+                        'customer_po_no': str(order.file_name),
+                    })
+                else:
+                    invoice.update({
+                        'customer_po_no': "",
+                    })
+            else:
+                invoice.update({
+                    'customer_po_no': "",
+                })

@@ -46,3 +46,5 @@ from . import isp_crm_temporary_links
 from . import isp_crm_payment_model
 from . import isp_crm_mime_pop
 from . import isp_crm_quotation
+from . import isp_crm_backbone_provider
+from . import isp_crm_register_invoice_payment

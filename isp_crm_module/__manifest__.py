@@ -18,7 +18,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['crm', 'sale_management', 'account_invoicing', 'hr'],
+    'depends': ['crm', 'sale_management', 'account_invoicing', 'hr', 'website'],
 
     # always loaded
     'data': [
@@ -67,6 +67,7 @@
         'views/isp_crm_menulist_views.xml',
         'views/isp_crm_notify_user.xml',
         'views/isp_crm_customer_quotation.xml',
+        'views/isp_crm_register_payment_validate_form.xml',
         'template/new_ticket_page.xml',
         'template/customer_profile_ticket.xml',
         'template/customer_profile/customer_profile.xml',

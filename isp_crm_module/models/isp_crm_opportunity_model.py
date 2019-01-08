@@ -29,7 +29,7 @@ class Opportunity(models.Model):
     is_customer_deferred = fields.Boolean("Is Customer Deferred", default=False)
     invoice_state = fields.Char('Invoice State')
     referred_by = fields.Many2one('res.partner', string='Referred By')
-    assigned_rm = fields.Many2one('hr.employee', string='RM', store=True)
+    assigned_rm = fields.Many2one('res.users', string='RM')
     lead_type = fields.Selection(CUSTOMER_TYPE, string='Type', required=False,  help="Lead and Opportunity Type")
 
 
@@ -98,6 +98,24 @@ class Opportunity(models.Model):
                     raise UserError(_('Please Enter a Valid Phone Number!'))
             else:
                 raise UserError(_('Phone number is too long!'))
+
+    @api.onchange('lead_type')
+    def onchange_lead_type(self):
+        """
+        If user changes Lead Type in opportunity form, then change Lead Type to all related sale orders of the customer of that opportunity .
+        :return:
+        """
+        if self.lead_type:
+            customer = self.partner_id.id
+            if customer:
+                check_customer = self.env['res.partner'].search([('id', '=', customer)], limit=1)
+                if check_customer:
+                    get_sales_order_of_the_customer = self.env['sale.order'].search([('partner_id', '=', check_customer.id)])
+                    if get_sales_order_of_the_customer:
+                        for order in get_sales_order_of_the_customer:
+                            order.update({
+                                'lead_type': str(self.lead_type),
+                            })
 
     @api.model
     def create(self, vals):
