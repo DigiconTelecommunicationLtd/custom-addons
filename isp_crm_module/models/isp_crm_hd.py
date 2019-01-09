@@ -320,7 +320,7 @@ class Helpdesk(models.Model):
         if customer:
             get_assigned_rm_from_customer = customer.assigned_rm
             if get_assigned_rm_from_customer:
-                if get_assigned_rm_from_customer != self.env.uid:
+                if get_assigned_rm_from_customer.id != self.env.uid:
                     raise UserError('This ticket can only be resolved by the assigned RM.')
         self.update({
             'td_flags': TD_FLAGS[5][0],
@@ -349,7 +349,7 @@ class Helpdesk(models.Model):
         if customer:
             get_assigned_rm_from_customer = customer.assigned_rm
             if get_assigned_rm_from_customer:
-                if get_assigned_rm_from_customer != self.env.uid:
+                if get_assigned_rm_from_customer.id != self.env.uid:
                     raise UserError('This ticket can only be resolved by the assigned RM.')
 
         self.update({
