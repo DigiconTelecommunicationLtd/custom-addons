@@ -30,21 +30,53 @@ class CustomerQuotation(models.Model):
     customer_po_no = fields.Binary(strint='Upload File')
     file_name = fields.Char(string="File Name")
 
-    @api.depends('otc_price', 'discount')
+    @api.depends('otc_price', 'discount', 'govt_vat')
     def _compute_total_amount(self):
         """
         Compute the amounts of the OTC.
         """
         for order in self:
-            total_price = float(order.otc_price) - float(order.discount)
-            govt_vat = float(order.govt_vat)
-            vat = (total_price * govt_vat)/100.0
+            if order.otc_price:
+                if order.discount:
+                    total_price = float(order.otc_price) - float(order.discount)
+                else:
+                    total_price = float(order.otc_price)
+            else:
+                total_price = 0.0
+            if order.govt_vat:
+                govt_vat = float(order.govt_vat)
+                vat = (total_price * govt_vat)/100.0
+            else:
+                govt_vat = 0
+                vat = 0.0
             without_vat = float(total_price) - float(vat)
             order.update({
                 'price_total': total_price,
                 'price_total_without_vat': without_vat,
                 'govt_vat_in_amount': str(vat),
             })
+
+    @api.onchange('govt_vat')
+    def onchange_gov_vat(self):
+        if self.otc_price:
+            if self.discount:
+                total_price = float(self.otc_price) - float(self.discount)
+            else:
+                total_price = float(self.otc_price)
+        else:
+            total_price = 0.0
+        if self.govt_vat:
+            govt_vat = float(self.govt_vat)
+            vat = (total_price * govt_vat) / 100.0
+        else:
+            govt_vat = 0
+            vat = 0.0
+        without_vat = float(total_price) - float(vat)
+        self.update({
+            'price_total': total_price,
+            'price_total_without_vat': without_vat,
+            'govt_vat_in_amount': str(vat),
+        })
 
     @api.depends('partner_id')
     def _get_lead_type(self):
