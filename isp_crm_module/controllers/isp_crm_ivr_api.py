@@ -3,27 +3,29 @@ from odoo import http
 
 class ISPCRMIVRApi(http.Controller):
 
-    @http.route("/ivr/<string: get_send_data>/", type='json', methods=["GET"], auth='user', website=True)
-    def get_data(self, data, **kw):
-
-        if data == "get_data":
+    @http.route('/ivr/<string:get_send_data>/', type='json', methods=["GET", "POST"], auth='public', website=True, csrf=False)
+    def get_data(self, get_send_data=None, **kw):
+        if get_send_data == "get_data":
             customer_id = kw.get('customer_id')
             customer_name = kw.get('customer_name')
             package_name = kw.get('package_name')
 
-            creating_values = {
-                'customer_id': customer_id,
-                'customer_name': customer_name,
-                'package_name': package_name,
-            }
-            ticket_obj = http.request.env['isp_crm_module.ivr_api'].create(creating_values)
-            success_msg = "Data received successfully"
+            if customer_id or customer_name:
+                creating_values = {
+                    'customer_id': customer_id,
+                    'customer_name': customer_name,
+                    'package_name': package_name,
+                }
+                ticket_obj = http.request.env['isp_crm_module.ivr_api'].sudo().create(creating_values)
+                success_msg = "Data received successfully"
 
-            return success_msg
+                return success_msg
+            else:
+                return False
 
-        elif data == "post_data":
+        elif get_send_data == "post_data":
             customer_phone = kw.get('customer_phone')
-            get_customer = http.request.env['res.partner'].search([('phone', '=', customer_phone)], limit=1)
+            get_customer = http.request.env['res.partner'].sudo().search([('phone', '=', customer_phone)], limit=1)
             if get_customer:
                 send_values = {
                     'customer_id': get_customer.subscriber_id,
