@@ -158,8 +158,8 @@ class Customer(models.Model):
             get_opportunities = self.env['crm.lead'].search([('partner_id', '=', customer)])
             if get_opportunities:
                 for opportunity in get_opportunities:
-                    opportunity.update({
-                        'assigned_rm': self.assigned_rm,
+                    opportunity.write({
+                        'assigned_rm': self.assigned_rm.id,
                     })
 
     @api.model

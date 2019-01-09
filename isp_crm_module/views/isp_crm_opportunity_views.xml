@@ -298,7 +298,9 @@
                 <field name="mobile"/>
                 <br/>
                 <field name="lead_type" widget="radio"/>
-                <field name="assigned_rm"/>
+                <field name="assigned_rm" domain="[('share', '=', False)]"
+                                context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads'], 'team_id': team_id}"/>
+                <field name="team_id" widget="selection" domain="[('use_leads','=',True)]" attrs="{'invisible':True}"/>
                 <!--<field name="zip"/>-->
                 <!--<field name="function"/>-->
                 <!--<field name="website"/>-->
@@ -320,7 +322,8 @@
             <xpath expr="//group/group/field[@name='date_deadline']" position="after">
                 <br/>
                 <field name="lead_type" widget="radio"/>
-                <field name="assigned_rm"/>
+                <field name="assigned_rm" domain="[('share', '=', False)]"
+                                context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads'], 'team_id': team_id}"/>
             </xpath>
         </field>
     </record>
@@ -333,7 +336,8 @@
         <field name="inherit_id" ref="crm.crm_case_form_view_leads" />
         <field name="arch" type="xml">
             <xpath expr="//group/group/field[@name='partner_id']" position="replace">
-                <field name="assigned_rm"/>
+                <field name="assigned_rm" domain="[('share', '=', False)]"
+                                context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads'], 'team_id': team_id}"/>
             </xpath>
             <xpath expr="//group/group/field[@name='mobile']" position="after">
                 <br/>
