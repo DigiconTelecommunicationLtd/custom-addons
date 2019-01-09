@@ -99,6 +99,22 @@ class Opportunity(models.Model):
             else:
                 raise UserError(_('Phone number is too long!'))
 
+    @api.onchange('assigned_rm')
+    def onchange_assigned_rm(self):
+        """
+        If user changes RM , it will reflect in customer form.
+        :return:
+        """
+        if self.assigned_rm:
+            customer = self.partner_id.id
+            if customer:
+                check_customer = self.env['res.partner'].search([('id', '=', customer)])
+                if check_customer:
+                    for cust in check_customer:
+                        cust.write({
+                            'assigned_rm': self.assigned_rm.id,
+                        })
+
     @api.onchange('lead_type')
     def onchange_lead_type(self):
         """
