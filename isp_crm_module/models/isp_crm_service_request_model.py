@@ -31,6 +31,7 @@ DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
 OTC_PRODUCT_CODE = 'ISP-OTC'
+DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 
 default_crypt_context = CryptContext(
     # kdf which can be verified by the context. The default encryption kdf is
@@ -207,10 +208,20 @@ class ServiceRequest(models.Model):
             user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
 
             # invoice generation
-            invoice_generated               = self.create_invoice_for_customer(customer=customer)
-            sales_order_obj                 = self.env['sale.order'].search([('name', '=', invoice_generated.origin)], order='create_date asc', limit=1)
-            current_package_id              = invoice_generated.invoice_line_ids[0].product_id.id
-            current_package_price           = invoice_generated.invoice_line_ids[0].price_unit
+            last_invoice                    = self.env['account.invoice'].search([('partner_id', '=', customer.id)], order='create_date asc', limit=1)
+            last_invoices_inv_lines         = last_invoice[0].invoice_line_ids
+
+            for line in last_invoices_inv_lines:
+                try:
+                    if line.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+                        package_line = line
+
+                except UserError as ex:
+                    print(ex)
+
+            sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date asc', limit=1)
+            current_package_id              = package_line.product_id.id
+            current_package_price           = package_line.price_unit
             current_package_start_date      = fields.Date.today()
             current_package_sales_order_id  = sales_order_obj.id
 
