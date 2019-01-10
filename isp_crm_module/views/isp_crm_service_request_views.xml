@@ -126,8 +126,8 @@
                         <!--Left-->
                         <group>
                             <field name="customer" string="Customer Name" options="{'no_create_edit': True}"/>
-                            <field name="customer_mobile" string="Customer Mobile" readonly="1"/>
-                            <field name="customer_phone" string="Customer Phone" readonly="1"/>
+                            <field name="customer_mobile" string="Mobile" readonly="1"/>
+                            <field name="customer_phone" string="Phone" readonly="1"/>
                         </group>
                         <!--Right-->
                         <group>
