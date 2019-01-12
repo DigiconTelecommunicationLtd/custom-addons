@@ -376,7 +376,7 @@ class SelfcareController(PaymentController):
             context['user'] = logged_in_user
             context['full_name'] = logged_in_user.name.title()
             context['customer_id'] = logged_in_user.subscriber_id
-            context['customer_balance'] = customer_showing_price if customer_showing_price >= 0 else 0.00
+            context['customer_balance'] = customer_balance if customer_balance >= 0 else 0.00
             context['image'] = logged_in_user.image
             context['content_header'] = content_header
             context['template_name'] = template_name
