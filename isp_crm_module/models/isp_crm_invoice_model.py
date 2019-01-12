@@ -2,6 +2,8 @@
 
 
 from odoo import api, fields, models, _
+import datetime
+import calendar
 
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
@@ -18,6 +20,8 @@ class ISPCRMInvoice(models.Model):
     payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type', default=1)
     is_deferred = fields.Boolean("Is Deferred", default=False)
     customer_po_no = fields.Char(compute='_get_customer_po_no', string='Customer PO No')
+    billing_due_date = fields.Char(compute='_get_billing_due_date', string='Due Date')
+    vat = fields.Char(compute='_get_vat', string='VAT')
 
     @api.multi
     def action_invoice_paid(self):
@@ -54,3 +58,62 @@ class ISPCRMInvoice(models.Model):
                 invoice.update({
                     'customer_po_no': "",
                 })
+
+    def add_months(self, sourcedate, months):
+        getdate = datetime.datetime.strptime(sourcedate, "%Y-%m-%d")
+        month = getdate.month - 1 + months
+        year = getdate.year + month // 12
+        month = month % 12 + 1
+        day = min(getdate.day, calendar.monthrange(year, month)[1])
+        return datetime.date(year, month, day)
+
+    def _get_billing_due_date(self):
+        """
+        Compute due date of billing of invoice
+        :return:
+        """
+        for invoice in self:
+            get_customer = invoice.env['res.partner'].search([('id', '=', invoice.partner_id.id)], limit=1)
+            if get_customer:
+                opportunities = invoice.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
+                for opportunity in opportunities:
+                    if opportunity.lead_type == "corporate":
+                        if invoice.date_invoice:
+                            due_date = invoice.date_invoice
+                            due_date = invoice.add_months(due_date, 1)
+                            invoice.update({
+                                'billing_due_date': str(due_date),
+                            })
+                        else:
+                            invoice.update({
+                                'billing_due_date': "",
+                            })
+                    else:
+                        if invoice.date_due:
+                            due_date = invoice.date_due
+                            invoice.update({
+                                'billing_due_date' : str(due_date),
+                            })
+                        else:
+                            invoice.update({
+                                'billing_due_date': "",
+                            })
+
+    def _get_vat(self):
+        """
+        Compute vat of invoice.
+        :return:
+        """
+        for invoice in self:
+            if invoice.amount_untaxed:
+                invoice_vat = float(invoice.amount_untaxed) * 0.05
+                invoice.update({
+                    'vat': str(invoice_vat),
+                })
+            else:
+                invoice_vat = 0.0
+                invoice.update({
+                    'vat': str(invoice_vat),
+                })
+
+
