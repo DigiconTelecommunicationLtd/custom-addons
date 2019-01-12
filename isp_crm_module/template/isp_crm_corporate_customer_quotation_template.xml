@@ -88,8 +88,8 @@
                             </div>
                             <div class="row" style="padding-left:10px;padding-top:3%;page-break-after: always;">
                                 <p><span t-field="o.foundation"/>,</p>
-                                <p>34, Kamal Ataturk Avevue, Awal Center (18th Floor)</p>
-                                <p>Banani C/A, Dhaka, Bangladesh</p>
+                                <p><span t-field="o.destination"/></p>
+                                <p>Bangladesh</p>
                                 <p>Attn: <span t-field="o.foundation"/></p>
                                 <div class="text-center" style="margin-bottom:5%;padding-left:10px;">
                                     <u><h5>Proposal for Data Connectivity Solution</h5></u>
@@ -147,7 +147,7 @@
                                         <tbody class="invoice_tbody">
                                             <tr>
                                                 <td>
-                                                    <span t-field="o.foundation"/>
+                                                    MIME "<span t-field="o.foundation"/>" POP
                                                 </td>
                                                 <td>
                                                     <span t-field="o.destination"/>
