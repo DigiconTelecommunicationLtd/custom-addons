@@ -27,7 +27,7 @@
         'data/default_hd_stages_data.xml',
         'data/default_stages_data.xml',
         'data/default_payment_service_data.xml',
-        'data/default_account_data.xml',
+        # 'data/default_account_data.xml',
         'data/default_hd_complexity_level.xml',
         'data/default_hd_problems.xml',
         'data/default_ticket_types.xml',
