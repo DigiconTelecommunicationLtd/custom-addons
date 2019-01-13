@@ -1165,7 +1165,7 @@
                         </table>
                     </t>
                     <t t-else="">
-                        <h3>There are no tickets!!!</h3>
+                        <h3>There are no Packages!!!</h3>
                     </t>
                 </div>
                 <!-- /.box-body -->
