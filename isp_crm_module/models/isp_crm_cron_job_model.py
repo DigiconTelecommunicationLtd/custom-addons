@@ -304,7 +304,7 @@ class CronJobModel(models.Model):
         for invoice in invoices:
             if invoice.date_due:
                 if present.date() > datetime.strptime(invoice.date_due, "%Y-%m-%d").date() and invoice.state != INVOICE_PAID_STATUS:
-                    message = "Invoice\'s due date is over. Custome's name: '"+str(invoice.partner_id.name) + "' and Customer's Subscriber ID: '"+str(invoice.partner_id.subscriber_id)+"'"
+                    message = "Invoice\'s due date is over. Customer's name: '"+str(invoice.partner_id.name) + "' and Customer's Subscriber ID: '"+str(invoice.partner_id.subscriber_id)+"'"
                     invoice.user_id.notify_info(message)
 
     def delete_expired_reset_password_links(self):

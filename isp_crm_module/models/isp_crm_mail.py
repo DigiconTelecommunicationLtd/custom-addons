@@ -92,3 +92,35 @@ class Team(models.Model):
             raise UserError('Could not create temporary link to reset password.')
 
 
+    def sending_mail_for_payment(self, payment_obj, template_obj):
+        body = template_obj.body_html
+        body = body.replace('--date--', str(payment_obj.create_date))
+        body = body.replace('--subscriber_id--', str(payment_obj.partner_id.subscriber_id))
+        body = body.replace('--name--', str(payment_obj.partner_id.name))
+        body = body.replace('--address--', str(payment_obj.partner_id.get_partner_address_str()))
+        body = body.replace('--email--', str(payment_obj.partner_id.email))
+        body = body.replace('--mobile--', str(payment_obj.partner_id.mobile))
+        body = body.replace('--payment_service_type--', str(payment_obj.service_type_id.name))
+        body = body.replace('--payment_amount--', str(payment_obj.amount))
+        body = body.replace('--payment_journal_name--', str(payment_obj.journal_id.name))
+        body = body.replace('--card_type--', str(payment_obj.card_type) if payment_obj.card_type else "" )
+        body = body.replace('--card_number--', str(payment_obj.card_number) if payment_obj.card_number else "")
+        body = body.replace('--transaction_ammount--', str(payment_obj.bill_amount) if payment_obj.bill_amount else "")
+
+        if template_obj:
+            mail_values = {
+                'subject': template_obj.subject,
+                'body_html': body,
+                'email_to': payment_obj.partner_id.email,
+                'email_from': 'notice.mime@cg-bd.com',
+            }
+            try:
+                create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
+            except Exception as ex:
+                print(ex)
+            return True
+        else:
+            raise UserError('Could Not send the mail.')
+
+
+

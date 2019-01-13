@@ -310,5 +310,17 @@ class Customer(models.Model):
         balance = 0.0 if (total_debit - total_credit) == 0.0 else total_debit - total_credit
         return balance
 
+    def get_partner_address_str(self):
+        address_str = ""
+        address_str = ", ".join([
+            self.street or '',
+            self.street2 or '',
+            self.city or '',
+            self.state_id.name or '',
+            self.zip or '',
+            self.country_id.name or '',
+        ])
+        return address_str
+
 
 
