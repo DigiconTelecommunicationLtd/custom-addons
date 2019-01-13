@@ -89,7 +89,6 @@
                             <div class="row" style="padding-left:10px;padding-top:3%;page-break-after: always;">
                                 <p><span t-field="o.partner_id.name"/>,</p>
                                 <p><span t-field="o.destination"/></p>
-                                <p>Bangladesh</p>
                                 <p>Attn: <span t-field="o.partner_id.name"/></p>
                                 <div class="text-center" style="margin-bottom:5%;padding-left:10px;">
                                     <u><h5>Proposal for Data Connectivity Solution</h5></u>
@@ -104,10 +103,11 @@
                                 <p>Thanking you</p>
                                 <br/>
                                 <p><strong>Ahmed Anwar Hasan</strong></p>
-                                <p>VIce President, Business Development</p>
+                                <p>Vice President, Business Development</p>
                                 <p>MIME</p>
                                 <P>34, Kamal Ataturk Avevue, Awal Center (15th Floor)</P>
-                                <P>Mobile:  Phone: </P>
+                                <p>Mobile: </p>
+                                <p>Phone: </p>
                                 <p>E-mail:  Web: www.mime.com</p>
                             </div>
                         </t>
@@ -317,6 +317,7 @@
                                     <li>Monthly Service charges are to be paid within the 5th of the current month.</li>
                                     <li>Implementation needs minimum <strong>10 working days</strong> from the date of receiving work order.</li>
                                     <li>Fiber Optic, Radio Device, Media Converter, ONU and related accessories property of MIME.</li>
+                                    <li>1 month prior notice before service termination.</li>
                                 </ol>
                             </div>
                             <br/>
@@ -420,6 +421,7 @@
                                     <li>Monthly Service charges are to be paid within the 5th of the current month.</li>
                                     <li>Implementation needs minimum <strong>10 working days</strong> from the date of receiving work order.</li>
                                     <li>Fiber Optic, Radio Device, Media Converter, ONU and related accessories property of MIME.</li>
+                                    <li>1 month prior notice before service termination.</li>
                                 </ol>
                             </div>
                             <br/>
