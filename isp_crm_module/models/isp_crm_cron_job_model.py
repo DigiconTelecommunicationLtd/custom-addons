@@ -289,9 +289,12 @@ class CronJobModel(models.Model):
                 package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
                 created_package_history = package_history_obj.set_package_change_history(customer)
             else:
-                customer.update({
-                    'active_status' : CUSTOMER_INCATIVE_STATUS
-                })
+                if customer.is_sent_package_change_req == True:
+                    updated_customer = customer.update_next_bill_cycle_info(customer=customer)
+                else:
+                    customer.update({
+                        'active_status' : CUSTOMER_INCATIVE_STATUS
+                    })
         return True
 
     def send_notification_after_invoice_due_date(self):
@@ -304,7 +307,7 @@ class CronJobModel(models.Model):
         for invoice in invoices:
             if invoice.date_due:
                 if present.date() > datetime.strptime(invoice.date_due, "%Y-%m-%d").date() and invoice.state != INVOICE_PAID_STATUS:
-                    message = "Invoice\'s due date is over. Custome's name: '"+str(invoice.partner_id.name) + "' and Customer's Subscriber ID: '"+str(invoice.partner_id.subscriber_id)+"'"
+                    message = "Invoice\'s due date is over. Customer's name: '"+str(invoice.partner_id.name) + "' and Customer's Subscriber ID: '"+str(invoice.partner_id.subscriber_id)+"'"
                     invoice.user_id.notify_info(message)
 
     def delete_expired_reset_password_links(self):

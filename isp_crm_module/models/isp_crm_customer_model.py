@@ -71,6 +71,7 @@ class Customer(models.Model):
     customer_etin = fields.Char(string='Customer ETIN')
     customer_bin = fields.Char(string='Customer BIN')
     is_service_request_marked_done = fields.Boolean(compute='_get_mark_done_info', default=False)
+    is_sent_package_change_req = fields.Boolean("Is Package Change Request Sent", default=False)
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
@@ -309,6 +310,18 @@ class Customer(models.Model):
 
         balance = 0.0 if (total_debit - total_credit) == 0.0 else total_debit - total_credit
         return balance
+
+    def get_partner_address_str(self):
+        address_str = ""
+        address_str = ", ".join([
+            self.street or '',
+            self.street2 or '',
+            self.city or '',
+            self.state_id.name or '',
+            self.zip or '',
+            self.country_id.name or '',
+        ])
+        return address_str
 
 
 

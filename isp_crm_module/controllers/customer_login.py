@@ -234,7 +234,8 @@ class SelfcareController(PaymentController):
                     'service_type_id'   : service_type,
                     'is_advance'        : True,
                 })
-                created_payment_obj.post()
+                created_payment_obj.post(vals={}, is_mail_sent=True)
+
                 # updating the payment object with card info
                 created_payment_obj.update({
                     'customer_id'       : customer_obj.subscriber_id,
@@ -252,7 +253,7 @@ class SelfcareController(PaymentController):
                     'full_response'     : str(data),
                 })
 
-
+                created_payment_obj.send_mail_for_payment()
                 # make payment
                 # if invoice_id:
                 #     created_payment_obj.action_validate_invoice_payment()
@@ -543,8 +544,7 @@ class SelfcareController(PaymentController):
                     'to_package_id'     : package_obj.id,
                     'active_from'       : active_from
                 })
-
-                # TODO (Arif) : Have to create a customer invoice status object upon discussion with alam bro
+                created_package_change.send_package_change_mail()
 
                 success_msg = "Your Package change request Successfully enlisted."
 

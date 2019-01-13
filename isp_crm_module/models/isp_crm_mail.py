@@ -7,10 +7,14 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
 class Team(models.Model):
+    DEFAULT_FROM_MAIL = 'notice.mime@cg-bd.com'
+
     _name = 'isp_crm_module.mail'
     _description = "ISP CRM Mail Module"
     _rec_name = 'name'
     _order = "name, id"
+
+
 
 
     name = fields.Char('Mail Name', translate=True)
@@ -26,7 +30,7 @@ class Team(models.Model):
                 'body_html': body,
                 'email_to': mailto,
                 'email_cc': '',
-                'email_from': 'mime@cgbd.com',
+                'email_from': self.DEFAULT_FROM_MAIL,
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
@@ -43,7 +47,7 @@ class Team(models.Model):
                 'body_html': body,
                 'email_to': mailto,
                 'email_cc': '',
-                'email_from': 'mime@cgbd.com',
+                'email_from': self.DEFAULT_FROM_MAIL,
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
@@ -61,7 +65,7 @@ class Team(models.Model):
                 'subject': template_obj.subject,
                 'body_html': body,
                 'email_to': mailto,
-                'email_from': 'mime@cgbd.com',
+                'email_from': self.DEFAULT_FROM_MAIL,
                 # 'attachment_ids': [(6, 0, [attachment.id])],
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
@@ -84,7 +88,7 @@ class Team(models.Model):
                     'subject': template_obj.subject,
                     'body_html': body,
                     'email_to': mailto,
-                    'email_from': 'mime@cgbd.com',
+                    'email_from': self.DEFAULT_FROM_MAIL,
                 }
                 create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
             return True
@@ -92,3 +96,65 @@ class Team(models.Model):
             raise UserError('Could not create temporary link to reset password.')
 
 
+    def sending_mail_for_payment(self, payment_obj, template_obj):
+        body = template_obj.body_html
+        body = body.replace('--date--', str(payment_obj.create_date))
+        body = body.replace('--subscriber_id--', str(payment_obj.partner_id.subscriber_id))
+        body = body.replace('--name--', str(payment_obj.partner_id.name))
+        body = body.replace('--address--', str(payment_obj.partner_id.get_partner_address_str()))
+        body = body.replace('--email--', str(payment_obj.partner_id.email))
+        body = body.replace('--mobile--', str(payment_obj.partner_id.mobile))
+        body = body.replace('--payment_service_type--', str(payment_obj.service_type_id.name))
+        body = body.replace('--payment_amount--', str(payment_obj.amount))
+        body = body.replace('--payment_journal_name--', str(payment_obj.journal_id.name))
+        body = body.replace('--card_type--', str(payment_obj.card_type) if payment_obj.card_type else "" )
+        body = body.replace('--card_number--', str(payment_obj.card_number) if payment_obj.card_number else "")
+        body = body.replace('--transaction_ammount--', str(payment_obj.bill_amount) if payment_obj.bill_amount else "")
+
+        if template_obj:
+            mail_values = {
+                'subject': template_obj.subject,
+                'body_html': body,
+                'email_to': payment_obj.partner_id.email,
+                'email_from': self.DEFAULT_FROM_MAIL,
+            }
+            try:
+                create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
+            except Exception as ex:
+                print(ex)
+            return True
+        else:
+            raise UserError('Could Not send the mail.')
+
+
+    def sending_mail_for_package_change_request(self, package_change_obj, template_obj):
+        body = template_obj.body_html
+        # package_name
+        # next_package_name
+        # bill_cycle_str
+        bill_cycle_str = ""
+        body = body.replace('--package_name--', str(package_change_obj.from_package_id.name))
+        body = body.replace('--next_package_name--', str(package_change_obj.to_package_id.name))
+        if package_change_obj.active_from == package_change_obj.customer_id.next_package_start_date:
+            bill_cycle_str = "Requesting you to pay the amount before <strong>Next Bill Cycle.</strong>"
+
+        else:
+            bill_cycle_str = "Your new bill cycle start from: <strong>{bill_cycle_date}</strong><br /><br />" \
+                             "Requesting you to pay the amount (Tk. <strong>{next_package_price}</strong>) " \
+                             "before <strong>'{bill_cycle_date}'</strong>".format(bill_cycle_date=package_change_obj.active_from, next_package_price=package_change_obj.to_package_id.list_price)
+        body = body.replace('--bill_cycle_str--', str(bill_cycle_str))
+
+        if template_obj:
+            mail_values = {
+                'subject': template_obj.subject,
+                'body_html': body,
+                'email_to': package_change_obj.customer_id.email,
+                'email_from': self.DEFAULT_FROM_MAIL,
+            }
+            try:
+                create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
+            except Exception as ex:
+                print(ex)
+            return True
+        else:
+            raise UserError('Could Not send the mail.')

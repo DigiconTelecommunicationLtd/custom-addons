@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="isp_crm_module.user_package_change_mail_template" model="mail.template">
+        <field name="name">isp_crm_module_user_package_change_mail_template</field>
+        <field name="subject">MIME Package Changing Info</field>
+        <field name="body_html"><![CDATA[
+
+            <p>Dear Valued Subscriber,</p>
+
+            <p>We have received your request for changing Package request.</p>
+            <p>Currently you are enjoying package: <strong>--package_name--</strong></p>
+            <p>You have requested for: <strong>--next_package_name--</strong></p>
+            <p>--bill_cycle_str--</p>
+            <br/>
+            <br/>
+            [N.B In case you don't pay the amount you will continue to enjoy your existing package till next bill cycle.]
+            <br/>
+        ]]>
+
+        </field>
+    </record>
+</odoo>

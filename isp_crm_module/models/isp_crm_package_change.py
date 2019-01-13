@@ -45,11 +45,11 @@ class ChangePackage(models.Model):
             valid_till_date_obj = active_from_date_obj - timedelta(days=1)
             valid_till_date_str = valid_till_date_obj.strftime('%Y-%m-%d')
             pack_change_obj.customer_id.update({
-                'current_package_end_date' : valid_till_date_str,
                 'next_package_id' : pack_change_obj.to_package_id.id,
                 'next_package_start_date' : pack_change_obj.active_from,
                 'next_package_price' : pack_change_obj.to_package_id.lst_price,
                 'next_package_original_price' : pack_change_obj.to_package_id.lst_price,
+                'is_sent_package_change_req' : True,
             })
             pack_change_obj.update({
                 'validated_by_id' : self.env.user.id,
@@ -77,3 +77,13 @@ class ChangePackage(models.Model):
                 })
 
         return True
+
+    def send_package_change_mail(self):
+        """
+        Sends mail for changing package
+        :return: True if the changing package mailing is successfull
+        """
+        template_obj = self.env['mail.template'].search([('name', '=', 'isp_crm_module_user_package_change_mail_template')])
+        for record in self:
+            mail_obj = self.env['isp_crm_module.mail'].sending_mail_for_package_change_request(package_change_obj=record,
+                                                                                template_obj=template_obj)

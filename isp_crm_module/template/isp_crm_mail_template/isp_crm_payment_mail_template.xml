@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="isp_crm_module.user_payment_mail_template" model="mail.template">
+        <field name="name">isp_crm_module_user_payment_mail_template</field>
+        <field name="subject">MIME Payment Confirmation</field>
+        <field name="body_html"><![CDATA[
+
+            <p>Date: --date--</p>
+            <br/>
+            <style>
+            table, tr, th, td {
+                text-align: left;
+            }
+            </style>
+            <div style="width:600px; border-style: solid; border-color: #eaeaea; border-width:2px; padding:10px;">
+                <h2>Subscriber</h2>
+                <table>
+                    <tr>
+                        <th style="text-align: left;">Subscriber ID#</th>
+                        <td> : --subscriber_id--</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Name</th>
+                        <td> : --name--</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Address</th>
+                        <td> : --address--</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Email</th>
+                        <td> : --email--</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Mobile</th>
+                        <td> : --mobile--</td>
+                    </tr>
+
+                </table>
+            </div>
+            <br/>
+            <div style="width:600px; border-style: solid; border-color: #eaeaea; border-width:2px; padding:10px;">
+                <h2>Items</h2>
+                <table>
+                    <tr>
+                        <th style="text-align: left;">--payment_service_type--</th>
+                        <th style="text-color:red"> : --payment_amount--</th>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+            <div style="align:left; width:600px; border-style: solid; border-color: #eaeaea; border-width:2px; padding:10px;">
+                <h2>Payment Details</h2>
+                <table>
+                    <tr>
+                        <th style="text-align: left;">Payment Method</th>
+                        <td> : --payment_journal_name--</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Card Type</th>
+                        <td> : --card_type--</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Card Number</th>
+                        <td> : --card_number--</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Transaction Ammount</th>
+                        <td> : --transaction_ammount--</td>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+        ]]>
+
+        </field>
+    </record>
+</odoo>

@@ -44,7 +44,7 @@ class ISPCRMPayment(models.Model):
     bill_pay_type = fields.Char(compute="_get_bill_pay_type", string="Payment_type")
 
     @api.multi
-    def post(self):
+    def post(self, vals, is_mail_sent=False):
         """
         Overrides the default post function for advance payment option
         :return:
@@ -53,8 +53,11 @@ class ISPCRMPayment(models.Model):
             self.make_advance_payment(records=self)
         else:
             super(ISPCRMPayment, self).post()
-        return True
 
+        if is_mail_sent == False:
+            self.send_mail_for_payment()
+        return True
+    
     def _get_bill_pay_type(self):
         """
         Compute bill payment type.
@@ -73,6 +76,16 @@ class ISPCRMPayment(models.Model):
             self.update({
                 'bill_pay_type': str(self.journal_id.type),
             })
+
+    def send_mail_for_payment(self):
+        """
+        Sends mail for payment
+        :return: True if the payment mailing is successfull
+        """
+        template_obj = self.env['mail.template'].search([('name', '=', 'isp_crm_module_user_payment_mail_template')])
+        for record in self:
+            mail_obj = self.env['isp_crm_module.mail'].sending_mail_for_payment(payment_obj=record, template_obj=template_obj)
+
 
     def make_advance_payment(self, records):
         """
