@@ -234,7 +234,8 @@ class SelfcareController(PaymentController):
                     'service_type_id'   : service_type,
                     'is_advance'        : True,
                 })
-                created_payment_obj.post()
+                created_payment_obj.post(vals={}, is_mail_sent=True)
+
                 # updating the payment object with card info
                 created_payment_obj.update({
                     'customer_id'       : customer_obj.subscriber_id,
@@ -252,7 +253,7 @@ class SelfcareController(PaymentController):
                     'full_response'     : str(data),
                 })
 
-
+                created_payment_obj.send_mail_for_payment()
                 # make payment
                 # if invoice_id:
                 #     created_payment_obj.action_validate_invoice_payment()
