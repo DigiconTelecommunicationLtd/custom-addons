@@ -4,7 +4,7 @@
 
 from ast import literal_eval
 from datetime import datetime, timedelta
-
+from odoo import http
 from odoo import api, fields, models, _
 from odoo.exceptions import Warning, UserError
 import odoo.addons.decimal_precision as dp
@@ -41,6 +41,7 @@ class ISPCRMPayment(models.Model):
     card_number = fields.Char(string="Card number")
     billing_status = fields.Char(string="Billing status")
     full_response = fields.Text(string="Full Response")
+    bill_pay_type = fields.Char(compute="_get_bill_pay_type", string="Payment_type")
 
     @api.multi
     def post(self):
@@ -53,6 +54,25 @@ class ISPCRMPayment(models.Model):
         else:
             super(ISPCRMPayment, self).post()
         return True
+
+    def _get_bill_pay_type(self):
+        """
+        Compute bill payment type.
+        :return:
+        """
+        for payment in self:
+            if payment.journal_id:
+                payment.update({
+                    'bill_pay_type': str(payment.journal_id.type),
+                })
+
+
+    @api.onchange('journal_id')
+    def _onchange_journal_id(self):
+        if self.journal_id:
+            self.update({
+                'bill_pay_type': str(self.journal_id.type),
+            })
 
     def make_advance_payment(self, records):
         """

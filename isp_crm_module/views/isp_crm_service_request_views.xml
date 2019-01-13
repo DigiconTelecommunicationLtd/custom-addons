@@ -114,7 +114,7 @@
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <label class="oe_edit_only" for="problem" string="Problem Name"/>
+                        <label for="problem" string="Name"/>
                         <h1><field name="problem" string="Name" placeholder="Problem Name"/></h1>
 
                         <h3>
