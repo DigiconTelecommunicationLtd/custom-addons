@@ -161,7 +161,7 @@
                                             </tr>
                                             <tr>
                                                 <th>Customer PO No.</th>
-                                                <td><span t-field="o.reference"/></td>
+                                                <td><span t-field="o.customer_po_no"/></td>
                                             </tr>
                                             <tr>
                                                 <th>Bill Date</th>
