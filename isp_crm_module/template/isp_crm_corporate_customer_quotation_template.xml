@@ -87,10 +87,10 @@
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px;padding-top:3%;page-break-after: always;">
-                                <p><span t-field="o.foundation"/>,</p>
+                                <p><span t-field="o.partner_id.name"/>,</p>
                                 <p><span t-field="o.destination"/></p>
                                 <p>Bangladesh</p>
-                                <p>Attn: <span t-field="o.foundation"/></p>
+                                <p>Attn: <span t-field="o.partner_id.name"/></p>
                                 <div class="text-center" style="margin-bottom:5%;padding-left:10px;">
                                     <u><h5>Proposal for Data Connectivity Solution</h5></u>
                                 </div>
