@@ -10,6 +10,7 @@ from . import isp_crm_service_request_model
 
 DEFAULT_PROBLEM = "There are some Problem"
 INVOICE_PAID_STATUS = 'paid'
+DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 
 CUSTOMER_TYPE = [
     ('retail', _('Retail')),
@@ -188,18 +189,44 @@ class Opportunity(models.Model):
                     sale_order_line_obj = self.env['sale.order.line'].search([('order_id', '=', confirmed_sale_order_id)])
                     break
 
-            service_req_data = {
-                'problem' : opportunity.description or '',
-                'stage' : first_stage.id,
-                'customer' : opportunity.partner_id.id,
-                'customer_email' : opportunity.email_from,
-                'customer_mobile' : opportunity.mobile,
-                'customer_phone' : opportunity.phone,
-                'opportunity_id': opportunity.id,
-                'confirmed_sale_order_id': confirmed_sale_order_id,
-                'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
-                'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
-            }
+            last_invoice = self.env['account.invoice'].search([('partner_id', '=', opportunity.partner_id.id)],
+                                                              order='create_date asc', limit=1)
+            last_invoices_inv_lines = last_invoice[0].invoice_line_ids
+            package_line = ""
+            for line in last_invoices_inv_lines:
+                try:
+                    if line.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+                        package_line = line
+
+                except UserError as ex:
+                    print(ex)
+
+            if package_line.product_id:
+                service_req_data = {
+                    'problem': str(opportunity.partner_id.name) + ' - ' + str(package_line.product_id.name) or '',
+                    'stage': first_stage.id,
+                    'customer': opportunity.partner_id.id,
+                    'customer_email': opportunity.email_from,
+                    'customer_mobile': opportunity.mobile,
+                    'customer_phone': opportunity.phone,
+                    'opportunity_id': opportunity.id,
+                    'confirmed_sale_order_id': confirmed_sale_order_id,
+                    'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
+                    'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
+                }
+            else:
+                service_req_data = {
+                    'problem' : str(opportunity.partner_id.name) + ' - ' + "No packages" or '',
+                    'stage' : first_stage.id,
+                    'customer' : opportunity.partner_id.id,
+                    'customer_email' : opportunity.email_from,
+                    'customer_mobile' : opportunity.mobile,
+                    'customer_phone' : opportunity.phone,
+                    'opportunity_id': opportunity.id,
+                    'confirmed_sale_order_id': confirmed_sale_order_id,
+                    'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
+                    'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
+                }
             created_service_req_obj = service_req_obj.create(service_req_data)
             if len(sale_order_line_obj) > 0:
                 for sale_order_line in sale_order_line_obj:

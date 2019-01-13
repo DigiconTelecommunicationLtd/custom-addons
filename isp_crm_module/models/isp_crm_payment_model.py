@@ -41,6 +41,7 @@ class ISPCRMPayment(models.Model):
     card_number = fields.Char(string="Card number")
     billing_status = fields.Char(string="Billing status")
     full_response = fields.Text(string="Full Response")
+    bill_pay_type = fields.Char(compute="_get_bill_pay_type", string="Payment_type")
 
     @api.multi
     def post(self):
@@ -53,6 +54,17 @@ class ISPCRMPayment(models.Model):
         else:
             super(ISPCRMPayment, self).post()
         return True
+
+    def _get_bill_pay_type(self):
+        """
+        Compute bill payment type.
+        :return:
+        """
+        for payment in self:
+            if payment.journal_id:
+                payment.update({
+                    'bill_pay_type': str(payment.journal_id.type),
+                })
 
     def make_advance_payment(self, records):
         """
