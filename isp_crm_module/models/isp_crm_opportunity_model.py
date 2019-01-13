@@ -173,6 +173,19 @@ class Opportunity(models.Model):
         if (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
             raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
 
+        if vals.get('email_from'):
+            check_customer_email = self.env['res.partner'].search([('email', '=', vals.get('email_from'))], limit=1)
+            if check_customer_email:
+                raise Warning(_('Email should be unique'))
+        if vals.get('phone'):
+            check_customer_phone = self.env['res.partner'].search([('phone', '=', vals.get('phone'))], limit=1)
+            if check_customer_phone:
+                raise Warning(_('Phone Number should be unique'))
+        if vals.get('mobile'):
+            check_customer_mobile = self.env['res.partner'].search([('mobile', '=', vals.get('mobile'))], limit=1)
+            if check_customer_mobile:
+                raise Warning(_('Mobile Number should be unique'))
+
         return super(Opportunity, self).create(vals)
 
     @api.multi

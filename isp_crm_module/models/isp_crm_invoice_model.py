@@ -48,7 +48,7 @@ class ISPCRMInvoice(models.Model):
             if order:
                 if order.customer_po_no:
                     invoice.update({
-                        'customer_po_no': str(order.file_name),
+                        'customer_po_no': str(order.customer_po_no),
                     })
                 else:
                     invoice.update({

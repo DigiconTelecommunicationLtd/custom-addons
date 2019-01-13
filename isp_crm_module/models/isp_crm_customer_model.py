@@ -68,10 +68,30 @@ class Customer(models.Model):
     active_status = fields.Selection(ACTIVE_STATES, string='Active Status', required=False, help="Active Status of Current Bill Cycle", default='active')
     is_deferred = fields.Boolean("Is Deferred", default=False)
     assigned_rm = fields.Many2one('res.users', string='RM')
+    customer_etin = fields.Char(string='Customer ETIN')
+    customer_bin = fields.Char(string='Customer BIN')
+    is_service_request_marked_done = fields.Boolean(compute='_get_mark_done_info', default=False)
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
     mail_cc = fields.Char()
+
+    def _get_mark_done_info(self):
+        """
+        Compute if service request is marked done or not
+        :return:
+        """
+        for customer in self:
+            check_done = customer.is_service_request_marked_done
+            get_opportunity = self.env['isp_crm_module.service_request'].search([('customer', '=', customer.id)], limit=1)
+            if get_opportunity.is_done:
+                customer.update({
+                    'is_service_request_marked_done': True,
+                })
+            else:
+                customer.update({
+                    'is_service_request_marked_done': False,
+                })
 
 
     def _get_package_end_date(self, given_date):

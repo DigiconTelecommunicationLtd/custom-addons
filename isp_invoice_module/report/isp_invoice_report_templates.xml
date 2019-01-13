@@ -112,11 +112,15 @@
                                             </tr>
                                             <tr>
                                                 <th style="width:30%">Customer BIN</th>
-                                                <td></td>
+                                                <td>
+                                                    <span t-field="o.partner_id.customer_bin"/>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th style="width:30%">Customer ETIN</th>
-                                                <td></td>
+                                                <td>
+                                                    <span t-field="o.partner_id.customer_etin"/>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -161,7 +165,7 @@
                                             </tr>
                                             <tr>
                                                 <th>Customer PO No.</th>
-                                                <td><span t-field="o.reference"/></td>
+                                                <td><span t-field="o.customer_po_no"/></td>
                                             </tr>
                                             <tr>
                                                 <th>Bill Date</th>
