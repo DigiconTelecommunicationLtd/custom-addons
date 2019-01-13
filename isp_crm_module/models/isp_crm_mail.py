@@ -7,10 +7,14 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
 class Team(models.Model):
+    DEFAULT_FROM_MAIL = 'notice.mime@cg-bd.com'
+
     _name = 'isp_crm_module.mail'
     _description = "ISP CRM Mail Module"
     _rec_name = 'name'
     _order = "name, id"
+
+
 
 
     name = fields.Char('Mail Name', translate=True)
@@ -26,7 +30,7 @@ class Team(models.Model):
                 'body_html': body,
                 'email_to': mailto,
                 'email_cc': '',
-                'email_from': 'mime@cgbd.com',
+                'email_from': self.DEFAULT_FROM_MAIL,
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
@@ -43,7 +47,7 @@ class Team(models.Model):
                 'body_html': body,
                 'email_to': mailto,
                 'email_cc': '',
-                'email_from': 'mime@cgbd.com',
+                'email_from': self.DEFAULT_FROM_MAIL,
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
@@ -61,7 +65,7 @@ class Team(models.Model):
                 'subject': template_obj.subject,
                 'body_html': body,
                 'email_to': mailto,
-                'email_from': 'mime@cgbd.com',
+                'email_from': self.DEFAULT_FROM_MAIL,
                 # 'attachment_ids': [(6, 0, [attachment.id])],
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
@@ -84,7 +88,7 @@ class Team(models.Model):
                     'subject': template_obj.subject,
                     'body_html': body,
                     'email_to': mailto,
-                    'email_from': 'mime@cgbd.com',
+                    'email_from': self.DEFAULT_FROM_MAIL,
                 }
                 create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
             return True
@@ -112,7 +116,7 @@ class Team(models.Model):
                 'subject': template_obj.subject,
                 'body_html': body,
                 'email_to': payment_obj.partner_id.email,
-                'email_from': 'notice.mime@cg-bd.com',
+                'email_from': self.DEFAULT_FROM_MAIL,
             }
             try:
                 create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
@@ -145,7 +149,7 @@ class Team(models.Model):
                 'subject': template_obj.subject,
                 'body_html': body,
                 'email_to': package_change_obj.customer_id.email,
-                'email_from': 'notice.mime@cg-bd.com',
+                'email_from': self.DEFAULT_FROM_MAIL,
             }
             try:
                 create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
