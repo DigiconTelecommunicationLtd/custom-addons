@@ -201,32 +201,36 @@ class Opportunity(models.Model):
                 except UserError as ex:
                     print(ex)
 
-            if package_line.product_id:
-                service_req_data = {
-                    'problem': str(opportunity.partner_id.name) + ' - ' + str(package_line.product_id.name) or '',
-                    'stage': first_stage.id,
-                    'customer': opportunity.partner_id.id,
-                    'customer_email': opportunity.email_from,
-                    'customer_mobile': opportunity.mobile,
-                    'customer_phone': opportunity.phone,
-                    'opportunity_id': opportunity.id,
-                    'confirmed_sale_order_id': confirmed_sale_order_id,
-                    'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
-                    'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
-                }
-            else:
-                service_req_data = {
-                    'problem' : str(opportunity.partner_id.name) + ' - ' + "No packages" or '',
-                    'stage' : first_stage.id,
-                    'customer' : opportunity.partner_id.id,
-                    'customer_email' : opportunity.email_from,
-                    'customer_mobile' : opportunity.mobile,
-                    'customer_phone' : opportunity.phone,
-                    'opportunity_id': opportunity.id,
-                    'confirmed_sale_order_id': confirmed_sale_order_id,
-                    'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
-                    'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
-                }
+            try:
+                if package_line.product_id:
+                    service_req_data = {
+                        'problem': str(opportunity.partner_id.name) + ' - ' + str(package_line.product_id.name) or '',
+                        'stage': first_stage.id,
+                        'customer': opportunity.partner_id.id,
+                        'customer_email': opportunity.email_from,
+                        'customer_mobile': opportunity.mobile,
+                        'customer_phone': opportunity.phone,
+                        'opportunity_id': opportunity.id,
+                        'confirmed_sale_order_id': confirmed_sale_order_id,
+                        'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
+                        'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
+                    }
+                else:
+                    service_req_data = {
+                        'problem' : str(opportunity.partner_id.name) + ' - ' + "No packages" or '',
+                        'stage' : first_stage.id,
+                        'customer' : opportunity.partner_id.id,
+                        'customer_email' : opportunity.email_from,
+                        'customer_mobile' : opportunity.mobile,
+                        'customer_phone' : opportunity.phone,
+                        'opportunity_id': opportunity.id,
+                        'confirmed_sale_order_id': confirmed_sale_order_id,
+                        'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
+                        'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
+                    }
+            except Exception as ex:
+                raise UserError(ex)
+
             created_service_req_obj = service_req_obj.create(service_req_data)
             if len(sale_order_line_obj) > 0:
                 for sale_order_line in sale_order_line_obj:
