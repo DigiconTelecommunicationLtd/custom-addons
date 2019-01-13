@@ -82,6 +82,7 @@ class Customer(models.Model):
         :return:
         """
         for customer in self:
+            check_done = customer.is_service_request_marked_done
             get_opportunity = self.env['isp_crm_module.service_request'].search([('customer', '=', customer.id)], limit=1)
             if get_opportunity.is_done:
                 customer.update({
