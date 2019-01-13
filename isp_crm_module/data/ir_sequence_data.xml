@@ -6,7 +6,7 @@
         <record id="seq_service_request" model="ir.sequence">
             <field name="name">Service Request</field>
             <field name="code">isp_crm_module.service_request</field>
-            <field name="prefix">REQ%(y)s%(month)s</field>
+            <field name="prefix">REQ%(y)s%(month)s%(day)s</field>
             <field name="padding">4</field>
         </record>
 
