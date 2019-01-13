@@ -544,8 +544,7 @@ class SelfcareController(PaymentController):
                     'to_package_id'     : package_obj.id,
                     'active_from'       : active_from
                 })
-
-                # TODO (Arif) : Have to create a customer invoice status object upon discussion with alam bro
+                created_package_change.send_package_change_mail()
 
                 success_msg = "Your Package change request Successfully enlisted."
 

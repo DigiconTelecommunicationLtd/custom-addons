@@ -123,4 +123,34 @@ class Team(models.Model):
             raise UserError('Could Not send the mail.')
 
 
+    def sending_mail_for_package_change_request(self, package_change_obj, template_obj):
+        body = template_obj.body_html
+        # package_name
+        # next_package_name
+        # bill_cycle_str
+        bill_cycle_str = ""
+        body = body.replace('--package_name--', str(package_change_obj.from_package_id.name))
+        body = body.replace('--next_package_name--', str(package_change_obj.to_package_id.name))
+        if package_change_obj.active_from == package_change_obj.customer_id.next_package_start_date:
+            bill_cycle_str = "Requesting you to pay the amount before <strong>Next Bill Cycle.</strong>"
 
+        else:
+            bill_cycle_str = "Your new bill cycle start from: <strong>{bill_cycle_date}</strong><br /><br />" \
+                             "Requesting you to pay the amount (Tk. <strong>{next_package_price}</strong>) " \
+                             "before <strong>'{bill_cycle_date}'</strong>".format(bill_cycle_date=package_change_obj.active_from, next_package_price=package_change_obj.to_package_id.list_price)
+        body = body.replace('--bill_cycle_str--', str(bill_cycle_str))
+
+        if template_obj:
+            mail_values = {
+                'subject': template_obj.subject,
+                'body_html': body,
+                'email_to': package_change_obj.customer_id.email,
+                'email_from': 'notice.mime@cg-bd.com',
+            }
+            try:
+                create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
+            except Exception as ex:
+                print(ex)
+            return True
+        else:
+            raise UserError('Could Not send the mail.')

@@ -71,6 +71,7 @@ class Customer(models.Model):
     customer_etin = fields.Char(string='Customer ETIN')
     customer_bin = fields.Char(string='Customer BIN')
     is_service_request_marked_done = fields.Boolean(compute='_get_mark_done_info', default=False)
+    is_sent_package_change_req = fields.Boolean("Is Package Change Request Sent", default=False)
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
