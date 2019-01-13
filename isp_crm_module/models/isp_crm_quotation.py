@@ -100,27 +100,28 @@ class CustomerQuotation(models.Model):
         """
         for order in self:
             customer = order.env['res.partner'].search([('id', '=', order.partner_id.id)], order='create_date desc', limit=1)
-            street = ""
-            street2 = ""
-            zip = ""
-            city = ""
-            state_id = ""
-            country_id = ""
+            destination_address = ""
 
             if customer.street:
                 street = customer.street
+                destination_address = destination_address + str(street) + ", "
             if customer.street2:
                 street2 = customer.street2
+                destination_address = destination_address + str(street2) + ", "
             if customer.zip:
                 zip = customer.zip
+                destination_address = destination_address + str(zip) + ", "
             if customer.city:
                 city = customer.city
+                destination_address = destination_address + str(city) + ", "
             if customer.state_id.name:
                 state_id = customer.state_id.name
+                destination_address = destination_address + str(state_id) + ", "
             if customer.country_id.name:
                 country_id = customer.country_id.name
-            destination_address = str(street) + ", " + str(street2) + ", " + str(zip) + ", " + str(city) + ", " + str(state_id) + ", " + str(country_id)
-
+                destination_address = destination_address + str(country_id)
+            if destination_address.endswith(','):
+                destination_address = destination_address[:-1]
             order.update({
                 'destination': destination_address,
             })
