@@ -49,3 +49,4 @@ from . import isp_crm_quotation
 from . import isp_crm_backbone_provider
 from . import isp_crm_register_invoice_payment
 from . import isp_crm_ivr_api
+from . import isp_crm_partner_binding_model
