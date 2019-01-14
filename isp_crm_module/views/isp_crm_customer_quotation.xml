@@ -6,10 +6,14 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
+            <xpath expr="//button[@name='print_quotation']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             <xpath expr="//group/group/field[@name='partner_id']" position="after">
                 <field name="lead_type"/>
                 <field name="customer_po_no"/>
                 <field name="file_name" invisible="1"/>
+                <field name="customer_po_no_upload" filename="file_name" invisible="1"/>
             </xpath>
             <xpath expr="//sheet/notebook/page[2]" position="before">
                 <page string="OTC Information" attrs ="{'invisible':[('lead_type','==', 'retail')]}">
