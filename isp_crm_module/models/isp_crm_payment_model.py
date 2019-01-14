@@ -44,7 +44,7 @@ class ISPCRMPayment(models.Model):
     bill_pay_type = fields.Char(compute="_get_bill_pay_type", string="Payment_type")
 
     @api.multi
-    def post(self, vals, is_mail_sent=False):
+    def post(self, is_mail_sent=False):
         """
         Overrides the default post function for advance payment option
         :return:
