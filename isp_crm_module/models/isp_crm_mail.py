@@ -91,10 +91,7 @@ class Team(models.Model):
                     'email_from': self.DEFAULT_FROM_MAIL,
                 }
                 create_and_send_email = self.env['mail.mail'].sudo().create(mail_values).send()
-                if create_and_send_email:
-                    return True
-                else:
-                    return False
+            return True
         else:
             raise UserError('Could not create temporary link to reset password.')
 
