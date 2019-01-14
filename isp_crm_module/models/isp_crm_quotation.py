@@ -14,6 +14,9 @@ CONNECTIVITY_MEDIA = [
 class CustomerQuotation(models.Model):
     _inherit = 'sale.order'
     _order = "create_date desc, name, id"
+    _sql_constraints = [
+        ('customer_po_no', 'unique(customer_po_no)', 'Customer PO No. already exists!')
+    ]
 
     foundation = fields.Many2one('isp_crm_module.mime_pop', string='Foundation')
     connectivity_media = fields.Selection(CONNECTIVITY_MEDIA, string='Connectivity Media', required=False,  help="Connectivity Media")
