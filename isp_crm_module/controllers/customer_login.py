@@ -99,10 +99,13 @@ class SelfcareController(PaymentController):
                     email_to = check_user.email
 
                     if email_to:
-                        request.env['isp_crm_module.mail'].send_reset_password_link_email(check_user, email_to, template_obj)
-                        success_msg = 'Reset Password Link sent successfully. Please check your email.'
-                        context['success_msg'] = _(success_msg)
-                        return request.render(login_template, context)
+                        send_link = request.env['isp_crm_module.mail'].send_reset_password_link_email(check_user, email_to, template_obj)
+                        if send_link:
+                            success_msg = 'Reset Password Link sent successfully. Please check your email.'
+                            context['success_msg'] = _(success_msg)
+                            return request.render(login_template, context)
+                        else:
+                            context['error'] = _('Could not send mail to the given mail address. Check if mail server is working properly.')
                     else:
                         context['error'] = _('Could not find any email address for this user.')
                 else:
@@ -142,7 +145,7 @@ class SelfcareController(PaymentController):
                     new_password         = request.params['new_password']
                     confirm_new_password = request.params['confirm_new_password']
 
-                    if len(str(new_password)) > 0:
+                    if len(str(new_password)) < 1:
                         context['error'] = _("Could not reset empty new password.")
                     elif new_password == confirm_new_password:
                         check_user._set_password(new_password)
