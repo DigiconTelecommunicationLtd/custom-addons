@@ -142,7 +142,7 @@ class SelfcareController(PaymentController):
                     new_password         = request.params['new_password']
                     confirm_new_password = request.params['confirm_new_password']
 
-                    if new_password == confirm_new_password :
+                    if new_password == confirm_new_password and len(str(new_password)) > 0:
                         check_user._set_password(new_password)
 
                         success_msg            = 'Successfully reset password'
