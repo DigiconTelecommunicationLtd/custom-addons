@@ -229,18 +229,19 @@ class Opportunity(models.Model):
                         'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
                     }
                 else:
-                    service_req_data = {
-                        'problem' : str(opportunity.partner_id.name) + ' - ' + "No packages" or '',
-                        'stage' : first_stage.id,
-                        'customer' : opportunity.partner_id.id,
-                        'customer_email' : opportunity.email_from,
-                        'customer_mobile' : opportunity.mobile,
-                        'customer_phone' : opportunity.phone,
-                        'opportunity_id': opportunity.id,
-                        'confirmed_sale_order_id': confirmed_sale_order_id,
-                        'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
-                        'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
-                    }
+                    raise UserError('No packages under package catagory')
+                    # service_req_data = {
+                    #     'problem' : str(opportunity.partner_id.name) + ' - ' + "No product under package catagory" or '',
+                    #     'stage' : first_stage.id,
+                    #     'customer' : opportunity.partner_id.id,
+                    #     'customer_email' : opportunity.email_from,
+                    #     'customer_mobile' : opportunity.mobile,
+                    #     'customer_phone' : opportunity.phone,
+                    #     'opportunity_id': opportunity.id,
+                    #     'confirmed_sale_order_id': confirmed_sale_order_id,
+                    #     'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
+                    #     'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
+                    # }
             except Exception as ex:
                 raise UserError(ex)
 
