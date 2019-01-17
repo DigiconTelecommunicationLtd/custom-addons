@@ -209,10 +209,10 @@ class ServiceRequest(models.Model):
             })
 
             # Create an user
-            user_created = self._create_user(partner=customer, username=customer_subs_id, password=encrypted)
+            user_created = self._create_user(partner=customer, username=customer_subs_id, password=cust_password)
 
             # invoice generation
-            last_invoice                    = self.env['account.invoice'].search([('partner_id', '=', customer.id)], order='create_date asc', limit=1)
+            last_invoice                    = self.env['account.invoice'].search([('partner_id', '=', customer.id)], order='create_date desc', limit=1)
             last_invoices_inv_lines         = last_invoice[0].invoice_line_ids
 
             for line in last_invoices_inv_lines:
@@ -223,7 +223,7 @@ class ServiceRequest(models.Model):
                 except UserError as ex:
                     print(ex)
 
-            sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date asc', limit=1)
+            sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date desc', limit=1)
             current_package_id              = package_line.product_id.id
             current_package_price           = package_line.price_unit
             current_package_start_date      = fields.Date.today()
