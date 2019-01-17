@@ -58,7 +58,7 @@ class Opportunity(models.Model):
             if customer:
                 check_customer = self.env['res.partner'].search([('id', '=', customer)], limit=1)
                 if check_customer:
-                    invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="date_invoice desc", limit=1)
+                    invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="create_date desc", limit=1)
                     if invoices:
                         if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
                             self.invoice_state = invoices.state
