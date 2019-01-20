@@ -48,7 +48,7 @@ class PaymentController(BaseController):
             'cus_country': customer.country_id.name if customer.country_id else "",
             'cus_phone': customer.mobile if customer.mobile else "",
             'cus_fax': customer.phone if customer.phone else "",
-            'multi_card_name': "mastercard, visacard, amexcard ",
+            # 'multi_card_name': "mastercard, visacard, amexcard ",
         }
 
     def initiate_session(self, base_url, customer, amount, transaction_id):

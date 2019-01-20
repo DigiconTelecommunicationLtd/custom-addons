@@ -341,6 +341,8 @@ class SelfcareController(PaymentController):
                     request.session['service_type'] = service_type
                     context['cards'] = response_content["desc"]
                     context['redirect_gateway'] = response_content["redirectGatewayURL"]
+                    context['gateway_page_url'] = response_content["GatewayPageURL"]
+                    return request.redirect(context['gateway_page_url'])
 
                     amex_card = {
                         "name" : "Amex Cards",
