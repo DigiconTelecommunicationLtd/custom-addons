@@ -310,6 +310,27 @@ class CronJobModel(models.Model):
                     message = "Invoice\'s due date is over. Customer's name: '"+str(invoice.partner_id.name) + "' and Customer's Subscriber ID: '"+str(invoice.partner_id.subscriber_id)+"'"
                     invoice.user_id.notify_info(message)
 
+                    customer = invoice.partner_id
+                    if customer:
+                        get_assigned_rm_from_customer = invoice.user_id
+                        if get_assigned_rm_from_customer:
+                            notification_message = message
+                            get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
+                            get_user.notify_info(notification_message)
+
+                            try:
+                                recipient_ids = [(get_user.partner_id.id)]
+                                channel_ids = [(get_user.partner_id.channel_ids)]
+
+                                ch = []
+                                for channel in channel_ids[0]:
+                                    ch.append(channel.id)
+                                    channel.message_post(subject='New notification', body=notification_message,
+                                                         subtype="mail.mt_comment")
+                            except Exception as ex:
+                                error = 'Failed to send notification. Error Message: ' + str(ex)
+                                raise UserError(error)
+
     def delete_expired_reset_password_links(self):
         """
         Delete reset password links if expired.

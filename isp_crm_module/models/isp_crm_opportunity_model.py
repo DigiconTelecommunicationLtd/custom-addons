@@ -166,6 +166,7 @@ class Opportunity(models.Model):
 
     @api.model
     def create(self, vals):
+        sequence_id = ""
         if vals.get('opportunity_seq_id', 'New') == 'New':
             sequence_id = self.env['ir.sequence'].next_by_code('crm.lead') or '/'
             vals['opportunity_seq_id'] = sequence_id
@@ -185,6 +186,26 @@ class Opportunity(models.Model):
             check_customer_mobile = self.env['res.partner'].search([('mobile', '=', vals.get('mobile'))], limit=1)
             if check_customer_mobile:
                 raise Warning(_('Mobile Number should be unique'))
+
+        if vals.get('assigned_rm'):
+            get_assigned_rm_from_customer = vals.get('assigned_rm')
+            if get_assigned_rm_from_customer:
+                notification_message = "New Opportunity - "+str(sequence_id)+" created"
+                get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer)])
+                get_user.notify_info(notification_message)
+
+                try:
+                    recipient_ids = [(get_user.partner_id.id)]
+                    channel_ids = [(get_user.partner_id.channel_ids)]
+
+                    ch = []
+                    for channel in channel_ids[0]:
+                        ch.append(channel.id)
+                        channel.message_post(subject='New notification', body=notification_message,
+                                             subtype="mail.mt_comment")
+                except Exception as ex:
+                    error = 'Failed to send notification. Error Message: ' + str(ex)
+                    raise UserError(error)
 
         return super(Opportunity, self).create(vals)
 

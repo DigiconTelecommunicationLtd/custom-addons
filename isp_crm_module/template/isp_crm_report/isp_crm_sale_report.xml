@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Sale report search view-->
+    <record id="isp_crm_module_sale_search" model="ir.ui.view">
+        <field name="problem">sale - Search</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <search string="Customer Invoice Search">
+                <field name="name"/>
+                <filter
+                    string="Today"
+                    name="isp_crm_customer_invoice_today_filter"
+                    domain="[('customer_current_package_end_date','=', context_today().strftime('%Y-%m-%d'))]"
+                    help="Todays Filter"/>
+            </search>
+        </field>
+    </record>
+
+    <!--Sale report table view-->
+    <record id="isp_crm_module_sale_report_tree" model="ir.ui.view">
+        <field name="problem">isp_crm_module.customer_invoice_status.tree</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="customer_active_status == 'inactive'" string="Customer Invoice Status">
+                <!--customer info-->
+                <field name="customer_id"/>
+                <field name="customer_mobile"/>
+                <field name="customer_current_package_name"/>
+                <field name="customer_current_package_start_date"/>
+                <field name="customer_current_package_end_date"/>
+                <field name="customer_current_package_price"/>
+                <field name="customer_active_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Action to perform when user clicks on the sale menu-->
+    <record id="isp_crm_opportunity_report_menu_sales" model="ir.actions.act_window">
+            <field name="name">Sale Analysis</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{'search_default_current': True, 'active_test': True, 'search_default_lead': True}</field>
+            <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'graph', 'view_id': ref('crm_opportunity_report_view_graph_lead')}),
+                          (0, 0, {'view_mode': 'pivot', 'view_id': ref('crm_opportunity_report_view_pivot_lead')})]"/>
+            <field name="search_view_id" ref="isp_crm_module_sale_search" />
+            <field name="help">This report analyses your sales.</field>
+        </record>
+
+    <!--Sale report menu of ISP CRM-->
+    <menuitem
+        id="isp_crm_opportunity_report_menu_sales"
+        name="Sales"
+        parent="crm_menu_report"
+        action="crm_opportunity_report_action_sales"
+        groups="crm.group_use_lead"
+        sequence="5"/>
+
+</odoo>
