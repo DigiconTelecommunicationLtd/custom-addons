@@ -181,6 +181,10 @@ class ServiceRequest(models.Model):
         stage_ids = self.env['isp_crm_module.stage'].search([('name', '!=', 'Undefined')])
         return stage_ids
 
+    @api.onchange('stage')
+    def stage_onchange(self):
+        raise UserError('System does not allow you to drag record.')
+
     @api.multi
     def action_make_service_request_done(self):
         for service_req in self:

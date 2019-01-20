@@ -111,6 +111,23 @@ class Helpdesk(models.Model):
                     }
                 )
                 vals['complexity'] = helpdesk_ticket_complexity.id
+        else:
+            vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
+            vals['default_stages'] = 'New'
+            vals['td_flags'] = TD_FLAGS[0][0]
+            helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
+                [('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
+            if helpdesk_ticket_complexity:
+                vals['complexity'] = helpdesk_ticket_complexity.id
+            else:
+                helpdesk_ticket_complexity = helpdesk_ticket_complexity.env[
+                    'isp_crm_module.helpdesk_ticket_complexity'].create(
+                    {
+                        'name': COMPLEXITY_LEVEL_ONE[0][1],
+                        'time_limit': COMPLEXITY_LEVEL_ONE[1][1],
+                    }
+                )
+                vals['complexity'] = helpdesk_ticket_complexity.id
 
         newrecord = super(Helpdesk, self).create(vals)
         self.env['isp_crm_module.helpdesk_ticket_history'].create(
@@ -120,6 +137,29 @@ class Helpdesk(models.Model):
                 'ticket_id': newrecord.id
             }
         )
+
+        customer = newrecord.customer
+        if customer:
+            get_assigned_rm_from_customer = customer.assigned_rm
+            if get_assigned_rm_from_customer:
+                notification_message = "Ticket No. : " + str(newrecord.name) + " Created"
+                get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
+                get_user.notify_info(notification_message)
+
+                try:
+                    recipient_ids = [(get_user.partner_id.id)]
+                    channel_ids = [(get_user.partner_id.channel_ids)]
+
+                    ch = []
+                    for channel in channel_ids[0]:
+                        ch.append(channel.id)
+                        channel.message_post(subject='New notification', body=notification_message,
+                                             subtype="mail.mt_comment")
+                except Exception as ex:
+                    error = 'Failed to send notification. Error Message: ' + str(ex)
+                    raise UserError(error)
+
+
         template_obj = self.env['isp_crm_module.mail'].sudo().search(
             [('name', '=', 'Helpdesk_Ticket_Creation_Mail')],
             limit=1)
@@ -216,6 +256,18 @@ class Helpdesk(models.Model):
             if get_assigned_rm_from_customer:
                 get_user = self.env['res.users'].search([('id','=', get_assigned_rm_from_customer.id)])
                 get_user.notify_info(notification_message)
+
+                try:
+                    recipient_ids = [(get_user.partner_id.id)]
+                    channel_ids = [(get_user.partner_id.channel_ids)]
+
+                    ch = []
+                    for channel in channel_ids[0]:
+                        ch.append(channel.id)
+                        channel.message_post(subject='New ticket at RM', body=notification_message, subtype="mail.mt_comment")
+                except Exception as ex:
+                    error = 'Failed to send notification. Error Message: ' + str(ex)
+                    raise UserError(error)
         return True
 
     @api.multi
@@ -289,6 +341,27 @@ class Helpdesk(models.Model):
         }
         )
 
+        customer = self.customer
+        if customer:
+            get_assigned_rm_from_customer = customer.assigned_rm
+            if get_assigned_rm_from_customer:
+                notification_message = "Ticket No. : " + str(self.name) + " sent to td"
+                get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
+                get_user.notify_info(notification_message)
+
+                try:
+                    recipient_ids = [(get_user.partner_id.id)]
+                    channel_ids = [(get_user.partner_id.channel_ids)]
+
+                    ch = []
+                    for channel in channel_ids[0]:
+                        ch.append(channel.id)
+                        channel.message_post(subject='New notification', body=notification_message,
+                                             subtype="mail.mt_comment")
+                except Exception as ex:
+                    error = 'Failed to send notification. Error Message: ' + str(ex)
+                    raise UserError(error)
+
         return True
 
     @api.multi
@@ -298,6 +371,29 @@ class Helpdesk(models.Model):
                 'td_flags': TD_FLAGS[0][0],
                 'default_stages': 'Doing',
             })
+
+            customer = self.customer
+            if customer:
+                get_assigned_rm_from_customer = customer.assigned_rm
+                if get_assigned_rm_from_customer:
+                    notification_message = "Ticket No. : " + str(self.name) + " cancelled from td"
+                    get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
+                    get_user.notify_info(notification_message)
+
+                    try:
+                        recipient_ids = [(get_user.partner_id.id)]
+                        channel_ids = [(get_user.partner_id.channel_ids)]
+
+                        ch = []
+                        for channel in channel_ids[0]:
+                            ch.append(channel.id)
+                            channel.message_post(subject='New notification', body=notification_message,
+                                                 subtype="mail.mt_comment")
+                    except Exception as ex:
+                        error = 'Failed to send notification. Error Message: ' + str(ex)
+                        raise UserError(error)
+
+
             self.env['isp_crm_module.helpdesk_td'].search(
                     [('helpdesk_ticket', '=', self.id)]).unlink()
         return True
@@ -312,6 +408,27 @@ class Helpdesk(models.Model):
                 'color':7,
             })
 
+        customer = self.customer
+        if customer:
+            get_assigned_rm_from_customer = customer.assigned_rm
+            if get_assigned_rm_from_customer:
+                notification_message = "Ticket No. : " + str(self.name) + " resolved by sd and sent to RM"
+                get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
+                get_user.notify_info(notification_message)
+
+                try:
+                    recipient_ids = [(get_user.partner_id.id)]
+                    channel_ids = [(get_user.partner_id.channel_ids)]
+
+                    ch = []
+                    for channel in channel_ids[0]:
+                        ch.append(channel.id)
+                        channel.message_post(subject='New notification', body=notification_message,
+                                             subtype="mail.mt_comment")
+                except Exception as ex:
+                    error = 'Failed to send notification. Error Message: ' + str(ex)
+                    raise UserError(error)
+
         return True
 
     @api.multi
@@ -322,6 +439,24 @@ class Helpdesk(models.Model):
             if get_assigned_rm_from_customer:
                 if get_assigned_rm_from_customer.id != self.env.uid:
                     raise UserError('This ticket can only be resolved by the assigned RM.')
+                else:
+                    notification_message = "Ticket No. : " + str(self.name) + " resolved by RM"
+                    get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
+                    get_user.notify_info(notification_message)
+
+                    try:
+                        recipient_ids = [(get_user.partner_id.id)]
+                        channel_ids = [(get_user.partner_id.channel_ids)]
+
+                        ch = []
+                        for channel in channel_ids[0]:
+                            ch.append(channel.id)
+                            channel.message_post(subject='New notification', body=notification_message,
+                                                 subtype="mail.mt_comment")
+                    except Exception as ex:
+                        error = 'Failed to send notification. Error Message: ' + str(ex)
+                        raise UserError(error)
+
         self.update({
             'td_flags': TD_FLAGS[5][0],
         })
@@ -335,6 +470,27 @@ class Helpdesk(models.Model):
             'default_stages': 'Done',
             'color': 11,
         })
+
+        customer = self.customer
+        if customer:
+            get_assigned_rm_from_customer = customer.assigned_rm
+            if get_assigned_rm_from_customer:
+                notification_message = "Ticket No. : " + str(self.name) + " resolved"
+                get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
+                get_user.notify_info(notification_message)
+
+                try:
+                    recipient_ids = [(get_user.partner_id.id)]
+                    channel_ids = [(get_user.partner_id.channel_ids)]
+
+                    ch = []
+                    for channel in channel_ids[0]:
+                        ch.append(channel.id)
+                        channel.message_post(subject='New notification', body=notification_message,
+                                             subtype="mail.mt_comment")
+                except Exception as ex:
+                    error = 'Failed to send notification. Error Message: ' + str(ex)
+                    raise UserError(error)
 
         template_obj = self.env['isp_crm_module.mail'].sudo().search(
             [('name', '=', 'Helpdesk_Ticket_Closing_Mail')],
@@ -351,6 +507,23 @@ class Helpdesk(models.Model):
             if get_assigned_rm_from_customer:
                 if get_assigned_rm_from_customer.id != self.env.uid:
                     raise UserError('This ticket can only be resolved by the assigned RM.')
+                else:
+                    notification_message = "Ticket No. : " + str(self.name) + " marked as not resolved"
+                    get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
+                    get_user.notify_info(notification_message)
+
+                    try:
+                        recipient_ids = [(get_user.partner_id.id)]
+                        channel_ids = [(get_user.partner_id.channel_ids)]
+
+                        ch = []
+                        for channel in channel_ids[0]:
+                            ch.append(channel.id)
+                            channel.message_post(subject='New notification', body=notification_message,
+                                                 subtype="mail.mt_comment")
+                    except Exception as ex:
+                        error = 'Failed to send notification. Error Message: ' + str(ex)
+                        raise UserError(error)
 
         self.update({
             'td_flags': TD_FLAGS[0][0],
