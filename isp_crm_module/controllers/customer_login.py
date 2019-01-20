@@ -376,10 +376,13 @@ class SelfcareController(PaymentController):
 
             customer_balance = logged_in_user.partner_id.get_customer_balance(customer_id=logged_in_user.partner_id.id)
             customer_package_price = logged_in_user.partner_id.current_package_price
+            customer_package_original_price = logged_in_user.partner_id.current_package_id.list_price
             customer_showing_price = abs(customer_balance) - customer_package_price
             context['user'] = logged_in_user
             context['full_name'] = logged_in_user.name.title()
             context['customer_id'] = logged_in_user.subscriber_id
+            context['customer_package_price'] = customer_package_price
+            context['customer_package_original_price'] = customer_package_original_price
             context['customer_balance'] = abs(customer_balance) if customer_balance <= 0 else 0.00
             context['image'] = logged_in_user.image
             context['content_header'] = content_header
