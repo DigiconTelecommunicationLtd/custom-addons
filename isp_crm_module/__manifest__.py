@@ -82,6 +82,8 @@
         'template/isp_crm_mail_template/isp_crm_forget_password_mail_template.xml',
         'template/isp_crm_mail_template/isp_crm_payment_mail_template.xml',
         'template/isp_crm_mail_template/isp_crm_package_change_mail_template.xml',
+        'template/payment_receive_report/payment_receive_report.xml',
+        'template/payment_receive_report/payment_receive_report_template.xml',
         'template/isp_crm_corporate_customer_quotation_template.xml',
         'data/default_stages_data.xml',
     ],
