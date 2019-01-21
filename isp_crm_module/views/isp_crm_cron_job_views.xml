@@ -41,5 +41,19 @@
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
         </record>
+
+        <!--Cron job for Sending Notification After Invoice Due Date-->
+        <record forcecreate="True" id="isp_crm_cron_job_send_notification_after_invoice_due_date" model="ir.cron">
+            <field name="name">Send Notification After Invoice Due Date</field>
+            <field name="model_id" ref="model_isp_crm_cron_job"/>
+            <field name="state">code</field>
+            <field name="model" eval="'isp_crm.cron_job'" />
+            <field name="code">model.send_notification_after_invoice_due_date()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">24</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
     </data>
 </odoo>
