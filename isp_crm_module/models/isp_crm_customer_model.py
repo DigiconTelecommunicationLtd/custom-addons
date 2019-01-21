@@ -131,7 +131,7 @@ class Customer(models.Model):
         :return: updated customer
         """
         current_package_id              = product_id if product_id else customer.current_package_id.id
-        current_package_price           = price if price else customer.current_package_id.standard_price
+        current_package_price           = price if price else customer.current_package_price
         current_package_original_price  = customer.current_package_id.list_price
         current_package_start_date      = start_date if start_date else datetime.today().strftime(DEFAULT_DATE_FORMAT)
         current_package_end_date        = self._get_package_end_date(given_date=current_package_start_date)
@@ -160,7 +160,7 @@ class Customer(models.Model):
         """
         next_package_id             = product_id if product_id else customer.current_package_id.id
         next_package_start_date     = start_date if start_date else self._get_next_package_start_date(given_date=customer.current_package_start_date)
-        next_package_price          = price if price else customer.current_package_id.standard_price
+        next_package_price          = price if price else customer.current_package_price
         next_package_original_price = price if price else customer.current_package_original_price
         next_package_sales_order_id = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
 

@@ -229,7 +229,7 @@ class ServiceRequest(models.Model):
 
             sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date desc', limit=1)
             current_package_id              = package_line.product_id.id
-            current_package_price           = package_line.product_id.standard_price
+            current_package_price           = package_line.price_subtotal
             current_package_start_date      = fields.Date.today()
             current_package_sales_order_id  = sales_order_obj.id
 
