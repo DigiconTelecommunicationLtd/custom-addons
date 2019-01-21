@@ -1,0 +1,117 @@
+<odoo>
+    <record model="report.paperformat" id="paperformat_monthly_payment_receive_report">
+        <field name="name">paperformat.monthly.payment.receive.report</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_width">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_right">5</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <report id="isp_crm_module.monthly_payment_report"
+            model="isp_crm_module.payment_report"
+            string="Monthly Payment Receive Report"
+            report_type="qweb-pdf"
+            name="isp_crm_module.monthly_payment_receive_view"
+            paperformat="paperformat_monthly_payment_receive_report"
+            menu="False"/>
+
+    <template id="monthly_payment_receive_view">
+        <div class="header" style="border-bottom: 2px solid black">
+            <div class="row">
+                <div class="col-xs-3 mb4">
+                    <img src="isp_invoice_module/static/src/assets/images/logo.png" style="max-height: 85px;"/>
+                </div>
+            </div>
+        </div>
+        <div class="article">
+            <br/>
+            <div class="row">
+                <h3 class="text-center">Monthly Payment Receive Report</h3>
+                <h4 class="text-center">
+                    <strong>From</strong>:
+                    <t t-esc="date_start"/>
+                    <strong>To</strong>:
+                    <t t-esc="date_end"/>
+                </h4>
+            </div>
+            <table class="table table-condensed table-bordered" style="width: 100%">
+                <thead>
+                    <th class="text-center" style="width: 70%">Customer ID</th>
+                    <th class="text-center" style="width: 70%">Customer Name</th>
+                    <th class="text-center" style="width: 70%">Package Name</th>
+                    <th class="text-center" style="width: 70%">Bill Cycle</th>
+                    <th class="text-center" style="width: 70%">Bill Amount</th>
+                    <th class="text-center" style="width: 70%">Received Amount</th>
+                    <th class="text-center" style="width: 70%">Payment Gateway Service Charge(Deducted Amount)</th>
+                    <th class="text-center" style="width: 70%">Bill Payment Date</th>
+                    <th class="text-center" style="width: 70%">Card Type</th>
+                    <th class="text-center" style="width: 70%">Card Number</th>
+                    <th class="text-center" style="width: 70%">Billing Status</th>
+                </thead>
+                <tbody>
+                    <t t-foreach="docs" t-as="doc">
+                        <tr>
+                            <td>
+                                <span t-esc="doc['customer_id']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['customer_name']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['package_name']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['bill_cycle']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['bill_amount']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['received_amount']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['payment_gateway_service_charge']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['bill_payment_date']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['card_type']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['card_number']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['billing_status']"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer">
+            <div class="row text-center" style="border-top: 1px solid black;">
+                <div class="col-xs-3 col-xs-offset-9 text-right">
+                    <ul class="list-inline" style="margin-top:10px;">
+                        <li>Page:</li>
+                        <li>
+                            <span class="page"/>
+                        </li>
+                        <li>/</li>
+                        <li>
+                            <span class="topage"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

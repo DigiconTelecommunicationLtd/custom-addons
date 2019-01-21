@@ -30,7 +30,7 @@ class CustomerQuotation(models.Model):
     govt_vat_in_amount = fields.Char(compute='_compute_total_amount', string='Govt. VAT (In Amount)', readonly=True, store=True)
     lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
     destination = fields.Char(compute='_get_destination_address', string='Destination')
-    customer_po_no = fields.Char(strint='Customer PO No.')
+    customer_po_no = fields.Char(string='Customer PO No.')
     customer_po_no_upload = fields.Binary(string='Upload File')
     file_name = fields.Char(string="File Name")
 
