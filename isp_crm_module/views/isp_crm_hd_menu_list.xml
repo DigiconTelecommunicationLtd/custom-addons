@@ -5,20 +5,21 @@
     <menuitem
         id="isp_crm_hd"
         name="Helpdesk"
-        parent="crm.crm_menu_root"
+        sequence="6"
      />
-
+    <menuitem id="menu_isp_crm_helpdesk_configuration" name="Configuration" parent="isp_crm_hd" sequence="7"/>
     <!--ISP CRM Helpdesk Configuration-->
     <menuitem
         id="isp_crm_hd_config"
         name="Helpdesk Configuration"
-        parent="crm.crm_menu_config"
+        parent="menu_isp_crm_helpdesk_configuration"
      />
 
     <!--ISP CRM Helpdesk TD Configuration-->
     <menuitem
         id="isp_crm_hd_td_config"
         name="Helpdesk TD Configuration"
-        parent="crm.crm_menu_config"
+        parent="menu_isp_crm_helpdesk_configuration"
      />
+
 </odoo>

@@ -136,33 +136,34 @@ class Opportunity(models.Model):
 
     @api.onchange('stage_id')
     def _onchange_stage_id(self):
-        values = self._onchange_stage_id_values(self.stage_id.id)
-        if values['probability'] == 100:
-            for lead in self:
-                # TODO Arif: `invoice_status` will be added later. Now checking status will be `confirm_sale`
-                sale_confirmed = False
-
-                # Check if invoice is paid .
-                customer = self.partner_id.id
-                if customer:
-                    check_customer = self.env['res.partner'].search([('id', '=', customer)], limit=1)
-                    if check_customer:
-                        invoices = self.env['account.invoice'].search([('partner_id', '=', customer)],
-                                                                      order="date_invoice desc", limit=1)
-                        if invoices:
-                            if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
-                                self.update(values)
-                            else:
-                                raise UserError(_("This Opportunity's invoice is neither paid nor deferred."))
-                        else:
-                            raise UserError(_(
-                                "This Opportunity's invoice has not been created yet. Please create the invoice first ."))
-                    else:
-                        raise UserError(_("Customer not found."))
-                else:
-                    raise UserError(_("Customer not found."))
-        else:
-            self.update(values)
+        raise UserError('System does not allow you to drag record. You must change stage by action.')
+        # values = self._onchange_stage_id_values(self.stage_id.id)
+        # if values['probability'] == 100:
+        #     for lead in self:
+        #         # TODO Arif: `invoice_status` will be added later. Now checking status will be `confirm_sale`
+        #         sale_confirmed = False
+        #
+        #         # Check if invoice is paid .
+        #         customer = self.partner_id.id
+        #         if customer:
+        #             check_customer = self.env['res.partner'].search([('id', '=', customer)], limit=1)
+        #             if check_customer:
+        #                 invoices = self.env['account.invoice'].search([('partner_id', '=', customer)],
+        #                                                               order="date_invoice desc", limit=1)
+        #                 if invoices:
+        #                     if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
+        #                         self.update(values)
+        #                     else:
+        #                         raise UserError(_("This Opportunity's invoice is neither paid nor deferred."))
+        #                 else:
+        #                     raise UserError(_(
+        #                         "This Opportunity's invoice has not been created yet. Please create the invoice first ."))
+        #             else:
+        #                 raise UserError(_("Customer not found."))
+        #         else:
+        #             raise UserError(_("Customer not found."))
+        # else:
+        #     self.update(values)
 
     @api.model
     def create(self, vals):

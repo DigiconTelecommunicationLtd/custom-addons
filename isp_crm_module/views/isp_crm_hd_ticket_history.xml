@@ -61,6 +61,7 @@
             name="Ticket History"
             parent="isp_crm_hd"
             action="isp_crm_module_hd_ticket_history_action"
+            sequence="3"
     />
 
 </odoo>

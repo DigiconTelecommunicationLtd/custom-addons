@@ -223,6 +223,7 @@
             name="Technical Department Ticket"
             parent="isp_crm_hd"
             action="isp_crm_helpdesk_td"
+            sequence="2"
     />
 
 </odoo>
