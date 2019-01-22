@@ -261,6 +261,7 @@
             name="Helpdesk Ticket"
             parent="isp_crm_hd"
             action="isp_crm_helpdesk"
+            sequence="1"
     />
 
 </odoo>
