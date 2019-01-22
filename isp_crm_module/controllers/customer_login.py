@@ -130,7 +130,7 @@ class SelfcareController(PaymentController):
         login_template = 'isp_crm_module.template_selfcare_login_main'
         context        = {}
         success_msg    = ''
-        url            = "http://localhost:8069"+str(request.httprequest.full_path).split("?")[0]
+        url            = "http://10.10.16.6:8069"+str(request.httprequest.full_path).split("?")[0]
         check_link     = request.env['isp_crm_module.temporary_links'].sudo().search([('link', '=', url)], limit=1)
 
         if check_link:
