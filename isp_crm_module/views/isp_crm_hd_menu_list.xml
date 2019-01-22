@@ -7,6 +7,7 @@
         name="Helpdesk"
         sequence="6"
      />
+    <menuitem id="menu_isp_crm_helpdesk_history" name="Ticket History" parent="isp_crm_hd" sequence="6"/>
     <menuitem id="menu_isp_crm_helpdesk_configuration" name="Configuration" parent="isp_crm_hd" sequence="7"/>
     <!--ISP CRM Helpdesk Configuration-->
     <menuitem

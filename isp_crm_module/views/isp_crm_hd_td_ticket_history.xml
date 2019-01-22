@@ -59,7 +59,7 @@
     <menuitem
             id="isp_crm_hd_td_ticket_history"
             name="Technical Department Ticket History"
-            parent="isp_crm_hd"
+            parent="menu_isp_crm_helpdesk_history"
             action="isp_crm_module_hd_td_ticket_history_action"
             sequence="4"
     />
