@@ -74,11 +74,11 @@ class Team(models.Model):
 
     def send_reset_password_link_email(self, user, mailto, template_obj):
         random_number = self.env['isp_crm_module.temporary_links'].randomString(10)
-        link = "http://10.10.16.6:8069/selfcare/reset/password/"+str(random_number)
+        link = "http://localhost:8069/selfcare/reset/password/"+str(random_number)
         temporary_link = self.env['isp_crm_module.temporary_links'].sudo().create({
 
             'name': user.id,
-            'link': link
+            'link': link,
         })
         if temporary_link:
             body = template_obj.body_html
