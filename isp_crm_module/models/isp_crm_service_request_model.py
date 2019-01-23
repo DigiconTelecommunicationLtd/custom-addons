@@ -183,7 +183,9 @@ class ServiceRequest(models.Model):
 
     @api.onchange('stage')
     def stage_onchange(self):
-        raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
+        value = self.stage.id
+        if value == 4:
+            raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
 
     @api.multi
     def action_make_service_request_done(self):
