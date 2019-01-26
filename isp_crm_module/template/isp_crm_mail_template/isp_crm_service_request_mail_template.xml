@@ -8,7 +8,7 @@
             <p><strong>Dear Customer,</strong></p>
 
             <p>It is a pleasure for us that you have selected MIME services, please check below for UserName and Password (Use these credentials to login to the customer portal).</p>
-            <p>Customer Portal URL: localhost://selfcare.com/login</p>
+            <p>Customer Portal URL: http://103.117.192.76:8069/selfcare.com/login</p>
             <p>Your User ID is:<strong> --userid--</strong></p>
             <p>Your Password is:<strong> --password--</strong></p>
             <p>Your IP :<strong> --ip--</strong></p>

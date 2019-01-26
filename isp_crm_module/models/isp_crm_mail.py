@@ -6,6 +6,12 @@ from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
+
+try:
+    from isp_crm_module.controllers.local_settings import *
+except ImportError:
+    pass
+
 class Team(models.Model):
     DEFAULT_FROM_MAIL = 'notice.mime@cg-bd.com'
 
@@ -74,7 +80,7 @@ class Team(models.Model):
 
     def send_reset_password_link_email(self, user, mailto, template_obj):
         random_number = self.env['isp_crm_module.temporary_links'].randomString(10)
-        link = "http://10.10.16.6:8069/selfcare/reset/password/"+str(random_number)
+        link = str(BASE_URL) + "selfcare/reset/password/"+str(random_number)
         temporary_link = self.env['isp_crm_module.temporary_links'].sudo().create({
 
             'name': user.id,

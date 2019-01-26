@@ -13,10 +13,15 @@ from odoo.http import content_disposition, dispatch_rpc, request, \
 from odoo.addons.web.controllers.main import Home
 from .payment_controller import PaymentController
 
+try:
+    from isp_crm_module.controllers.local_settings import *
+except ImportError:
+    pass
+
 
 class SelfcareController(PaymentController):
 
-    DEFAULT_SERVER_LOC = "http://localhost:8069"
+    DEFAULT_SERVER_LOC = "http://103.117.192.76:8069"
     DEFAULT_LOGIN_REDIRECT = "/selfcare"
     DEFAULT_LOGIN_ROUTE = "/selfcare/login"
     DEFAULT_LOGOUT_ROUTE = "/selfcare/logout"
@@ -130,7 +135,7 @@ class SelfcareController(PaymentController):
         login_template = 'isp_crm_module.template_selfcare_login_main'
         context        = {}
         success_msg    = ''
-        url            = "http://10.10.16.6:8069"+str(request.httprequest.full_path).split("?")[0]
+        url            = str(BASE_URL)[:-1]+str(request.httprequest.full_path).split("?")[0]
         check_link     = request.env['isp_crm_module.temporary_links'].sudo().search([('link', '=', url)], limit=1)
 
         if check_link:
