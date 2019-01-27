@@ -8,7 +8,7 @@ from odoo.exceptions import UserError
 
 
 try:
-    from isp_crm_module.controllers.local_settings import *
+    from ..controllers.local_settings import *
 except ImportError:
     pass
 
