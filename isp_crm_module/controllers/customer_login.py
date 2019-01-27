@@ -21,7 +21,7 @@ except ImportError:
 
 class SelfcareController(PaymentController):
 
-    DEFAULT_SERVER_LOC = "http://10.10.16.6:8069"
+    DEFAULT_SERVER_LOC = BASE_URL
     DEFAULT_LOGIN_REDIRECT = "/selfcare"
     DEFAULT_LOGIN_ROUTE = "/selfcare/login"
     DEFAULT_LOGOUT_ROUTE = "/selfcare/logout"
