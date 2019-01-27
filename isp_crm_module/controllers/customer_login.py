@@ -14,14 +14,14 @@ from odoo.addons.web.controllers.main import Home
 from .payment_controller import PaymentController
 
 try:
-    from isp_crm_module.controllers.local_settings import *
+    from ..controllers.local_settings import *
 except ImportError:
     pass
 
 
 class SelfcareController(PaymentController):
 
-    DEFAULT_SERVER_LOC = "http://103.117.192.76:8069"
+    DEFAULT_SERVER_LOC = "http://10.10.16.6:8069"
     DEFAULT_LOGIN_REDIRECT = "/selfcare"
     DEFAULT_LOGIN_ROUTE = "/selfcare/login"
     DEFAULT_LOGOUT_ROUTE = "/selfcare/logout"
