@@ -37,6 +37,28 @@ class ISPCRMInvoice(models.Model):
         super(ISPCRMInvoice, self).action_invoice_paid()
         return True
 
+    @api.multi
+    def action_invoice_open(self):
+        # Updating the sales order of the customer
+        created_product_line_list = []
+        customer = self.partner_id
+        invoice_lines = self.invoice_line_ids
+        customer_product_line_obj = self.env['isp_crm_module.customer_product_line']
+        for invoice_line in invoice_lines:
+            created_product_line = customer_product_line_obj.create({
+                'customer_id': customer.id,
+                'name': invoice_line.name,
+                'product_id': invoice_line.product_id.id,
+                'product_updatable': False,
+                'product_uom_qty': invoice_line.quantity,
+                'product_uom': invoice_line.product_id.uom_id.id,
+                'price_unit': invoice_line.price_unit,
+                'price_subtotal': invoice_line.price_subtotal,
+            })
+            created_product_line_list.append(created_product_line)
+        super(ISPCRMInvoice, self).action_invoice_open()
+        return True
+
     def _get_customer_po_no(self):
         """
         Get the customer PO No from sale.order
