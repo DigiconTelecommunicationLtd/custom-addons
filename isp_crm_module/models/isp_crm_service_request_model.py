@@ -112,7 +112,7 @@ class ServiceRequest(models.Model):
 
     is_helpdesk_ticket = fields.Boolean("Is Ticket", default=False)
     confirmed_sale_order_id = fields.Many2one('sale.order', string='Confirmed Sale Order')
-    order_line = fields.One2many('sale.order.line', 'service_request_id', string='Order Lines', copy=True, auto_join=True)
+    order_line = fields.One2many('isp_crm_module.service_product_line', 'service_request_id', string='Service Product Lines', copy=True, auto_join=True)
     order_line_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_order_line_total',
                                    track_visibility='always')
     tagged_product_ids = fields.Many2many('product.product', 'isp_crm_module_service_request_product_rel', 'service_request_id', 'product_id',

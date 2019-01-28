@@ -51,3 +51,4 @@ from . import isp_crm_register_invoice_payment
 from . import isp_crm_ivr_api
 from . import isp_crm_partner_binding_model
 from . import isp_crm_monthly_payment_receive_report
+from . import isp_crm_service_product_line
