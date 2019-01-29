@@ -85,6 +85,14 @@ class Customer(models.Model):
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', readonly=True,
                                    help="Pricelist for Customer.")
 
+    invoice_product_id = fields.Many2one('product.product', string='Package', domain=[('sale_ok', '=', True)],
+                                         change_default=True, ondelete='restrict')
+    invoice_product_price = fields.Float('Current Package Price', required=True,
+                                         digits=dp.get_precision('Product Price'), default=0.0)
+    invoice_product_original_price = fields.Float('Current Package Original Price',
+                                                  digits=dp.get_precision('Product Price'), default=0.0)
+    invoice_sales_order_name = fields.Char('Subcriber ID', copy=False, readonly=True)
+
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
