@@ -217,23 +217,22 @@ class ServiceRequest(models.Model):
             # Create an user
             user_created = self._create_user(partner=customer, username=customer_subs_id, password=cust_password)
 
-            # invoice generation
-            last_invoice                    = self.env['account.invoice'].search([('partner_id', '=', customer.id)], order='create_date desc', limit=1)
-            last_invoices_inv_lines         = last_invoice[0].invoice_line_ids
+            # # invoice generation
+            # last_invoice                    = self.env['account.invoice'].search([('partner_id', '=', customer.id)], order='create_date desc', limit=1)
+            # last_invoices_inv_lines         = last_invoice[0].invoice_line_ids
+            #
+            # for line in last_invoices_inv_lines:
+            #     try:
+            #         if line.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+            #             package_line = line
+            #
+            #     except UserError as ex:
+            #         print(ex)
 
-            for line in last_invoices_inv_lines:
-                try:
-                    if line.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
-                        package_line = line
-
-                except UserError as ex:
-                    print(ex)
-
-            sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date desc', limit=1)
-            current_package_id              = package_line.product_id.id
-            current_package_price           = package_line.price_subtotal
+            # sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date desc', limit=1)
+            current_package_id              = customer.invoice_product_id.id
+            current_package_price           = customer.invoice_product_price
             current_package_start_date      = fields.Date.today()
-            current_package_sales_order_id  = sales_order_obj.id
 
             # updating current package info
             customer.update_current_bill_cycle_info(
@@ -241,7 +240,6 @@ class ServiceRequest(models.Model):
                 start_date      = current_package_start_date,
                 product_id      = current_package_id,
                 price           = current_package_price,
-                sales_order_id  = current_package_sales_order_id
             )
             # updating next package info
             customer.update_next_bill_cycle_info(
@@ -262,24 +260,11 @@ class ServiceRequest(models.Model):
 
             # Generate Dynamic Invoice and Send in mail.
             template_obj = self.env['mail.template'].sudo().search([('name', '=', 'Send_Service_Request_Mail')], limit=1)
-            invoice      = self.env['account.invoice'].sudo().search([])[-1]
-            pdf          = self.env.ref('sale.action_report_saleorder').render_qweb_pdf([sales_order_obj.id])
-
-            # save pdf as attachment
-            ATTACHMENT_NAME = "Test Attachment Name"
-            attachment = self.env['ir.attachment'].create({
-                'name': ATTACHMENT_NAME,
-                'type': 'binary',
-                'datas_fname': ATTACHMENT_NAME + '.pdf',
-                'store_fname': ATTACHMENT_NAME,
-                'datas': base64.encodestring(pdf[0]),
-                'mimetype': 'application/x-pdf'
-            })
 
             # showing warning for not setting ip, subnetmask and gateway
             if self.ip is False or self.subnet_mask is False or self.gateway is False:
                 raise UserError('Please give all the technical information to mark done this ticket.')
-            self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj,attachment)
+            self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj)
 
         return True
 

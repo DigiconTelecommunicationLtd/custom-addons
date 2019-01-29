@@ -59,7 +59,7 @@ class Team(models.Model):
 
         return True
 
-    def service_request_send_email(self, mailto,userid,password,ip,subnet_mask,gateway,template_obj,attachment):
+    def service_request_send_email(self, mailto,userid,password,ip,subnet_mask,gateway,template_obj,attachment=False):
         body = template_obj.body_html
         body = body.replace('--userid--', userid)
         body = body.replace('--password--', password)

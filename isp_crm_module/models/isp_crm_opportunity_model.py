@@ -253,7 +253,7 @@ class Opportunity(models.Model):
                 'current_service_request_status' : 'Processing',
                 'is_service_request_created' : True
             })
-        
+
         return True
 
 
