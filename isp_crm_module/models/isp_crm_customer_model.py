@@ -77,6 +77,22 @@ class Customer(models.Model):
     customer_bin = fields.Char(string='Customer BIN', track_visibility='onchange')
     is_service_request_marked_done = fields.Boolean(compute='_get_mark_done_info', default=False, track_visibility='onchange')
     is_sent_package_change_req = fields.Boolean("Is Package Change Request Sent", default=False, track_visibility='onchange')
+
+    product_line = fields.One2many('isp_crm_module.customer_product_line', 'customer_id',
+                                 string='Customer Product Lines', copy=True, auto_join=True)
+    product_line_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_product_line_total',
+                                       track_visibility='always')
+    pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', readonly=True,
+                                   help="Pricelist for Customer.")
+
+    invoice_product_id = fields.Many2one('product.product', string='Package', domain=[('sale_ok', '=', True)],
+                                         change_default=True, ondelete='restrict')
+    invoice_product_price = fields.Float('Current Package Price', required=True,
+                                         digits=dp.get_precision('Product Price'), default=0.0)
+    invoice_product_original_price = fields.Float('Current Package Original Price',
+                                                  digits=dp.get_precision('Product Price'), default=0.0)
+    invoice_sales_order_name = fields.Char('Subcriber ID', copy=False, readonly=True)
+
     body_html = fields.Text()
     subject_mail = fields.Char()
     mail_to = fields.Char()
@@ -85,6 +101,7 @@ class Customer(models.Model):
         'product.pricelist', 'Sale Pricelist', compute='_compute_product_pricelist',
         inverse="_inverse_product_pricelist", company_dependent=False,  # NOT A REAL PROPERTY
         help="This pricelist will be used, instead of the default one, for sales to the current partner", track_visibility='onchange')
+
 
     def _get_mark_done_info(self):
         """
@@ -331,6 +348,19 @@ class Customer(models.Model):
             self.country_id.name or '',
         ])
         return address_str
+
+    @api.depends('product_line.price_total')
+    def _compute_product_line_total(self):
+        """
+        Compute the total amounts of the SO.
+        """
+        for order in self:
+            amount_untaxed = 0.0
+            for line in order.product_line:
+                amount_untaxed += line.price_subtotal
+            order.update({
+                'product_line_total': amount_untaxed,
+            })
 
 
 

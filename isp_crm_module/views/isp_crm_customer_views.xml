@@ -94,6 +94,25 @@
                         </group>
                     </group>
                 </page>
+                <!--showing order lines-->
+                <page string="Service Info">
+                    <field name="product_line" mode="tree">
+                        <tree string="Sales Order Lines">
+                            <field name="product_id"/>
+                            <field name="name"/>
+                            <field name="product_uom_qty"/>
+                            <field name="price_unit"/>
+                            <field name="price_subtotal"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                            <label for="product_line_total" />
+                        </div>
+                        <field name="product_line_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                    </group>
+                </page>
+                <!--end of order line-->
             </xpath>
         </field>
     </record>

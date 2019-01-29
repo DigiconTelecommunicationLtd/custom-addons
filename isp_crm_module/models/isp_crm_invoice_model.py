@@ -8,6 +8,7 @@ import calendar
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
+DEFAULT_PACKAGES_CATEGORY_NAME = 'Packages'
 
 class ISPCRMInvoice(models.Model):
 
@@ -35,6 +36,40 @@ class ISPCRMInvoice(models.Model):
                     'is_invoice_paid': True
                 })
         super(ISPCRMInvoice, self).action_invoice_paid()
+        return True
+
+    @api.multi
+    def action_invoice_open(self):
+        # Updating the sales order of the customer
+        package_line = ''
+        created_product_line_list = []
+        customer = self.partner_id
+        invoice_lines = self.invoice_line_ids
+        customer_product_line_obj = self.env['isp_crm_module.customer_product_line']
+        for invoice_line in invoice_lines:
+            if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                package_line = invoice_line
+            created_product_line = customer_product_line_obj.create({
+                'customer_id': customer.id,
+                'name': invoice_line.name,
+                'product_id': invoice_line.product_id.id,
+                'product_updatable': False,
+                'product_uom_qty': invoice_line.quantity,
+                'product_uom': invoice_line.product_id.uom_id.id,
+                'price_unit': invoice_line.price_unit,
+                'price_subtotal': invoice_line.price_subtotal,
+            })
+            created_product_line_list.append(created_product_line.id)
+        if package_line != '':
+            customer.update({
+                'invoice_product_id': package_line.product_id.id,
+                'invoice_product_price': package_line.price_subtotal,
+                'invoice_product_original_price': package_line.product_id.list_price,
+                'invoice_sales_order_name': self.origin,
+                'product_line': [(6, None, created_product_line_list)]
+            })
+
+        super(ISPCRMInvoice, self).action_invoice_open()
         return True
 
     def _get_customer_po_no(self):

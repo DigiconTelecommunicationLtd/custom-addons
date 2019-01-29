@@ -214,71 +214,46 @@ class Opportunity(models.Model):
     def action_create_new_service_request(self):
         res = {}
         for opportunity in self:
+            customer = opportunity.partner_id
+            service_req_obj = self.env['isp_crm_module.service_request']
             first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
-            service_req_obj = self.env['isp_crm_module.service_request'].search([])
-            confirmed_sale_order_id = ""
-            sale_order_line_obj = ""
-            for order in opportunity.order_ids:
-                if order.state == 'sale':
-                    confirmed_sale_order_id = order.id
-                    sale_order_line_obj = self.env['sale.order.line'].search([('order_id', '=', confirmed_sale_order_id)])
-                    break
-
-            last_invoice = self.env['account.invoice'].search([('partner_id', '=', opportunity.partner_id.id)],
-                                                              order='create_date asc', limit=1)
-            last_invoices_inv_lines = last_invoice[0].invoice_line_ids
-            package_line = ""
-            for line in last_invoices_inv_lines:
-                try:
-                    if line.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
-                        package_line = line
-
-                except UserError as ex:
-                    print(ex)
-
-            try:
-                if package_line.product_id:
-                    service_req_data = {
-                        'problem': str(opportunity.partner_id.name) + ' - ' + str(package_line.product_id.name) or '',
-                        'stage': first_stage.id,
-                        'customer': opportunity.partner_id.id,
-                        'customer_email': opportunity.email_from,
-                        'customer_mobile': opportunity.mobile,
-                        'customer_phone': opportunity.phone,
-                        'opportunity_id': opportunity.id,
-                        'confirmed_sale_order_id': confirmed_sale_order_id,
-                        'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
-                        'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
-                    }
-                else:
-                    raise UserError('No packages under package catagory')
-                    # service_req_data = {
-                    #     'problem' : str(opportunity.partner_id.name) + ' - ' + "No product under package catagory" or '',
-                    #     'stage' : first_stage.id,
-                    #     'customer' : opportunity.partner_id.id,
-                    #     'customer_email' : opportunity.email_from,
-                    #     'customer_mobile' : opportunity.mobile,
-                    #     'customer_phone' : opportunity.phone,
-                    #     'opportunity_id': opportunity.id,
-                    #     'confirmed_sale_order_id': confirmed_sale_order_id,
-                    #     'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
-                    #     'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
-                    # }
-            except Exception as ex:
-                raise UserError(ex)
-
+            package_name = customer.invoice_product_id.name if (customer.invoice_product_id != False) else ''
+            service_req_data = {
+                'problem': str(customer.name) + ' - ' + package_name or '',
+                'stage': first_stage.id,
+                'customer': customer.id,
+                'customer_email': opportunity.email_from,
+                'customer_mobile': opportunity.mobile,
+                'customer_phone': opportunity.phone,
+                'opportunity_id': opportunity.id,
+                'customer_address': self.get_opportunity_address_str(opportunity=opportunity),
+                'tagged_product_ids': [(6, None, opportunity.tagged_product_ids.ids)],
+            }
             created_service_req_obj = service_req_obj.create(service_req_data)
-            if len(sale_order_line_obj) > 0:
-                for sale_order_line in sale_order_line_obj:
-                    sale_order_line.update({
-                        'service_request_id' : created_service_req_obj.id
-                    })
+            customer_product_lines = customer.product_line
+            created_service_order_line_list = []
+            service_order_line_obj = self.env['isp_crm_module.service_product_line']
+
+            for product_line in customer_product_lines:
+                created_service_order_line = service_order_line_obj.create({
+                    'service_request_id': created_service_req_obj.id,
+                    'name': product_line.name,
+                    'product_id': product_line.product_id.id,
+                    'product_updatable': False,
+                    'product_uom_qty': product_line.product_uom_qty,
+                    'product_uom': product_line.product_id.uom_id.id,
+                    'price_unit': product_line.price_unit,
+                    'price_subtotal': product_line.price_subtotal,
+                })
+                created_service_order_line_list.append(created_service_order_line)
+
             opportunity.update({
                 'color' : 2,
                 'current_service_request_id' : created_service_req_obj.name,
                 'current_service_request_status' : 'Processing',
                 'is_service_request_created' : True
             })
+
         return True
 
 
