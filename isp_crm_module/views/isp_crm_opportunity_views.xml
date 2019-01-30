@@ -135,6 +135,7 @@
                         (<field name="current_service_request_status" readonly="1"/>)
                     </small>
                 </p>
+                <field name="cr" invisible="1"/>
             </xpath>
             <xpath expr="//div[contains(@class, 'o_kanban_record_subtitle')]" position="attributes">
                 <attribute name="invisible">1</attribute>

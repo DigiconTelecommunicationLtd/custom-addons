@@ -87,9 +87,9 @@ class ServiceRequest(models.Model):
     team_leader = fields.Many2one('hr.employee', string='Team Leader', store=True)
 
     customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True)], track_visibility='onchange')
-    customer_email = fields.Char(related='opportunity_id.email_from', store=True)
-    customer_mobile = fields.Char(string="Mobile", related='opportunity_id.mobile', store=True)
-    customer_phone = fields.Char(string="Phone", related='opportunity_id.phone', store=True)
+    customer_email = fields.Char(related='customer.email', store=True)
+    customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
+    customer_phone = fields.Char(string="Phone", related='customer.phone', store=True)
     customer_company = fields.Char(string="Company", related='customer.parent_id.name', store=True)
     customer_address = fields.Char(string="Address", track_visibility='onchange')
 
@@ -107,8 +107,8 @@ class ServiceRequest(models.Model):
 
     amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_amount_all',
                                    track_visibility='always')
-    opportunity_id = fields.Many2one('crm.lead', string='Opportunity', readonly=True,
-                                   help="Opportunity for which the service Request created.")
+    # opportunity_id = fields.Many2one('crm.lead', string='Opportunity', readonly=True,
+    #                                help="Opportunity for which the service Request created.")
 
     is_helpdesk_ticket = fields.Boolean("Is Ticket", default=False)
     confirmed_sale_order_id = fields.Many2one('sale.order', string='Confirmed Sale Order')
@@ -251,12 +251,12 @@ class ServiceRequest(models.Model):
             created_package_history = package_history_obj.set_package_change_history(customer)
 
             # updating opportunity
-            opportunity = service_req.opportunity_id
-            opportunity.update({
-                'color'                             : 10,
-                'current_service_request_id'        : service_req.name,
-                'current_service_request_status'    : 'Done',
-            })
+            # opportunity = service_req.opportunity_id
+            # opportunity.update({
+            #     'color'                             : 10,
+            #     'current_service_request_id'        : service_req.name,
+            #     'current_service_request_status'    : 'Done',
+            # })
 
             # Generate Dynamic Invoice and Send in mail.
             template_obj = self.env['mail.template'].sudo().search([('name', '=', 'Send_Service_Request_Mail')], limit=1)

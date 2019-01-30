@@ -11,6 +11,8 @@ from . import isp_crm_service_request_model
 DEFAULT_PROBLEM = "There are some Problem"
 INVOICE_PAID_STATUS = 'paid'
 DEFAULT_PACKAGE_CAT_NAME = 'Packages'
+DEFAULT_PROCESSING_STATUS = 'Processing'
+DEFAULT_DONE_STATUS = 'Done'
 
 CUSTOMER_TYPE = [
     ('retail', _('Retail')),
@@ -32,7 +34,19 @@ class Opportunity(models.Model):
     referred_by = fields.Many2one('res.partner', string='Referred By')
     assigned_rm = fields.Many2one('res.users', string='RM')
     lead_type = fields.Selection(CUSTOMER_TYPE, string='Type', required=False,  help="Lead and Opportunity Type")
+    cr = fields.Integer('Color Index', default=0, compute='_get_color_on_service_request_status')
 
+
+    def _get_color_on_service_request_status(self):
+        for opportunity in self:
+            service_request_obj = self.env['isp_crm_module.service_request'].search([('name', '=', opportunity.current_service_request_id)], limit=1)
+            if service_request_obj:
+                if service_request_obj.is_done:
+                    opportunity.write({
+                        'color'                             : 10,
+                        'current_service_request_id'        : service_request_obj.name,
+                        'current_service_request_status'    : DEFAULT_DONE_STATUS
+                    })
 
     def get_opportunity_address_str(self, opportunity):
         address_str = ""
@@ -250,7 +264,7 @@ class Opportunity(models.Model):
             opportunity.update({
                 'color' : 2,
                 'current_service_request_id' : created_service_req_obj.name,
-                'current_service_request_status' : 'Processing',
+                'current_service_request_status' : DEFAULT_PROCESSING_STATUS,
                 'is_service_request_created' : True
             })
 
