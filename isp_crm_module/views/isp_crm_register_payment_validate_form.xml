@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//sheet/group/group/field[@name='journal_id']" position="after">
                 <field name="bill_pay_type" attrs ="{'invisible': True}"/>
+                <field name="payment_service_id" required="True" can_create="true" can_write="true" modifiers="{'required':true}"/>
             </xpath>
             <xpath expr="//sheet/group" position="after">
                 <notebook colspan="1">
