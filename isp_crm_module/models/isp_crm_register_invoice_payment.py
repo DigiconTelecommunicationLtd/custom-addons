@@ -17,6 +17,8 @@ class InvoiceRegisterPayment(models.Model):
     bank_name = fields.Char(string='Bank Name')
     branch_name = fields.Char(string='Branch Name')
     is_dishonored = fields.Boolean(string='Is Dishonored')
+    payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type',
+                                         default=1)
 
     @api.multi
     def action_save(self):
@@ -29,6 +31,7 @@ class InvoiceRegisterPayment(models.Model):
         cheque_date = self.cheque_date
         bank_name = self.bank_name
         branch_name = self.branch_name
+        payment_service_id = self.payment_service_id
 
         if is_dishonored:
             self.update({
@@ -39,6 +42,7 @@ class InvoiceRegisterPayment(models.Model):
                 'cheque_date': cheque_date,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
+                'payment_service_id': payment_service_id,
 
             })
         else:
@@ -48,6 +52,7 @@ class InvoiceRegisterPayment(models.Model):
                 'cheque_date': cheque_date,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
+                'payment_service_id': payment_service_id,
 
             })
 
