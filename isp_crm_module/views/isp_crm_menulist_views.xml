@@ -12,9 +12,8 @@
     <menuitem
         id="menu_isp_crm_module_service_request_act"
         name="Service Requests"
-        sequence="4"
-        action="isp_crm_module_service_request_action"
-        parent="crm.crm_menu_pipeline"/>
+        sequence="6"
+        action="isp_crm_module_service_request_action"/>
 
     <menuitem
         id="menu_isp_crm_module_change_package_act"
