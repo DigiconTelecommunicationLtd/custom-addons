@@ -58,6 +58,7 @@ class ISPCRMInvoice(models.Model):
                 'product_uom': invoice_line.product_id.uom_id.id,
                 'price_unit': invoice_line.price_unit,
                 'price_subtotal': invoice_line.price_subtotal,
+                'price_total': self.amount_total,
             })
             created_product_line_list.append(created_product_line.id)
         if package_line != '':

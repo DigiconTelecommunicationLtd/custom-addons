@@ -103,14 +103,22 @@ class Team(models.Model):
 
 
     def sending_mail_for_payment(self, payment_obj, template_obj):
+        mobile_info = "N/A"
+        payment_service_type = ""
+        if payment_obj.partner_id.mobile:
+            mobile_info = str(payment_obj.partner_id.mobile)
+        if payment_obj.payment_service_id:
+            if len(str(payment_obj.payment_service_id.display_name)) > 1:
+                payment_service_type = str(payment_obj.payment_service_id.display_name)
+
         body = template_obj.body_html
         body = body.replace('--date--', str(payment_obj.create_date))
         body = body.replace('--subscriber_id--', str(payment_obj.partner_id.subscriber_id))
         body = body.replace('--name--', str(payment_obj.partner_id.name))
         body = body.replace('--address--', str(payment_obj.partner_id.get_partner_address_str()))
         body = body.replace('--email--', str(payment_obj.partner_id.email))
-        body = body.replace('--mobile--', str(payment_obj.partner_id.mobile))
-        body = body.replace('--payment_service_type--', str(payment_obj.service_type_id.name))
+        body = body.replace('--mobile--', mobile_info)
+        body = body.replace('--payment_service_type--', payment_service_type)
         body = body.replace('--payment_amount--', str(payment_obj.amount))
         body = body.replace('--payment_journal_name--', str(payment_obj.journal_id.name))
         body = body.replace('--card_type--', str(payment_obj.card_type) if payment_obj.card_type else "" )
