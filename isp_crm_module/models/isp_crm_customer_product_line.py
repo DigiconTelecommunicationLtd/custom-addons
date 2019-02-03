@@ -32,8 +32,8 @@ class CustomerProductLine(models.Model):
                                    default=1.0)
     product_uom = fields.Many2one('product.uom', string='Unit of Measure', )
     price_unit = fields.Float('Unit Price', required=True, digits=dp.get_precision('Product Price'), default=0.0)
-    price_subtotal = fields.Monetary(compute='_compute_amount', string='Subtotal', readonly=True, store=True)
-    price_total = fields.Monetary(compute='_compute_amount', string='Total', readonly=True, store=True)
+    price_subtotal = fields.Monetary(string='Subtotal', readonly=True, store=True)
+    price_total = fields.Monetary(string='Total', readonly=True, store=True)
     currency_id = fields.Many2one(related='customer_id.currency_id', store=True, string='Currency', readonly=True)
     tax_id = fields.Many2many('account.tax', string='Taxes',
                               domain=['|', ('active', '=', False), ('active', '=', True)])
@@ -54,6 +54,7 @@ class CustomerProductLine(models.Model):
 
         for line in self:
             price = line.price_unit * line.product_uom_qty
+            # price = line.price_subtotal
             line.update({
                 'price_subtotal': price,
             })
