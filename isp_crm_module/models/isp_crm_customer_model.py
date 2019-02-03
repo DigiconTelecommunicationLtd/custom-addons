@@ -28,11 +28,6 @@ DEFAULT_ACCOUNT_CODE = '100001'
 class Customer(models.Model):
     """Inherits res.partner and adds Customer info in partner form"""
     _inherit = 'res.partner'
-    # _sql_constraints = [
-    #     ('email', 'unique(email)', 'Email already exists!'),
-    #     ('phone', 'unique(phone)', 'Phone already exists!'),
-    #     ('mobile', 'unique(mobile)', 'Mobile already exists!'),
-    # ]
 
     subscriber_id = fields.Char('Subcriber ID', copy=False, readonly=True, index=True, default=lambda self: _('New'), track_visibility='onchange')
     father = fields.Char("Father's Name", default='', required=False, track_visibility='onchange')
