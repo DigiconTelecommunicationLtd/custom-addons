@@ -32,7 +32,7 @@ class Customer(models.Model):
     _sql_constraints = [
         ('phone', 'Check(1=1)', 'Phone number must be unique!'),
         ('mobile', 'Check(1=1)', 'Mobile number must be unique!'),
-        ('email_from', 'Check(1=1)', 'Email must be unique!'),
+        ('email_from', 'Check(1=1)', 'Email must be unique!')
     ]
 
     subscriber_id = fields.Char('Subcriber ID', copy=False, readonly=True, index=True, default=lambda self: _('New'), track_visibility='onchange')
