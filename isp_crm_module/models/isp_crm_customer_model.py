@@ -29,6 +29,12 @@ class Customer(models.Model):
     """Inherits res.partner and adds Customer info in partner form"""
     _inherit = 'res.partner'
 
+    _sql_constraints = [
+        ('phone', 'Check(1=1)', 'Phone number must be unique!'),
+        ('mobile', 'Check(1=1)', 'Mobile number must be unique!'),
+        ('email_from', 'Check(1=1)', 'Email must be unique!'),
+    ]
+
     subscriber_id = fields.Char('Subcriber ID', copy=False, readonly=True, index=True, default=lambda self: _('New'), track_visibility='onchange')
     father = fields.Char("Father's Name", default='', required=False, track_visibility='onchange')
     mother = fields.Char(string="Mother's Name", required=False, default='', track_visibility='onchange')
