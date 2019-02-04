@@ -9,6 +9,12 @@
             <xpath expr="//group/group/field[@name='payment_term_id']" position="after" >
                 <field name="payment_service_id" required="True"/>
             </xpath>
+            <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_untaxed']" position="replace">
+                <field name="amount_without_vat"/>
+            </xpath>
+            <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_tax']" position="replace">
+                <field name="amount_vat"/>
+            </xpath>
             <!-- Check if invoice is deferred -->
             <xpath expr="//group/group/field[@name='date_invoice']" position="before" >
                 <field name="is_deferred" string="Is Deferred" />

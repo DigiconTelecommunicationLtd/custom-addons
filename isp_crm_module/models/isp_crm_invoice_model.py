@@ -24,6 +24,24 @@ class ISPCRMInvoice(models.Model):
     billing_due_date = fields.Char(compute='_get_billing_due_date', string='Due Date')
     vat = fields.Char(compute='_get_vat', string='VAT')
 
+    amount_without_vat = fields.Monetary(string='Amount Without VAT', store=True, readonly=True, compute='_compute_amount',
+                                         track_visibility='onchange')
+    amount_vat = fields.Monetary(string='VAT', store=True, readonly=True, compute='_compute_amount')
+
+    @api.multi
+    def _compute_amount(self):
+        round_curr = self.currency_id.round
+        self.amount_untaxed = sum(line.price_subtotal for line in self.invoice_line_ids)
+        self.amount_tax = sum(round_curr(line.amount_total) for line in self.tax_line_ids)
+        total = self.amount_untaxed + self.amount_tax
+        vat = (total * 5.0) / 100.0
+        total_without_vat = (total * 100.0) / 105.0
+        self.update({
+            'amount_without_vat': total_without_vat,
+            'amount_vat': vat,
+        })
+        super(ISPCRMInvoice, self)._compute_amount()
+
     @api.multi
     def action_invoice_paid(self):
         # Updating the package change info

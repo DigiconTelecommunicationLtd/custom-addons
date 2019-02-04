@@ -238,10 +238,20 @@
                                         </tr>
                                         <tr>
                                             <td class="text-right pull-right" colspan="4">
-                                                <strong>VAT</strong>
+                                                <strong>Govt. VAT @ 5% (Including)</strong>
                                             </td>
                                             <td class="text-right pull-right">
-                                                Including
+                                                <span t-field="o.amount_vat"
+                                                      t-field-options='{"widget": "False"}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right pull-right" colspan="4">
+                                                <strong>Total Without VAT</strong>
+                                            </td>
+                                            <td class="text-right pull-right">
+                                                <span t-field="o.amount_without_vat"
+                                                      t-field-options='{"widget": "False"}'/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -369,10 +379,20 @@
                                         </tr>
                                         <tr>
                                             <td class="text-right pull-right" colspan="4">
-                                                <strong>VAT</strong>
+                                                <strong>Govt. VAT @ 5% (Including)</strong>
                                             </td>
                                             <td class="text-right pull-right">
-                                                Including
+                                                <span t-field="o.amount_vat"
+                                                      t-field-options='{"widget": "False"}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right pull-right" colspan="4">
+                                                <strong>Total Without VAT</strong>
+                                            </td>
+                                            <td class="text-right pull-right">
+                                                <span t-field="o.amount_without_vat"
+                                                      t-field-options='{"widget": "False"}'/>
                                             </td>
                                         </tr>
                                         <tr>
