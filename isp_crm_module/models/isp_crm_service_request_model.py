@@ -262,8 +262,10 @@ class ServiceRequest(models.Model):
             template_obj = self.env['mail.template'].sudo().search([('name', '=', 'Send_Service_Request_Mail')], limit=1)
 
             # showing warning for not setting ip, subnetmask and gateway
-            if self.ip is False or self.subnet_mask is False or self.gateway is False:
-                raise UserError('Please give all the technical information to mark done this ticket.')
+            # if self.ip is False or self.subnet_mask is False or self.gateway is False:
+            #     raise UserError('Please give all the technical information to mark done this ticket.')
+
+            # Send mail on mark done
             self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj)
 
         return True

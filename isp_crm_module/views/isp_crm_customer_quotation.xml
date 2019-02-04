@@ -15,6 +15,12 @@
                 <field name="file_name" invisible="1"/>
                 <field name="customer_po_no_upload" filename="file_name" invisible="1"/>
             </xpath>
+            <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_untaxed']" position="replace">
+                <field name="amount_without_vat" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+            </xpath>
+            <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_tax']" position="replace">
+                <field name="amount_vat" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+            </xpath>
             <xpath expr="//sheet/notebook/page[2]" position="before">
                 <page string="OTC Information" attrs ="{'invisible':[('lead_type','==', 'retail')]}">
                     <group>

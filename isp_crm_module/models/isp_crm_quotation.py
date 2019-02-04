@@ -34,6 +34,31 @@ class CustomerQuotation(models.Model):
     customer_po_no_upload = fields.Binary(string='Upload File')
     file_name = fields.Char(string="File Name")
 
+    amount_without_vat = fields.Monetary(string='Amount Without VAT', store=True, readonly=True, compute='_amount_all',
+                                     track_visibility='onchange')
+    amount_vat = fields.Monetary(string='VAT', store=True, readonly=True, compute='_amount_all')
+
+    @api.depends('order_line.price_total')
+    def _amount_all(self):
+        """
+        Compute the total amounts of the SO.
+        """
+        for order in self:
+            amount_untaxed = amount_tax = 0.0
+            for line in order.order_line:
+                amount_untaxed += line.price_subtotal
+                amount_tax += line.price_tax
+            total = amount_untaxed + amount_tax
+            vat = (total * 5.0) / 100.0
+            total_without_vat = (total * 100.0) / 105.0
+            order.update({
+                'amount_untaxed': order.pricelist_id.currency_id.round(amount_untaxed),
+                'amount_tax': order.pricelist_id.currency_id.round(amount_tax),
+                'amount_total': amount_untaxed + amount_tax,
+                'amount_without_vat': total_without_vat,
+                'amount_vat': vat,
+            })
+
     @api.depends('otc_price', 'discount', 'govt_vat')
     def _compute_total_amount(self):
         """
@@ -53,7 +78,8 @@ class CustomerQuotation(models.Model):
             else:
                 govt_vat = 0
                 vat = 0.0
-            without_vat = float(total_price) - float(vat)
+            x = 100.0 + govt_vat
+            without_vat = (total_price * 100.0)/x
             order.update({
                 'price_total': total_price,
                 'price_total_without_vat': without_vat,
@@ -75,7 +101,8 @@ class CustomerQuotation(models.Model):
         else:
             govt_vat = 0
             vat = 0.0
-        without_vat = float(total_price) - float(vat)
+        x = 100.0 + govt_vat
+        without_vat = (total_price * 100.0) / x
         self.update({
             'price_total': total_price,
             'price_total_without_vat': without_vat,
