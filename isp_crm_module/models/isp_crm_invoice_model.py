@@ -30,16 +30,17 @@ class ISPCRMInvoice(models.Model):
 
     @api.multi
     def _compute_amount(self):
-        round_curr = self.currency_id.round
-        self.amount_untaxed = sum(line.price_subtotal for line in self.invoice_line_ids)
-        self.amount_tax = sum(round_curr(line.amount_total) for line in self.tax_line_ids)
-        total = self.amount_untaxed + self.amount_tax
-        vat = (total * 5.0) / 100.0
-        total_without_vat = (total * 100.0) / 105.0
-        self.update({
-            'amount_without_vat': total_without_vat,
-            'amount_vat': vat,
-        })
+        for invoice in self:
+            round_curr = invoice.currency_id.round
+            invoice.amount_untaxed = sum(line.price_subtotal for line in invoice.invoice_line_ids)
+            invoice.amount_tax = sum(round_curr(line.amount_total) for line in invoice.tax_line_ids)
+            total = invoice.amount_untaxed + invoice.amount_tax
+            vat = (total * 5.0) / 100.0
+            total_without_vat = (total * 100.0) / 105.0
+            invoice.update({
+                'amount_without_vat': total_without_vat,
+                'amount_vat': vat,
+            })
         super(ISPCRMInvoice, self)._compute_amount()
 
     @api.multi
