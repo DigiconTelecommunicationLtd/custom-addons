@@ -192,6 +192,37 @@ class ServiceRequest(models.Model):
         for service_req in self:
             # update the stage of this service request to done
             last_stage_obj = self.env['isp_crm_module.stage'].search([], order='sequence desc', limit=1)
+
+            # Deduct quantity from stock.
+            try:
+                for product in service_req.product_line:
+                    quantity = product.product_uom_qty
+                    get_product = self.env['stock.quant'].search([('product_id', '=', product.product_id.id)], order='create_date desc',limit=1)
+                    if get_product:
+                        current_stock_quantity = get_product.quantity
+                        if abs(current_stock_quantity) <= 0.0:
+                            raise UserError('Not enough quantity available in stock.')
+                        new_available_quantity = abs(current_stock_quantity) - abs(quantity)
+                        if new_available_quantity:
+                            inventory_name = str(get_product.product_id.display_name) + "-" + str(datetime.now())
+                            create_inventory = self.env['stock.inventory'].create({
+                                'name': inventory_name,
+                                'location_id': get_product.location_id.id,
+                                'filter': 'product',
+                                'product_id': get_product.product_id.id,
+                                'accounting_date': datetime.today(),
+                            }).action_start()
+                            get_inventory = self.env['stock.inventory'].search([('name', '=', inventory_name)], order='create_date desc', limit=1)
+                            if get_inventory:
+                                get_inventory_lines = get_inventory.line_ids
+                                for line in get_inventory_lines:
+                                    line.update({
+                                        'product_qty': float(abs(new_available_quantity))
+                                    })
+                                get_inventory.action_done()
+            except Exception as ex:
+                print(ex)
+
             service_req.update({
                 'is_done': True,
                 'stage': last_stage_obj.id,
