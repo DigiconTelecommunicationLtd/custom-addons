@@ -2,7 +2,7 @@
 <odoo>
     <record id="isp_crm_module.mail_service_request_template" model="mail.template">
         <field name="name">Send_Service_Request_Mail</field>
-        <field name="subject">Service Request Test Mail</field>
+        <field name="subject">Service Request Activation Mail</field>
         <field name="body_html"><![CDATA[
 
             <p><strong>Dear Customer,</strong></p>

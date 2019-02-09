@@ -379,20 +379,10 @@
                                         </tr>
                                         <tr>
                                             <td class="text-right pull-right" colspan="4">
-                                                <strong>Govt. VAT @ 5% (Including)</strong>
+                                                <strong>Govt. VAT @ 5%</strong>
                                             </td>
                                             <td class="text-right pull-right">
-                                                <span t-field="o.amount_vat"
-                                                      t-field-options='{"widget": "False"}'/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right pull-right" colspan="4">
-                                                <strong>Total Without VAT</strong>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-field="o.amount_without_vat"
-                                                      t-field-options='{"widget": "False"}'/>
+                                                <span>Including</span>
                                             </td>
                                         </tr>
                                         <tr>
