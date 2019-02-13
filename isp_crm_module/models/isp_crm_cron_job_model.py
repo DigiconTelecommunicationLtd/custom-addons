@@ -352,3 +352,25 @@ class CronJobModel(models.Model):
                 # Delete the expired link
                 link.unlink()
         return True
+
+    #Change lead color if no action performed within 24 hours
+    def change_lead_color_if_no_action_performed(self):
+        try:
+            now = datetime.now().strftime("%Y-%m-%d %H-%M")
+            now = datetime.strptime(now, "%Y-%m-%d %H-%M")
+            get_all_leads = self.env['crm.lead'].search([])
+            for lead in get_all_leads:
+                if lead.write_date:
+                    last_action_time = lead.write_date
+                    last_action_time = datetime.strptime(last_action_time, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H-%M")
+                    last_action_time = datetime.strptime(last_action_time, "%Y-%m-%d %H-%M")
+                    get_diff         = str(now - last_action_time)
+                    hour             = int(get_diff.split(":")[0])
+                    min              = int(get_diff.split(":")[1])
+                    if abs(int(min)) > 2:
+                        lead.update({
+                            'color': 10
+                        })
+            return True
+        except Exception as ex:
+            print(ex)

@@ -232,6 +232,10 @@ class Opportunity(models.Model):
             service_req_obj = self.env['isp_crm_module.service_request']
             first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
             package_name = customer.invoice_product_id.name if (customer.invoice_product_id != False) else ''
+            if package_name:
+                pass
+            else:
+                package_name = ''
             service_req_data = {
                 'problem': str(customer.name) + ' - ' + package_name or '',
                 'stage': first_stage.id,

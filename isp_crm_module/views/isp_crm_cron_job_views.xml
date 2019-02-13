@@ -55,5 +55,19 @@
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
         </record>
+
+         <!--Cron job for changing color of lead if no action performed withing 24 hour-->
+        <record forcecreate="True" id="isp_crm_cron_job_change_lead_color_if_no_action_performed" model="ir.cron">
+            <field name="name">Change Lead Color if No Action Performed within a Day</field>
+            <field name="model_id" ref="model_isp_crm_cron_job"/>
+            <field name="state">code</field>
+            <field name="model" eval="'isp_crm.cron_job'" />
+            <field name="code">model.change_lead_color_if_no_action_performed()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">24</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
     </data>
 </odoo>
