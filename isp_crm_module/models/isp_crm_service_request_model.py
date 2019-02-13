@@ -207,7 +207,6 @@ class ServiceRequest(models.Model):
                             inventory_name = str(get_product.product_id.display_name) + "-" + str(datetime.now())
                             create_inventory = self.env['stock.inventory'].create({
                                 'name': inventory_name,
-                                # 'location_id': get_product.location_id.id,
                                 'filter': 'product',
                                 'product_id': get_product.product_id.id,
                                 'accounting_date': datetime.today(),
