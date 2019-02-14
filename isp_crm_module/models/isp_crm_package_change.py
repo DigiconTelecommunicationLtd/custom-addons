@@ -72,10 +72,8 @@ class ChangePackage(models.Model):
             balance = rec.customer_id.get_customer_balance(customer_id=rec.customer_id.id)
             rec.customer_balance = abs(balance) if balance < 0 else 0.0
             if rec.customer_balance > rec.to_package_id.price:
-                new_balance = rec.customer_balance - rec.to_package_id.price
                 rec.write({
                     'is_paid' : True,
-                    'customer_balance' : float(new_balance)
                 })
 
         return True

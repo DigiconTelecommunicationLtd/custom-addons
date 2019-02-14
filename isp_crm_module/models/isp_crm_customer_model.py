@@ -335,7 +335,7 @@ class Customer(models.Model):
                 total_debit += line.debit
                 total_credit += line.credit
 
-        balance = 0.0 if (total_debit - total_credit) == 0.0 else total_debit - total_credit
+        balance = 0.0 if (abs(total_debit) - abs(total_credit)) == 0.0 else abs(total_debit) - abs(total_credit)
         return balance
 
     def get_partner_address_str(self):
