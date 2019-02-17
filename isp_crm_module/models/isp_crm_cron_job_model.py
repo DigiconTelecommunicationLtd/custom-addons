@@ -273,7 +273,7 @@ class CronJobModel(models.Model):
                 payment_obj = self.env['account.payment']
                 payment_obj.customer_bill_adjustment(
                     customer=customer,
-                    package_price=customer.next_package_id.standard_price
+                    package_price=customer.next_package_id.list_price
                 )
                 # updating package info of customer
                 updated_customer = customer.update_current_bill_cycle_info(
