@@ -231,7 +231,16 @@ class Opportunity(models.Model):
             customer = opportunity.partner_id
             service_req_obj = self.env['isp_crm_module.service_request']
             first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
-            package_name = customer.invoice_product_id.name if (customer.invoice_product_id != False) else ''
+
+            # Get the package name which is under Packages category
+            package_name = ''
+            if customer.invoice_product_id != False:
+                for product in customer.invoice_product_id:
+                    if customer.invoice_product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME or customer.invoice_product_id.categ_id.complete_name == DEFAULT_PACKAGE_CAT_NAME:
+                        package_name = customer.invoice_product_id.name
+            else:
+                package_name = ''
+            # package_name = customer.invoice_product_id.name if (customer.invoice_product_id != False) else ''
             if package_name:
                 pass
             else:
