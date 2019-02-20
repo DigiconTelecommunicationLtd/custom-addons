@@ -27,6 +27,15 @@ class ISPCRMInvoice(models.Model):
     amount_without_vat = fields.Monetary(string='Amount Without VAT', store=True, readonly=True, compute='_compute_amount',
                                          track_visibility='onchange')
     amount_vat = fields.Monetary(string='VAT', store=True, readonly=True, compute='_compute_amount')
+    get_sales_order_origin = fields.Many2one('sale.order', string='Origin SO', compute='_get_origin')
+
+    def _get_origin(self):
+        sales_order_obj = self.env['sale.order']
+        for invoice in self:
+            sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
+            invoice.update({
+                'get_sales_order_origin': sales_order,
+            })
 
     @api.multi
     def _compute_amount(self):
