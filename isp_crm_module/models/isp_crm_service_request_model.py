@@ -241,7 +241,11 @@ class ServiceRequest(models.Model):
             # updating customer's potentiality
             customer.update({
                 'is_potential_customer' : False,
-                'subscriber_id' : customer_subs_id
+                'subscriber_id' : customer_subs_id,
+                'technical_info_ip' : self.ip,
+                'technical_info_subnet_mask' : self.subnet_mask,
+                'technical_info_gateway' : self.gateway,
+                'description_info' : self.description
             })
 
             # Create an user

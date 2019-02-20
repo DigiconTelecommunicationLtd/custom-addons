@@ -103,6 +103,10 @@ class Customer(models.Model):
         inverse="_inverse_product_pricelist", company_dependent=False,  # NOT A REAL PROPERTY
         help="This pricelist will be used, instead of the default one, for sales to the current partner", track_visibility='onchange')
 
+    technical_info_ip = fields.Char('IP Address')
+    technical_info_subnet_mask = fields.Char('Subnet Mask')
+    technical_info_gateway = fields.Char('Gateway')
+    description_info = fields.Text('Description')
 
     def _get_mark_done_info(self):
         """

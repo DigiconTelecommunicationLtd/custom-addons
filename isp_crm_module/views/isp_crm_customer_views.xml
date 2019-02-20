@@ -79,6 +79,9 @@
 
             <!--Technical Information-->
             <xpath expr="//notebook/page[@name='sales_purchases']" position="after" >
+                <page string="Description">
+                    <field name="description_info"/>
+                </page>
                 <page string="Technical Information">
                     <group>
                         <group>
@@ -91,6 +94,11 @@
                             <field name="connection_media" string="Connection Media"/>
                             <!--<field name="current_package_end_date" string="current_package_end_date "/>-->
                             <field name="next_package_start_date" string="next_package_start_date "/>
+                        </group>
+                        <group>
+                            <field name="technical_info_ip"/>
+                            <field name="technical_info_subnet_mask"/>
+                            <field name="technical_info_gateway"/>
                         </group>
                     </group>
                 </page>
