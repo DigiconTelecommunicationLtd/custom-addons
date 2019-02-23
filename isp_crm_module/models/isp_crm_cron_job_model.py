@@ -43,7 +43,10 @@ class CronJobModel(models.Model):
         self.mail_cc = customer.email
         body = template_obj.body_html
         body = body.replace('--customer_id--', str(customer.subscriber_id))
-        body = body.replace('--customer_name--', str(customer.name))
+        if len(str(customer.name)) > 1:
+            body = body.replace('--customer_name--', str(customer.name))
+        else:
+            body = body.replace('--customer_name--', " ")
         body = body.replace('--package--', str(customer.next_package_id.name or ""))
         body = body.replace('--price--', str(customer.next_package_price))
         if customer.current_package_end_date:
@@ -167,12 +170,12 @@ class CronJobModel(models.Model):
         service_request_obj = self.env['isp_crm_module.service_request']
 
         for customer in customers_list:
-            print("Creating Invoice for customer:- " + customer.name)
+            # print("Creating Invoice for customer:- " + customer.name)
             customer_invoice_status = self.create_customer_invoice_status(customer=customer)
             try:
-                print("mail sending.....")
+                # print("mail sending.....")
                 mail_sent = self._send_mail_to_customer_before_some_days(customer=customer)
-                print("mail sent")
+                # print("mail sent")
             except Exception as ex:
                 print(ex)
 
