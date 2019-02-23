@@ -40,7 +40,7 @@ class CronJobModel(models.Model):
                 [('name', '=', 'sending_invoice_for_warning_the_customer')],
                 limit=1)
         self.mail_to = customer.email
-        self.mail_cc = customer.email
+        # self.mail_cc = customer.email
         body = template_obj.body_html
         body = body.replace('--customer_id--', str(customer.subscriber_id))
         if len(str(customer.name)) > 1:
@@ -75,7 +75,7 @@ class CronJobModel(models.Model):
                 'subject': template_obj.subject_mail,
                 'body_html': body,
                 'email_to': self.mail_to,
-                'email_cc': self.mail_cc,
+                # 'email_cc': self.mail_cc,
                 'email_from': 'notice.mime@cg-bd.com',
                 # 'attachment_ids': [(6, 0, [attachment.id])],
             }
