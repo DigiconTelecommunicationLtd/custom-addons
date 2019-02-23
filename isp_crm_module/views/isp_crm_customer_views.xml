@@ -150,8 +150,8 @@
 
             <p><strong>Dear Valued Customer,</strong></p>
 
-            <p>Due to technical error, we humbly apologize for our last payment reminder email subjected as <strong>Invoice of next bill cycle</strong> sent to you. Please ignore our last payment reminder email and consider this as your new payment reminder email.</p>
-            <p>Here are the details of your next payment.</p>
+            <p>Due to technical error, we humbly apologize for our last payment reminder email subjected as <strong>Invoice of next bill cycle</strong> sent to you. Please ignore our last email and consider this as your payment reminder email.</p>
+            <p>Details of your package and payment info is given below.</p>
 
             <p><strong>Customer ID : </strong>--customer_id--
             <br/><strong>Customer Name: </strong>--customer_name--
