@@ -43,6 +43,7 @@ class CronJobModel(models.Model):
         self.mail_cc = customer.email
         body = template_obj.body_html
         body = body.replace('--customer_id--', str(customer.subscriber_id))
+        body = body.replace('--customer_name--', str(customer.name))
         body = body.replace('--package--', str(customer.next_package_id.name or ""))
         body = body.replace('--price--', str(customer.next_package_price))
         if customer.current_package_end_date:
@@ -51,20 +52,20 @@ class CronJobModel(models.Model):
             body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
 
         # Creating attachment file of the invoice
-        sales_order_obj = self.env['sale.order'].search([], order='create_date asc', limit=1)
-        pdf = self.env.ref('isp_crm_module.action_report_receipt_attachment').render_qweb_pdf([sales_order_obj[0].id])
-
-        # save pdf as attachment
-        # ATTACHMENT_NAME = customer.name + "_" + invoice.number
-        ATTACHMENT_NAME = customer.name
-        attachment = self.env['ir.attachment'].create({
-            'name': ATTACHMENT_NAME,
-            'type': 'binary',
-            'datas_fname': ATTACHMENT_NAME + '.pdf',
-            'store_fname': ATTACHMENT_NAME,
-            'datas': base64.encodestring(pdf[0]),
-            'mimetype': 'application/x-pdf'
-        })
+        # sales_order_obj = self.env['sale.order'].search([], order='create_date asc', limit=1)
+        # pdf = self.env.ref('isp_crm_module.action_report_receipt_attachment').render_qweb_pdf([sales_order_obj[0].id])
+        #
+        # # save pdf as attachment
+        # # ATTACHMENT_NAME = customer.name + "_" + invoice.number
+        # ATTACHMENT_NAME = customer.name
+        # attachment = self.env['ir.attachment'].create({
+        #     'name': ATTACHMENT_NAME,
+        #     'type': 'binary',
+        #     'datas_fname': ATTACHMENT_NAME + '.pdf',
+        #     'store_fname': ATTACHMENT_NAME,
+        #     'datas': base64.encodestring(pdf[0]),
+        #     'mimetype': 'application/x-pdf'
+        # })
 
         if template_obj:
             mail_values = {
@@ -73,7 +74,7 @@ class CronJobModel(models.Model):
                 'email_to': self.mail_to,
                 'email_cc': self.mail_cc,
                 'email_from': 'notice.mime@cg-bd.com',
-                'attachment_ids': [(6, 0, [attachment.id])],
+                # 'attachment_ids': [(6, 0, [attachment.id])],
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
         return create_and_send_email
@@ -154,9 +155,13 @@ class CronJobModel(models.Model):
         today = datetime.today()
         after_threshold_days_date =  today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
         after_threshold_days_date_str = after_threshold_days_date.strftime("%Y-%m-%d")
+        # customers_list = self.env['res.partner'].search([
+        #     ('customer', '=', True),
+        #     ('current_package_end_date', '=', after_threshold_days_date)
+        # ])
+
         customers_list = self.env['res.partner'].search([
-            ('customer', '=', True),
-            ('current_package_end_date', '=', after_threshold_days_date)
+            ('customer', '=', True)
         ])
 
         service_request_obj = self.env['isp_crm_module.service_request']
