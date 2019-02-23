@@ -46,7 +46,7 @@ class CronJobModel(models.Model):
         if len(str(customer.name)) > 1:
             body = body.replace('--customer_name--', str(customer.name))
         else:
-            body = body.replace('--customer_name--', " ")
+            body = body.replace('--customer_name--', "N/A")
         body = body.replace('--package--', str(customer.next_package_id.name or ""))
         body = body.replace('--price--', str(customer.next_package_price))
         if customer.current_package_end_date:
