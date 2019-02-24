@@ -361,7 +361,7 @@ class CronJobModel(models.Model):
                 link.unlink()
         return True
 
-    #Change lead color if no action performed within 24 hours
+    #Change lead color in list view if no action performed within 24 hours
     def change_lead_color_if_no_action_performed(self):
         try:
             now = datetime.now().strftime("%Y-%m-%d %H-%M")
