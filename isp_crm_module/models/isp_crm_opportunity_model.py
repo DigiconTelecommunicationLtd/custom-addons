@@ -35,8 +35,8 @@ class Opportunity(models.Model):
     assigned_rm = fields.Many2one('res.users', string='RM')
     lead_type = fields.Selection(CUSTOMER_TYPE, string='Type', required=False,  help="Lead and Opportunity Type")
     cr = fields.Integer('Color Index', default=0, compute='_get_color_on_service_request_status')
-    update_flag = fields.Integer('Is updated', default=0)
-    update_date = fields.Datetime(string='Updated time')
+    update_flag = fields.Integer('Is updated', default=1)
+    update_date = fields.Datetime(string='Updated time', default=datetime.now())
 
 
     def _get_color_on_service_request_status(self):
@@ -236,7 +236,7 @@ class Opportunity(models.Model):
         # By default value of length of vals is assigned to 3 when user clicks on the back button of the view of the lead.
         # By default value of length of vals is assigned to the number of fields edited when user clicks on the save button of the view of the lead.
         # Check if length of vals has the key 'current_service_request_id' to detect whether user has edited any field or not.
-        if 'current_service_request_id' in vals:
+        if 'current_service_request_id' in vals or 'update_flag' in vals:
             # User did not edit any field so passing it.
             pass
         else:

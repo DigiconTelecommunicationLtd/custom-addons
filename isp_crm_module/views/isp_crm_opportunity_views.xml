@@ -380,6 +380,7 @@
         <field name="arch" type="xml">
             <xpath expr="//tree/field[@name='name']" position="after">
                 <field name="assigned_rm"/>
+                <field name="update_flag" invisible="1"/>
             </xpath>
             <xpath expr="//tree/field[@name='contact_name']" position="replace">
                 <field name="emergency_contact_name"/>
@@ -423,6 +424,20 @@
             </xpath>
         </field>
     </record>
+
+
+    <!--Change crm lead tree's records color-->
+    <record model="ir.ui.view" id="view_crm_lead_tree_change_color">
+        <field name="name">view.crm.lead.tree.change.color</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads" />
+        <field name="arch" type="xml">
+            <xpath expr="//tree[1]" position="attributes">
+                <attribute name="decoration-danger">update_flag==0</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
 
     <menuitem
         id="crm.crm_menu_root"

@@ -75,7 +75,7 @@ class HelpdeskTD(models.Model):
     customer_phone = fields.Char(string="Phone", related='customer.phone', store=True)
     customer_company = fields.Char(string="Company", related='customer.parent_id.name', store=True)
     customer_address = fields.Char(string="Address", track_visibility='onchange')
-    complexity = fields.Many2one('isp_crm_module.helpdesk_td_ticket_complexity', string='Complexity', ondelete='set null',
+    complexity = fields.Many2one('isp_crm_module.helpdesk_td_ticket_complexity', string='Service Level', ondelete='set null',
                                   help='Complexity level of the ticket.')
     solution_ids = fields.One2many('isp_crm_module.helpdesk_td_tasks', 'problem', string="Solutions", copy=True,
                                    auto_join=True)

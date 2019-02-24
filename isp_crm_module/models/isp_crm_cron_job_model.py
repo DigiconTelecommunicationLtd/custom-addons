@@ -383,7 +383,7 @@ class CronJobModel(models.Model):
                             min = int(get_diff.split(":")[1])
                         if abs(int(min)) > 2:
                             lead.update({
-                                'color': 2
+                                'update_flag': 0
                             })
                 else:
                     last_update_date = lead.create_date
@@ -399,7 +399,7 @@ class CronJobModel(models.Model):
                             min = int(get_diff.split(":")[1])
                         if abs(int(min)) > 2:
                             lead.update({
-                                'color': 1
+                                'update_flag': 0
                             })
             return True
         except Exception as ex:
