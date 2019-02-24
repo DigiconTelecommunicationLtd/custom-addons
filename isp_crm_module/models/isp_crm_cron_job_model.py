@@ -368,17 +368,39 @@ class CronJobModel(models.Model):
             now = datetime.strptime(now, "%Y-%m-%d %H-%M")
             get_all_leads = self.env['crm.lead'].search([])
             for lead in get_all_leads:
-                if lead.write_date:
-                    last_action_time = lead.write_date
-                    last_action_time = datetime.strptime(last_action_time, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H-%M")
-                    last_action_time = datetime.strptime(last_action_time, "%Y-%m-%d %H-%M")
-                    get_diff         = str(now - last_action_time)
-                    hour             = int(get_diff.split(":")[0])
-                    min              = int(get_diff.split(":")[1])
-                    if abs(int(min)) > 2:
-                        lead.update({
-                            'color': 10
-                        })
+                if lead.update_flag == 1:
+                    last_update_date = lead.update_date
+                    if last_update_date:
+                        last_update_date = datetime.strptime(last_update_date, "%Y-%m-%d %H:%M:%S").strftime(
+                            "%Y-%m-%d %H-%M")
+                        last_update_date = datetime.strptime(last_update_date, "%Y-%m-%d %H-%M")
+                        get_diff = str(now - last_update_date)
+                        if get_diff.find(",") != -1:
+                            hour = 25
+                            min = 6
+                        else:
+                            hour = int(get_diff.split(":")[0])
+                            min = int(get_diff.split(":")[1])
+                        if abs(int(min)) > 2:
+                            lead.update({
+                                'color': 2
+                            })
+                else:
+                    last_update_date = lead.create_date
+                    if last_update_date:
+                        last_update_date = datetime.strptime(last_update_date, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H-%M")
+                        last_update_date = datetime.strptime(last_update_date, "%Y-%m-%d %H-%M")
+                        get_diff         = str(now - last_update_date)
+                        if get_diff.find(",") != -1:
+                            hour = 25
+                            min = 6
+                        else:
+                            hour = int(get_diff.split(":")[0])
+                            min = int(get_diff.split(":")[1])
+                        if abs(int(min)) > 2:
+                            lead.update({
+                                'color': 1
+                            })
             return True
         except Exception as ex:
             print(ex)

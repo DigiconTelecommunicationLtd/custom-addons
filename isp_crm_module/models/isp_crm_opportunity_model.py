@@ -6,7 +6,7 @@ import re
 from odoo import api, fields, models, _
 from odoo.exceptions import Warning, UserError
 from . import isp_crm_service_request_model
-
+from datetime import datetime, timezone, timedelta, date
 
 DEFAULT_PROBLEM = "There are some Problem"
 INVOICE_PAID_STATUS = 'paid'
@@ -35,6 +35,8 @@ class Opportunity(models.Model):
     assigned_rm = fields.Many2one('res.users', string='RM')
     lead_type = fields.Selection(CUSTOMER_TYPE, string='Type', required=False,  help="Lead and Opportunity Type")
     cr = fields.Integer('Color Index', default=0, compute='_get_color_on_service_request_status')
+    update_flag = fields.Integer('Is updated', default=0)
+    update_date = fields.Datetime(string='Updated time')
 
 
     def _get_color_on_service_request_status(self):
@@ -223,6 +225,25 @@ class Opportunity(models.Model):
                     raise UserError(error)
 
         return super(Opportunity, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        """
+        Update the update_flag and update_date field when user edits any lead.
+        :param vals:
+        :return:
+        """
+        # By default value of length of vals is assigned to 3 when user clicks on the back button of the view of the lead.
+        # By default value of length of vals is assigned to the number of fields edited when user clicks on the save button of the view of the lead.
+        # Check if length of vals has the key 'current_service_request_id' to detect whether user has edited any field or not.
+        if 'current_service_request_id' in vals:
+            # User did not edit any field so passing it.
+            pass
+        else:
+            # User has edited the field so updating the flags and date.
+            vals['update_flag'] = 1
+            vals['update_date'] = datetime.now()
+        return super(Opportunity, self).write(vals)
 
     @api.multi
     def action_create_new_service_request(self):
