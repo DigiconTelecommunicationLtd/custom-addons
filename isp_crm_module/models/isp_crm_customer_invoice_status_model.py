@@ -13,7 +13,7 @@ import odoo.addons.decimal_precision as dp
 class CustomerInvoice(models.Model):
     """Inherits res.partner and adds Customer info in partner form"""
     _name = 'isp_crm_module.customer_invoice_status'
-    _description = "Showing the list of Customer and current month's Invoice status."
+    _description = "Showing the list of Customer and current month's Invoice status"
     _rec_name = 'name'
     _order = "create_date desc, name, id"
 
