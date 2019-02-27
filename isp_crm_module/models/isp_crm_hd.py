@@ -92,7 +92,7 @@ class Helpdesk(models.Model):
     customer_feedback = fields.Text('Feedback')
     color = fields.Integer(default=1)
     td_flags = fields.Selection(TD_FLAGS, string="Status")
-    sd_resolved_by = fields.Many2one('hr.employee', string='Resolved By', store=True)
+    sd_resolved_by = fields.Many2one('res.users', string='Resolved By', store=True, track_visibility='onchange')
 
     @api.model
     def create(self, vals):

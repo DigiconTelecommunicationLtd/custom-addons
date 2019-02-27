@@ -6,6 +6,11 @@
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_form"/>
         <field name="arch" type="xml">
+            <!-- Remove 'Print Invoice' button -->
+            <xpath expr="//header/button[2]" position="replace" >
+                <button name="invoice_print" string="Print Invoice" type="object" invisible='1' class="oe_highlight" groups="base.group_user"/>
+            </xpath>
+
             <xpath expr="//group/group/field[@name='payment_term_id']" position="after" >
                 <field name="payment_service_id" required="True"/>
             </xpath>

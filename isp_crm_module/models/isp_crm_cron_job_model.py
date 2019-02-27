@@ -381,7 +381,7 @@ class CronJobModel(models.Model):
                         else:
                             hour = int(get_diff.split(":")[0])
                             min = int(get_diff.split(":")[1])
-                        if abs(int(min)) > 2:
+                        if abs(int(hour)) > 24:
                             lead.update({
                                 'update_flag': 0
                             })
@@ -397,7 +397,7 @@ class CronJobModel(models.Model):
                         else:
                             hour = int(get_diff.split(":")[0])
                             min = int(get_diff.split(":")[1])
-                        if abs(int(min)) > 2:
+                        if abs(int(hour)) > 24:
                             lead.update({
                                 'update_flag': 0
                             })
