@@ -264,7 +264,7 @@ class CronJobModel(models.Model):
         for customer in customers_list:
             # Get customer balance
             customer_balance =  customer.get_customer_balance(customer_id=customer.id)
-            # find their recent invoice that paid
+            # find their invoices that are paid
             current_month_invoice = self.env['account.invoice'].search([
                 ('partner_id', '=', customer.id),
                 ('state', '=', 'paid')
