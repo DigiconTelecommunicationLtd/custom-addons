@@ -258,6 +258,13 @@ class CronJobModel(models.Model):
     def update_customer_package_for_next_bill_cycle(self):
         today = date.today()
         tomorrow = date.today() + timedelta(days=1)
+        # Check if it is a customer,
+        # and if the customer is inactive or next package start date is tomorrow.
+        # If the customer is inactive, then we will check if
+        # the customer has sufficient balance otherwise
+        # if the customer is active and next package start date is tomorrow then check if
+        # the customer has sufficient balance.
+        # If the customer has sufficient balance then reactivate the customer. 
         customers_list = self.env['res.partner'].search([
             ('customer', '=', True),
             '|',
