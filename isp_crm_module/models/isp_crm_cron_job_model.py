@@ -11,7 +11,8 @@ DEFAULT_THRESHOLD_DAYS = 7
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
-CUSTOMER_INCATIVE_STATUS = 'inactive'
+CUSTOMER_INACTIVE_STATUS = 'inactive'
+CUSTOMER_ACTIVE_STATUS = 'active'
 
 INVOICE_PAID_STATUS = 'paid'
 
@@ -296,12 +297,17 @@ class CronJobModel(models.Model):
                 # Adding the package change history
                 package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
                 created_package_history = package_history_obj.set_package_change_history(customer)
+
+                #Make customer active
+                customer.update({
+                    'active_status': CUSTOMER_ACTIVE_STATUS
+                })
             else:
                 if customer.is_sent_package_change_req == True:
                     updated_customer = customer.update_next_bill_cycle_info(customer=customer)
                 else:
                     customer.update({
-                        'active_status' : CUSTOMER_INCATIVE_STATUS
+                        'active_status' : CUSTOMER_INACTIVE_STATUS
                     })
         return True
 
