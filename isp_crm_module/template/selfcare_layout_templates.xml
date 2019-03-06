@@ -367,14 +367,14 @@
                         <li class="list-group-item">
                             <b>Original Package Price</b>
                             <b class="pull-right text-info">
-                                Tk. <t t-esc="user.current_package_price" />
+                                Tk. <t t-esc="user.current_package_original_price" />
                             </b>
                         </li>
                         <t t-if="user.property_product_pricelist">
                             <li class="list-group-item">
                                 <b>Discounted Package Price</b>
                                 <b class="pull-right text-info">
-                                    Tk. <t t-esc="user.current_package_original_price" />
+                                    Tk. <t t-esc="user.current_package_price" />
                                 </b>
                             </li>
                         </t>

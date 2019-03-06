@@ -260,7 +260,9 @@ class CronJobModel(models.Model):
         tomorrow = date.today() + timedelta(days=1)
         customers_list = self.env['res.partner'].search([
             ('customer', '=', True),
-            ('next_package_start_date', '=', tomorrow)
+            '|',
+            ('next_package_start_date', '=', tomorrow),
+            ('active_status', '=', CUSTOMER_INACTIVE_STATUS)
         ])
         for customer in customers_list:
             # Get customer balance
