@@ -298,7 +298,7 @@ class CronJobModel(models.Model):
                 package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
                 created_package_history = package_history_obj.set_package_change_history(customer)
 
-                #Make customer active
+                # Make customer active
                 customer.update({
                     'active_status': CUSTOMER_ACTIVE_STATUS
                 })
