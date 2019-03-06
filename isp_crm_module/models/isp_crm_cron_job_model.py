@@ -267,7 +267,7 @@ class CronJobModel(models.Model):
             # find their recent invoice that paid
             current_month_invoice = self.env['account.invoice'].search([
                 ('partner_id', '=', customer.id),
-                ('date_due', '=', today), ('state', '=', 'paid')
+                ('state', '=', 'paid')
             ], limit=1)
             #
             # if current_month_invoice:
