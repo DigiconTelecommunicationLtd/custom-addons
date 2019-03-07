@@ -264,7 +264,7 @@ class CronJobModel(models.Model):
         # the customer has sufficient balance otherwise
         # if the customer is active and next package start date is tomorrow then check if
         # the customer has sufficient balance.
-        # If the customer has sufficient balance then reactivate the customer. 
+        # If the customer has sufficient balance then reactivate the customer.
         customers_list = self.env['res.partner'].search([
             ('customer', '=', True),
             '|',
