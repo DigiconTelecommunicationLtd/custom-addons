@@ -17,8 +17,7 @@ DEFAULT_DONE_STATUS = 'Done'
 CUSTOMER_TYPE = [
     ('retail', _('Retail')),
     ('corporate', _('Corporate')),
-    ('soho', _('SOHO')),
-    ('sme', _('SME')),
+    ('sohoandsme', _('SOHO and SME')),
 ]
 
 class Opportunity(models.Model):

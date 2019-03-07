@@ -37,6 +37,7 @@
                 <filter name="deferred" string="Deferred" domain="[('is_deferred', '=', 'True')]"/>
                 <filter name="retail" string="Retail" domain="[('partner_id.opportunity_ids.lead_type', '=', 'retail')]"/>
                 <filter name="corporate" string="Corporate" domain="[('partner_id.opportunity_ids.lead_type', '=', 'corporate')]"/>
+                <filter name="sohoandsme" string="Corporate" domain="[('partner_id.opportunity_ids.lead_type', '=', 'sohoandsme')]"/>
             </xpath>
         </field>
     </record>

@@ -141,7 +141,8 @@ class ISPCRMInvoice(models.Model):
             if get_customer:
                 opportunities = invoice.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
                 for opportunity in opportunities:
-                    if opportunity.lead_type == "corporate":
+                    # check if lead type is corporate or soho or sme
+                    if opportunity.lead_type != "retail":
                         if invoice.date_invoice:
                             due_date = invoice.date_invoice
                             due_date = invoice.add_months(due_date, 1)

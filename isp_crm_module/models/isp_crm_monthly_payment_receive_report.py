@@ -12,8 +12,7 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT, DEFAULT_SERVER
 CUSTOMER_TYPE = [
     ('retail', _('Retail')),
     ('corporate', _('Corporate')),
-    ('soho', _('SOHO')),
-    ('sme', _('SME')),
+    ('sohoandsme', _('SOHO and SME')),
 ]
 
 class ISPCRMPayment(models.Model):

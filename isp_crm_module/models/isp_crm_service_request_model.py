@@ -229,7 +229,12 @@ class ServiceRequest(models.Model):
             customer = service_req.customer
             get_opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
             if get_opportunity:
-                customer_type = "MR" if get_opportunity.lead_type == "retail" else "MC"
+                if get_opportunity.lead_type == "retail":
+                    customer_type = "MR"
+                elif get_opportunity.lead_type == "sohoandsme":
+                    customer_type = "MSY"
+                else:
+                    customer_type = "MC"
             else:
                 customer_type = "MR" if customer.company_type == 'person' else "MC"
             sequence = self.env['ir.sequence'].next_by_code('res.partner')
