@@ -286,18 +286,25 @@ class CronJobModel(models.Model):
             #     pass
 
             # updating the customer active_status and package according to their balance
-            if (customer_balance < 0) and (abs(customer_balance) >= customer.next_package_id.standard_price):
+            if (customer_balance < 0) and (abs(customer_balance) >= customer.next_package_price):
                 # updating account moves of customer
                 payment_obj = self.env['account.payment']
                 payment_obj.customer_bill_adjustment(
                     customer=customer,
-                    package_price=customer.next_package_id.list_price
+                    package_price=customer.next_package_price
                 )
                 # updating package info of customer
+                sale_order_lines = customer.next_package_sales_order_id.order_line
+                original_price = 0.0
+                for sale_order_line in sale_order_lines:
+                    discount = (sale_order_line.discount * sale_order_line.price_subtotal) / 100.0
+                    original_price_sale_order_line = sale_order_line.price_subtotal + discount
+                    original_price = original_price + original_price_sale_order_line
                 updated_customer = customer.update_current_bill_cycle_info(
                     customer=customer,
                     product_id=customer.next_package_id.id,
-                    price=customer.next_package_id.standard_price,
+                    price=customer.next_package_price,
+                    original_price = original_price,
                     start_date=customer.next_package_start_date,
                 )
                 updated_customer = updated_customer.update_next_bill_cycle_info(

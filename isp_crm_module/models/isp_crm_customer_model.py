@@ -146,7 +146,7 @@ class Customer(models.Model):
         package_start_date_obj  = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
         return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
 
-    def update_current_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False, sales_order_id=False):
+    def update_current_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False, original_price=False, sales_order_id=False):
         """
         Updates current month's package and bill cycle info of given customer
         :param customer: package user
@@ -156,9 +156,24 @@ class Customer(models.Model):
         :param sales_order_id: sales order id of the package
         :return: updated customer
         """
+
+        if original_price or customer.current_package_id.list_price !=0:
+            if original_price !=0:
+                pass
+            else:
+                original_price = customer.invoice_product_original_price
+        else:
+            # sale_order_lines = customer.next_package_sales_order_id.order_line
+            # original_price = 0.0
+            # for sale_order_line in sale_order_lines:
+            #     discount = (sale_order_line.discount * sale_order_line.price_subtotal) / 100.0
+            #     original_price_sale_order_line = sale_order_line.price_subtotal + discount
+            #     original_price = original_price + original_price_sale_order_line
+            original_price = customer.invoice_product_original_price
+
         current_package_id              = product_id if product_id else customer.current_package_id.id
         current_package_price           = price if price else customer.current_package_price
-        current_package_original_price  = customer.current_package_id.list_price
+        current_package_original_price  = original_price if original_price else customer.current_package_id.list_price
         current_package_start_date      = start_date if start_date else datetime.today().strftime(DEFAULT_DATE_FORMAT)
         current_package_end_date        = self._get_package_end_date(given_date=current_package_start_date)
         current_package_sales_order_id  = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
@@ -184,6 +199,7 @@ class Customer(models.Model):
         :param sales_order_id: sales order id of the package
         :return: updated customer
         """
+
         next_package_id             = product_id if product_id else customer.current_package_id.id
         next_package_start_date     = start_date if start_date else self._get_next_package_start_date(given_date=customer.current_package_start_date)
         next_package_price          = price if price else customer.current_package_price

@@ -34,6 +34,21 @@ class CustomerPackageHistory(models.Model):
         :param original_price: original price of the package
         :return: package history object
         """
+
+        if original_price or customer.next_package_original_price !=0:
+            if original_price !=0:
+                pass
+            else:
+                original_price = customer.invoice_product_original_price
+        else:
+            # sale_order_lines = customer.next_package_sales_order_id.order_line
+            # original_price = 0.0
+            # for sale_order_line in sale_order_lines:
+            #     discount = (sale_order_line.discount * sale_order_line.price_subtotal) / 100.0
+            #     original_price_sale_order_line = sale_order_line.price_subtotal + discount
+            #     original_price = original_price + original_price_sale_order_line
+            original_price = customer.invoice_product_original_price
+
         package_history_obj = self.env['isp_crm_module.customer_package_history']
         # Create new Package history for next package
         new_package_history = package_history_obj.create({
@@ -72,11 +87,18 @@ class CustomerPackageHistory(models.Model):
                 # Create new Package History
                 return self.create_new_package_history(customer=customer)
         else:
+            # sale_order_lines = customer.current_package_sales_order_id.order_line
+            # original_price = 0.0
+            # for sale_order_line in sale_order_lines:
+            #     discount = (sale_order_line.discount * sale_order_line.price_subtotal)/100.0
+            #     original_price_sale_order_line = sale_order_line.price_subtotal + discount
+            #     original_price = original_price + original_price_sale_order_line
+            original_price = customer.invoice_product_original_price
             # Creates Package history if the current customer has no package history
             return self.create_new_package_history(
                 customer        = customer,
                 package         = customer.current_package_id,
                 start_date      = customer.current_package_start_date,
                 price           = customer.current_package_price,
-                original_price  = customer.current_package_original_price,
+                original_price  = original_price,
             )
