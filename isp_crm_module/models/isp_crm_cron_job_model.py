@@ -300,16 +300,35 @@ class CronJobModel(models.Model):
                     discount = (sale_order_line.discount * sale_order_line.price_subtotal) / 100.0
                     original_price_sale_order_line = sale_order_line.price_subtotal + discount
                     original_price = original_price + original_price_sale_order_line
-                updated_customer = customer.update_current_bill_cycle_info(
-                    customer=customer,
-                    product_id=customer.next_package_id.id,
-                    price=customer.next_package_price,
-                    original_price = original_price,
-                    start_date=customer.next_package_start_date,
-                )
-                updated_customer = updated_customer.update_next_bill_cycle_info(
-                    customer=updated_customer
-                )
+
+                check_customer = self.env['res.partner'].search([('id', '=', customer.id)], limit=1)
+                if check_customer:
+                    # get the opportunity of the customer, one customer should have one opportunity.
+                    opportunity = self.env['crm.lead'].search([('partner_id', '=', check_customer.id)], limit=1)
+                    if opportunity and opportunity.lead_type != "sohoandsme":
+                        updated_customer = customer.update_current_bill_cycle_info(
+                            customer=customer,
+                            product_id=customer.next_package_id.id,
+                            price=customer.next_package_price,
+                            original_price = original_price,
+                            start_date=customer.next_package_start_date,
+                        )
+                        updated_customer = updated_customer.update_next_bill_cycle_info(
+                            customer=updated_customer
+                        )
+                    else:
+                        today = datetime.today()
+                        next_month_first_day = str(datetime(today.year, today.month + 1, 1)).split(" ")[0]
+                        updated_customer = customer.update_current_bill_cycle_info(
+                            customer=customer,
+                            product_id=customer.next_package_id.id,
+                            price=customer.next_package_price,
+                            original_price=original_price,
+                            start_date=next_month_first_day,
+                        )
+                        updated_customer = updated_customer.update_next_bill_cycle_info(
+                            customer=updated_customer
+                        )
                 # Adding the package change history
                 package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
                 created_package_history = package_history_obj.set_package_change_history(customer)
