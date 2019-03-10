@@ -22,6 +22,13 @@
         action="isp_crm_module_change_package_action"
         parent="crm.crm_menu_pipeline"/>
 
+    <!--Payment Receive Report-->
+    <menuitem
+        id="menu_payment_receive_report"
+        name="Payment Receive Report"
+        action="action_payment_receive_report_form_view"
+        parent="crm.crm_menu_config"
+        sequence="24"/>
     <!--Custom configuration menu-->
     <menuitem
         id="menu_isp_crm_configuration"

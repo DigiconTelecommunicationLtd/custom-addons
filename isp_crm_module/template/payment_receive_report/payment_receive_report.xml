@@ -34,9 +34,9 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_payment_receive_report"
-        name="Payment Receive Report"
-        action="action_payment_receive_report_form_view"
-        parent="account.menu_finance_legal_statement"/>
+    <!--<menuitem id="menu_payment_receive_report"-->
+        <!--name="Payment Receive Report"-->
+        <!--action="action_payment_receive_report_form_view"-->
+        <!--parent="account.menu_finance_legal_statement"/>-->
 
 </odoo>
