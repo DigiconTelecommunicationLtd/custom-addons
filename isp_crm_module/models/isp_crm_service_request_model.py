@@ -92,6 +92,7 @@ class ServiceRequest(models.Model):
     customer_phone = fields.Char(string="Phone", related='customer.phone', store=True)
     customer_company = fields.Char(string="Company", related='customer.parent_id.name', store=True)
     customer_address = fields.Char(string="Address", track_visibility='onchange')
+    customer_rm = fields.Many2one(string="RM", related='customer.assigned_rm', store=True)
 
     project = fields.Many2one('project.project', string="Project")
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
