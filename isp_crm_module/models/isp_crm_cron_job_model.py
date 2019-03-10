@@ -317,6 +317,7 @@ class CronJobModel(models.Model):
                             customer=updated_customer
                         )
                     else:
+                        # if soho and sme, then bill cycle will start form the start of the next month.
                         today = datetime.today()
                         next_month_first_day = str(datetime(today.year, today.month + 1, 1)).split(" ")[0]
                         updated_customer = customer.update_current_bill_cycle_info(
