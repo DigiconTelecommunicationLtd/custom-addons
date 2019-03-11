@@ -228,6 +228,7 @@ class ServiceRequest(models.Model):
                 'stage': last_stage_obj.id,
             })
             customer = service_req.customer
+            # format sequence number based on lead type
             get_opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
             if get_opportunity:
                 if get_opportunity.lead_type == "retail":
