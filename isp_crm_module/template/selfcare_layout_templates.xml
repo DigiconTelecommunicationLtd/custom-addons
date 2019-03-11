@@ -1290,7 +1290,7 @@
                                         <th class="text-center">Package</th>
                                         <th class="text-center">Start Date</th>
                                         <th class="text-center">End Date</th>
-                                        <th class="text-center">Price</th>
+                                        <th class="text-center">Discounted Price</th>
                                         <th class="text-center">
                                             Original Price
                                         </th>
