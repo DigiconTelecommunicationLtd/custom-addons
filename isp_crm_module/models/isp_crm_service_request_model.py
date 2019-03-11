@@ -233,7 +233,7 @@ class ServiceRequest(models.Model):
                 if get_opportunity.lead_type == "retail":
                     customer_type = "MR"
                 elif get_opportunity.lead_type == "sohoandsme":
-                    customer_type = "MSY"
+                    customer_type = "MS"
                 else:
                     customer_type = "MC"
             else:
