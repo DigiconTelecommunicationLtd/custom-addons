@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models, _
 import datetime
+from dateutil.relativedelta import relativedelta
 import calendar
 
 DEFAULT_MONTH_DAYS = 30
@@ -28,6 +29,8 @@ class ISPCRMInvoice(models.Model):
                                          track_visibility='onchange')
     amount_vat = fields.Monetary(string='VAT', store=True, readonly=True, compute='_compute_amount')
     get_sales_order_origin = fields.Many2one('sale.order', string='Origin SO', compute='_get_origin')
+    corporate_soho_first_month_date_start = fields.Date(string="Start Date", required=True, default=datetime.date.today().replace(day=1) + relativedelta(months=1), inverse='_compute_partial_amount')
+    corporate_soho_first_month_date_end = fields.Date(string="End Date", required=True, default=datetime.date(datetime.date.today().year, datetime.date.today().month+2, 1) - relativedelta(days=1), inverse='_compute_partial_amount')
 
     def _get_origin(self):
         sales_order_obj = self.env['sale.order']
@@ -37,8 +40,83 @@ class ISPCRMInvoice(models.Model):
                 'get_sales_order_origin': sales_order,
             })
 
+    def compute_partail_amount(self):
+        for invoice in self:
+            # Compute partial bill amount
+            if invoice.corporate_soho_first_month_date_start and invoice.corporate_soho_first_month_date_end:
+
+                corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
+                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                                                                    datetime.date.today().month + 2, 1) - relativedelta(
+                    days=1)
+
+                bill_start_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_start),
+                                                             "%Y-%m-%d").strftime(
+                    "%Y-%m-%d %H-%M")
+                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                bill_end_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_end),
+                                                           "%Y-%m-%d").strftime(
+                    "%Y-%m-%d %H-%M")
+                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                difference = bill_end_date - bill_start_date
+                total_days_of_the_month = float(difference.days)
+
+                bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
+                                                             "%Y-%m-%d").strftime(
+                    "%Y-%m-%d %H-%M")
+                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                                                           "%Y-%m-%d").strftime(
+                    "%Y-%m-%d %H-%M")
+                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                difference = bill_end_date - bill_start_date
+                difference = float(difference.days)
+
+                for line in invoice.invoice_line_ids:
+                    price_subtotal = line.quantity * line.price_unit
+                    price_subtotal = (price_subtotal * difference) / total_days_of_the_month
+                    line.write({
+                        'price_subtotal': price_subtotal,
+                    })
+            else:
+                corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
+                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                                                                    datetime.date.today().month + 2, 1) - relativedelta(
+                    days=1)
+                invoice.update({
+                    'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
+                    'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
+                })
+
+                bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
+                                                             "%Y-%m-%d").strftime(
+                    "%Y-%m-%d %H-%M")
+                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                                                           "%Y-%m-%d").strftime(
+                    "%Y-%m-%d %H-%M")
+                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                difference = bill_end_date - bill_start_date
+                difference = float(difference.days)
+
+                for line in invoice.invoice_line_ids:
+                    price_subtotal = line.quantity * line.price_unit
+                    line.write({
+                        'price_subtotal': price_subtotal,
+                    })
+
+    def _compute_partial_amount(self):
+        self.compute_partail_amount()
+
     @api.multi
     def _compute_amount(self):
+        self.compute_partail_amount()
         for invoice in self:
             round_curr = invoice.currency_id.round
             invoice.amount_untaxed = sum(line.price_subtotal for line in invoice.invoice_line_ids)
