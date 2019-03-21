@@ -54,4 +54,5 @@ from . import isp_crm_monthly_payment_receive_report
 from . import isp_crm_customer_product_line
 from . import isp_crm_service_product_line
 from . import isp_crm_account_invoice_line
+from . import isp_crm_validate_multiple_invoices
 
