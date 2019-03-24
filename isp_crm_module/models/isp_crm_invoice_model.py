@@ -51,7 +51,6 @@ class ISPCRMInvoice(models.Model):
                     if opportunity.lead_type != "retail":
                         if invoice.corporate_soho_first_month_date_start and invoice.corporate_soho_first_month_date_end:
 
-                            date = invoice.corporate_soho_first_month_date_start
                             formated_date = datetime.datetime.strptime(str(invoice.corporate_soho_first_month_date_start),
                                                                          "%Y-%m-%d").strftime(
                                 "%Y-%m-%d")
