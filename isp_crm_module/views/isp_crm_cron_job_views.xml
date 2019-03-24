@@ -69,5 +69,19 @@
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
         </record>
+
+        <!--Cron job for creating draft invoices before 7 days of the next month-->
+        <record forcecreate="True" id="isp_crm_cron_job_create_draft_invoice" model="ir.cron">
+            <field name="name">Create Draft Invoice Before Some Days Of Next Month</field>
+            <field name="model_id" ref="model_isp_crm_cron_job"/>
+            <field name="state">code</field>
+            <field name="model" eval="'isp_crm.cron_job'" />
+            <field name="code">model.create_draft_invoice()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">24</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
     </data>
 </odoo>
