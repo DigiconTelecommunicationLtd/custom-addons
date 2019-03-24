@@ -460,7 +460,7 @@ class CronJobModel(models.Model):
             corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
             corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
 
-            if difference is 2:
+            if difference > 0:
                 sale_order_object = self.env['sale.order']
                 sale_orders = sale_order_object.search([])
                 for order in sale_orders:
@@ -482,5 +482,8 @@ class CronJobModel(models.Model):
                                 else:
                                     error_message = "Invoice not found for sale order" + str(order.name)
                                     print(error_message)
+            else:
+                error_message = "Cron Job for creating draft invoice should run only before specified days of the start of next month"
+                print(error_message)
         except Exception as ex:
             print(ex)
