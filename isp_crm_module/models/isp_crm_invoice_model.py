@@ -51,10 +51,23 @@ class ISPCRMInvoice(models.Model):
                     if opportunity.lead_type != "retail":
                         if invoice.corporate_soho_first_month_date_start and invoice.corporate_soho_first_month_date_end:
 
-                            corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
-                            corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                datetime.date.today().month + 2, 1) - relativedelta(
+                            date = invoice.corporate_soho_first_month_date_start
+                            formated_date = datetime.datetime.strptime(str(invoice.corporate_soho_first_month_date_start),
+                                                                         "%Y-%m-%d").strftime(
+                                "%Y-%m-%d")
+                            formated_date = datetime.datetime.strptime(formated_date, "%Y-%m-%d")
+
+                            corporate_soho_first_month_date_start = formated_date.replace(
+                                day=1)
+                            corporate_soho_first_month_date_start = str(corporate_soho_first_month_date_start).split(" ")[0]
+                            corporate_soho_first_month_date_end = datetime.date(formated_date.year,
+                                                                                formated_date.month + 1,
+                                                                                1) - relativedelta(
                                 days=1)
+                            # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
+                            # corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                            #                                                     datetime.date.today().month + 2, 1) - relativedelta(
+                            #     days=1)
 
                             bill_start_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_start),
                                                                          "%Y-%m-%d").strftime(
@@ -67,7 +80,7 @@ class ISPCRMInvoice(models.Model):
                             bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
 
                             difference = bill_end_date - bill_start_date
-                            total_days_of_the_month = float(difference.days)
+                            total_days_of_the_month = float(difference.days+1)
 
                             bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
                                                                          "%Y-%m-%d").strftime(
@@ -80,7 +93,7 @@ class ISPCRMInvoice(models.Model):
                             bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
 
                             difference = bill_end_date - bill_start_date
-                            difference = float(difference.days)
+                            difference = float(difference.days+1)
 
                             for line in invoice.invoice_line_ids:
                                 price_subtotal = line.quantity * line.price_unit
