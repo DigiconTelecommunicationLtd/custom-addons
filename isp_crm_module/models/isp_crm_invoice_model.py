@@ -96,6 +96,8 @@ class ISPCRMInvoice(models.Model):
 
                             for line in invoice.invoice_line_ids:
                                 price_subtotal = line.quantity * line.price_unit
+                                discount = (price_subtotal * line.discount) / 100
+                                price_subtotal = price_subtotal - discount
                                 price_subtotal = (price_subtotal * difference) / total_days_of_the_month
                                 line.write({
                                     'price_subtotal': price_subtotal,
@@ -125,6 +127,8 @@ class ISPCRMInvoice(models.Model):
 
                             for line in invoice.invoice_line_ids:
                                 price_subtotal = line.quantity * line.price_unit
+                                discount = (price_subtotal * line.discount) / 100
+                                price_subtotal = price_subtotal - discount
                                 line.write({
                                     'price_subtotal': price_subtotal,
                                 })
