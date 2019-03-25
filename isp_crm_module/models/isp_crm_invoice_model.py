@@ -63,10 +63,6 @@ class ISPCRMInvoice(models.Model):
                                                                                 formated_date.month + 1,
                                                                                 1) - relativedelta(
                                 days=1)
-                            # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
-                            # corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                            #                                                     datetime.date.today().month + 2, 1) - relativedelta(
-                            #     days=1)
 
                             bill_start_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_start),
                                                                          "%Y-%m-%d").strftime(
