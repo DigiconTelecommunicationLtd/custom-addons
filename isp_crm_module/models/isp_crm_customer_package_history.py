@@ -83,6 +83,7 @@ class CustomerPackageHistory(models.Model):
                 )
             tomorrow = date.today() + timedelta(days=1)
             active_date = 1
+            # Check if any package change request has been made recently.
             if package_change_req:
                 package_change_req_active_date = datetime.strptime(package_change_req.active_from, "%Y-%m-%d").date()
                 active_date = package_change_req_active_date - tomorrow
