@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, timedelta, date
 import odoo.addons.decimal_precision as dp
 from odoo import api, fields, models, _
 
@@ -49,6 +49,8 @@ class CustomerPackageHistory(models.Model):
             #     original_price = original_price + original_price_sale_order_line
             original_price = customer.invoice_product_original_price
 
+        if package:
+            original_price = package.list_price
         package_history_obj = self.env['isp_crm_module.customer_package_history']
         # Create new Package history for next package
         new_package_history = package_history_obj.create({
@@ -72,11 +74,24 @@ class CustomerPackageHistory(models.Model):
             ('customer_id', '=', customer.id),
         ])
         if customer_package_history_count > 0:
-            if customer.current_package_id.id != customer.next_package_id.id:
+            # Get Last Package change request of the customer
+            package_change_req = self.env['isp_crm_module.change_package'].search([
+                        ('customer_id', '=', customer.id),
+                    ],
+                    order='create_date desc',
+                    limit=1
+                )
+            tomorrow = date.today() + timedelta(days=1)
+            active_date = 1
+            if package_change_req:
+                package_change_req_active_date = datetime.strptime(package_change_req.active_from, "%Y-%m-%d").date()
+                active_date = package_change_req_active_date - tomorrow
+                active_date = int(abs(active_date.days))
+            if active_date == 0 or customer.current_package_id.id != customer.next_package_id.id:
                 # Update Last Package's end date
                 last_package_history_obj = package_history_obj.search([
                         ('customer_id', '=', customer.id),
-                        ('package_id', '=', customer.current_package_id.id),
+                        # ('package_id', '=', customer.current_package_id.id),
                     ],
                     order='create_date desc',
                     limit=1
@@ -85,7 +100,10 @@ class CustomerPackageHistory(models.Model):
                     'end_date' : today,
                 })
                 # Create new Package History
-                return self.create_new_package_history(customer=customer)
+                if active_date == 0 and package_change_req:
+                    return self.create_new_package_history(customer=customer, package=package_change_req.to_package_id, start_date= str(datetime.strptime(package_change_req.active_from, "%Y-%m-%d").date()))
+                else:
+                    return self.create_new_package_history(customer=customer)
         else:
             # sale_order_lines = customer.current_package_sales_order_id.order_line
             # original_price = 0.0
