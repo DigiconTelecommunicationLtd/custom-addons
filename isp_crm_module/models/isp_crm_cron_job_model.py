@@ -457,8 +457,9 @@ class CronJobModel(models.Model):
             next_month_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
             difference = after_threshold_days_date - next_month_date_start
             difference = int(abs(difference.days))
-            corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
-            corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
+            corporate_soho_invoice_date_start = datetime.today()
+            # corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
+            corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 1, 1) - relativedelta(days=1)
 
             if difference > 0:
                 sale_order_object = self.env['sale.order']
@@ -477,7 +478,7 @@ class CronJobModel(models.Model):
                                         'corporate_soho_first_month_date_start': corporate_soho_invoice_date_start,
                                         'corporate_soho_first_month_date_end': corporate_soho_invoice_date_end,
                                         'date_invoice': today,
-                                        'date_due': today,
+                                        # 'date_due': today,
                                     })
                                 else:
                                     error_message = "Invoice not found for sale order" + str(order.name)

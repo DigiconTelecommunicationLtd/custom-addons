@@ -18,6 +18,12 @@
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_untaxed']" position="replace">
                 <field name="amount_without_vat" widget='monetary' options="{'currency_field': 'currency_id'}"/>
             </xpath>
+<!--            <xpath expr="//sheet/notebook/page[1]/field[@name='order_line']/form/group/group/div/field[@name='qty_delivered']" position="replace">-->
+<!--                <field name="qty_delivered" attrs="{'column_invisible': True}"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//sheet/notebook/page[1]/field[@name='order_line']/form/group/group/div/field[@name='qty_invoiced']" position="replace">-->
+<!--                <field name="qty_invoiced" attrs="{'column_invisible': True}"/>-->
+<!--            </xpath>-->
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_tax']" position="replace">
                 <field name="amount_vat" widget='monetary' options="{'currency_field': 'currency_id'}"/>
             </xpath>
@@ -41,6 +47,22 @@
                         </group>
                     </group>
                 </page>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
+     <!--Hiding invoiced and delivered in sale order line-->
+    <record model="ir.ui.view" id="view_hide_invoiced_delivered_in_sale_order_line">
+        <field name="name">view.hide.invoice.delivered.in.sale.order.line</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='qty_delivered']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='qty_invoiced']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
         </field>
     </record>

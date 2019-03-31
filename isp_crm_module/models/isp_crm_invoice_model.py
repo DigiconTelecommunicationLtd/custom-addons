@@ -29,8 +29,8 @@ class ISPCRMInvoice(models.Model):
                                          track_visibility='onchange')
     amount_vat = fields.Monetary(string='VAT', store=True, readonly=True, compute='_compute_amount')
     get_sales_order_origin = fields.Many2one('sale.order', string='Origin SO', compute='_get_origin')
-    corporate_soho_first_month_date_start = fields.Date(string="Start Date", required=True, default=datetime.date.today().replace(day=1) + relativedelta(months=1), inverse='_compute_partial_amount')
-    corporate_soho_first_month_date_end = fields.Date(string="End Date", required=True, default=datetime.date(datetime.date.today().year, datetime.date.today().month+2, 1) - relativedelta(days=1), inverse='_compute_partial_amount')
+    corporate_soho_first_month_date_start = fields.Date(string="Start Date", required=True, default=datetime.date.today(), inverse='_compute_partial_amount')
+    corporate_soho_first_month_date_end = fields.Date(string="End Date", required=True, default=datetime.date(datetime.date.today().year, datetime.date.today().month+1, 1) - relativedelta(days=1), inverse='_compute_partial_amount')
 
     def _get_origin(self):
         sales_order_obj = self.env['sale.order']
@@ -58,6 +58,7 @@ class ISPCRMInvoice(models.Model):
 
                             corporate_soho_first_month_date_start = formated_date.replace(
                                 day=1)
+                            # corporate_soho_first_month_date_start = formated_date
                             corporate_soho_first_month_date_start = str(corporate_soho_first_month_date_start).split(" ")[0]
                             corporate_soho_first_month_date_end = datetime.date(formated_date.year,
                                                                                 formated_date.month + 1,
