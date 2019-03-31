@@ -51,15 +51,19 @@ class ISPCRMInvoice(models.Model):
                     if opportunity.lead_type != "retail":
                         if invoice.corporate_soho_first_month_date_start and invoice.corporate_soho_first_month_date_end:
 
+                            # Convert the given date to specific format
                             formated_date = datetime.datetime.strptime(str(invoice.corporate_soho_first_month_date_start),
                                                                          "%Y-%m-%d").strftime(
                                 "%Y-%m-%d")
+                            # Convert the formated_date to date type from string type.
                             formated_date = datetime.datetime.strptime(formated_date, "%Y-%m-%d")
 
+                            # Get the first day of the month in order to calculate total days of the month.
                             corporate_soho_first_month_date_start = formated_date.replace(
                                 day=1)
-                            # corporate_soho_first_month_date_start = formated_date
                             corporate_soho_first_month_date_start = str(corporate_soho_first_month_date_start).split(" ")[0]
+
+                            # Get the last day of the month.
                             corporate_soho_first_month_date_end = datetime.date(formated_date.year,
                                                                                 formated_date.month + 1,
                                                                                 1) - relativedelta(
@@ -100,9 +104,10 @@ class ISPCRMInvoice(models.Model):
                                     'price_subtotal': price_subtotal,
                                 })
                         else:
-                            corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
+                            corporate_soho_first_month_date_start = datetime.date.today()
+                            # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
                             corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                datetime.date.today().month + 2, 1) - relativedelta(
+                                                                                datetime.date.today().month + 1, 1) - relativedelta(
                                 days=1)
                             invoice.update({
                                 'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
