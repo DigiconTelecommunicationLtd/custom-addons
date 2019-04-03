@@ -5,6 +5,7 @@ from odoo import api, fields, models, _
 import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
+from odoo.exceptions import Warning, UserError
 
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
@@ -29,8 +30,9 @@ class ISPCRMInvoice(models.Model):
                                          track_visibility='onchange')
     amount_vat = fields.Monetary(string='VAT', store=True, readonly=True, compute='_compute_amount')
     get_sales_order_origin = fields.Many2one('sale.order', string='Origin SO', compute='_get_origin')
-    corporate_soho_first_month_date_start = fields.Date(string="Start Date", required=True, default=datetime.date.today(), inverse='_compute_partial_amount')
-    corporate_soho_first_month_date_end = fields.Date(string="End Date", required=True, default=datetime.date(datetime.date.today().year, datetime.date.today().month+1, 1) - relativedelta(days=1), inverse='_compute_partial_amount')
+    corporate_soho_first_month_date_start = fields.Date(string="Start Date", required=False, inverse='compute_partial_amount')
+    corporate_soho_first_month_date_end = fields.Date(string="End Date", required=False, inverse='compute_partial_amount')
+    lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
 
     def _get_origin(self):
         sales_order_obj = self.env['sale.order']
@@ -40,7 +42,23 @@ class ISPCRMInvoice(models.Model):
                 'get_sales_order_origin': sales_order,
             })
 
-    def compute_partail_amount(self):
+    @api.depends('partner_id')
+    def _get_lead_type(self):
+        """
+        Compute type of customer .(Corporate or Retail)
+        :return:
+        """
+
+        for invoice in self:
+            lead = invoice.env['crm.lead'].search([('partner_id', '=', invoice.partner_id.id)], order='create_date desc',
+                                                limit=1)
+            lead_type = lead.lead_type
+
+            invoice.update({
+                'lead_type': lead_type,
+            })
+
+    def compute_partial_amount(self):
         for invoice in self:
             # Compute partial bill amount
             get_customer = invoice.env['res.partner'].search([('id', '=', invoice.partner_id.id)], limit=1)
@@ -104,45 +122,46 @@ class ISPCRMInvoice(models.Model):
                                     'price_subtotal': price_subtotal,
                                 })
                         else:
-                            corporate_soho_first_month_date_start = datetime.date.today()
-                            # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
-                            corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                datetime.date.today().month + 1, 1) - relativedelta(
-                                days=1)
-                            invoice.update({
-                                'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
-                                'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
-                            })
-
-                            bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
-                                                                         "%Y-%m-%d").strftime(
-                                "%Y-%m-%d %H-%M")
-                            bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
-
-                            bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
-                                                                       "%Y-%m-%d").strftime(
-                                "%Y-%m-%d %H-%M")
-                            bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
-
-                            difference = bill_end_date - bill_start_date
-                            difference = float(difference.days)
-
-                            for line in invoice.invoice_line_ids:
-                                price_subtotal = line.quantity * line.price_unit
-                                discount = (price_subtotal * line.discount) / 100
-                                price_subtotal = price_subtotal - discount
-                                line.write({
-                                    'price_subtotal': price_subtotal,
-                                })
+                            print("User has not selected service start date and end date")
+                        #     corporate_soho_first_month_date_start = datetime.date.today()
+                        #     # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
+                        #     corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                        #                                                         datetime.date.today().month + 1, 1) - relativedelta(
+                        #         days=1)
+                        #     invoice.update({
+                        #         'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
+                        #         'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
+                        #     })
+                        #
+                        #     bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
+                        #                                                  "%Y-%m-%d").strftime(
+                        #         "%Y-%m-%d %H-%M")
+                        #     bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+                        #
+                        #     bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                        #                                                "%Y-%m-%d").strftime(
+                        #         "%Y-%m-%d %H-%M")
+                        #     bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+                        #
+                        #     difference = bill_end_date - bill_start_date
+                        #     difference = float(difference.days)
+                        #
+                        #     for line in invoice.invoice_line_ids:
+                        #         price_subtotal = line.quantity * line.price_unit
+                        #         discount = (price_subtotal * line.discount) / 100
+                        #         price_subtotal = price_subtotal - discount
+                        #         line.write({
+                        #             'price_subtotal': price_subtotal,
+                        #         })
                     else:
                         print("Customer type is not corporate or soho")
 
     def _compute_partial_amount(self):
-        self.compute_partail_amount()
+        self.compute_partial_amount()
 
     @api.multi
     def _compute_amount(self):
-        self.compute_partail_amount()
+        self.compute_partial_amount()
         for invoice in self:
             round_curr = invoice.currency_id.round
             invoice.amount_untaxed = sum(line.price_subtotal for line in invoice.invoice_line_ids)
@@ -172,6 +191,13 @@ class ISPCRMInvoice(models.Model):
 
     @api.multi
     def action_invoice_open(self):
+
+        if self.lead_type != "retail":
+            if self.corporate_soho_first_month_date_start and self.corporate_soho_first_month_date_end:
+                pass
+            else:
+                raise UserError('Please select service start date and end date')
+
         # Updating the sales order of the customer
         package_line = ''
         created_product_line_list = []

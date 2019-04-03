@@ -23,8 +23,9 @@
             <!-- Check if invoice is deferred -->
             <xpath expr="//group/group/field[@name='date_invoice']" position="before" >
                 <field name="is_deferred" string="Is Deferred" />
-                <field name="corporate_soho_first_month_date_start" string="Service Start Date" />
-                <field name="corporate_soho_first_month_date_end" string="Service End Date" />
+                <field name="lead_type" invisible="1"/>
+                <field name="corporate_soho_first_month_date_start" string="Service Start Date" attrs ="{'invisible':[('lead_type','==', 'retail')]}"/>
+                <field name="corporate_soho_first_month_date_end" string="Service End Date" attrs ="{'invisible':[('lead_type','==', 'retail')]}"/>
             </xpath>
         </field>
     </record>
