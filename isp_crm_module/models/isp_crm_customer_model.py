@@ -132,7 +132,7 @@ class Customer(models.Model):
         :param given_date: start_date of the package
         :return: date str
         """
-
+        # Check if customer is inactive and valid till date is over
         today = str(date.today())
         today_obj = datetime.strptime(today, DEFAULT_DATE_FORMAT)
         given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
@@ -148,7 +148,7 @@ class Customer(models.Model):
         :param given_date: start_date of the package
         :return: date str
         """
-
+        # Check if customer is inactive and valid till date is over
         today = str(date.today())
         today_obj = datetime.strptime(today, DEFAULT_DATE_FORMAT)
         given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
