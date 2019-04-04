@@ -193,11 +193,11 @@ class ISPCRMInvoice(models.Model):
     @api.multi
     def action_invoice_open(self):
 
-        if self.lead_type != "retail":
-            if self.corporate_soho_first_month_date_start and self.corporate_soho_first_month_date_end:
-                pass
-            else:
-                raise UserError('Please select service start date and end date')
+        # if self.lead_type != "retail":
+        #     if self.corporate_soho_first_month_date_start and self.corporate_soho_first_month_date_end:
+        #         pass
+        #     else:
+        #         raise UserError('Please select service start date and end date')
 
         # Updating the sales order of the customer
         package_line = ''
