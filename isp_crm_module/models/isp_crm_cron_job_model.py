@@ -177,7 +177,7 @@ class CronJobModel(models.Model):
             opportunities = self.env['crm.lead'].search([('partner_id', '=', customer.id)])
             for opportunity in opportunities:
                 # check if lead type is corporate or soho or sme
-                if opportunity.lead_type == "retail":
+                if opportunity.lead_type != "corporate":
                     # print("Creating Invoice for customer:- " + customer.name)
                     customer_invoice_status = self.create_customer_invoice_status(customer=customer)
                     try:
