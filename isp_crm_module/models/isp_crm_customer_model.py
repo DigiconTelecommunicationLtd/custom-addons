@@ -4,7 +4,7 @@
 
 from ast import literal_eval
 from odoo import api, fields, models, _
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from odoo.exceptions import Warning, UserError
 import re
 import odoo.addons.decimal_precision as dp
@@ -132,8 +132,14 @@ class Customer(models.Model):
         :param given_date: start_date of the package
         :return: date str
         """
+
+        today = str(date.today())
+        today_obj = datetime.strptime(today, DEFAULT_DATE_FORMAT)
         given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
-        package_end_date_obj    = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
+        if today_obj > given_date_obj:
+            package_end_date_obj = today_obj + timedelta(days=DEFAULT_MONTH_DAYS)
+        else:
+            package_end_date_obj    = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
         return package_end_date_obj.strftime(DEFAULT_DATE_FORMAT)
 
     def _get_next_package_start_date(self, given_date):
@@ -142,8 +148,14 @@ class Customer(models.Model):
         :param given_date: start_date of the package
         :return: date str
         """
+
+        today = str(date.today())
+        today_obj = datetime.strptime(today, DEFAULT_DATE_FORMAT)
         given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
-        package_start_date_obj  = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
+        if today_obj > given_date_obj:
+            package_start_date_obj = today_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
+        else:
+            package_start_date_obj  = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
         return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
 
     def update_current_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False, original_price=False, sales_order_id=False):
