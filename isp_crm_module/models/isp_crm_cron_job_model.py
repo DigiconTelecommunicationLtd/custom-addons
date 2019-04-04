@@ -456,7 +456,7 @@ class CronJobModel(models.Model):
 
     #Create draft invoice
     def create_draft_invoice(self):
-        print('this wont go to production now.')
+        print('this wont go to production now')
         # try:
         #     today = datetime.today()
         #     after_threshold_days_date = today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
