@@ -173,14 +173,19 @@ class CronJobModel(models.Model):
         service_request_obj = self.env['isp_crm_module.service_request']
 
         for customer in customers_list:
-            # print("Creating Invoice for customer:- " + customer.name)
-            customer_invoice_status = self.create_customer_invoice_status(customer=customer)
-            try:
-                # print("mail sending.....")
-                mail_sent = self._send_mail_to_customer_before_some_days(customer=customer)
-                # print("mail sent")
-            except Exception as ex:
-                print(ex)
+            # Check if the customer is corporate or not
+            opportunities = self.env['crm.lead'].search([('partner_id', '=', customer.id)])
+            for opportunity in opportunities:
+                # check if lead type is corporate or soho or sme
+                if opportunity.lead_type == "retail":
+                    # print("Creating Invoice for customer:- " + customer.name)
+                    customer_invoice_status = self.create_customer_invoice_status(customer=customer)
+                    try:
+                        # print("mail sending.....")
+                        mail_sent = self._send_mail_to_customer_before_some_days(customer=customer)
+                        # print("mail sent")
+                    except Exception as ex:
+                        print(ex)
 
 
     @api.model
