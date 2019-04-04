@@ -292,12 +292,12 @@ class SelfcareController(PaymentController):
 
                                                                                      # start_date=start_date)
                 # make user active
-                customer_balance = customer_obj.get_customer_balance(customer_id=customer_obj.id)
-                if (customer_balance < 0) and (abs(customer_balance) > customer_obj.current_package_price):
-                    if customer_obj.active_status == self.ACTIVE_STATUS_INACTIVE :
-                        customer_obj.update({
-                            'active_status' : self.ACTIVE_STATUS_ACTIVE
-                        })
+                # customer_balance = customer_obj.get_customer_balance(customer_id=customer_obj.id)
+                # if (customer_balance < 0) and (abs(customer_balance) > customer_obj.current_package_price):
+                #     if customer_obj.active_status == self.ACTIVE_STATUS_INACTIVE :
+                #         customer_obj.update({
+                #             'active_status' : self.ACTIVE_STATUS_ACTIVE
+                #         })
 
             user_id = request.env.context.get('uid')
             logged_in_user = request.env['res.users'].sudo().browse(user_id)
