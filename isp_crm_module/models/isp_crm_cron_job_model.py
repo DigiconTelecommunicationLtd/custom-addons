@@ -456,41 +456,41 @@ class CronJobModel(models.Model):
 
     #Create draft invoice
     def create_draft_invoice(self):
-        print('this wont go to production now')
-        # try:
-        #     today = datetime.today()
-        #     after_threshold_days_date = today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
-        #     next_month_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
-        #     difference = after_threshold_days_date - next_month_date_start
-        #     difference = int(abs(difference.days))
-        #     # corporate_soho_invoice_date_start = datetime.today()
-        #     corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
-        #     corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
-        #
-        #     if difference > 0:
-        #         sale_order_object = self.env['sale.order']
-        #         sale_orders = sale_order_object.search([])
-        #         for order in sale_orders:
-        #             get_customer = self.env['res.partner'].search([('id', '=', order.partner_id.id)], limit=1)
-        #             if get_customer:
-        #                 opportunities = self.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
-        #                 for opportunity in opportunities:
-        #                     # check if lead type is corporate or soho or sme
-        #                     if opportunity.lead_type != "retail":
-        #                         invoice_object = self.env['account.invoice'].search([('origin', '=', order.name)], limit=1)
-        #                         if invoice_object:
-        #                             new_draft_invoice = invoice_object.copy()
-        #                             new_draft_invoice = new_draft_invoice.update({
-        #                                 'corporate_soho_first_month_date_start': corporate_soho_invoice_date_start,
-        #                                 'corporate_soho_first_month_date_end': corporate_soho_invoice_date_end,
-        #                                 'date_invoice': today,
-        #                                 # 'date_due': today,
-        #                             })
-        #                         else:
-        #                             error_message = "Invoice not found for sale order" + str(order.name)
-        #                             print(error_message)
-        #     else:
-        #         error_message = "Cron Job for creating draft invoice should run only before specified days of the start of next month"
-        #         print(error_message)
-        # except Exception as ex:
-        #     print(ex)
+        # print('this wont go to production now')
+        try:
+            today = datetime.today()
+            after_threshold_days_date = today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
+            next_month_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
+            difference = after_threshold_days_date - next_month_date_start
+            difference = int(abs(difference.days))
+            # corporate_soho_invoice_date_start = datetime.today()
+            corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
+            corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
+
+            if difference > 0:
+                sale_order_object = self.env['sale.order']
+                sale_orders = sale_order_object.search([])
+                for order in sale_orders:
+                    get_customer = self.env['res.partner'].search([('id', '=', order.partner_id.id)], limit=1)
+                    if get_customer:
+                        opportunities = self.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
+                        for opportunity in opportunities:
+                            # check if lead type is corporate or soho or sme
+                            if opportunity.lead_type != "retail":
+                                invoice_object = self.env['account.invoice'].search([('origin', '=', order.name)], limit=1)
+                                if invoice_object:
+                                    new_draft_invoice = invoice_object.copy()
+                                    new_draft_invoice = new_draft_invoice.update({
+                                        'corporate_soho_first_month_date_start': corporate_soho_invoice_date_start,
+                                        'corporate_soho_first_month_date_end': corporate_soho_invoice_date_end,
+                                        'date_invoice': today,
+                                        # 'date_due': today,
+                                    })
+                                else:
+                                    error_message = "Invoice not found for sale order" + str(order.name)
+                                    print(error_message)
+            else:
+                error_message = "Cron Job for creating draft invoice should run only before specified days of the start of next month"
+                print(error_message)
+        except Exception as ex:
+            print(ex)
