@@ -162,7 +162,7 @@ class ISPCRMInvoice(models.Model):
         self.compute_partial_amount()
 
     def compute_otc_amount(self):
-        print("compute otc amount")
+        print("compute otc amount for invoice")
         # compute otc amount for invoice
         # for invoice in self:
         #     if invoice.lead_type != "retail":
