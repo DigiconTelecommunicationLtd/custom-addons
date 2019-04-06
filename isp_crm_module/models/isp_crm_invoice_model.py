@@ -171,6 +171,7 @@ class ISPCRMInvoice(models.Model):
                     invoice.write({
                         'corporate_otc_amount' : float(sales_order.otc_price),
                     })
+                    break
 
     @api.multi
     def _compute_amount(self):
