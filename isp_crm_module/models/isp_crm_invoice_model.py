@@ -32,6 +32,7 @@ class ISPCRMInvoice(models.Model):
     get_sales_order_origin = fields.Many2one('sale.order', string='Origin SO', compute='_get_origin')
     corporate_soho_first_month_date_start = fields.Date(string="Start Date", required=False, inverse='compute_partial_amount')
     corporate_soho_first_month_date_end = fields.Date(string="End Date", required=False, inverse='compute_partial_amount')
+    corporate_otc_amount = fields.Monetary(string='OTC Amount', store=True, readonly=True, compute='compute_otc_amount')
     lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
 
     def _get_origin(self):
@@ -160,10 +161,22 @@ class ISPCRMInvoice(models.Model):
     def _compute_partial_amount(self):
         self.compute_partial_amount()
 
+    def compute_otc_amount(self):
+        print("computing otc amount")
+        if self.lead_type != "retail":
+            sales_order_obj = self.env['sale.order']
+            sales_order = sales_order_obj.search([('name', '=', self.origin)], limit=1)
+            if sales_order:
+                self.write({
+                    'corporate_otc_amount' : float(sales_order.otc_price),
+                })
+
     @api.multi
     def _compute_amount(self):
         self.compute_partial_amount()
+        self.compute_otc_amount()
         for invoice in self:
+
             round_curr = invoice.currency_id.round
             invoice.amount_untaxed = sum(line.price_subtotal for line in invoice.invoice_line_ids)
             invoice.amount_tax = sum(round_curr(line.amount_total) for line in invoice.tax_line_ids)
@@ -231,6 +244,11 @@ class ISPCRMInvoice(models.Model):
             })
 
         super(ISPCRMInvoice, self).action_invoice_open()
+
+        self.update({
+            'residual': self.amount_total + self.corporate_otc_amount,
+        })
+
         return True
 
     def _get_customer_po_no(self):
