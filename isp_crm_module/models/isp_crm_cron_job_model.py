@@ -9,6 +9,7 @@ from datetime import datetime, timezone, timedelta, date
 from dateutil.relativedelta import relativedelta
 
 DEFAULT_THRESHOLD_DAYS = 7
+DEFAULT_SECOND_THRESHOLD_DAYS = 3
 
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
@@ -161,9 +162,15 @@ class CronJobModel(models.Model):
         today = datetime.today()
         after_threshold_days_date =  today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
         after_threshold_days_date_str = after_threshold_days_date.strftime("%Y-%m-%d")
+
+        after_second_threshold_days_date = today + timedelta(days=DEFAULT_SECOND_THRESHOLD_DAYS)
+        after_second_threshold_days_date_str = after_second_threshold_days_date.strftime("%Y-%m-%d")
+
         customers_list = self.env['res.partner'].search([
             ('customer', '=', True),
-            ('current_package_end_date', '=', after_threshold_days_date)
+            '|',
+            ('current_package_end_date', '=', after_threshold_days_date),
+            ('current_package_end_date', '=', after_second_threshold_days_date)
         ])
 
         # customers_list = self.env['res.partner'].search([
