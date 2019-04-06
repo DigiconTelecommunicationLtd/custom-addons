@@ -162,16 +162,17 @@ class ISPCRMInvoice(models.Model):
         self.compute_partial_amount()
 
     def compute_otc_amount(self):
+        print("compute otc amount")
         # compute otc amount for invoice
-        for invoice in self:
-            if invoice.lead_type != "retail":
-                sales_order_obj = invoice.env['sale.order']
-                sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
-                if sales_order:
-                    invoice.write({
-                        'corporate_otc_amount' : float(sales_order.otc_price)
-                    })
-                    break
+        # for invoice in self:
+        #     if invoice.lead_type != "retail":
+        #         sales_order_obj = invoice.env['sale.order']
+        #         sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
+        #         if sales_order:
+        #             invoice.write({
+        #                 'corporate_otc_amount' : float(sales_order.otc_price)
+        #             })
+        #             break
 
     @api.multi
     def _compute_amount(self):
