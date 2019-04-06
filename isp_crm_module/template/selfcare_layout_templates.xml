@@ -1304,7 +1304,7 @@
                                                     <t t-esc="package.package_id.name"/>
                                                 </t>
                                                 <t t-else="">
-                                                    <span>Name Not Available</span>
+                                                    <span>N/A</span>
                                                 </t>
 
                                             </td>
@@ -1313,7 +1313,7 @@
                                                     <t t-esc="package.start_date" t-field-options='{"format": "dd-MM-Y"}'/>
                                                 </t>
                                                 <t t-else="">
-                                                    <span>Date Not Available</span>
+                                                    <span>N/A</span>
                                                 </t>
                                             </td>
                                             <td>
@@ -1321,7 +1321,7 @@
                                                     <t t-esc="package.end_date" t-field-options='{"format": "dd-MM-Y"}'/>
                                                 </t>
                                                 <t t-else="">
-                                                    <span>Date Not Available</span>
+                                                    <span>N/A</span>
                                                 </t>
                                             </td>
                                             <td>
