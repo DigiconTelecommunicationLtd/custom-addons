@@ -169,7 +169,7 @@ class ISPCRMInvoice(models.Model):
                 sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
                 if sales_order:
                     invoice.write({
-                        'corporate_otc_amount' : float(sales_order.otc_price),
+                        'corporate_otc_amount' : float(sales_order.otc_price)
                     })
                     break
 
