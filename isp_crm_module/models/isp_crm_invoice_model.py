@@ -159,8 +159,8 @@ class ISPCRMInvoice(models.Model):
                     else:
                         print("Customer type is not corporate or soho")
 
-    def _compute_partial_amount(self):
-        self.compute_partial_amount()
+    # def _compute_partial_amount(self):
+    #     self.compute_partial_amount()
 
     def compute_otc_amount(self):
         # print("compute otc amount for invoice")
@@ -177,8 +177,6 @@ class ISPCRMInvoice(models.Model):
 
     @api.multi
     def _compute_amount(self):
-        self.compute_partial_amount()
-        self.compute_otc_amount()
         for invoice in self:
 
             round_curr = invoice.currency_id.round
@@ -192,6 +190,8 @@ class ISPCRMInvoice(models.Model):
                 'amount_vat': vat,
             })
         super(ISPCRMInvoice, self)._compute_amount()
+        self.compute_partial_amount()
+        self.compute_otc_amount()
 
     @api.multi
     def action_invoice_paid(self):
@@ -249,9 +249,10 @@ class ISPCRMInvoice(models.Model):
 
         super(ISPCRMInvoice, self).action_invoice_open()
 
-        self.update({
-            'residual': self.amount_total + self.corporate_otc_amount,
-        })
+        if self.lead_type != "retail":
+            self.update({
+                'residual': self.amount_total + self.corporate_otc_amount,
+            })
 
         return True
 

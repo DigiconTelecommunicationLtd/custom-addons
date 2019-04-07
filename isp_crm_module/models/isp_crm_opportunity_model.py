@@ -38,7 +38,6 @@ class Opportunity(models.Model):
     cr = fields.Integer('Color Index', default=0, compute='_get_color_on_service_request_status')
     update_flag = fields.Integer('Is updated', default=1)
     update_date = fields.Datetime(string='Updated time', default=datetime.now())
-    # total_sale_amount = fields.Char(string='Total Sale Amount', compute='_get_total_sale_amount')
 
 
     def _get_color_on_service_request_status(self):
