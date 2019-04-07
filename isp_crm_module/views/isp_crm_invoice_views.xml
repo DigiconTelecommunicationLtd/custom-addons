@@ -26,9 +26,6 @@
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='payments_widget']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <xpath expr="//sheet/notebook/page[1]/group/field[@name='payments_widget']" position="after">
-                <span>Paid</span>
-            </xpath>
             <!-- Check if invoice is deferred -->
             <xpath expr="//group/group/field[@name='date_invoice']" position="before" >
                 <field name="is_deferred" string="Is Deferred" />
