@@ -20,10 +20,16 @@
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_tax']" position="replace">
                 <field name="amount_vat"/>
             </xpath>
-            <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_total']" position="after">
+            <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_total']" position="before">
                 <field name="corporate_otc_amount" attrs="{'invisible':[('lead_type','==', 'retail')]}"/>
             </xpath>
+            <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_total']" position="after">
+                <field name="toal_amount_otc_mrc" class="oe_subtotal_footer_separator"/>
+            </xpath>
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='payments_widget']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_total']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
             <!-- Check if invoice is deferred -->

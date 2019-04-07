@@ -356,7 +356,7 @@
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="text-right pull-right">
-                                                <span t-field="o.amount_total"
+                                                <span t-esc="o.amount_without_vat + o.amount_vat"
                                                       t-field-options='{"widget": "False"}'/>
                                             </td>
                                         </tr>

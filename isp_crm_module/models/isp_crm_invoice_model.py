@@ -33,6 +33,7 @@ class ISPCRMInvoice(models.Model):
     corporate_soho_first_month_date_start = fields.Date(string="Start Date", required=False, inverse='compute_partial_amount')
     corporate_soho_first_month_date_end = fields.Date(string="End Date", required=False, inverse='compute_partial_amount')
     corporate_otc_amount = fields.Monetary(string='OTC Amount', store=True, readonly=True)
+    toal_amount_otc_mrc = fields.Monetary(string='Total', readonly=True)
     lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
 
     def _get_origin(self):
@@ -159,9 +160,16 @@ class ISPCRMInvoice(models.Model):
                         #         })
                         sales_order_obj = invoice.env['sale.order']
                         sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
+                        round_curr = invoice.currency_id.round
+                        invoice.amount_untaxed = sum(line.price_subtotal for line in invoice.invoice_line_ids)
+                        invoice.amount_tax = sum(round_curr(line.amount_total) for line in invoice.tax_line_ids)
+                        total = invoice.amount_untaxed + invoice.amount_tax
+                        vat = total - ((total * 100.0) / 105.0)
+                        total_without_vat = (total * 100.0) / 105.0
                         if sales_order:
                             invoice.write({
-                                'corporate_otc_amount': float(sales_order.price_total)
+                                'corporate_otc_amount': float(sales_order.price_total),
+                                'toal_amount_otc_mrc': vat + total_without_vat + float(sales_order.price_total)
                             })
                     else:
                         print("Customer type is not corporate or soho")
@@ -259,6 +267,7 @@ class ISPCRMInvoice(models.Model):
         if self.lead_type != "retail":
             self.update({
                 'residual': self.amount_total + self.corporate_otc_amount,
+                'amount_total_signed': self.amount_total + self.corporate_otc_amount,
             })
 
         return True
