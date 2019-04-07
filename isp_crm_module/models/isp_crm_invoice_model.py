@@ -32,7 +32,7 @@ class ISPCRMInvoice(models.Model):
     get_sales_order_origin = fields.Many2one('sale.order', string='Origin SO', compute='_get_origin')
     corporate_soho_first_month_date_start = fields.Date(string="Start Date", required=False, inverse='compute_partial_amount')
     corporate_soho_first_month_date_end = fields.Date(string="End Date", required=False, inverse='compute_partial_amount')
-    corporate_otc_amount = fields.Monetary(string='OTC Amount', store=True, readonly=True, compute='compute_otc_amount')
+    corporate_otc_amount = fields.Monetary(string='OTC Amount', store=True, readonly=True)
     lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
 
     def _get_origin(self):
@@ -117,13 +117,14 @@ class ISPCRMInvoice(models.Model):
                             difference = float(difference.days+1)
 
                             for line in invoice.invoice_line_ids:
-                                price_subtotal = line.quantity * line.price_unit
-                                discount = (price_subtotal * line.discount) / 100
-                                price_subtotal = price_subtotal - discount
-                                price_subtotal = (price_subtotal * difference) / total_days_of_the_month
-                                line.write({
-                                    'price_subtotal': price_subtotal,
-                                })
+                                if line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                                    price_subtotal = line.quantity * line.price_unit
+                                    discount = (price_subtotal * line.discount) / 100
+                                    price_subtotal = price_subtotal - discount
+                                    price_subtotal = (price_subtotal * difference) / total_days_of_the_month
+                                    line.write({
+                                        'price_subtotal': price_subtotal,
+                                    })
                         else:
                             print("User has not selected service start date and end date")
                         #     corporate_soho_first_month_date_start = datetime.date.today()
@@ -156,27 +157,33 @@ class ISPCRMInvoice(models.Model):
                         #         line.write({
                         #             'price_subtotal': price_subtotal,
                         #         })
+                        sales_order_obj = invoice.env['sale.order']
+                        sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
+                        if sales_order:
+                            invoice.write({
+                                'corporate_otc_amount': float(sales_order.price_total)
+                            })
                     else:
                         print("Customer type is not corporate or soho")
 
     # def _compute_partial_amount(self):
     #     self.compute_partial_amount()
 
-    def compute_otc_amount(self):
-        # print("compute otc amount for invoice")
-        # compute otc amount for invoice
-        for invoice in self:
-            if invoice.lead_type != "retail":
-                sales_order_obj = invoice.env['sale.order']
-                sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
-                if sales_order:
-                    invoice.write({
-                        'corporate_otc_amount' : float(sales_order.price_total)
-                    })
-                    break
+    # def compute_otc_amount(self):
+    #     # print("compute otc amount for invoice")
+    #     # compute otc amount for invoice
+    #     for invoice in self:
+    #         if invoice.lead_type != "retail":
+    #             sales_order_obj = invoice.env['sale.order']
+    #             sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
+    #             if sales_order:
+    #                 invoice.update({
+    #                     'corporate_otc_amount' : float(sales_order.price_total)
+    #                 })
 
     @api.multi
     def _compute_amount(self):
+        self.compute_partial_amount()
         for invoice in self:
 
             round_curr = invoice.currency_id.round
@@ -190,8 +197,8 @@ class ISPCRMInvoice(models.Model):
                 'amount_vat': vat,
             })
         super(ISPCRMInvoice, self)._compute_amount()
-        self.compute_partial_amount()
-        self.compute_otc_amount()
+        # self.compute_otc_amount()
+
 
     @api.multi
     def action_invoice_paid(self):
@@ -336,4 +343,7 @@ class ISPCRMInvoice(models.Model):
                     'vat': str(invoice_vat),
                 })
 
-
+    @api.onchange('payment_term_id', 'date_invoice')
+    def _onchange_payment_term_date_invoice(self):
+        self.compute_partial_amount()
+        super(ISPCRMInvoice, self)._onchange_payment_term_date_invoice()
