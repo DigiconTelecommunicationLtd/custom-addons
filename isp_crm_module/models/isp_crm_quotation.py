@@ -49,7 +49,7 @@ class CustomerQuotation(models.Model):
                 amount_untaxed += line.price_subtotal
                 amount_tax += line.price_tax
             total = amount_untaxed + amount_tax
-            vat = (total * 5.0) / 100.0
+            vat = total - ((total * 100.0) / 105.0)
             total_without_vat = (total * 100.0) / 105.0
             order.update({
                 'amount_untaxed': order.pricelist_id.currency_id.round(amount_untaxed),
