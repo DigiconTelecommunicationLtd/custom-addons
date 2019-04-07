@@ -23,7 +23,7 @@ class ISPCRMInvoice(models.Model):
     payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type', default=1)
     is_deferred = fields.Boolean("Is Deferred", default=False)
     customer_po_no = fields.Char(compute='_get_customer_po_no', string='Customer PO No')
-    billing_due_date = fields.Char(compute='_get_billing_due_date', string='Due Date')
+    billing_due_date = fields.Char(compute='_get_billing_due_date', string='Due Date', default="", readonly=False)
     vat = fields.Char(compute='_get_vat', string='VAT')
 
     amount_without_vat = fields.Monetary(string='Amount Without VAT', store=True, readonly=True, compute='_compute_amount',
