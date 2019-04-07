@@ -62,7 +62,7 @@ class CustomerQuotation(models.Model):
     @api.depends('otc_price', 'discount', 'govt_vat')
     def _compute_total_amount(self):
         """
-        Compute the amounts of the OTC.
+        Compute the amounts of the OTC..
         """
         for order in self:
             if order.otc_price:
