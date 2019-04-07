@@ -38,6 +38,7 @@ class Opportunity(models.Model):
     cr = fields.Integer('Color Index', default=0, compute='_get_color_on_service_request_status')
     update_flag = fields.Integer('Is updated', default=1)
     update_date = fields.Datetime(string='Updated time', default=datetime.now())
+    # total_sale_amount = fields.Char(string='Total Sale Amount', compute='_get_total_sale_amount')
 
 
     def _get_color_on_service_request_status(self):
@@ -50,6 +51,25 @@ class Opportunity(models.Model):
                         'current_service_request_id'        : service_request_obj.name,
                         'current_service_request_status'    : DEFAULT_DONE_STATUS
                     })
+
+    @api.depends('order_ids')
+    def _compute_sale_amount_total(self):
+        """
+        Compute total sale amount for an opportunity
+        :return:
+        """
+        for lead in self:
+            total = 0.0
+            nbr = 0
+            company_currency = lead.company_currency or self.env.user.company_id.currency_id
+            for order in lead.order_ids:
+                if order.state in ('draft', 'sent', 'sale'):
+                    nbr += 1
+                if order.state not in ('draft', 'sent', 'cancel'):
+                    order_amount_total = order.amount_untaxed + order.price_total
+                    total += order.currency_id.compute(order_amount_total, company_currency)
+            lead.sale_amount_total = total
+            lead.sale_number = nbr
 
     def get_opportunity_address_str(self, opportunity):
         address_str = ""

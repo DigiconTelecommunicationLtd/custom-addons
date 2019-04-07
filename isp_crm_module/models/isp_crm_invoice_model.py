@@ -100,7 +100,8 @@ class ISPCRMInvoice(models.Model):
                             bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
 
                             difference = bill_end_date - bill_start_date
-                            total_days_of_the_month = float(difference.days+1)
+                            # total_days_of_the_month = float(difference.days+1)
+                            total_days_of_the_month = 30.0
 
                             bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
                                                                          "%Y-%m-%d").strftime(
@@ -170,7 +171,7 @@ class ISPCRMInvoice(models.Model):
                 sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
                 if sales_order:
                     invoice.write({
-                        'corporate_otc_amount' : float(sales_order.otc_price)
+                        'corporate_otc_amount' : float(sales_order.price_total)
                     })
                     break
 

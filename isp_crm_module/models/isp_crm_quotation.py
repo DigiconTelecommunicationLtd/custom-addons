@@ -54,7 +54,7 @@ class CustomerQuotation(models.Model):
             order.update({
                 'amount_untaxed': order.pricelist_id.currency_id.round(amount_untaxed),
                 'amount_tax': order.pricelist_id.currency_id.round(amount_tax),
-                'amount_total': amount_untaxed + amount_tax + order.price_total,
+                'amount_total': amount_untaxed + amount_tax,
                 'amount_without_vat': total_without_vat,
                 'amount_vat': vat,
             })
