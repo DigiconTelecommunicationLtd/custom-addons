@@ -164,7 +164,7 @@ class ISPCRMInvoice(models.Model):
                                 'corporate_otc_amount': float(sales_order.price_total)
                             })
                     else:
-                        print("Customer type is not corporate or soho.")
+                        print("Customer type is not corporate or soho")
 
     # def _compute_partial_amount(self):
     #     self.compute_partial_amount()
