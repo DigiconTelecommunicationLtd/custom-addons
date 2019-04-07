@@ -182,6 +182,7 @@ class ISPCRMInvoice(models.Model):
                         invoice.write({
                             'toal_amount_otc_mrc': vat + total_without_vat
                         })
+                        print("Computed total for retail")
 
     # def _compute_partial_amount(self):
     #     self.compute_partial_amount()
