@@ -211,6 +211,9 @@ class Opportunity(models.Model):
         if (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
             raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
 
+        if not vals.get('lead_type'):
+            raise Warning(_('Please Provide lead type'))
+
         # if vals.get('email_from'):
         #     check_customer_email = self.env['res.partner'].search([('email', '=', vals.get('email_from'))], limit=1)
         #     if check_customer_email:
