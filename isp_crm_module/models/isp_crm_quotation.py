@@ -76,6 +76,7 @@ class CustomerQuotation(models.Model):
                 govt_vat = float(order.govt_vat)
                 govt_vat = 100.0 + govt_vat
                 vat = total_price - ((total_price * 100.0)/govt_vat)
+                govt_vat = float(order.govt_vat)
             else:
                 govt_vat = 0
                 vat = 0.0
@@ -100,6 +101,7 @@ class CustomerQuotation(models.Model):
             govt_vat = float(self.govt_vat)
             govt_vat = 100.0 + govt_vat
             vat = total_price - ((total_price * 100.0) / govt_vat)
+            govt_vat = float(self.govt_vat)
         else:
             govt_vat = 0
             vat = 0.0
