@@ -173,6 +173,15 @@ class ISPCRMInvoice(models.Model):
                             })
                     else:
                         print("Customer type is not corporate or soho")
+                        round_curr = invoice.currency_id.round
+                        invoice.amount_untaxed = sum(line.price_subtotal for line in invoice.invoice_line_ids)
+                        invoice.amount_tax = sum(round_curr(line.amount_total) for line in invoice.tax_line_ids)
+                        total = invoice.amount_untaxed + invoice.amount_tax
+                        vat = total - ((total * 100.0) / 105.0)
+                        total_without_vat = (total * 100.0) / 105.0
+                        invoice.write({
+                            'toal_amount_otc_mrc': vat + total_without_vat
+                        })
 
     # def _compute_partial_amount(self):
     #     self.compute_partial_amount()
