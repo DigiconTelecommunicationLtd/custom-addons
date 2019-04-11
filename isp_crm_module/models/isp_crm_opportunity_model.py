@@ -155,7 +155,7 @@ class Opportunity(models.Model):
     @api.onchange('lead_type')
     def onchange_lead_type(self):
         """
-        If user changes Lead Type in opportunity form, then change Lead Type to all related sale orders of the customer of that opportunity .
+        If user changes Lead Type in opportunity form, then change Lead Type to all related sale orders of the customer of that opportunity.
         :return:
         """
         if self.lead_type:
