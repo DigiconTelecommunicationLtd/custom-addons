@@ -36,14 +36,34 @@
                     domain="[('customer_type','=','sohoandsme')]"
                     help="Soho and SME Customers Filter"/>
                 <filter
-                    string="Advance Payment Service Type"
-                    name="isp_crm_module_advance_payment_service_type_filter"
-                    domain="[('service_type_id','=','Advance')]"
+                    string="Retail Advance Payment Service Type"
+                    name="isp_crm_module_retail_advance_payment_service_type_filter"
+                    domain="[('customer_type','=','retail'),('service_type_id','=','Advance'),('is_advance','=',False)]"
                     help="Advance Payment Service Type Filter"/>
                 <filter
-                    string="Monthly Bill Payment Service Type"
-                    name="isp_crm_module_monthly_bill_payment_service_type_filter"
-                    domain="[('service_type_id','=','Monthly bill')]"
+                    string="Corporate Advance Payment Service Type"
+                    name="isp_crm_module_corporate_advance_payment_service_type_filter"
+                    domain="[('customer_type','=','corporate'),('service_type_id','=','Advance'),('is_advance','=',False)]"
+                    help="Advance Payment Service Type Filter"/>
+                <filter
+                    string="Soho and SME Advance Payment Service Type"
+                    name="isp_crm_module_soho_and_sme_advance_payment_service_type_filter"
+                    domain="[('customer_type','=','sohoandsme'),('service_type_id','=','Advance'),('is_advance','=',False)]"
+                    help="Advance Payment Service Type Filter"/>
+                <filter
+                    string="Retail Monthly Bill Payment Service Type"
+                    name="isp_crm_module_retail_monthly_bill_payment_service_type_filter"
+                    domain="[('customer_type','=','retail'),('service_type_id','=','Monthly bill'),('is_advance','=',True)]"
+                    help="Monthly Bill Payment Service Type Filter"/>
+                <filter
+                    string="Corporate Monthly Bill Payment Service Type"
+                    name="isp_crm_module_corporate_monthly_bill_payment_service_type_filter"
+                    domain="[('customer_type','=','corporate'),('service_type_id','=','Monthly bill'),('is_advance','=',True)]"
+                    help="Monthly Bill Payment Service Type Filter"/>
+                <filter
+                    string="Soho and SME Monthly Bill Payment Service Type"
+                    name="isp_crm_module_soho_and_sme_monthly_bill_payment_service_type_filter"
+                    domain="[('customer_type','=','sohoandsme'),('service_type_id','=','Monthly bill'),('is_advance','=',True)]"
                     help="Monthly Bill Payment Service Type Filter"/>
             </xpath>
         </field>
