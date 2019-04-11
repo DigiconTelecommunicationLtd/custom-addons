@@ -18,12 +18,12 @@
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_untaxed']" position="replace">
                 <field name="amount_without_vat" widget='monetary' options="{'currency_field': 'currency_id'}"/>
             </xpath>
-<!--            <xpath expr="//sheet/notebook/page[1]/field[@name='order_line']/form/group/group/div/field[@name='qty_delivered']" position="replace">-->
-<!--                <field name="qty_delivered" attrs="{'column_invisible': True}"/>-->
-<!--            </xpath>-->
-<!--            <xpath expr="//sheet/notebook/page[1]/field[@name='order_line']/form/group/group/div/field[@name='qty_invoiced']" position="replace">-->
-<!--                <field name="qty_invoiced" attrs="{'column_invisible': True}"/>-->
-<!--            </xpath>-->
+            <xpath expr="//sheet/notebook/page[1]/field[@name='order_line']/tree/field[@name='qty_delivered']" position="replace">
+                <field name="qty_delivered" attrs="{'column_invisible': True}"/>
+            </xpath>
+            <xpath expr="//sheet/notebook/page[1]/field[@name='order_line']/tree/field[@name='qty_invoiced']" position="replace">
+                <field name="qty_invoiced" attrs="{'column_invisible': True}"/>
+            </xpath>
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_tax']" position="replace">
                 <field name="amount_vat" widget='monetary' options="{'currency_field': 'currency_id'}"/>
             </xpath>
@@ -67,5 +67,33 @@
         </field>
     </record>
     <!--End of the section-->
+
+    <!--Adding customer type filter in sales Report-->
+    <record model="ir.ui.view" id="add_customer_type_filter_in_sales_report">
+        <field name="name">add.customer.type.filter.in.sales.report</field>
+        <field name="model">sale.report</field>
+        <field name="inherit_id" ref="sale.view_order_product_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='date']" position="after">
+                <filter
+                    string="Retail Customers"
+                    name="isp_crm_module_sales_report_retail_customer_type_filter"
+                    domain="[('customer_type','=','retail')]"
+                    help="Retail Customers Filter"/>
+                <filter
+                    string="Corporate Customers"
+                    name="isp_crm_module_sales_report_corporate_customer_type_filter"
+                    domain="[('customer_type','=','corporate')]"
+                    help="Corporate Customers Filter"/>
+                <filter
+                    string="Soho and SME Customers"
+                    name="isp_crm_module_sales_report_soho_and_sme_customer_type_filter"
+                    domain="[('customer_type','=','sohoandsme')]"
+                    help="Soho and SME Customers Filter"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
 
 </odoo>

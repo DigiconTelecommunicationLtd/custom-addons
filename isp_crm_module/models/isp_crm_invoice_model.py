@@ -171,6 +171,10 @@ class ISPCRMInvoice(models.Model):
                                 'corporate_otc_amount': float(sales_order.price_total),
                                 'toal_amount_otc_mrc': vat + total_without_vat + float(sales_order.price_total)
                             })
+                        else:
+                            invoice.write({
+                                'toal_amount_otc_mrc': vat + total_without_vat
+                            })
                     else:
                         print("Customer type is not corporate or soho")
                         round_curr = invoice.currency_id.round
