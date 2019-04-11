@@ -12,4 +12,42 @@
             </field>
         </field>
     </record>
+
+    <!--Adding customer type filter in payments list-->
+    <record model="ir.ui.view" id="add_customer_type_filter_in_payments_list">
+        <field name="name">add.customer.type.filter.in.payments.list</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='company_id']" position="after">
+                <filter
+                    string="Retail Customers"
+                    name="isp_crm_module_payments_list_retail_customer_type_filter"
+                    domain="[('customer_type','=','retail')]"
+                    help="Retail Customers Filter"/>
+                <filter
+                    string="Corporate Customers"
+                    name="isp_crm_module_payments_list_corporate_customer_type_filter"
+                    domain="[('customer_type','=','corporate')]"
+                    help="Corporate Customers Filter"/>
+                <filter
+                    string="Soho and SME Customers"
+                    name="isp_crm_module_payments_list_soho_and_sme_customer_type_filter"
+                    domain="[('customer_type','=','sohoandsme')]"
+                    help="Soho and SME Customers Filter"/>
+                <filter
+                    string="Advance Payment Service Type"
+                    name="isp_crm_module_advance_payment_service_type_filter"
+                    domain="[('service_type_id','=','Advance')]"
+                    help="Advance Payment Service Type Filter"/>
+                <filter
+                    string="Monthly Bill Payment Service Type"
+                    name="isp_crm_module_monthly_bill_payment_service_type_filter"
+                    domain="[('service_type_id','=','Monthly bill')]"
+                    help="Monthly Bill Payment Service Type Filter"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
 </odoo>
