@@ -10,6 +10,7 @@
                 <field name="bill_pay_type" attrs ="{'invisible': True}"/>
                 <field name="payment_service_id" required="True" can_create="true" can_write="true" modifiers="{'required':true}"/>
             </xpath>
+            <!-- Make payment difference invisible-->
             <xpath expr="//sheet/group/group[3]" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
