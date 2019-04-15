@@ -10,6 +10,9 @@
                 <field name="bill_pay_type" attrs ="{'invisible': True}"/>
                 <field name="payment_service_id" required="True" can_create="true" can_write="true" modifiers="{'required':true}"/>
             </xpath>
+            <xpath expr="//sheet/group/group[3]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             <xpath expr="//sheet/group" position="after">
                 <notebook colspan="1">
                     <page name="cheque_information" string="Cheque Information" attrs ="{'invisible':[('bill_pay_type','==','cash')]}">
