@@ -71,94 +71,94 @@ class ISPCRMInvoice(models.Model):
                 for opportunity in opportunities:
                     # check if lead type is corporate or soho or sme
                     if opportunity.lead_type != "retail":
-                        # if invoice.corporate_soho_first_month_date_start and invoice.corporate_soho_first_month_date_end:
-                        #
-                        #     # Convert the given date to specific format
-                        #     formated_date = datetime.datetime.strptime(str(invoice.corporate_soho_first_month_date_start),
-                        #                                                  "%Y-%m-%d").strftime(
-                        #         "%Y-%m-%d")
-                        #     # Convert the formated_date to date type from string type.
-                        #     formated_date = datetime.datetime.strptime(formated_date, "%Y-%m-%d")
-                        #
-                        #     # Get the first day of the month in order to calculate total days of the month.
-                        #     corporate_soho_first_month_date_start = formated_date.replace(
-                        #         day=1)
-                        #     corporate_soho_first_month_date_start = str(corporate_soho_first_month_date_start).split(" ")[0]
-                        #
-                        #     # Get the last day of the month.
-                        #     corporate_soho_first_month_date_end = datetime.date(formated_date.year,
-                        #                                                         formated_date.month + 1,
-                        #                                                         1) - relativedelta(
-                        #         days=1)
-                        #
-                        #     bill_start_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_start),
-                        #                                                  "%Y-%m-%d").strftime(
-                        #         "%Y-%m-%d %H-%M")
-                        #     bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
-                        #
-                        #     bill_end_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_end),
-                        #                                                "%Y-%m-%d").strftime(
-                        #         "%Y-%m-%d %H-%M")
-                        #     bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
-                        #
-                        #     difference = bill_end_date - bill_start_date
-                        #     # total_days_of_the_month = float(difference.days+1)
-                        #     total_days_of_the_month = 30.0
-                        #
-                        #     bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
-                        #                                                  "%Y-%m-%d").strftime(
-                        #         "%Y-%m-%d %H-%M")
-                        #     bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
-                        #
-                        #     bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
-                        #                                                "%Y-%m-%d").strftime(
-                        #         "%Y-%m-%d %H-%M")
-                        #     bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
-                        #
-                        #     difference = bill_end_date - bill_start_date
-                        #     difference = float(difference.days+1)
-                        #
-                        #     for line in invoice.invoice_line_ids:
-                        #         if line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
-                        #             price_subtotal = line.quantity * line.price_unit
-                        #             discount = (price_subtotal * line.discount) / 100
-                        #             price_subtotal = price_subtotal - discount
-                        #             price_subtotal = (price_subtotal * difference) / total_days_of_the_month
-                        #             line.write({
-                        #                 'price_subtotal': price_subtotal,
-                        #             })
-                        # else:
-                        #     print("User has not selected service start date and end date")
-                        #     corporate_soho_first_month_date_start = datetime.date.today()
-                        #     # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
-                        #     corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                        #                                                         datetime.date.today().month + 1, 1) - relativedelta(
-                        #         days=1)
-                        #     invoice.update({
-                        #         'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
-                        #         'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
-                        #     })
-                        #
-                        #     bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
-                        #                                                  "%Y-%m-%d").strftime(
-                        #         "%Y-%m-%d %H-%M")
-                        #     bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
-                        #
-                        #     bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
-                        #                                                "%Y-%m-%d").strftime(
-                        #         "%Y-%m-%d %H-%M")
-                        #     bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
-                        #
-                        #     difference = bill_end_date - bill_start_date
-                        #     difference = float(difference.days)
-                        #
-                        #     for line in invoice.invoice_line_ids:
-                        #         price_subtotal = line.quantity * line.price_unit
-                        #         discount = (price_subtotal * line.discount) / 100
-                        #         price_subtotal = price_subtotal - discount
-                        #         line.write({
-                        #             'price_subtotal': price_subtotal,
-                        #         })
+                        if invoice.corporate_soho_first_month_date_start and invoice.corporate_soho_first_month_date_end:
+
+                            # Convert the given date to specific format
+                            formated_date = datetime.datetime.strptime(str(invoice.corporate_soho_first_month_date_start),
+                                                                         "%Y-%m-%d").strftime(
+                                "%Y-%m-%d")
+                            # Convert the formated_date to date type from string type.
+                            formated_date = datetime.datetime.strptime(formated_date, "%Y-%m-%d")
+
+                            # Get the first day of the month in order to calculate total days of the month.
+                            corporate_soho_first_month_date_start = formated_date.replace(
+                                day=1)
+                            corporate_soho_first_month_date_start = str(corporate_soho_first_month_date_start).split(" ")[0]
+
+                            # Get the last day of the month.
+                            corporate_soho_first_month_date_end = datetime.date(formated_date.year,
+                                                                                formated_date.month + 1,
+                                                                                1) - relativedelta(
+                                days=1)
+
+                            bill_start_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_start),
+                                                                         "%Y-%m-%d").strftime(
+                                "%Y-%m-%d %H-%M")
+                            bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                            bill_end_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_end),
+                                                                       "%Y-%m-%d").strftime(
+                                "%Y-%m-%d %H-%M")
+                            bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                            difference = bill_end_date - bill_start_date
+                            # total_days_of_the_month = float(difference.days+1)
+                            total_days_of_the_month = 30.0
+
+                            bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
+                                                                         "%Y-%m-%d").strftime(
+                                "%Y-%m-%d %H-%M")
+                            bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                            bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                                                                       "%Y-%m-%d").strftime(
+                                "%Y-%m-%d %H-%M")
+                            bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                            difference = bill_end_date - bill_start_date
+                            difference = float(difference.days+1)
+
+                            for line in invoice.invoice_line_ids:
+                                if line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                                    price_subtotal = line.quantity * line.price_unit
+                                    discount = (price_subtotal * line.discount) / 100
+                                    price_subtotal = price_subtotal - discount
+                                    price_subtotal = (price_subtotal * difference) / total_days_of_the_month
+                                    line.write({
+                                        'price_subtotal': price_subtotal,
+                                    })
+                        else:
+                            print("User has not selected service start date and end date")
+                            corporate_soho_first_month_date_start = datetime.date.today()
+                            # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
+                            corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                                                                                datetime.date.today().month + 1, 1) - relativedelta(
+                                days=1)
+                            invoice.update({
+                                'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
+                                'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
+                            })
+
+                            bill_start_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_start,
+                                                                         "%Y-%m-%d").strftime(
+                                "%Y-%m-%d %H-%M")
+                            bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                            bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                                                                       "%Y-%m-%d").strftime(
+                                "%Y-%m-%d %H-%M")
+                            bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                            difference = bill_end_date - bill_start_date
+                            difference = float(difference.days)
+
+                            for line in invoice.invoice_line_ids:
+                                price_subtotal = line.quantity * line.price_unit
+                                discount = (price_subtotal * line.discount) / 100
+                                price_subtotal = price_subtotal - discount
+                                line.write({
+                                    'price_subtotal': price_subtotal,
+                                })
                         sales_order_obj = invoice.env['sale.order']
                         sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
                         round_curr = invoice.currency_id.round
@@ -244,11 +244,11 @@ class ISPCRMInvoice(models.Model):
     def action_invoice_open(self):
 
         # If service start date and end date is not given then give a warning.
-        # if self.lead_type != "retail":
-        #     if self.corporate_soho_first_month_date_start and self.corporate_soho_first_month_date_end:
-        #         pass
-        #     else:
-        #         raise UserError('Please select service start date and end date')
+        if self.lead_type != "retail":
+            if self.corporate_soho_first_month_date_start and self.corporate_soho_first_month_date_end:
+                pass
+            else:
+                raise UserError('Please select service start date and end date')
 
         # Updating the sales order of the customer
         package_line = ''
