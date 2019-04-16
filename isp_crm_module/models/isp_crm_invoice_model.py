@@ -34,6 +34,7 @@ class ISPCRMInvoice(models.Model):
     corporate_soho_first_month_date_end = fields.Date(string="End Date", required=False, inverse='compute_partial_amount')
     corporate_otc_amount = fields.Monetary(string='OTC Amount', store=True, readonly=True)
     toal_amount_otc_mrc = fields.Monetary(string='Total', readonly=True)
+    toal_amount_mrc = fields.Monetary(string='MRC Amount', readonly=True)
     lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
 
     def _get_origin(self):
@@ -169,11 +170,13 @@ class ISPCRMInvoice(models.Model):
                         if sales_order:
                             invoice.write({
                                 'corporate_otc_amount': float(sales_order.price_total),
-                                'toal_amount_otc_mrc': vat + total_without_vat + float(sales_order.price_total)
+                                'toal_amount_otc_mrc': vat + total_without_vat + float(sales_order.price_total),
+                                'toal_amount_mrc': vat + total_without_vat
                             })
                         else:
                             invoice.write({
-                                'toal_amount_otc_mrc': vat + total_without_vat
+                                'toal_amount_otc_mrc': vat + total_without_vat,
+                                'toal_amount_mrc': vat + total_without_vat
                             })
                     else:
                         print("Customer type is not corporate or soho")
@@ -184,7 +187,8 @@ class ISPCRMInvoice(models.Model):
                         vat = total - ((total * 100.0) / 105.0)
                         total_without_vat = (total * 100.0) / 105.0
                         invoice.write({
-                            'toal_amount_otc_mrc': vat + total_without_vat
+                            'toal_amount_otc_mrc': vat + total_without_vat,
+                            'toal_amount_mrc': vat + total_without_vat
                         })
                         print("Computed total for retail")
 

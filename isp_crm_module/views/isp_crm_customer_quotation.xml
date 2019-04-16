@@ -95,5 +95,20 @@
     </record>
     <!--End of the section-->
 
+    <!--Adding customer measure type in sales Report-->
+    <record model="ir.ui.view" id="add_customer_measure_type_in_sales_report">
+        <field name="name">add.customer.measure.type.in.sales.report</field>
+        <field name="model">sale.report</field>
+        <field name="inherit_id" ref="sale.view_order_product_pivot" />
+        <field name="arch" type="xml">
+            <xpath expr="//pivot/field[@name='price_subtotal']" position="after">
+                <field name="corporate_otc_amount" type="measure"/>
+                <field name="toal_amount_mrc" type="measure"/>
+                <field name="toal_amount_otc_mrc" type="measure"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
+
 
 </odoo>
