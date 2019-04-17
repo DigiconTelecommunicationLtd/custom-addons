@@ -487,11 +487,30 @@ class CronJobModel(models.Model):
         #                         invoice_object = self.env['account.invoice'].search([('origin', '=', order.name)], limit=1)
         #                         if invoice_object:
         #                             new_draft_invoice = invoice_object.copy()
+        #
         #                             new_draft_invoice = new_draft_invoice.update({
         #                                 'corporate_soho_first_month_date_start': corporate_soho_invoice_date_start,
         #                                 'corporate_soho_first_month_date_end': corporate_soho_invoice_date_end,
         #                                 'date_invoice': today,
         #                                 # 'date_due': today,
+        #                             })
+        #
+        #                             # OTC will not be calculated
+        #                             round_curr = new_draft_invoice.currency_id.round
+        #                             new_draft_invoice.amount_untaxed = sum(
+        #                                 line.price_subtotal for line in new_draft_invoice.invoice_line_ids)
+        #                             new_draft_invoice.amount_tax = sum(
+        #                                 round_curr(line.amount_total) for line in new_draft_invoice.tax_line_ids)
+        #                             total = new_draft_invoice.amount_untaxed + new_draft_invoice.amount_tax
+        #                             vat = total - ((total * 100.0) / 105.0)
+        #                             total_without_vat = (total * 100.0) / 105.0
+        #
+        #                             new_draft_invoice = new_draft_invoice.update({
+        #                                 'corporate_otc_amount': 0.0,
+        #                                 'toal_amount_otc_mrc': vat + total_without_vat,
+        #                                 'toal_amount_mrc': vat + total_without_vat,
+        #                                 'residual': vat + total_without_vat,
+        #                                 'amount_total_signed': vat + total_without_vat,
         #                             })
         #                         else:
         #                             error_message = "Invoice not found for sale order" + str(order.name)

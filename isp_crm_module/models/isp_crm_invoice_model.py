@@ -134,7 +134,7 @@ class ISPCRMInvoice(models.Model):
                             corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
                                                                                 datetime.date.today().month + 1, 1) - relativedelta(
                                 days=1)
-                            invoice.update({
+                            invoice.write({
                                 'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
                                 'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
                             })
@@ -191,6 +191,7 @@ class ISPCRMInvoice(models.Model):
                             'toal_amount_mrc': vat + total_without_vat
                         })
                         print("Computed total for retail")
+            break
 
     # def _compute_partial_amount(self):
     #     self.compute_partial_amount()
