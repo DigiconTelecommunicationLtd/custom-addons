@@ -26,6 +26,7 @@ class ISPCRMPayment(models.Model):
         required=False,
         string='Payment Service Type'
     )
+    invoice_payment_type = fields.Char(compute='_get_bill_pay_type', string='Payment Service Type')
     is_advance = fields.Boolean("Is Advance", default=False)
 
     customer_id = fields.Char(string="Customer ID")
@@ -65,6 +66,16 @@ class ISPCRMPayment(models.Model):
         :return:
         """
         for payment in self:
+            try:
+                get_invoice = payment.env['account.invoice'].search([('number', '=', payment.communication)], limit=1)
+                if get_invoice:
+                    get_invoice_payment_service_type = get_invoice.payment_service_id.name
+                    if get_invoice_payment_service_type:
+                        payment.update({
+                            'invoice_payment_type': get_invoice_payment_service_type,
+                        })
+            except Exception as ex:
+                print(ex)
             if payment.journal_id:
                 payment.update({
                     'bill_pay_type': str(payment.journal_id.type),

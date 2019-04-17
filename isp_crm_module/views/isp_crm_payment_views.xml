@@ -7,7 +7,8 @@
         <field name="inherit_id" ref="account.view_account_payment_form"/>
         <field name="arch" type="xml">
             <field name="payment_method_code" position="after">
-                <field name="service_type_id"/>
+                <field name="service_type_id" attrs="{'invisible': [('service_type_id', '=', False)]}"/>
+                <field name="invoice_payment_type" attrs="{'invisible': [('service_type_id', '!=', False)]}"/>
                 <field name="is_advance"/>
             </field>
         </field>
@@ -58,12 +59,12 @@
                 <filter
                     string="Corporate Monthly Bill Payment Service Type"
                     name="isp_crm_module_corporate_monthly_bill_payment_service_type_filter"
-                    domain="[('customer_type','=','corporate'),('service_type_id','=','Monthly bill'),('is_advance','=',True)]"
+                    domain="[('customer_type','=','corporate'),('service_type_id','=','Monthly bill')]"
                     help="Monthly Bill Payment Service Type Filter"/>
                 <filter
                     string="Soho and SME Monthly Bill Payment Service Type"
                     name="isp_crm_module_soho_and_sme_monthly_bill_payment_service_type_filter"
-                    domain="[('customer_type','=','sohoandsme'),('service_type_id','=','Monthly bill'),('is_advance','=',True)]"
+                    domain="[('customer_type','=','sohoandsme'),('service_type_id','=','Monthly bill')]"
                     help="Monthly Bill Payment Service Type Filter"/>
             </xpath>
         </field>
