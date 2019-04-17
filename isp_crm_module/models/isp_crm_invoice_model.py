@@ -62,7 +62,6 @@ class ISPCRMInvoice(models.Model):
             })
 
     def compute_partial_amount(self):
-        # print('this wont go to production now.')
         for invoice in self:
             # Compute partial bill amount
             get_customer = invoice.env['res.partner'].search([('id', '=', invoice.partner_id.id)], limit=1)

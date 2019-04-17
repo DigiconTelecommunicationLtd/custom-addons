@@ -101,7 +101,7 @@
         <field name="model">sale.report</field>
         <field name="inherit_id" ref="sale.view_order_product_pivot" />
         <field name="arch" type="xml">
-            <xpath expr="//pivot/field[@name='price_subtotal']" position="after">
+            <xpath expr="//pivot/field[@name='price_subtotal']" position="replace">
                 <field name="corporate_otc_amount" type="measure"/>
                 <field name="toal_amount_mrc" type="measure"/>
                 <field name="toal_amount_otc_mrc" type="measure"/>
