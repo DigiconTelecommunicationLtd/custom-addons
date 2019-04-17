@@ -62,7 +62,7 @@ class ISPCRMPayment(models.Model):
     
     def _get_bill_pay_type(self):
         """
-        Compute bill payment type.
+        Compute bill payment type and payment service type.
         :return:
         """
         for payment in self:
