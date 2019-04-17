@@ -54,17 +54,17 @@
                 <filter
                     string="Retail Monthly Bill Payment Service Type"
                     name="isp_crm_module_retail_monthly_bill_payment_service_type_filter"
-                    domain="[('customer_type','=','retail'),('service_type_id','=','Monthly bill'),('is_advance','=',True)]"
+                    domain="[('customer_type','=','retail'),('is_advance','=',True),'|',('service_type_id','=','Monthly bill'),('invoice_payment_type','=','Monthly bill')]"
                     help="Monthly Bill Payment Service Type Filter"/>
                 <filter
                     string="Corporate Monthly Bill Payment Service Type"
                     name="isp_crm_module_corporate_monthly_bill_payment_service_type_filter"
-                    domain="[('customer_type','=','corporate'),('service_type_id','=','Monthly bill')]"
+                    domain="[('customer_type','=','corporate'),'|',('service_type_id','=','Monthly bill'),('invoice_payment_type','=','Monthly bill')]"
                     help="Monthly Bill Payment Service Type Filter"/>
                 <filter
                     string="Soho and SME Monthly Bill Payment Service Type"
                     name="isp_crm_module_soho_and_sme_monthly_bill_payment_service_type_filter"
-                    domain="[('customer_type','=','sohoandsme'),('service_type_id','=','Monthly bill')]"
+                    domain="[('customer_type','=','sohoandsme'),'|',('service_type_id','=','Monthly bill'),('invoice_payment_type','=','Monthly bill')]"
                     help="Monthly Bill Payment Service Type Filter"/>
             </xpath>
         </field>
