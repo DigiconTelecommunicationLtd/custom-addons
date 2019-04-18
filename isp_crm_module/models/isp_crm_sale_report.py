@@ -64,7 +64,6 @@ class ISPCRMSaleReport(models.Model):
         from_str = """
                 sale_order_line l
                       join sale_order s on (l.order_id=s.id)
-                      join account_invoice a on (s.name=a.origin)
                       join res_partner partner on s.partner_id = partner.id
                         left join product_product p on (l.product_id=p.id)
                             left join product_template t on (p.product_tmpl_id=t.id)
