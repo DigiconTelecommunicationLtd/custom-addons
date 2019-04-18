@@ -38,15 +38,6 @@ class ISPCRMSaleReport(models.Model):
     warehouse_id = fields.Float(related='corporate_otc_amount',readonly=True)
     price_total = fields.Float(related='corporate_otc_amount',readonly=True)
 
-    # commercial_partner_id = fields.Many2one('res.partner', 'Commercial Entity', readonly=True)
-    # state = fields.Selection([
-    #     ('draft', 'Draft Quotation'),
-    #     ('sent', 'Quotation Sent'),
-    #     ('sale', 'Sales Order'),
-    #     ('done', 'Sales Done'),
-    #     ('cancel', 'Cancelled'),
-    # ], string='Status', readonly=True)
-
 
     # def _select(self):
     #     select_str = """
