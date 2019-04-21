@@ -56,4 +56,5 @@ from . import isp_crm_service_product_line
 from . import isp_crm_account_invoice_line
 from . import isp_crm_validate_multiple_invoices
 from . import isp_crm_sale_report
+from . import isp_crm_sale_report_table
 
