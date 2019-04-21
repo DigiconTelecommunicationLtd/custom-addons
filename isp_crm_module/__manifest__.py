@@ -69,6 +69,7 @@
         'views/isp_crm_notify_user.xml',
         'views/isp_crm_customer_quotation.xml',
         'views/isp_crm_register_payment_validate_form.xml',
+        'views/isp_crm_sale_report.xml',
         'template/new_ticket_page.xml',
         'template/customer_profile_ticket.xml',
         'template/customer_profile/customer_profile.xml',

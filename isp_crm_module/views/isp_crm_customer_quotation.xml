@@ -110,37 +110,4 @@
 <!--    </record>-->
     <!--End of the section-->
 
-    <record id="view_order_product_pivot_two" model="ir.ui.view">
-         <field name="name">sale.report.pivot.two</field>
-         <field name="model">sale.report.table</field>
-         <field name="arch" type="xml">
-             <pivot string="Sales Analysis" disable_linking="True">
-                 <field name="team_id" type="col"/>
-                 <field name="confirmation_date" interval="month" type="row"/>
-                 <field name="corporate_otc_amount" type="measure"/>
-                 <field name="toal_amount_mrc" type="measure"/>
-                 <field name="toal_amount_otc_mrc" type="measure"/>
-             </pivot>
-         </field>
-    </record>
-
-
-    <record id="action_sale_report_table" model="ir.actions.act_window">
-        <field name="name">Sales Analysis Report Table</field>
-        <field name="res_model">sale.report.table</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">pivot</field>
-        <field name="view_id"></field>  <!-- force empty -->
-        <field name="context">{'search_default_Sales':1, 'group_by_no_leaf':1,'group_by':[]}</field>
-        <field name="help">This report performs analysis on your quotations and sales orders. Analysis check your sales revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the Invoice Analysis report in the Accounting application.</field>
-    </record>
-
-    <menuitem
-            id="isp_crm_sales_report_pivot_menu"
-            name="Sales Report Table"
-            parent="sale.menu_sale_report"
-            action="action_sale_report_table"
-            sequence="4"
-    />
-
 </odoo>
