@@ -26,7 +26,13 @@ class ISPCRMPayment(models.Model):
         required=False,
         string='Payment Service Type'
     )
-    invoice_payment_type = fields.Char(compute='_get_bill_pay_type', string='Payment Service Type')
+    invoice_payment_type = fields.Many2one(
+        'isp_crm_module.selfcare_payment_service',
+        default=False,
+        required=False,
+        readonly=False,
+        string='Payment Service Type'
+    )
     is_advance = fields.Boolean("Is Advance", default=False)
 
     customer_id = fields.Char(string="Customer ID")
@@ -69,10 +75,10 @@ class ISPCRMPayment(models.Model):
             try:
                 get_invoice = payment.env['account.invoice'].search([('number', '=', payment.communication)], limit=1)
                 if get_invoice:
-                    get_invoice_payment_service_type = get_invoice.payment_service_id.name
+                    get_invoice_payment_service_type = get_invoice.payment_service_id
                     if get_invoice_payment_service_type:
-                        payment.update({
-                            'invoice_payment_type': get_invoice_payment_service_type,
+                        payment.write({
+                            'invoice_payment_type': get_invoice_payment_service_type.id
                         })
             except Exception as ex:
                 print(ex)
