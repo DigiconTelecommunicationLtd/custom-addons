@@ -15,6 +15,18 @@
          </field>
     </record>
 
+    <!--Adding customer measure type in sales Report-->
+    <record model="ir.ui.view" id="add_customer_measure_type_in_sales_report">
+        <field name="name">add.customer.measure.type.in.sales.report</field>
+        <field name="model">sale.report</field>
+        <field name="inherit_id" ref="sale.view_order_product_pivot" />
+        <field name="arch" type="xml">
+            <xpath expr="//pivot/field[@name='price_subtotal']" position="replace">
+                <field name="toal_amount_mrc" type="measure"/>
+            </xpath>
+        </field>
+    </record>
+    <!--End of the section-->
 
     <record id="action_sale_report_table" model="ir.actions.act_window">
         <field name="name">Sales Analysis Report Table</field>

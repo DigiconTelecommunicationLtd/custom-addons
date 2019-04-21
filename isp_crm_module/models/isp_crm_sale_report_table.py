@@ -94,15 +94,3 @@ class SaleReportTable(models.Model):
             %s
             )""" % (self._table, self._select(), self._from(), self._group_by()))
 
-# class SaleOrderReportProforma(models.AbstractModel):
-#     _name = 'report.sale.report_saleproforma'
-#
-#     @api.multi
-#     def get_report_values(self, docids, data=None):
-#         docs = self.env['sale.order'].browse(docids)
-#         return {
-#             'doc_ids': docs.ids,
-#             'doc_model': 'sale.order',
-#             'docs': docs,
-#             'proforma': True
-#         }
