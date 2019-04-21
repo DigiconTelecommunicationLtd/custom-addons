@@ -22,6 +22,13 @@ class SaleReportTable(models.Model):
     corporate_otc_amount = fields.Float(string='OTC Amount', readonly=True)
     toal_amount_otc_mrc = fields.Float(string='Total (OTC + MRC)', readonly=True)
     toal_amount_mrc = fields.Float(string='MRC Amount', readonly=True)
+    state = fields.Selection([
+        ('draft', 'Draft Quotation'),
+        ('sent', 'Quotation Sent'),
+        ('sale', 'Sales Order'),
+        ('done', 'Sales Done'),
+        ('cancel', 'Cancelled'),
+    ], string='Status', readonly=True)
 
     def _select(self):
         try:
