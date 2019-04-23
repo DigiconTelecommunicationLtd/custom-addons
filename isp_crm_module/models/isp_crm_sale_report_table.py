@@ -22,6 +22,7 @@ class SaleReportTable(models.Model):
     corporate_otc_amount = fields.Float(string='OTC Amount', readonly=True)
     toal_amount_otc_mrc = fields.Float(string='Total (OTC + MRC)', readonly=True)
     toal_amount_mrc = fields.Float(string='MRC Amount', readonly=True)
+    customer_type = fields.Selection(related='partner_id.opportunity_ids.lead_type', string='Customer Type')
     state = fields.Selection([
         ('draft', 'Draft Quotation'),
         ('sent', 'Quotation Sent'),

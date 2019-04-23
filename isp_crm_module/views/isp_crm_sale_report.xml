@@ -37,6 +37,21 @@
                 <filter string="This Year" name="year" invisible="1" domain="[('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]"/>
                 <filter name="Quotations" string="Quotations" domain="[('state','in', ('draft', 'sent'))]"/>
                 <filter name="Sales" string="Sales" domain="[('state','not in',('draft', 'cancel', 'sent'))]"/>
+                <filter
+                    string="Retail Customers"
+                    name="isp_crm_module_sales_report_table_retail_customer_type_filter"
+                    domain="[('customer_type','=','retail')]"
+                    help="Retail Customers Filter"/>
+                <filter
+                    string="Corporate Customers"
+                    name="isp_crm_module_sales_report_table_corporate_customer_type_filter"
+                    domain="[('customer_type','=','corporate')]"
+                    help="Corporate Customers Filter"/>
+                <filter
+                    string="Soho and SME Customers"
+                    name="isp_crm_module_sales_report_table_soho_and_sme_customer_type_filter"
+                    domain="[('customer_type','=','sohoandsme')]"
+                    help="Soho and SME Customers Filter"/>
                 <separator/>
                 <field name="partner_id"/>
                 <field name="user_id"/>
