@@ -39,17 +39,17 @@
                 <filter
                     string="Retail Advance Payment Service Type"
                     name="isp_crm_module_retail_advance_payment_service_type_filter"
-                    domain="[('customer_type','=','retail'),('service_type_id','=','Advance'),('is_advance','=',False)]"
+                    domain="[('customer_type','=','retail'),('is_advance','=',False),'|',('service_type_id','=','Advance'),('invoice_payment_type','=','Advance')]"
                     help="Advance Payment Service Type Filter"/>
                 <filter
                     string="Corporate Advance Payment Service Type"
                     name="isp_crm_module_corporate_advance_payment_service_type_filter"
-                    domain="[('customer_type','=','corporate'),('service_type_id','=','Advance'),('is_advance','=',False)]"
+                    domain="[('customer_type','=','corporate'),('is_advance','=',False),'|',('service_type_id','=','Advance'),('invoice_payment_type','=','Advance')]"
                     help="Advance Payment Service Type Filter"/>
                 <filter
                     string="Soho and SME Advance Payment Service Type"
                     name="isp_crm_module_soho_and_sme_advance_payment_service_type_filter"
-                    domain="[('customer_type','=','sohoandsme'),('service_type_id','=','Advance'),('is_advance','=',False)]"
+                    domain="[('customer_type','=','sohoandsme'),('is_advance','=',False),'|',('service_type_id','=','Advance'),('invoice_payment_type','=','Advance')]"
                     help="Advance Payment Service Type Filter"/>
                 <filter
                     string="Retail Monthly Bill Payment Service Type"
