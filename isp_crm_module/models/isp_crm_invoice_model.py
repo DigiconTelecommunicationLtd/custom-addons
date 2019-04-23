@@ -322,7 +322,7 @@ class ISPCRMInvoice(models.Model):
 
     def _get_billing_due_date(self):
         """
-        Compute due date of billing of invoice
+        Compute due date of billing of invoice.
         :return:
         """
         for invoice in self:
