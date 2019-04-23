@@ -73,13 +73,14 @@ class ISPCRMPayment(models.Model):
         """
         for payment in self:
             try:
-                get_invoice = payment.env['account.invoice'].search([('number', '=', payment.communication)], limit=1)
-                if get_invoice:
-                    get_invoice_payment_service_type = get_invoice.payment_service_id
-                    if get_invoice_payment_service_type:
-                        payment.write({
-                            'invoice_payment_type': get_invoice_payment_service_type.id
-                        })
+                if payment.communication:
+                    get_invoice = payment.env['account.invoice'].search([('number', '=', payment.communication)], limit=1)
+                    if get_invoice:
+                        get_invoice_payment_service_type = get_invoice.payment_service_id
+                        if get_invoice_payment_service_type:
+                            payment.write({
+                                'invoice_payment_type': get_invoice_payment_service_type.id
+                            })
             except Exception as ex:
                 print(ex)
             if payment.journal_id:
