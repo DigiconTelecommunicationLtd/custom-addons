@@ -65,15 +65,6 @@ class SelfcareController(PaymentController):
                 context['error'] = _('Access denied. Please provide a valid id or email address.')
                 context['success_msg'] = _(success_msg)
                 return request.render(template, context)
-            # check_users = request.env['res.partner'].sudo().search([('subscriber_id', '=', str(login))])
-            # for user in check_users:
-            #     get_opportunities = request.env['crm.lead'].search([('partner_id', '=', user.id)])
-            #     if get_opportunities:
-            #         for opportunity in get_opportunities:
-            #             if opportunity.lead_type == "corporate":
-            #                 context['error'] = _("Corporate User has no access right")
-            #                 context['success_msg'] = _(success_msg)
-            #                 return request.render(template, context)
             old_uid = request.uid
             uid = request.session.authenticate(request.session.db, request.params['login'], request.params['password'])
             if uid is not False:

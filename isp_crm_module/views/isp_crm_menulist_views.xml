@@ -22,29 +22,29 @@
         action="isp_crm_module_change_package_action"
         parent="crm.crm_menu_pipeline"/>
 
-    <menuitem
-        id="menu_isp_crm_module_new_connection_request"
-        name="New Connection Request"
-        sequence="1"
-        parent="menu_isp_crm_module_service_request_act"/>
+<!--    <menuitem-->
+<!--        id="menu_isp_crm_module_new_connection_request"-->
+<!--        name="New Connection Request"-->
+<!--        sequence="1"-->
+<!--        parent="menu_isp_crm_module_service_request_act"/>-->
 
-    <menuitem
-        id="menu_isp_crm_module_bandwidth_change_request"
-        name="Bandwidth Change Request"
-        sequence="2"
-        parent="menu_isp_crm_module_service_request_act"/>
+<!--    <menuitem-->
+<!--        id="menu_isp_crm_module_bandwidth_change_request"-->
+<!--        name="Bandwidth Change Request"-->
+<!--        sequence="2"-->
+<!--        parent="menu_isp_crm_module_service_request_act"/>-->
 
-    <menuitem
-        id="menu_isp_crm_module_retail_soho_customers"
-        name="Retail/SOHO Customers"
-        sequence="1"
-        parent="menu_isp_crm_module_bandwidth_change_request"/>
+<!--    <menuitem-->
+<!--        id="menu_isp_crm_module_retail_soho_customers"-->
+<!--        name="Retail/SOHO Customers"-->
+<!--        sequence="1"-->
+<!--        parent="menu_isp_crm_module_bandwidth_change_request"/>-->
 
-    <menuitem
-        id="menu_isp_crm_module_corporate_customers"
-        name="Corporate Customers"
-        sequence="2"
-        parent="menu_isp_crm_module_bandwidth_change_request"/>
+<!--    <menuitem-->
+<!--        id="menu_isp_crm_module_corporate_customers"-->
+<!--        name="Corporate Customers"-->
+<!--        sequence="2"-->
+<!--        parent="menu_isp_crm_module_bandwidth_change_request"/>-->
 
     <!--Payment Receive Report-->
     <menuitem
