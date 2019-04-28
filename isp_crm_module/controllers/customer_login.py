@@ -61,7 +61,7 @@ class SelfcareController(PaymentController):
         success_msg = ''
         if request.httprequest.method == 'POST':
             login = request.params['login']
-            if login == "New" or "MC" in login or "MS" in login:
+            if login == "New" or "MC" in login:
                 context['error'] = _('Access denied. Please provide a valid id or email address.')
                 context['success_msg'] = _(success_msg)
                 return request.render(template, context)
@@ -576,6 +576,19 @@ class SelfcareController(PaymentController):
                 created_package_change.send_package_change_mail()
 
                 success_msg = "Your Package change request Successfully enlisted."
+
+                bandwidth_change_obj = request.env['isp_crm_module.retail_soho_bandwidth_change'].sudo().search([])
+                created_bandwidth_change_request = bandwidth_change_obj.create({
+                    'customer': logged_in_user.partner_id.id,
+                    'customer_id': logged_in_user.partner_id.subscriber_id,
+                    'ticket_ref': created_ticket.name,
+                    'current_package': logged_in_user.partner_id.current_package_id.id,
+                    'proposed_new_package': package_obj.id,
+                    'proposed_package_price': package_obj.lst_price,
+                    'proposed_activation_date': active_from
+                })
+
+                print("Bandwidth Change Request is created.")
 
         context['csrf_token']       = request.csrf_token()
         context['user']             = logged_in_user

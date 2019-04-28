@@ -35,7 +35,7 @@
                         <div class="oe_kanban_content">
                             <div class="o_kanban_record_top">
                                 <div class="o_kanban_record_headings">
-                                    <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
+                                    <strong class="o_kanban_record_title"><field name="ticket_ref"/></strong><br/>
                                     <strong class="o_kanban_record_title"><field name="customer"/></strong><br/>
 <!--                                    <field name="tagged_product_ids" widget="many2many_tags" options="{'color_field': 'color'}" readonly="1"/>-->
 <!--                                    <small class="o_kanban_record_subtitle text-muted">-->
@@ -95,7 +95,7 @@
             <form string="Bandwidth Change Request">
                 <sheet>
                     <div class="oe_title">
-                        <field name="name" string="Ticket ID" readonly="1"/>
+                        <field name="ticket_ref" string="Ticket ID" readonly="1"/>
                         <h1><field name="problem" string="Name" placeholder="Problem" attrs="{'required': True}"/></h1>
                     </div>
                     <group string="Customer Info">

@@ -76,6 +76,12 @@ class ChangePackage(models.Model):
                     'is_paid' : True,
                 })
 
+                ticket = rec.env['isp_crm_module.retail_soho_bandwidth_change'].search([('ticket_ref', '=', rec.ticket_ref)], limit=1)
+                if ticket.customer_type != 'corporate':
+                    ticket.write({
+                        'color': 10,
+                    })
+
         return True
 
     def send_package_change_mail(self):

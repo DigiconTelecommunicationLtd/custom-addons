@@ -26,6 +26,7 @@
         id="menu_isp_crm_module_new_connection_request"
         name="New Connection Request"
         sequence="1"
+        action="isp_crm_module_retail_soho_bandwidth_change_request_action"
         parent="menu_isp_crm_module_service_request_act"/>
 
     <menuitem
