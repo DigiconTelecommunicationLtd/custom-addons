@@ -57,4 +57,5 @@ from . import isp_crm_account_invoice_line
 from . import isp_crm_validate_multiple_invoices
 from . import isp_crm_sale_report
 from . import isp_crm_sale_report_table
+from . import isp_crm_retail_soho_bandwidth_change_process
 
