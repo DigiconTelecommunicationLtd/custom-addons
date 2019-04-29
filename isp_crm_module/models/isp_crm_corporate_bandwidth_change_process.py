@@ -54,7 +54,7 @@ class RetailSohoBandwidthChange(models.Model):
     current_package = fields.Many2one(related='customer.current_package_id', help='Current Package.')
     proposed_new_package = fields.Many2one('product.product', string='Proposed New Package', domain=[('sale_ok', '=', True)],
                                          change_default=True, ondelete='restrict', track_visibility='onchange')
-    bandwidth = fields.Float(string='Current Bandwidth', required=False, default=1, track_visibility='onchange')
+    bandwidth = fields.Float(string='Current Bandwidth', required=False, track_visibility='onchange')
     proposed_package_price = fields.Float(related='proposed_new_package.lst_price', digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange')
     proposed_activation_date = fields.Date(string="Proposed Activation Date", default=None)
     customer_email = fields.Char(related='customer.email', store=True)
