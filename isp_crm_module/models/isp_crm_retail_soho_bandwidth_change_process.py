@@ -48,7 +48,7 @@ class RetailSohoBandwidthChange(models.Model):
     ticket_ref = fields.Char(string="Ticket ID (reference)", default='New')
     description = fields.Text('Description')
     default_stages = fields.Selection(AVAILABLE_STAGES, string="Stages",group_expand='_default_stages')
-    customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True), ('opportunity_ids.lead_type', '!=', 'corporate')],
+    customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True), ('opportunity_ids.lead_type', '=', 'retail')],
                                track_visibility='onchange', required=True)
     customer_id = fields.Char(related='customer.subscriber_id', help='Customer ID.', required=True)
     current_package = fields.Many2one(related='customer.current_package_id', help='Current Package.', required=True)

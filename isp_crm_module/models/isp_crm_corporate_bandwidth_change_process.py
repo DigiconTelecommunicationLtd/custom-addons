@@ -48,7 +48,7 @@ class RetailSohoBandwidthChange(models.Model):
     ticket_ref = fields.Char(string="Ticket ID (reference)", default='New')
     description = fields.Text('Description')
     default_stages = fields.Selection(AVAILABLE_STAGES, string="Stages",group_expand='_default_stages')
-    customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True), ('opportunity_ids.lead_type', '=', 'corporate')],
+    customer = fields.Many2one('res.partner', string="Customer", domain=[('customer', '=', True), ('opportunity_ids.lead_type', '!=', 'retail')],
                                track_visibility='onchange', required=True)
     customer_id = fields.Char(related='customer.subscriber_id', help='Customer ID.')
     current_package = fields.Many2one(related='customer.current_package_id', help='Current Package.', required=True)
@@ -72,55 +72,59 @@ class RetailSohoBandwidthChange(models.Model):
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.corporate_bandwidth_change') or '/'
+            if vals.get('ticket_ref'):
+                vals['ticket_ref'] = vals.get('ticket_ref')
+            else:
+                customer = int(vals.get('customer'))
+                customer = self.env['res.partner'].search([('id', '=', customer)])
+                current_package_id = int(vals.get('current_package'))
+                current_package_id = self.env['product.product'].search([('id', '=', current_package_id)])
+                proposed_package_id = int(vals.get('proposed_new_package'))
+                proposed_package_id = self.env['product.product'].search([('id', '=', proposed_package_id)])
+                activation_date = vals.get('proposed_activation_date')
+                activation_date = datetime.strptime(activation_date, DEFAULT_DATE_FORMAT)
+                ticket_id = self.env['ir.sequence'].next_by_code(
+                    'isp_crm_module.corporate_bandwidth_change') or '/'
+                # Creating a Package change obj
+                package_change_obj = self.env['isp_crm_module.change_package'].search([])
+                created_package_change = package_change_obj.create({
+                    'ticket_ref': ticket_id,
+                    'customer_id': customer.id,
+                    'from_package_id': customer.current_package_id.id,
+                    'to_package_id': proposed_package_id.id,
+                    'active_from': activation_date
+                })
+                created_package_change.send_package_change_mail()
 
-            customer = int(vals.get('customer'))
-            customer = self.env['res.partner'].search([('id', '=', customer)])
-            current_package_id = int(vals.get('current_package'))
-            current_package_id = self.env['product.product'].search([('id', '=', current_package_id)])
-            proposed_package_id = int(vals.get('proposed_new_package'))
-            proposed_package_id = self.env['product.product'].search([('id', '=', proposed_package_id)])
-            activation_date = vals.get('proposed_activation_date')
-            activation_date = datetime.strptime(activation_date, DEFAULT_DATE_FORMAT)
-            ticket_id = self.env['ir.sequence'].next_by_code(
-                'isp_crm_module.corporate_bandwidth_change') or '/'
-            # Creating a Package change obj
-            package_change_obj = self.env['isp_crm_module.change_package'].search([])
-            created_package_change = package_change_obj.create({
-                'ticket_ref': ticket_id,
-                'customer_id': customer.id,
-                'from_package_id': customer.current_package_id.id,
-                'to_package_id': proposed_package_id.id,
-                'active_from': activation_date
-            })
-            created_package_change.send_package_change_mail()
-
-            vals['ticket_ref'] = ticket_id
+                vals['ticket_ref'] = ticket_id
             vals['default_stages'] = 'New'
         else:
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.corporate_bandwidth_change') or '/'
+            if vals.get('ticket_ref'):
+                vals['ticket_ref'] = vals.get('ticket_ref')
+            else:
+                customer = int(vals.get('customer'))
+                customer = self.env['res.partner'].search([('id', '=', customer)])
+                current_package_id = int(vals.get('current_package'))
+                current_package_id = self.env['product.product'].search([('id', '=', current_package_id)])
+                proposed_package_id = int(vals.get('proposed_new_package'))
+                proposed_package_id = self.env['product.product'].search([('id', '=', proposed_package_id)])
+                activation_date = vals.get('proposed_activation_date')
+                activation_date = datetime.strptime(activation_date, DEFAULT_DATE_FORMAT)
+                ticket_id = self.env['ir.sequence'].next_by_code(
+                    'isp_crm_module.corporate_bandwidth_change') or '/'
+                # Creating a Package change obj
+                package_change_obj = self.env['isp_crm_module.change_package'].search([])
+                created_package_change = package_change_obj.create({
+                    'ticket_ref': ticket_id,
+                    'customer_id': customer.id,
+                    'from_package_id': customer.current_package_id.id,
+                    'to_package_id': proposed_package_id.id,
+                    'active_from': activation_date
+                })
+                created_package_change.send_package_change_mail()
 
-            customer = int(vals.get('customer'))
-            customer = self.env['res.partner'].search([('id', '=', customer)])
-            current_package_id = int(vals.get('current_package'))
-            current_package_id = self.env['product.product'].search([('id', '=', current_package_id)])
-            proposed_package_id = int(vals.get('proposed_new_package'))
-            proposed_package_id = self.env['product.product'].search([('id', '=', proposed_package_id)])
-            activation_date = vals.get('proposed_activation_date')
-            activation_date = datetime.strptime(activation_date, DEFAULT_DATE_FORMAT)
-            ticket_id = self.env['ir.sequence'].next_by_code(
-                'isp_crm_module.corporate_bandwidth_change') or '/'
-            # Creating a Package change obj
-            package_change_obj = self.env['isp_crm_module.change_package'].search([])
-            created_package_change = package_change_obj.create({
-                'ticket_ref': ticket_id,
-                'customer_id': customer.id,
-                'from_package_id': customer.current_package_id.id,
-                'to_package_id': proposed_package_id.id,
-                'active_from': activation_date
-            })
-            created_package_change.send_package_change_mail()
-
-            vals['ticket_ref'] = ticket_id
+                vals['ticket_ref'] = ticket_id
             vals['default_stages'] = 'New'
 
         newrecord = super(RetailSohoBandwidthChange, self).create(vals)

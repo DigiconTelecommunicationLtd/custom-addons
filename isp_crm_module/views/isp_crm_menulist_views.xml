@@ -37,14 +37,14 @@
 
     <menuitem
         id="menu_isp_crm_module_retail_soho_customers"
-        name="Retail/SOHO Customers"
+        name="Retail Customers"
         sequence="1"
         action="isp_crm_module_retail_soho_bandwidth_change_request_action"
         parent="menu_isp_crm_module_bandwidth_change_request"/>
 
     <menuitem
         id="menu_isp_crm_module_corporate_customers"
-        name="Corporate Customers"
+        name="Corporate/SOHO Customers"
         sequence="2"
         action="isp_crm_module_corporate_bandwidth_change_request_action"
         parent="menu_isp_crm_module_bandwidth_change_request"/>
