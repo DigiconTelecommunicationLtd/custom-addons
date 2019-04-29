@@ -101,7 +101,7 @@
                     <group string="Customer Info">
                         <!--Left-->
                         <group>
-                            <field name="customer" string="Customer Name" options="{'no_create_edit': True}"/>
+                            <field name="customer" string="Customer Name" options="{'no_create_edit': True}" attrs="{'required': True}"/>
                             <field name="customer_id" string="Customer ID" readonly="1"/>
                             <field name="customer_type" readonly="1"/>
                         </group>
@@ -109,14 +109,14 @@
                     <group string="Package Info">
                         <!--Left-->
                         <group>
-                            <field name="current_package"/>
-                            <field name="proposed_new_package"/>
+                            <field name="current_package" attrs="{'required': True}"/>
+                            <field name="proposed_new_package" attrs="{'required': True}"/>
                             <field name="quantity" attrs="{'invisible': [('customer_type', '=', 'retail')]}"/>
-                            <field name="proposed_package_price" string="Proposed Package Price"/>
+                            <field name="proposed_package_price" string="Proposed Package Price" attrs="{'required': True}"/>
                         </group>
                         <!--Right-->
                         <group>
-                            <field name="proposed_activation_date"/>
+                            <field name="proposed_activation_date" attrs="{'required': True}"/>
                         </group>
                     </group>
                 </sheet>
