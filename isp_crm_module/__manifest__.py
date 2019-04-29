@@ -70,6 +70,7 @@
         'views/isp_crm_register_payment_validate_form.xml',
         'views/isp_crm_sale_report.xml',
         'views/isp_crm_retail_soho_bandwidth_change_process_views.xml',
+        'views/isp_crm_corporate_bandwidth_change_process_views.xml',
         'views/isp_crm_menulist_views.xml',
         'template/new_ticket_page.xml',
         'template/customer_profile_ticket.xml',

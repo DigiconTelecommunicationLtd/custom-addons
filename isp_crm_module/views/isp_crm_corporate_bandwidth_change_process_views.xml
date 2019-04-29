@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="isp_crm_module_retail_soho_bandwidth_change_search" model="ir.ui.view">
-        <field name="problem">Retail SOHO Bandwidth Change Ticket - Search</field>
-        <field name="model">isp_crm_module.retail_soho_bandwidth_change</field>
+    <record id="isp_crm_module_corporate_bandwidth_change_search" model="ir.ui.view">
+        <field name="problem">Corporate Bandwidth Change Ticket - Search</field>
+        <field name="model">isp_crm_module.corporate_bandwidth_change</field>
         <field name="arch" type="xml">
             <search string="Request Search">
                 <field name="name"/>
@@ -15,9 +15,9 @@
 
 
     <!--Ticket Kanban-->
-    <record model="ir.ui.view" id="view_isp_crm_module_retail_soho_bandwidth_change_kanban">
-        <field name="problem">isp_crm_module.retail_soho_bandwidth_change.kanban</field>
-        <field name="model">isp_crm_module.retail_soho_bandwidth_change</field>
+    <record model="ir.ui.view" id="view_isp_crm_module_corporate_bandwidth_change_kanban">
+        <field name="problem">isp_crm_module.corporate_bandwidth_change.kanban</field>
+        <field name="model">isp_crm_module.corporate_bandwidth_change</field>
         <field name="type">kanban</field>
         <field name="arch" type="xml">
             <kanban default_group_by="default_stages" class="o_kanban_small_column o_kanban_project_tasks">
@@ -76,9 +76,9 @@
     </record>
 
 
-    <record id="isp_crm_module_retail_soho_bandwidth_change_tree" model="ir.ui.view">
-        <field name="problem">isp_crm_module.retail_soho_bandwidth_change.tree</field>
-        <field name="model">isp_crm_module.retail_soho_bandwidth_change</field>
+    <record id="isp_crm_module_corporate_bandwidth_change_tree" model="ir.ui.view">
+        <field name="problem">isp_crm_module.corporate_bandwidth_change.tree</field>
+        <field name="model">isp_crm_module.corporate_bandwidth_change</field>
         <field name="arch" type="xml">
             <tree string="Service Request">
                 <field name="name"/>
@@ -87,9 +87,9 @@
         </field>
     </record>
 
-    <record id="isp_crm_module_retail_soho_bandwidth_change_form" model="ir.ui.view">
-        <field name="problem">isp_crm_module.retail_soho_bandwidth_change.form</field>
-        <field name="model">isp_crm_module.retail_soho_bandwidth_change</field>
+    <record id="isp_crm_module_corporate_bandwidth_change_form" model="ir.ui.view">
+        <field name="problem">isp_crm_module.corporate_bandwidth_change.form</field>
+        <field name="model">isp_crm_module.corporate_bandwidth_change</field>
         <field name="priority" eval="1"/>
         <field name="arch" type="xml">
             <form string="Bandwidth Change Request">
@@ -109,9 +109,9 @@
                     <group string="Package Info">
                         <!--Left-->
                         <group>
+                            <field name="bandwidth"/>
                             <field name="current_package"/>
                             <field name="proposed_new_package"/>
-                            <field name="quantity" attrs="{'invisible': [('customer_type', '=', 'retail')]}"/>
                             <field name="proposed_package_price" string="Proposed Package Price"/>
                         </group>
                         <!--Right-->
@@ -129,12 +129,12 @@
         </field>
     </record>
 
-    <record id="isp_crm_module_retail_soho_bandwidth_change_request_action" model="ir.actions.act_window">
-        <field name="name">Retail SOHO Bandwidth Change Request</field>
-        <field name="res_model">isp_crm_module.retail_soho_bandwidth_change</field>
+    <record id="isp_crm_module_corporate_bandwidth_change_request_action" model="ir.actions.act_window">
+        <field name="name">Corporate Bandwidth Change Request</field>
+        <field name="res_model">isp_crm_module.corporate_bandwidth_change</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[]</field>
-        <field name="search_view_id" ref="isp_crm_module_retail_soho_bandwidth_change_search" />
+        <field name="search_view_id" ref="isp_crm_module_corporate_bandwidth_change_search" />
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 Help Text

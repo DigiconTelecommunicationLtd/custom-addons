@@ -26,7 +26,7 @@
         id="menu_isp_crm_module_new_connection_request"
         name="New Connection Request"
         sequence="1"
-        action="isp_crm_module_retail_soho_bandwidth_change_request_action"
+        action="isp_crm_module_service_request_action"
         parent="menu_isp_crm_module_service_request_act"/>
 
     <menuitem
@@ -46,7 +46,7 @@
         id="menu_isp_crm_module_corporate_customers"
         name="Corporate Customers"
         sequence="2"
-        action="isp_crm_module_retail_soho_bandwidth_change_request_action"
+        action="isp_crm_module_corporate_bandwidth_change_request_action"
         parent="menu_isp_crm_module_bandwidth_change_request"/>
 
     <!--Payment Receive Report-->

@@ -49,5 +49,13 @@
             <field name="prefix">%(y)s%(month)s%(day)s</field>
             <field name="padding">3</field>
         </record>
+
+        <!-- Sequences for Corporate Bandwidth Change Request -->
+        <record id="seq_corporate_bandwidht_change" model="ir.sequence">
+            <field name="name">Corporate Bandwidth Change Request</field>
+            <field name="code">isp_crm_module.corporate_bandwidth_change</field>
+            <field name="prefix">%(y)s%(month)s%(day)s</field>
+            <field name="padding">3</field>
+        </record>
     </data>
 </odoo>
