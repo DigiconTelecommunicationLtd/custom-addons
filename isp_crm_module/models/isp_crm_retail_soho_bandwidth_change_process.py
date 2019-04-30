@@ -154,11 +154,15 @@ class RetailSohoBandwidthChange(models.Model):
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
+        tomorrow = date.today() + timedelta(days=1)
         if self.default_stages != 'Done':
             raise UserError('System does not allow you to change stage after Mark Done. ')
-        if self.default_stages == 'Done' and self.color != 10:
-            raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
+        if self.default_stages == 'Done':
+            if self.color == 1:
+                raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
+            if self.proposed_activation_date >= tomorrow:
+                raise UserError('Proposed activation date is over. Please set a new date.')
         else:
             self.write({
-                'color': 11,
+                'color': 7,
             })

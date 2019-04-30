@@ -16,6 +16,7 @@ DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 CUSTOMER_INACTIVE_STATUS = 'inactive'
 CUSTOMER_ACTIVE_STATUS = 'active'
+DEFAULT_DONE_STAGE = 'Done'
 
 INVOICE_PAID_STATUS = 'paid'
 
@@ -269,97 +270,170 @@ class CronJobModel(models.Model):
         return customer
 
     @api.model
-    def update_customer_package_for_next_bill_cycle(self):
-        today = date.today()
-        tomorrow = date.today() + timedelta(days=1)
-        # Check if it is a customer,
-        # and if the customer is inactive or next package start date is tomorrow.
-        # If the customer is inactive, then we will check if
-        # the customer has sufficient balance otherwise
-        # if the customer is active and next package start date is tomorrow then check if
-        # the customer has sufficient balance.
-        # If the customer has sufficient balance then reactivate the customer
-        customers_list = self.env['res.partner'].search([
-            ('customer', '=', True),
-            '|',
-            ('next_package_start_date', '=', tomorrow),
-            ('active_status', '=', CUSTOMER_INACTIVE_STATUS)
-        ])
-        for customer in customers_list:
-            # Get customer balance
-            customer_balance =  customer.get_customer_balance(customer_id=customer.id)
-            # find their invoices that are paid
-            current_month_invoice = self.env['account.invoice'].search([
-                ('partner_id', '=', customer.id),
-                ('state', '=', 'paid')
-            ], limit=1)
-            #
-            # if current_month_invoice:
-            #     self._update_customer_package_info(customer=customer)
-            # else:
-            #     pass
-
-            # updating the customer active_status and package according to their balance
-            if (customer_balance < 0) and (abs(customer_balance) >= customer.next_package_price):
-                # updating account moves of customer
-                payment_obj = self.env['account.payment']
-                payment_obj.customer_bill_adjustment(
-                    customer=customer,
-                    package_price=customer.next_package_price
-                )
-                # updating package info of customer
-                sale_order_lines = customer.next_package_sales_order_id.order_line
-                original_price = 0.0
-                for sale_order_line in sale_order_lines:
-                    discount = (sale_order_line.discount * sale_order_line.price_subtotal) / 100.0
-                    original_price_sale_order_line = sale_order_line.price_subtotal + discount
-                    original_price = original_price + original_price_sale_order_line
-
-                check_customer = self.env['res.partner'].search([('id', '=', customer.id)], limit=1)
-                if check_customer:
-                    # get the opportunity of the customer, one customer should have one opportunity.
-                    opportunity = self.env['crm.lead'].search([('partner_id', '=', check_customer.id)], limit=1)
-                    if opportunity and opportunity.lead_type != "sohoandsme":
-                        updated_customer = customer.update_current_bill_cycle_info(
-                            customer=customer,
-                            product_id=customer.next_package_id.id,
-                            price=customer.next_package_price,
-                            original_price = original_price,
-                            start_date=customer.next_package_start_date,
-                        )
-                        updated_customer = updated_customer.update_next_bill_cycle_info(
-                            customer=updated_customer
-                        )
+    def check_customer_balance_for_package_change(self):
+        try:
+            customers_list = self.env['res.partner'].search([
+                ('customer', '=', True),
+                ('active_status', '=', CUSTOMER_ACTIVE_STATUS)
+            ])
+            today = date.today()
+            tomorrow = date.today() + timedelta(days=1)
+            for customer in customers_list:
+                # Get customer balance
+                customer_balance =  customer.get_customer_balance(customer_id=customer.id)
+                # get the opportunity of the customer, one customer should have one opportunity.
+                opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
+                if opportunity and opportunity.lead_type != "retail":
+                    ticket_obj = self.env['isp_crm_module.corporate_bandwidth_change'].search([('customer', '=', customer.id),('color', '=', 1)], order='create_date desc', limit=1)
+                    if ticket_obj:
+                        # updating the customer active_status and package according to their balance
+                        if (customer_balance < 0) and (abs(customer_balance) >= ticket_obj.proposed_package_price):
+                            customer.write({
+                                'next_package_id': ticket_obj.proposed_new_package.id,
+                                'next_package_start_date': ticket_obj.proposed_activation_date,
+                                'next_package_price': ticket_obj.proposed_package_price,
+                                'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
+                                'is_sent_package_change_req': True
+                            })
+                            if ticket_obj.proposed_activation_date < tomorrow:
+                                ticket_obj.write({
+                                    'color':10
+                                })
+                            else:
+                                ticket_obj.write({
+                                    'color': 2
+                                })
                     else:
-                        # if soho and sme, then bill cycle will start form the start of the next month
-                        today = datetime.today()
-                        next_month_first_day = str(datetime(today.year, today.month + 1, 1)).split(" ")[0]
-                        updated_customer = customer.update_current_bill_cycle_info(
-                            customer=customer,
-                            product_id=customer.next_package_id.id,
-                            price=customer.next_package_price,
-                            original_price=original_price,
-                            start_date=next_month_first_day,
-                        )
-                        updated_customer = updated_customer.update_next_bill_cycle_info(
-                            customer=updated_customer
-                        )
-                # Adding the package change history
-                package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
-                created_package_history = package_history_obj.set_package_change_history(customer)
+                        ticket_obj = self.env['isp_crm_module.retail_soho_bandwidth_change'].search(
+                            [('customer', '=', customer.id), ('color', '=', 1)], order='create_date desc', limit=1)
+                        if ticket_obj:
+                            # updating the customer active_status and package according to their balance
+                            if (customer_balance < 0) and (abs(customer_balance) >= ticket_obj.proposed_package_price):
+                                customer.write({
+                                    'next_package_id': ticket_obj.proposed_new_package.id,
+                                    'next_package_start_date': ticket_obj.proposed_activation_date,
+                                    'next_package_price': ticket_obj.proposed_package_price,
+                                    'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
+                                    'is_sent_package_change_req': True
+                                })
+                                if ticket_obj.proposed_activation_date <= today:
+                                    ticket_obj.write({
+                                        'color': 10
+                                    })
+                                else:
+                                    ticket_obj.write({
+                                        'color': 2
+                                    })
+            return True
+        except Exception as ex:
+            print(ex)
 
-                # Make customer active
-                customer.update({
-                    'active_status': CUSTOMER_ACTIVE_STATUS
-                })
-            else:
-                if customer.is_sent_package_change_req == True:
-                    updated_customer = customer.update_next_bill_cycle_info(customer=customer)
+    @api.model
+    def update_customer_package_for_next_bill_cycle(self):
+        try:
+            today = date.today()
+            tomorrow = date.today() + timedelta(days=1)
+            # Check if it is a customer,
+            # and if the customer is inactive or next package start date is tomorrow.
+            # If the customer is inactive, then we will check if
+            # the customer has sufficient balance otherwise
+            # if the customer is active and next package start date is tomorrow then check if
+            # the customer has sufficient balance.
+            # If the customer has sufficient balance then reactivate the customer
+            customers_list = self.env['res.partner'].search([
+                ('customer', '=', True),
+                '|',
+                ('next_package_start_date', '=', tomorrow),
+                ('active_status', '=', CUSTOMER_INACTIVE_STATUS)
+            ])
+            for customer in customers_list:
+                # Get customer balance
+                customer_balance =  customer.get_customer_balance(customer_id=customer.id)
+                # find their invoices that are paid
+                current_month_invoice = self.env['account.invoice'].search([
+                    ('partner_id', '=', customer.id),
+                    ('state', '=', 'paid')
+                ], limit=1)
+                #
+                # if current_month_invoice:
+                #     self._update_customer_package_info(customer=customer)
+                # else:
+                #     pass
+                opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
+                ticket_obj = self.env['isp_crm_module.corporate_bandwidth_change']
+                if opportunity and opportunity.lead_type != "retail":
+                    ticket = ticket_obj.search(
+                        [('customer', '=', customer.id), ('color', '!=', 1)], order='create_date desc', limit=1)
                 else:
-                    customer.update({
-                        'active_status' : CUSTOMER_INACTIVE_STATUS
-                    })
-        return True
+                    ticket = ticket_obj.search(
+                        [('customer', '=', customer.id), ('color', '!=', 1)], order='create_date desc', limit=1)
+                if ticket:
+                    # updating the customer active_status and package according to their balance
+                    if (customer_balance < 0) and (abs(customer_balance) >= customer.next_package_price) and ticket.default_stages == DEFAULT_DONE_STAGE:
+                        # updating account moves of customer
+                        payment_obj = self.env['account.payment']
+                        payment_obj.customer_bill_adjustment(
+                            customer=customer,
+                            package_price=customer.next_package_price
+                        )
+                        # updating package info of customer
+                        sale_order_lines = customer.next_package_sales_order_id.order_line
+                        original_price = 0.0
+                        for sale_order_line in sale_order_lines:
+                            discount = (sale_order_line.discount * sale_order_line.price_subtotal) / 100.0
+                            original_price_sale_order_line = sale_order_line.price_subtotal + discount
+                            original_price = original_price + original_price_sale_order_line
+
+                        check_customer = self.env['res.partner'].search([('id', '=', customer.id)], limit=1)
+                        if check_customer:
+                            # get the opportunity of the customer, one customer should have one opportunity.
+                            opportunity = self.env['crm.lead'].search([('partner_id', '=', check_customer.id)], limit=1)
+                            if opportunity and opportunity.lead_type != "sohoandsme":
+                                updated_customer = customer.update_current_bill_cycle_info(
+                                    customer=customer,
+                                    product_id=customer.next_package_id.id,
+                                    price=customer.next_package_price,
+                                    original_price = original_price,
+                                    start_date=customer.next_package_start_date,
+                                )
+                                updated_customer = updated_customer.update_next_bill_cycle_info(
+                                    customer=updated_customer
+                                )
+                            else:
+                                # if soho and sme, then bill cycle will start form the start of the next month
+                                today = datetime.today()
+                                next_month_first_day = str(datetime(today.year, today.month + 1, 1)).split(" ")[0]
+                                updated_customer = customer.update_current_bill_cycle_info(
+                                    customer=customer,
+                                    product_id=customer.next_package_id.id,
+                                    price=customer.next_package_price,
+                                    original_price=original_price,
+                                    start_date=next_month_first_day,
+                                )
+                                updated_customer = updated_customer.update_next_bill_cycle_info(
+                                    customer=updated_customer
+                                )
+                        # Adding the package change history
+                        package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
+                        created_package_history = package_history_obj.set_package_change_history(customer)
+
+                        # Make customer active
+                        customer.update({
+                            'active_status': CUSTOMER_ACTIVE_STATUS
+                        })
+
+                    else:
+                        if customer.is_sent_package_change_req == True:
+                            updated_customer = customer.update_next_bill_cycle_info(customer=customer)
+                        else:
+                            customer.update({
+                                'active_status' : CUSTOMER_INACTIVE_STATUS
+                            })
+                else:
+                    print("No ticket found!")
+            return True
+        except Exception as ex:
+            print(ex)
 
     def send_notification_after_invoice_due_date(self):
         """
