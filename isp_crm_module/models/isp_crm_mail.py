@@ -149,7 +149,7 @@ class Team(models.Model):
         bill_cycle_str = ""
         body = body.replace('--package_name--', str(package_change_obj.current_package.name))
         body = body.replace('--next_package_name--', str(package_change_obj.proposed_new_package.name))
-        if package_change_obj.active_from == package_change_obj.customer_id.next_package_start_date:
+        if package_change_obj.proposed_activation_date == package_change_obj.customer.next_package_start_date:
             bill_cycle_str = "Requesting you to pay the amount before <strong>Next Bill Cycle.</strong>"
 
         else:

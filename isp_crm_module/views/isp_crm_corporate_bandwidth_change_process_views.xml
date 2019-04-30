@@ -130,7 +130,7 @@
     </record>
 
     <record id="isp_crm_module_corporate_bandwidth_change_request_action" model="ir.actions.act_window">
-        <field name="name">Corporate SOHO Bandwidth Change Request</field>
+        <field name="name">Corporate/SOHO Bandwidth Change Request</field>
         <field name="res_model">isp_crm_module.corporate_bandwidth_change</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[]</field>
