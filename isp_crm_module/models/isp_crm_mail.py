@@ -162,7 +162,7 @@ class Team(models.Model):
             mail_values = {
                 'subject': template_obj.subject,
                 'body_html': body,
-                'email_to': package_change_obj.customer_id.email,
+                'email_to': package_change_obj.customer.email,
                 'email_from': self.DEFAULT_FROM_MAIL,
             }
             try:
