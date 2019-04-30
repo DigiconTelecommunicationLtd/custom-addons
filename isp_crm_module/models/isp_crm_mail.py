@@ -147,15 +147,15 @@ class Team(models.Model):
         # next_package_name
         # bill_cycle_str
         bill_cycle_str = ""
-        body = body.replace('--package_name--', str(package_change_obj.from_package_id.name))
-        body = body.replace('--next_package_name--', str(package_change_obj.to_package_id.name))
+        body = body.replace('--package_name--', str(package_change_obj.current_package.name))
+        body = body.replace('--next_package_name--', str(package_change_obj.proposed_new_package.name))
         if package_change_obj.active_from == package_change_obj.customer_id.next_package_start_date:
             bill_cycle_str = "Requesting you to pay the amount before <strong>Next Bill Cycle.</strong>"
 
         else:
             bill_cycle_str = "Your new bill cycle start from: <strong>{bill_cycle_date}</strong><br /><br />" \
                              "Requesting you to pay the amount (Tk. <strong>{next_package_price}</strong>) " \
-                             "before <strong>'{bill_cycle_date}'</strong>".format(bill_cycle_date=package_change_obj.active_from, next_package_price=package_change_obj.to_package_id.list_price)
+                             "before <strong>'{bill_cycle_date}'</strong>".format(bill_cycle_date=package_change_obj.proposed_activation_date, next_package_price=package_change_obj.proposed_package_price)
         body = body.replace('--bill_cycle_str--', str(bill_cycle_str))
 
         if template_obj:

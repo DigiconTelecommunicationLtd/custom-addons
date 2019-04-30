@@ -95,7 +95,7 @@
             <form string="Bandwidth Change Request">
                 <sheet>
                     <div class="oe_title">
-                        <field name="ticket_ref" string="Ticket ID" readonly="1"/>
+                        <h1><field name="ticket_ref" string="Ticket ID" readonly="1"/></h1>
                         <h1><field name="problem" string="Name" placeholder="Problem" attrs="{'required': True}"/></h1>
                     </div>
                     <group string="Customer Info">
@@ -110,7 +110,7 @@
                         <!--Left-->
                         <group>
                             <field name="bandwidth" attrs="{'required': True}"/>
-                            <field name="current_package" attrs="{'required': True}"/>
+                            <field name="current_package" string="Current Package" attrs="{'required': True}"/>
                             <field name="proposed_new_package" attrs="{'required': True}"/>
                             <field name="proposed_package_price" string="Proposed Package Price" attrs="{'required': True}"/>
                         </group>
@@ -130,7 +130,7 @@
     </record>
 
     <record id="isp_crm_module_corporate_bandwidth_change_request_action" model="ir.actions.act_window">
-        <field name="name">Corporate Bandwidth Change Request</field>
+        <field name="name">Corporate SOHO Bandwidth Change Request</field>
         <field name="res_model">isp_crm_module.corporate_bandwidth_change</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[]</field>

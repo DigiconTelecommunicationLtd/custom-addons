@@ -554,26 +554,26 @@ class SelfcareController(PaymentController):
                     active_from  = logged_in_user.partner_id.next_package_start_date
 
 
-
-                ticket_type_obj = request.env['isp_crm_module.helpdesk_type'].sudo().search([('name', 'like', 'Package Change')], limit=1)
-                ticket_obj = request.env['isp_crm_module.helpdesk'].sudo().search([])
-                created_ticket = ticket_obj.create({
-                    'customer'      : logged_in_user.partner_id.id,
-                    'type'          : ticket_type_obj.id,
-                    'problem'       : pack_change_problem_obj.id,
-                    'description'   : description,
-                })
-
-                # Creating a Package change obj
-                package_change_obj = request.env['isp_crm_module.change_package'].sudo().search([])
-                created_package_change = package_change_obj.create({
-                    'ticket_ref'        : created_ticket.name,
-                    'customer_id'       : logged_in_user.partner_id.id,
-                    'from_package_id'   : logged_in_user.partner_id.current_package_id.id,
-                    'to_package_id'     : package_obj.id,
-                    'active_from'       : active_from
-                })
-                created_package_change.send_package_change_mail()
+                # # Create Ticket in Helpdesk (No Need Now)
+                # ticket_type_obj = request.env['isp_crm_module.helpdesk_type'].sudo().search([('name', 'like', 'Package Change')], limit=1)
+                # ticket_obj = request.env['isp_crm_module.helpdesk'].sudo().search([])
+                # created_ticket = ticket_obj.create({
+                #     'customer'      : logged_in_user.partner_id.id,
+                #     'type'          : ticket_type_obj.id,
+                #     'problem'       : pack_change_problem_obj.id,
+                #     'description'   : description,
+                # })
+                #
+                # # Creating a Package change obj (No Need Now)
+                # package_change_obj = request.env['isp_crm_module.change_package'].sudo().search([])
+                # created_package_change = package_change_obj.create({
+                #     'ticket_ref'        : created_ticket.name,
+                #     'customer_id'       : logged_in_user.partner_id.id,
+                #     'from_package_id'   : logged_in_user.partner_id.current_package_id.id,
+                #     'to_package_id'     : package_obj.id,
+                #     'active_from'       : active_from
+                # })
+                # created_package_change.send_package_change_mail()
 
                 success_msg = "Your Package change request Successfully enlisted."
 
@@ -584,7 +584,6 @@ class SelfcareController(PaymentController):
                 created_bandwidth_change_request = bandwidth_change_obj.create({
                     'customer': logged_in_user.partner_id.id,
                     'customer_id': logged_in_user.partner_id.subscriber_id,
-                    'ticket_ref': created_ticket.name,
                     'current_package': logged_in_user.partner_id.current_package_id.id,
                     'proposed_new_package': package_obj.id,
                     'proposed_package_price': package_obj.lst_price,
