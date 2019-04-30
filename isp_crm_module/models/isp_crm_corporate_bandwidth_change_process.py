@@ -33,9 +33,9 @@ AVAILABLE_STAGES = [
     ('Done', 'Done'),
 ]
 
-class RetailSohoBandwidthChange(models.Model):
+class CorporateSohoBandwidthChange(models.Model):
     """
-    Model for different type of service_requests.
+    Model for Retail bandwidth change request.
     """
     _name = "isp_crm_module.corporate_bandwidth_change"
     _description = "Corporate SOHO Bandwidth Change Request."
@@ -83,7 +83,7 @@ class RetailSohoBandwidthChange(models.Model):
             vals['ticket_ref'] = ticket_id
             vals['default_stages'] = 'New'
 
-        newrecord = super(RetailSohoBandwidthChange, self).create(vals)
+        newrecord = super(CorporateSohoBandwidthChange, self).create(vals)
         template_obj = self.env['mail.template'].search(
             [('name', '=', 'isp_crm_module_user_package_change_mail_template')])
         mail_obj = self.env['isp_crm_module.mail'].sending_mail_for_package_change_request(
