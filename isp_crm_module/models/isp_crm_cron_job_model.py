@@ -430,7 +430,7 @@ class CronJobModel(models.Model):
                                 updated_customer = updated_customer.update_next_bill_cycle_info(
                                     customer=updated_customer
                                 )
-                        # Adding the package change history
+                        # Adding the package change history.
                         package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
                         created_package_history = package_history_obj.set_package_change_history(customer)
 
