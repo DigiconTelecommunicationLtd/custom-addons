@@ -66,7 +66,7 @@ class RetailSohoBandwidthChange(models.Model):
     priority = fields.Selection(AVAILABLE_PRIORITIES, string="Priority")
     customer_rating = fields.Selection(AVAILABLE_RATINGS, string="Rating")
     customer_feedback = fields.Text('Feedback')
-    color = fields.Integer(default=1)
+    color = fields.Integer(default=0)
 
     @api.model
     def create(self, vals):
@@ -117,7 +117,7 @@ class RetailSohoBandwidthChange(models.Model):
         if self.default_stages != 'Done':
             raise UserError('System does not allow you to change stage after Mark Done. ')
         if self.default_stages == 'Done':
-            if self.color == 1:
+            if self.color == 0:
                 raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
             if self.proposed_activation_date >= tomorrow:
                 raise UserError('Proposed activation date is over. Please set a new date.')

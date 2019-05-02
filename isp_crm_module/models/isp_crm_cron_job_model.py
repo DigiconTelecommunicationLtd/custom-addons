@@ -284,7 +284,7 @@ class CronJobModel(models.Model):
                 # get the opportunity of the customer, one customer should have one opportunity.
                 opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
                 if opportunity and opportunity.lead_type != "retail":
-                    ticket_obj = self.env['isp_crm_module.corporate_bandwidth_change'].search([('customer', '=', customer.id),('color', '=', 1)], order='create_date desc', limit=1)
+                    ticket_obj = self.env['isp_crm_module.corporate_bandwidth_change'].search([('customer', '=', customer.id),('color', '=', 0)], order='create_date desc', limit=1)
                     if ticket_obj:
                         # updating the customer active_status and package according to their balance
                         if (customer_balance < 0) and (abs(customer_balance) >= ticket_obj.proposed_package_price):
@@ -295,35 +295,49 @@ class CronJobModel(models.Model):
                                 'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
                                 'is_sent_package_change_req': True
                             })
-                            if ticket_obj.proposed_activation_date < tomorrow:
-                                ticket_obj.write({
-                                    'color':10
-                                })
-                            else:
-                                ticket_obj.write({
-                                    'color': 2
-                                })
-                    else:
-                        ticket_obj = self.env['isp_crm_module.retail_soho_bandwidth_change'].search(
-                            [('customer', '=', customer.id), ('color', '=', 1)], order='create_date desc', limit=1)
-                        if ticket_obj:
-                            # updating the customer active_status and package according to their balance
-                            if (customer_balance < 0) and (abs(customer_balance) >= ticket_obj.proposed_package_price):
-                                customer.write({
-                                    'next_package_id': ticket_obj.proposed_new_package.id,
-                                    'next_package_start_date': ticket_obj.proposed_activation_date,
-                                    'next_package_price': ticket_obj.proposed_package_price,
-                                    'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
-                                    'is_sent_package_change_req': True
-                                })
-                                if ticket_obj.proposed_activation_date <= today:
-                                    ticket_obj.write({
-                                        'color': 10
-                                    })
-                                else:
+                            if ticket_obj.proposed_activation_date <= today:
+                                difference = today - ticket_obj.proposed_activation_date
+                                difference = int(abs(difference.days))
+                                if difference == 1 or difference == 0:
                                     ticket_obj.write({
                                         'color': 2
                                     })
+                                else:
+                                    ticket_obj.write({
+                                        'color':10
+                                    })
+                            else:
+                                ticket_obj.write({
+                                    'color': 1
+                                })
+                else:
+                    ticket_obj = self.env['isp_crm_module.retail_soho_bandwidth_change'].search(
+                        [('customer', '=', customer.id), ('color', '=', 0)], order='create_date desc', limit=1)
+                    if ticket_obj:
+                        # updating the customer active_status and package according to their balance
+                        if (customer_balance < 0) and (abs(customer_balance) >= ticket_obj.proposed_package_price):
+                            customer.write({
+                                'next_package_id': ticket_obj.proposed_new_package.id,
+                                'next_package_start_date': ticket_obj.proposed_activation_date,
+                                'next_package_price': ticket_obj.proposed_package_price,
+                                'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
+                                'is_sent_package_change_req': True
+                            })
+                            if ticket_obj.proposed_activation_date <= today:
+                                difference = today - ticket_obj.proposed_activation_date
+                                difference = int(abs(difference.days))
+                                if difference == 1 or difference == 0:
+                                    ticket_obj.write({
+                                        'color': 2
+                                    })
+                                else:
+                                    ticket_obj.write({
+                                        'color': 10
+                                    })
+                            else:
+                                ticket_obj.write({
+                                    'color': 1
+                                })
             return True
         except Exception as ex:
             print(ex)
