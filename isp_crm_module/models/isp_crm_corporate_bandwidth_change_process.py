@@ -54,7 +54,7 @@ class CorporateSohoBandwidthChange(models.Model):
     current_package = fields.Many2one(related='customer.current_package_id', help='Current Package.', required=True)
     proposed_new_package = fields.Many2one('product.product', string='Proposed New Package', domain=[('sale_ok', '=', True), ('default_code', '=', 'Corporate')],
                                          change_default=True, ondelete='restrict', track_visibility='onchange', required=True)
-    bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange')
+    bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange', default=0.0)
     proposed_package_price = fields.Float(related='proposed_new_package.lst_price', digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
     proposed_activation_date = fields.Date(string="Proposed Activation Date", default=None, required=True)
     customer_email = fields.Char(related='customer.email', store=True)
@@ -116,12 +116,9 @@ class CorporateSohoBandwidthChange(models.Model):
         tomorrow = date.today() + timedelta(days=1)
         if self.default_stages != 'Done':
             raise UserError('System does not allow you to change stage after Mark Done. ')
-        if self.default_stages == 'Done':
-            if self.color == 0:
-                raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
-            if self.proposed_activation_date >= tomorrow:
-                raise UserError('Proposed activation date is over. Please set a new date.')
+        if self.default_stages == 'Done' and self.color == 0:
+            raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
         else:
-            self.write({
-                'color': 7,
+            self.update({
+                'color': 5,
             })

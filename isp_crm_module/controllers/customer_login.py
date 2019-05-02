@@ -93,7 +93,7 @@ class SelfcareController(PaymentController):
             old_uid = request.uid
             login   = request.params['login']
 
-            if login == "New":
+            if login == "New" or "MC" in login:
                 raise UserError('Invalid data provided. Please provide a valid id or email address.')
 
             check_users = request.env['res.partner'].sudo().search([('subscriber_id', '=', str(login))])

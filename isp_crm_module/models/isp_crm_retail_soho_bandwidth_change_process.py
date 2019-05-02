@@ -95,33 +95,30 @@ class RetailSohoBandwidthChange(models.Model):
         stage_ids = self._fields['default_stages'].get_values(self.env)
         return stage_ids
 
-    @api.onchange('quantity')
-    def _onchange_quantity(self):
-        if self.quantity > 1 and self.proposed_new_package:
-            proposed_package_price = self.proposed_new_package.lst_price * self.quantity
-            self.write({
-                'proposed_package_price': proposed_package_price
-            })
-
-    @api.onchange('proposed_new_package')
-    def _onchange_proposed_package_price(self):
-        if self.quantity > 1 and self.proposed_new_package:
-            proposed_package_price = self.proposed_new_package.lst_price * self.quantity
-            self.write({
-                'proposed_package_price': proposed_package_price
-            })
+    # @api.onchange('quantity')
+    # def _onchange_quantity(self):
+    #     if self.quantity > 1 and self.proposed_new_package:
+    #         proposed_package_price = self.proposed_new_package.lst_price * self.quantity
+    #         self.write({
+    #             'proposed_package_price': proposed_package_price
+    #         })
+    #
+    # @api.onchange('proposed_new_package')
+    # def _onchange_proposed_package_price(self):
+    #     if self.quantity > 1 and self.proposed_new_package:
+    #         proposed_package_price = self.proposed_new_package.lst_price * self.quantity
+    #         self.write({
+    #             'proposed_package_price': proposed_package_price
+    #         })
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
         tomorrow = date.today() + timedelta(days=1)
         if self.default_stages != 'Done':
             raise UserError('System does not allow you to change stage after Mark Done. ')
-        if self.default_stages == 'Done':
-            if self.color == 0:
-                raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
-            if self.proposed_activation_date >= tomorrow:
-                raise UserError('Proposed activation date is over. Please set a new date.')
+        if self.default_stages == 'Done'and self.color == 0:
+            raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
         else:
-            self.write({
-                'color': 7,
+            self.update({
+                'color': 5,
             })
