@@ -99,6 +99,7 @@ class Opportunity(models.Model):
                         if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
                             self.invoice_state = invoices.state
                             super(Opportunity, lead).action_set_won()
+                            self.action_create_new_service_request()
                         else:
                             raise UserError(_("This Opportunity's invoice is neither paid nor deferred."))
                     else:
