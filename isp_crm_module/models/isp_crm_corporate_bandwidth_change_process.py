@@ -15,6 +15,7 @@ import base64
 import ctypes
 
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
+DEFAULT_PACKAGES_CATEGORY_NAME = 'Packages'
 
 AVAILABLE_PRIORITIES = [
         ('0', 'Normal'),
@@ -54,7 +55,7 @@ class CorporateSohoBandwidthChange(models.Model):
     current_package = fields.Many2one(related='customer.current_package_id', help='Current Package.', required=True)
     proposed_new_package = fields.Many2one('product.product', string='Proposed New Package', domain=[('sale_ok', '=', True), ('default_code', '=', 'Corporate')],
                                          change_default=True, ondelete='restrict', track_visibility='onchange', required=True)
-    bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange', default=1.0)
+    bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange', default=1.0, compute="_compute_current_bandwidth")
     proposed_bandwidth = fields.Float(string='Proposed Bandwidth', required=True, track_visibility='onchange', default=1.0)
     proposed_package_price = fields.Float(related='proposed_new_package.lst_price', digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
     current_package_price = fields.Float(related='current_package.lst_price', digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
@@ -97,21 +98,46 @@ class CorporateSohoBandwidthChange(models.Model):
         stage_ids = self._fields['default_stages'].get_values(self.env)
         return stage_ids
 
-    # @api.onchange('quantity')
-    # def _onchange_quantity(self):
-    #     if self.quantity > 1 and self.proposed_new_package:
-    #         proposed_package_price = self.proposed_new_package.lst_price * self.quantity
-    #         self.write({
-    #             'proposed_package_price': proposed_package_price
-    #         })
-    #
-    # @api.onchange('proposed_new_package')
-    # def _onchange_proposed_package_price(self):
-    #     if self.quantity > 1 and self.proposed_new_package:
-    #         proposed_package_price = self.proposed_new_package.lst_price * self.quantity
-    #         self.write({
-    #             'proposed_package_price': proposed_package_price
-    #         })
+    @api.onchange('proposed_bandwidth')
+    def _onchange_quantity(self):
+        if self.proposed_bandwidth > 1 and self.proposed_new_package:
+            proposed_package_price = self.proposed_new_package.lst_price * self.proposed_bandwidth
+            self.write({
+                'proposed_package_price': proposed_package_price
+            })
+
+    @api.onchange('proposed_new_package')
+    def _onchange_proposed_package_price(self):
+        if self.proposed_bandwidth > 1 and self.proposed_new_package:
+            proposed_package_price = self.proposed_new_package.lst_price * self.proposed_bandwidth
+            self.write({
+                'proposed_package_price': proposed_package_price
+            })
+
+    def _compute_current_bandwidth(self):
+        try:
+            if self.current_package:
+                invoice_obj = self.env['account.invoice'].search([('partner_id', '=', self.customer.id)], order='create_date desc', limit=1)
+                quantity = 1
+                price = 0
+                if invoice_obj:
+                    invoice_line_ids = invoice_obj.invoice_line_ids
+                    if invoice_line_ids:
+                        for invoice_line in invoice_line_ids:
+                            if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                                if invoice_line.product_id.name == self.current_package.name:
+                                    quantity = invoice_line.quantity
+                                    price = invoice_line.quantity * invoice_line.price_unit
+                current_package_bandwidth = quantity
+                current_package_price = price
+                self.bandwidth = current_package_bandwidth
+                self.current_package_price = current_package_price
+                # self.write({
+                #     'bandwidth': current_package_bandwidth,
+                #     'current_package_price': current_package_price
+                # })
+        except Exception as ex:
+            print(ex)
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):

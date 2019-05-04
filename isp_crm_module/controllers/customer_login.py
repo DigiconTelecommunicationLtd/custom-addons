@@ -579,24 +579,16 @@ class SelfcareController(PaymentController):
 
                 if "MR" in logged_in_user.partner_id.subscriber_id:
                     bandwidth_change_obj = request.env['isp_crm_module.retail_soho_bandwidth_change'].sudo().search([])
-                    created_bandwidth_change_request = bandwidth_change_obj.create({
-                        'customer': logged_in_user.partner_id.id,
-                        'customer_id': logged_in_user.partner_id.subscriber_id,
-                        'current_package': logged_in_user.partner_id.current_package_id.id,
-                        'proposed_new_package': package_obj.id,
-                        'proposed_package_price': package_obj.lst_price,
-                        'proposed_activation_date': active_from
-                    })
                 else:
                     bandwidth_change_obj = request.env['isp_crm_module.corporate_bandwidth_change'].sudo().search([])
-                    created_bandwidth_change_request = bandwidth_change_obj.create({
-                        'customer': logged_in_user.partner_id.id,
-                        'customer_id': logged_in_user.partner_id.subscriber_id,
-                        'current_package': logged_in_user.partner_id.current_package_id.id,
-                        'proposed_new_package': package_obj.id,
-                        'proposed_package_price': package_obj.lst_price,
-                        'proposed_activation_date': active_from
-                    })
+                created_bandwidth_change_request = bandwidth_change_obj.create({
+                    'customer': logged_in_user.partner_id.id,
+                    'customer_id': logged_in_user.partner_id.subscriber_id,
+                    'current_package': logged_in_user.partner_id.current_package_id.id,
+                    'proposed_new_package': package_obj.id,
+                    'proposed_package_price': package_obj.lst_price,
+                    'proposed_activation_date': active_from
+                })
 
                 print("Bandwidth Change Request is created.")
 
