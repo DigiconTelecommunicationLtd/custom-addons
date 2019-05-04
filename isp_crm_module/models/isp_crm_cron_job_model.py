@@ -17,6 +17,7 @@ DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 CUSTOMER_INACTIVE_STATUS = 'inactive'
 CUSTOMER_ACTIVE_STATUS = 'active'
 DEFAULT_DONE_STAGE = 'Done'
+DEFAULT_PACKAGES_CATEGORY_NAME = 'Packages'
 
 INVOICE_PAID_STATUS = 'paid'
 
@@ -288,30 +289,30 @@ class CronJobModel(models.Model):
                         ticket_obj = self.env['isp_crm_module.corporate_bandwidth_change'].search([('customer', '=', customer.id),('color', '=', 0)], order='create_date desc', limit=1)
                         if ticket_obj:
                             # updating the customer active_status and package according to their balance
-                            if (customer_balance < 0) and (abs(customer_balance) >= ticket_obj.proposed_package_price):
-                                customer.write({
-                                    'next_package_id': ticket_obj.proposed_new_package.id,
-                                    'next_package_start_date': ticket_obj.proposed_activation_date,
-                                    'next_package_price': ticket_obj.proposed_package_price,
-                                    'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
-                                    'is_sent_package_change_req': True
-                                })
-                                activation_date = datetime.strptime(ticket_obj.proposed_activation_date, "%Y-%m-%d").date()
-                                if activation_date >= today:
-                                    difference = today - activation_date
-                                    difference = int(abs(difference.days))
-                                    if difference == 1 or difference == 0:
-                                        ticket_obj.write({
-                                            'color': 2
-                                        })
-                                    else:
-                                        ticket_obj.write({
-                                            'color':10
-                                        })
+                            # if (customer_balance < 0) and (abs(customer_balance) >= ticket_obj.proposed_package_price):
+                            customer.write({
+                                'next_package_id': ticket_obj.proposed_new_package.id,
+                                'next_package_start_date': ticket_obj.proposed_activation_date,
+                                'next_package_price': ticket_obj.proposed_package_price,
+                                'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
+                                'is_sent_package_change_req': True
+                            })
+                            activation_date = datetime.strptime(ticket_obj.proposed_activation_date, "%Y-%m-%d").date()
+                            if activation_date >= today:
+                                difference = today - activation_date
+                                difference = int(abs(difference.days))
+                                if difference == 1 or difference == 0:
+                                    ticket_obj.write({
+                                        'color': 2
+                                    })
                                 else:
                                     ticket_obj.write({
-                                        'color': 1
+                                        'color':0
                                     })
+                            else:
+                                ticket_obj.write({
+                                    'color': 1
+                                })
                     else:
                         ticket_obj = self.env['isp_crm_module.retail_soho_bandwidth_change'].search(
                             [('customer', '=', customer.id), ('color', '=', 0)], order='create_date desc', limit=1)
@@ -618,60 +619,129 @@ class CronJobModel(models.Model):
 
     #Create draft invoice
     def create_draft_invoice(self):
-        print('this wont go to production now')
-        # try:
-        #     today = datetime.today()
-        #     after_threshold_days_date = today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
-        #     next_month_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
-        #     difference = after_threshold_days_date - next_month_date_start
-        #     difference = int(abs(difference.days))
-        #     # corporate_soho_invoice_date_start = datetime.today()
-        #     corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
-        #     corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
-        #
-        #     if difference > 0:
-        #         sale_order_object = self.env['sale.order']
-        #         sale_orders = sale_order_object.search([])
-        #         for order in sale_orders:
-        #             get_customer = self.env['res.partner'].search([('id', '=', order.partner_id.id)], limit=1)
-        #             if get_customer:
-        #                 opportunities = self.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
-        #                 for opportunity in opportunities:
-        #                     # check if lead type is corporate or soho or sme
-        #                     if opportunity.lead_type != "retail":
-        #                         invoice_object = self.env['account.invoice'].search([('origin', '=', order.name)], limit=1)
-        #                         if invoice_object:
-        #                             new_draft_invoice = invoice_object.copy()
-        #
-        #                             new_draft_invoice = new_draft_invoice.update({
-        #                                 'corporate_soho_first_month_date_start': corporate_soho_invoice_date_start,
-        #                                 'corporate_soho_first_month_date_end': corporate_soho_invoice_date_end,
-        #                                 'date_invoice': today,
-        #                                 # 'date_due': today,
-        #                             })
-        #
-        #                             # OTC will not be calculated
-        #                             round_curr = new_draft_invoice.currency_id.round
-        #                             new_draft_invoice.amount_untaxed = sum(
-        #                                 line.price_subtotal for line in new_draft_invoice.invoice_line_ids)
-        #                             new_draft_invoice.amount_tax = sum(
-        #                                 round_curr(line.amount_total) for line in new_draft_invoice.tax_line_ids)
-        #                             total = new_draft_invoice.amount_untaxed + new_draft_invoice.amount_tax
-        #                             vat = total - ((total * 100.0) / 105.0)
-        #                             total_without_vat = (total * 100.0) / 105.0
-        #
-        #                             new_draft_invoice = new_draft_invoice.update({
-        #                                 'corporate_otc_amount': 0.0,
-        #                                 'toal_amount_otc_mrc': vat + total_without_vat,
-        #                                 'toal_amount_mrc': vat + total_without_vat,
-        #                                 'residual': vat + total_without_vat,
-        #                                 'amount_total_signed': vat + total_without_vat,
-        #                             })
-        #                         else:
-        #                             error_message = "Invoice not found for sale order" + str(order.name)
-        #                             print(error_message)
-        #     else:
-        #         error_message = "Cron Job for creating draft invoice should run only before specified days of the start of next month"
-        #         print(error_message)
-        # except Exception as ex:
-        #     print(ex)
+        # print('this wont go to production now')
+        try:
+            today = datetime.today()
+            after_threshold_days_date = today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
+            next_month_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
+            difference = after_threshold_days_date - next_month_date_start
+            difference = int(abs(difference.days))
+            # corporate_soho_invoice_date_start = datetime.today()
+            corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
+            corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
+
+            if difference > 0:
+                sale_order_object = self.env['sale.order']
+                sale_orders = sale_order_object.search([])
+                for order in sale_orders:
+                    get_customer = self.env['res.partner'].search([('id', '=', order.partner_id.id)], limit=1)
+                    if get_customer:
+                        opportunities = self.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
+                        for opportunity in opportunities:
+                            # check if lead type is corporate or soho or sme
+                            if opportunity.lead_type != "retail":
+                                invoice_object_old = self.env['account.invoice'].search([('origin', '=', order.name)], limit=1)
+                                invoice_object = self.env['account.invoice'].search([])
+                                if invoice_object and invoice_object_old:
+
+                                    # Check if there is any package change request made in the current month.
+                                    get_package_change_request = self.env[
+                                        'isp_crm_module.corporate_bandwidth_change'].search(
+                                        [('customer', '=', get_customer.id), ('color', '=', 7)],
+                                        order='create_date desc', limit=1)
+
+                                    activation_date = datetime.strptime(
+                                        get_package_change_request.proposed_activation_date,
+                                        "%Y-%m-%d").date()
+                                    package_change_month = activation_date.month
+                                    current_month = today.date().month
+
+                                    # If any package change request made in the current month then calculate the extra price.
+                                    extra_price = 0.0
+                                    if current_month == package_change_month:
+                                        current_month_date_end = date(datetime.today().year,
+                                                                      datetime.today().month + 1,
+                                                                      1) - relativedelta(days=1)
+
+                                        difference = current_month_date_end - activation_date
+                                        difference = int(abs(difference.days))
+
+                                        extra_price = (get_package_change_request.proposed_package_price * difference) / 30
+                                        invoice_line_account_id = ''
+                                        for invoice_line in invoice_object_old.invoice_line_ids:
+                                            if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                                                invoice_line_account_id = invoice_line.account_id
+
+                                        invoice_line_data = {
+                                            'account_id': invoice_line_account_id,
+                                            'product_id': get_package_change_request.proposed_new_package.id,
+                                            'name': order.name,
+                                            'quantity': get_package_change_request.proposed_bandwidth,
+                                            'price_unit': get_package_change_request.proposed_new_package.lst_price,
+                                        }
+
+                                        # new_draft_invoice = invoice_object.copy()
+                                        new_draft_invoice = invoice_object.create({
+                                            'origin': order.name,
+                                            'corporate_soho_first_month_date_start': corporate_soho_invoice_date_start,
+                                            'corporate_soho_first_month_date_end': corporate_soho_invoice_date_end,
+                                            'date_invoice': today,
+                                            'partner_id': invoice_object_old.partner_id,
+                                            'payment_term_id': invoice_object_old.payment_term_id,
+                                            'payment_service_id': invoice_object_old.payment_service_id,
+                                            'user_id': invoice_object_old.user_id,
+                                            'team_id': invoice_object_old.team_id,
+                                            'is_deferred': invoice_object_old.is_deferred,
+                                            'journal_id': invoice_object_old.journal_id,
+                                            'account_id': invoice_object_old.account_id,
+                                            'invoice_line_ids': [(0, 0, invoice_line_data)],
+                                        })
+                                    else:
+                                        new_draft_invoice = invoice_object.create({
+                                            'origin': order.name,
+                                            'corporate_soho_first_month_date_start': corporate_soho_invoice_date_start,
+                                            'corporate_soho_first_month_date_end': corporate_soho_invoice_date_end,
+                                            'date_invoice': today,
+                                            'partner_id': invoice_object_old.partner_id,
+                                            'payment_term_id': invoice_object_old.payment_term_id,
+                                            'payment_service_id': invoice_object_old.payment_service_id,
+                                            'user_id': invoice_object_old.user_id,
+                                            'team_id': invoice_object_old.team_id,
+                                            'is_deferred': invoice_object_old.is_deferred,
+                                            'journal_id': invoice_object_old.journal_id,
+                                            'account_id': invoice_object_old.account_id,
+                                            'invoice_line_ids': invoice_object_old.invoice_line_ids
+                                        })
+
+                                    # new_draft_invoice = new_draft_invoice.update({
+                                    #     'corporate_soho_first_month_date_start': corporate_soho_invoice_date_start,
+                                    #     'corporate_soho_first_month_date_end': corporate_soho_invoice_date_end,
+                                    #     'date_invoice': today,
+                                    #     # 'date_due': today,
+                                    # })
+
+                                    # OTC will not be calculated
+                                    round_curr = new_draft_invoice.currency_id.round
+                                    new_draft_invoice.amount_untaxed = sum(
+                                        line.price_subtotal for line in new_draft_invoice.invoice_line_ids)
+                                    new_draft_invoice.amount_tax = sum(
+                                        round_curr(line.amount_total) for line in new_draft_invoice.tax_line_ids)
+                                    total = new_draft_invoice.amount_untaxed + new_draft_invoice.amount_tax
+                                    vat = total - ((total * 100.0) / 105.0)
+                                    total_without_vat = (total * 100.0) / 105.0
+
+                                    new_draft_invoice = new_draft_invoice.update({
+                                        'corporate_otc_amount': 0.0,
+                                        'toal_amount_otc_mrc': vat + total_without_vat + extra_price,
+                                        'toal_amount_mrc': vat + total_without_vat + extra_price,
+                                        'residual': vat + total_without_vat + extra_price,
+                                        'amount_total_signed': vat + total_without_vat + extra_price,
+                                    })
+                                else:
+                                    error_message = "Invoice not found for sale order" + str(order.name)
+                                    print(error_message)
+            else:
+                error_message = "Cron Job for creating draft invoice should run only before specified days of the start of next month"
+                print(error_message)
+        except Exception as ex:
+            print(ex)

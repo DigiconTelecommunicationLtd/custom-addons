@@ -54,8 +54,10 @@ class CorporateSohoBandwidthChange(models.Model):
     current_package = fields.Many2one(related='customer.current_package_id', help='Current Package.', required=True)
     proposed_new_package = fields.Many2one('product.product', string='Proposed New Package', domain=[('sale_ok', '=', True), ('default_code', '=', 'Corporate')],
                                          change_default=True, ondelete='restrict', track_visibility='onchange', required=True)
-    bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange', default=0.0)
+    bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange', default=1.0)
+    proposed_bandwidth = fields.Float(string='Proposed Bandwidth', required=True, track_visibility='onchange', default=1.0)
     proposed_package_price = fields.Float(related='proposed_new_package.lst_price', digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
+    current_package_price = fields.Float(related='current_package.lst_price', digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
     proposed_activation_date = fields.Date(string="Proposed Activation Date", default=None, required=True)
     customer_email = fields.Char(related='customer.email', store=True)
     customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
@@ -116,8 +118,8 @@ class CorporateSohoBandwidthChange(models.Model):
         tomorrow = date.today() + timedelta(days=1)
         if self.default_stages != 'Done':
             raise UserError('System does not allow you to change stage after Mark Done. ')
-        if self.default_stages == 'Done' and self.color == 0:
-            raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
+        # if self.default_stages == 'Done' and self.color == 0:
+        #     raise UserError('You can not drag the ticket to Done stage unless customer payment is done.')
         else:
             self.update({
                 'color': 5,
