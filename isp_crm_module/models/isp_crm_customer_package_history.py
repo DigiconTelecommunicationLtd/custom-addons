@@ -106,12 +106,6 @@ class CustomerPackageHistory(models.Model):
                 else:
                     return self.create_new_package_history(customer=customer)
         else:
-            # sale_order_lines = customer.current_package_sales_order_id.order_line
-            # original_price = 0.0
-            # for sale_order_line in sale_order_lines:
-            #     discount = (sale_order_line.discount * sale_order_line.price_subtotal)/100.0
-            #     original_price_sale_order_line = sale_order_line.price_subtotal + discount
-            #     original_price = original_price + original_price_sale_order_line
             original_price = customer.invoice_product_original_price
             # Creates Package history if the current customer has no package history
             return self.create_new_package_history(

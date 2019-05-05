@@ -55,10 +55,10 @@ class CorporateSohoBandwidthChange(models.Model):
     current_package = fields.Many2one(related='customer.current_package_id', help='Current Package.', required=True)
     proposed_new_package = fields.Many2one('product.product', string='Proposed New Package', domain=[('sale_ok', '=', True), ('default_code', '=', 'Corporate')],
                                          change_default=True, ondelete='restrict', track_visibility='onchange', required=True)
-    bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange', default=1.0, compute="_compute_current_bandwidth")
+    bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange', default=1.0)
     proposed_bandwidth = fields.Float(string='Proposed Bandwidth', required=True, track_visibility='onchange', default=1.0)
-    proposed_package_price = fields.Float(related='proposed_new_package.lst_price', digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
-    current_package_price = fields.Float(related='current_package.lst_price', digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
+    proposed_package_price = fields.Float(digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
+    current_package_price = fields.Float(digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
     proposed_activation_date = fields.Date(string="Proposed Activation Date", default=None, required=True)
     customer_email = fields.Char(related='customer.email', store=True)
     customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
@@ -102,19 +102,28 @@ class CorporateSohoBandwidthChange(models.Model):
     def _onchange_quantity(self):
         if self.proposed_bandwidth > 1 and self.proposed_new_package:
             proposed_package_price = self.proposed_new_package.lst_price * self.proposed_bandwidth
-            self.write({
-                'proposed_package_price': proposed_package_price
-            })
+            # self.write({
+            #     'proposed_package_price': proposed_package_price
+            # })
+            self.proposed_package_price = proposed_package_price
 
     @api.onchange('proposed_new_package')
     def _onchange_proposed_package_price(self):
         if self.proposed_bandwidth > 1 and self.proposed_new_package:
             proposed_package_price = self.proposed_new_package.lst_price * self.proposed_bandwidth
-            self.write({
-                'proposed_package_price': proposed_package_price
-            })
+            # self.write({
+            #     'proposed_package_price': proposed_package_price,
+            # })
+            self.proposed_package_price = proposed_package_price
+        elif self.proposed_new_package:
+            proposed_package_price = self.proposed_new_package.lst_price
+            # self.write({
+            #     'proposed_package_price': proposed_package_price,
+            # })
+            self.proposed_package_price = proposed_package_price
 
-    def _compute_current_bandwidth(self):
+    @api.onchange('current_package')
+    def _onchange_current_bandwidth(self):
         try:
             if self.current_package:
                 invoice_obj = self.env['account.invoice'].search([('partner_id', '=', self.customer.id)], order='create_date desc', limit=1)

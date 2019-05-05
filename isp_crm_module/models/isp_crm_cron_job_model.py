@@ -411,29 +411,44 @@ class CronJobModel(models.Model):
                                     customer=customer,
                                     product_id=customer.next_package_id.id,
                                     price=customer.next_package_price,
-                                    original_price = original_price,
+                                    original_price = customer.next_package_original_price,
                                     start_date=customer.next_package_start_date,
                                 )
                                 updated_customer = updated_customer.update_next_bill_cycle_info(
                                     customer=updated_customer
                                 )
                             else:
-                                # if soho and sme, then bill cycle will start form the start of the next month
+                                # same as corporate
                                 today = datetime.today()
                                 next_month_first_day = str(datetime(today.year, today.month + 1, 1)).split(" ")[0]
                                 updated_customer = customer.update_current_bill_cycle_info(
                                     customer=customer,
                                     product_id=customer.next_package_id.id,
                                     price=customer.next_package_price,
-                                    original_price=original_price,
-                                    start_date=next_month_first_day,
+                                    original_price=customer.next_package_original_price,
+                                    start_date=customer.next_package_start_date,
                                 )
                                 updated_customer = updated_customer.update_next_bill_cycle_info(
                                     customer=updated_customer
                                 )
+
+                        ### Start of adding package change history ###
                         # Adding the package change history.
                         package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
-                        created_package_history = package_history_obj.set_package_change_history(customer)
+                        # Update Last Package's end date
+                        last_package_history_obj = package_history_obj.search([
+                            ('customer_id', '=', customer.id),
+                            # ('package_id', '=', customer.current_package_id.id),
+                        ],
+                            order='create_date desc',
+                            limit=1
+                        )
+                        last_package_history_obj.update({
+                            'end_date': today,
+                        })
+                        package_history_obj.create_new_package_history(customer=customer, package=customer.next_package_id,
+                                                    start_date=str(customer.next_package_start_date))
+                        ### End of adding package change history ###
 
                         # Make customer active
                         customer.update({
@@ -477,7 +492,7 @@ class CronJobModel(models.Model):
                                     customer=customer,
                                     product_id=customer.next_package_id.id,
                                     price=customer.next_package_price,
-                                    original_price=original_price,
+                                    original_price=customer.next_package_original_price,
                                     start_date=customer.next_package_start_date,
                                 )
                                 updated_customer = updated_customer.update_next_bill_cycle_info(
@@ -491,15 +506,12 @@ class CronJobModel(models.Model):
                                     customer=customer,
                                     product_id=customer.next_package_id.id,
                                     price=customer.next_package_price,
-                                    original_price=original_price,
-                                    start_date=next_month_first_day,
+                                    original_price=customer.next_package_original_price,
+                                    start_date=customer.next_package_start_date,
                                 )
                                 updated_customer = updated_customer.update_next_bill_cycle_info(
                                     customer=updated_customer
                                 )
-                        # Adding the package change history
-                        package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
-                        created_package_history = package_history_obj.set_package_change_history(customer)
 
                         # Make customer active
                         customer.update({
