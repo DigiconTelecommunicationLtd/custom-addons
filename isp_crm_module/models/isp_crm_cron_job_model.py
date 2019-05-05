@@ -479,6 +479,12 @@ class CronJobModel(models.Model):
                             'color': 7
                         })
 
+                        if opportunity.lead_type != "retail":
+                            ticket.write({
+                                'bandwidth': ticket.proposed_bandwidth,
+                                'current_package_price': ticket.proposed_package_price
+                            })
+
                     else:
                         if customer.is_sent_package_change_req == True:
                             updated_customer = customer.update_next_bill_cycle_info(customer=customer)
