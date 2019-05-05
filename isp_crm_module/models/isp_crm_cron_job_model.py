@@ -450,6 +450,27 @@ class CronJobModel(models.Model):
                                                     start_date=str(customer.next_package_start_date))
                         ### End of adding package change history ###
 
+
+                        ### Start change customer service info ###
+                        created_product_line_list = []
+                        customer_product_line_obj = self.env['isp_crm_module.customer_product_line']
+                        created_product_line = customer_product_line_obj.create({
+                            'customer_id': customer.id,
+                            'name': customer.next_package_id.name,
+                            'product_id': customer.next_package_id.id,
+                            'product_updatable': False,
+                            'product_uom_qty': (customer.next_package_price / customer.next_package_id.lst_price),
+                            'product_uom': customer.next_package_id.uom_id.id,
+                            'price_unit': customer.next_package_id.lst_price,
+                            'price_subtotal': customer.next_package_price,
+                            'price_total': customer.next_package_price,
+                        })
+                        created_product_line_list.append(created_product_line.id)
+                        customer.update({
+                            'product_line': [(6, None, created_product_line_list)]
+                        })
+                        ### End change customer service info ###
+
                         # Make customer active
                         customer.update({
                             'active_status': CUSTOMER_ACTIVE_STATUS

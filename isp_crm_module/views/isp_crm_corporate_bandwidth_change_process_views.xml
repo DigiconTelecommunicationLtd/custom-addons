@@ -112,7 +112,7 @@
                             <field name="bandwidth" attrs="{'required': True}"/>
                             <field name="current_package" string="Current Product" attrs="{'required': True}"/>
                             <field name="current_package_price" string="Current Package Price" attrs="{'required': True}"/>
-                            <field name="proposed_new_package" attrs="{'required': True}"/>
+                            <field name="proposed_new_package" string="Proposed Product" attrs="{'required': True}"/>
                             <field name="proposed_bandwidth" attrs="{'required': True}"/>
                             <field name="proposed_package_price" string="Proposed Package Price" attrs="{'required': True}"/>
                         </group>
