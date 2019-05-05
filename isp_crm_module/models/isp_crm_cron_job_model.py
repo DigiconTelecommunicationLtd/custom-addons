@@ -700,7 +700,10 @@ class CronJobModel(models.Model):
                                             difference = current_month_date_end - activation_date
                                             difference = int(abs(difference.days))
 
-                                            extra_price = (get_package_change_request.proposed_package_price * difference) / 30
+                                            if get_package_change_request.proposed_package_price > get_package_change_request.current_package_price:
+                                                extra_price = ((get_package_change_request.proposed_package_price - get_package_change_request.current_package_price) * difference) / 30
+                                            else:
+                                                extra_price = 0.0
                                             invoice_line_account_id = ''
                                             for invoice_line in invoice_object_old.invoice_line_ids:
                                                 if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
