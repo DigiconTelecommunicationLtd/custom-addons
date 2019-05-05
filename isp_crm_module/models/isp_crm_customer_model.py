@@ -169,8 +169,8 @@ class Customer(models.Model):
         :return: updated customer
         """
 
-        if original_price or customer.current_package_id.list_price !=0:
-            if original_price !=0:
+        if original_price or customer.current_package_id.list_price != 0:
+            if original_price != 0:
                 pass
             else:
                 original_price = customer.invoice_product_original_price
