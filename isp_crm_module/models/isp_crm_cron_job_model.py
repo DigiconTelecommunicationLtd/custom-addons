@@ -675,7 +675,7 @@ class CronJobModel(models.Model):
                 sale_orders = sale_order_object.search([])
                 for order in sale_orders:
                     get_customer = self.env['res.partner'].search([('id', '=', order.partner_id.id), ('customer', '=', True)], limit=1)
-                    if get_customer:
+                    if get_customer and get_customer.subscriber_id != "New":
                         opportunities = self.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
                         for opportunity in opportunities:
                             # check if lead type is corporate or soho or sme
