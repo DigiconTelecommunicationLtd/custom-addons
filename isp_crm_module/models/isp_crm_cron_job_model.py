@@ -482,6 +482,7 @@ class CronJobModel(models.Model):
                         if opportunity.lead_type != "retail":
                             ticket.write({
                                 'bandwidth': ticket.proposed_bandwidth,
+                                'old_package_price': ticket.current_package_price,
                                 'current_package_price': ticket.proposed_package_price
                             })
 
@@ -673,7 +674,7 @@ class CronJobModel(models.Model):
                 sale_order_object = self.env['sale.order']
                 sale_orders = sale_order_object.search([])
                 for order in sale_orders:
-                    get_customer = self.env['res.partner'].search([('id', '=', order.partner_id.id)], limit=1)
+                    get_customer = self.env['res.partner'].search([('id', '=', order.partner_id.id), ('customer', '=', True)], limit=1)
                     if get_customer:
                         opportunities = self.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
                         for opportunity in opportunities:
@@ -706,8 +707,8 @@ class CronJobModel(models.Model):
                                             difference = current_month_date_end - activation_date
                                             difference = int(abs(difference.days))
 
-                                            if get_package_change_request.proposed_package_price > get_package_change_request.current_package_price:
-                                                extra_price = ((get_package_change_request.proposed_package_price - get_package_change_request.current_package_price) * difference) / 30
+                                            if get_package_change_request.proposed_package_price > get_package_change_request.old_package_price:
+                                                extra_price = ((get_package_change_request.proposed_package_price - get_package_change_request.old_package_price) * difference) / 30
                                             else:
                                                 extra_price = 0.0
                                             invoice_line_account_id = ''

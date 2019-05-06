@@ -59,6 +59,7 @@ class CorporateSohoBandwidthChange(models.Model):
     proposed_bandwidth = fields.Float(string='Proposed Bandwidth', required=True, track_visibility='onchange', default=1.0)
     proposed_package_price = fields.Float(digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
     current_package_price = fields.Float(digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange', required=True)
+    old_package_price = fields.Float(digits=dp.get_precision('Product Price'), default=0.0, required=True)
     proposed_activation_date = fields.Date(string="Proposed Activation Date", default=None, required=True)
     customer_email = fields.Char(related='customer.email', store=True)
     customer_mobile = fields.Char(string="Mobile", related='customer.mobile', store=True)
