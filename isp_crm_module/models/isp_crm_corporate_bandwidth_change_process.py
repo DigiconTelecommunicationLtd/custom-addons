@@ -53,7 +53,7 @@ class CorporateSohoBandwidthChange(models.Model):
                                track_visibility='onchange', required=True)
     customer_id = fields.Char(related='customer.subscriber_id', help='Customer ID.')
     current_package = fields.Many2one(related='customer.current_package_id', help='Current Package.', required=True)
-    proposed_new_package = fields.Many2one('product.product', string='Proposed New Package', domain=[('sale_ok', '=', True), ('default_code', '=', 'Corporate')],
+    proposed_new_package = fields.Many2one('product.product', string='Proposed New Package',
                                          change_default=True, ondelete='restrict', track_visibility='onchange', required=True)
     bandwidth = fields.Float(string='Current Bandwidth', required=True, track_visibility='onchange', default=1.0)
     proposed_bandwidth = fields.Float(string='Proposed Bandwidth', required=True, track_visibility='onchange', default=1.0)
@@ -139,8 +139,14 @@ class CorporateSohoBandwidthChange(models.Model):
                                     price = invoice_line.quantity * invoice_line.price_unit
                 current_package_bandwidth = quantity
                 current_package_price = price
-                self.bandwidth = current_package_bandwidth
-                self.current_package_price = current_package_price
+                # current package price will be zero if draft invoice not created.
+                # in that case use the price of customer's current package
+                if current_package_price == 0:
+                    self.bandwidth = current_package_bandwidth
+                    self.current_package_price = self.customer.current_package_price
+                else:
+                    self.bandwidth = current_package_bandwidth
+                    self.current_package_price = current_package_price
                 # self.write({
                 #     'bandwidth': current_package_bandwidth,
                 #     'current_package_price': current_package_price
