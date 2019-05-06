@@ -140,7 +140,7 @@ class CorporateSohoBandwidthChange(models.Model):
                 current_package_bandwidth = quantity
                 current_package_price = price
                 # current package price will be zero if draft invoice not created.
-                # in that case use the price of customer's current package
+                # in that case use the price of customer's current package.
                 if current_package_price == 0:
                     self.bandwidth = current_package_bandwidth
                     self.current_package_price = self.customer.current_package_price
