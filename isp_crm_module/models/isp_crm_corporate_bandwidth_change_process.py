@@ -122,6 +122,15 @@ class CorporateSohoBandwidthChange(models.Model):
             # })
             self.proposed_package_price = proposed_package_price
 
+    @api.onchange('customer_type')
+    def _onchange_customer_type(self):
+        res = {}
+        if self.customer_type == 'sohoandsme':
+            res['domain'] = {'proposed_new_package': [('sale_ok', '=', True),'|', ('default_code', '=', 'Corporate'), ('default_code', '=', 'Retail')]}
+        else:
+            res['domain'] = {'proposed_new_package': [('sale_ok', '=', True), ('default_code', '=', 'Corporate')]}
+        return res
+
     @api.onchange('current_package')
     def _onchange_current_bandwidth(self):
         try:
