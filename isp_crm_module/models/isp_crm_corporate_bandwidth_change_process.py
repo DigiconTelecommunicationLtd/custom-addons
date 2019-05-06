@@ -124,6 +124,10 @@ class CorporateSohoBandwidthChange(models.Model):
 
     @api.onchange('customer_type')
     def _onchange_customer_type(self):
+        """
+        Change proposed new product's domain based on customer.
+        :return:
+        """
         res = {}
         if self.customer_type == 'sohoandsme':
             res['domain'] = {'proposed_new_package': [('sale_ok', '=', True),'|', ('default_code', '=', 'Corporate'), ('default_code', '=', 'Retail')]}
