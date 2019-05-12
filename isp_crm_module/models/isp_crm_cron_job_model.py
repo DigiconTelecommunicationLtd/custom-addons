@@ -816,6 +816,8 @@ class CronJobModel(models.Model):
                                         'toal_amount_mrc': vat + total_without_vat + extra_price,
                                         'residual': vat + total_without_vat + extra_price,
                                         'amount_total_signed': vat + total_without_vat + extra_price,
+                                        'amount_total': vat + total_without_vat + extra_price,
+                                        'package_change_adjusted_amount': extra_price,
                                     })
                                 else:
                                     error_message = "Invoice not found for sale order" + str(order.name)

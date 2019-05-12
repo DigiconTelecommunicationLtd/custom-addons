@@ -22,6 +22,7 @@
             </xpath>
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_total']" position="before">
                 <field name="corporate_otc_amount" attrs="{'invisible':[('lead_type','==', 'retail')]}"/>
+                <field name="package_change_adjusted_amount"/>
             </xpath>
             <xpath expr="//sheet/notebook/page[1]/group/field[@name='amount_total']" position="after">
                 <field name="toal_amount_otc_mrc" class="oe_subtotal_footer_separator"/>
