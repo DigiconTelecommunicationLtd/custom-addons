@@ -54,12 +54,21 @@ class CronJobModel(models.Model):
         else:
             body = body.replace('--customer_name--', "N/A")
         # show package info from customer's technical information.
-        body = body.replace('--package--', str(customer.current_package_id.name or ""))
-        body = body.replace('--price--', str(customer.current_package_price))
-        if customer.current_package_end_date:
-            body = body.replace('--last_payment_date--', str(datetime.strptime(str(customer.current_package_end_date),'%Y-%m-%d').strftime("%d-%m-%Y")))
+        if customer.opportunity_ids.lead_type != "corporate":
+            body = body.replace('--package--', str(customer.current_package_id.name or ""))
+            body = body.replace('--price--', str(customer.current_package_price))
+            if customer.current_package_end_date:
+                body = body.replace('--last_payment_date--', str(datetime.strptime(str(customer.current_package_end_date),'%Y-%m-%d').strftime("%d-%m-%Y")))
+            else:
+                body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
         else:
-            body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
+            body = body.replace('--package--', str(customer.next_package_id.name or ""))
+            body = body.replace('--price--', str(customer.next_package_price))
+            if customer.current_package_end_date:
+                body = body.replace('--last_payment_date--', str(
+                    datetime.strptime(str(customer.current_package_end_date), '%Y-%m-%d').strftime("%d-%m-%Y")))
+            else:
+                body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
 
         # Creating attachment file of the invoice
         # sales_order_obj = self.env['sale.order'].search([], order='create_date asc', limit=1)
