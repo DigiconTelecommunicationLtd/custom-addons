@@ -53,8 +53,9 @@ class CronJobModel(models.Model):
             body = body.replace('--customer_name--', str(customer.name))
         else:
             body = body.replace('--customer_name--', "N/A")
-        body = body.replace('--package--', str(customer.next_package_id.name or ""))
-        body = body.replace('--price--', str(customer.next_package_price))
+        # show package info from customer's technical information
+        body = body.replace('--package--', str(customer.current_package_id.name or ""))
+        body = body.replace('--price--', str(customer.current_package_price))
         if customer.current_package_end_date:
             body = body.replace('--last_payment_date--', str(datetime.strptime(str(customer.current_package_end_date),'%Y-%m-%d').strftime("%d-%m-%Y")))
         else:
