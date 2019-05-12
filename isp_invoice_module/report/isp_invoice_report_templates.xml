@@ -376,6 +376,15 @@
                                 <table class="table table-condensed" name="invoice_total_table">
                                     <tbody>
                                         <tr style="border:1px solid #dddddd;">
+                                            <th>Adjusted Amount</th>
+                                            <th>
+                                                <span class="text-right pull-right">
+                                                    <strong>BDT </strong>
+                                                    <span t-field="o.package_change_adjusted_amount" t-field-options='{"widget": "False"}'/>
+                                                </span>
+                                            </th>
+                                        </tr>
+                                        <tr style="border:1px solid #dddddd;">
                                             <th>Total Outstanding</th>
                                             <th>
                                                 <span class="text-right pull-right">
@@ -506,6 +515,15 @@
                             <div class="clearfix" style="padding-left:10px;">
                                 <table class="table table-condensed" name="invoice_total_table">
                                     <tbody>
+                                        <tr style="border:1px solid #dddddd;">
+                                            <th>Adjusted Amount</th>
+                                            <th>
+                                                <span class="text-right pull-right">
+                                                    <strong>BDT </strong>
+                                                    <span t-field="o.package_change_adjusted_amount" t-field-options='{"widget": "False"}'/>
+                                                </span>
+                                            </th>
+                                        </tr>
                                         <tr style="border:1px solid #dddddd;">
                                             <th>Total Outstanding</th>
                                             <th>
