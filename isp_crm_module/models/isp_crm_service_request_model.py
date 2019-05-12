@@ -349,7 +349,7 @@ class ServiceRequest(models.Model):
 
     def update_bill_cycle_date(self, customer):
         """
-        Updates bill cycle date of customer in technical information
+        Updates bill cycle date of customer in technical information.
 
         :param customer:
         :return: Boolean
