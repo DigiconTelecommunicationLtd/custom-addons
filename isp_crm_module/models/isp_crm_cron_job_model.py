@@ -305,7 +305,8 @@ class CronJobModel(models.Model):
                                 'next_package_start_date': ticket_obj.proposed_activation_date,
                                 'next_package_price': ticket_obj.proposed_package_price,
                                 'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
-                                'is_sent_package_change_req': True
+                                'is_sent_package_change_req': True,
+                                'is_sent_package_change_req_from_technical_information': False,
                             })
                             activation_date = datetime.strptime(ticket_obj.proposed_activation_date, "%Y-%m-%d").date()
                             if activation_date >= today:
@@ -391,11 +392,11 @@ class CronJobModel(models.Model):
                 if opportunity:
                     if opportunity.lead_type != "retail":
                         ticket = ticket_obj.search(
-                            [('customer', '=', customer.id), ('color', '!=', 0), ('default_stages', '=', DEFAULT_DONE_STAGE)], order='create_date desc', limit=1)
+                            [('customer', '=', customer.id), ('color', '=', 5), ('default_stages', '=', DEFAULT_DONE_STAGE)], order='create_date desc', limit=1)
                     else:
                         ticket_obj = self.env['isp_crm_module.retail_soho_bandwidth_change']
                         ticket = ticket_obj.search(
-                            [('customer', '=', customer.id), ('color', '!=', 0), ('default_stages', '=', DEFAULT_DONE_STAGE)], order='create_date desc', limit=1)
+                            [('customer', '=', customer.id), ('color', '=', 5), ('default_stages', '=', DEFAULT_DONE_STAGE)], order='create_date desc', limit=1)
                 if ticket:
                     # updating the customer active_status and package according to their balance
                     if ticket.default_stages == DEFAULT_DONE_STAGE and ticket.color == 5:

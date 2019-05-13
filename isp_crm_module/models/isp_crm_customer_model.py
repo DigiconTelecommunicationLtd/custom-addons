@@ -225,7 +225,6 @@ class Customer(models.Model):
             'next_package_price'          : next_package_price,
             'next_package_original_price' : next_package_original_price,
             'next_package_sales_order_id' : next_package_sales_order_id,
-            'is_sent_package_change_req' : False,
             'is_sent_package_change_req_from_technical_information' : True,
         })
         return customer
