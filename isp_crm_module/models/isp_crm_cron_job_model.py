@@ -552,12 +552,15 @@ class CronJobModel(models.Model):
                         })
 
                     else:
-                        if customer.is_sent_package_change_req == True:
-                            updated_customer = customer.update_next_bill_cycle_info(customer=customer)
-                        else:
-                            customer.update({
-                                'active_status': CUSTOMER_INACTIVE_STATUS
-                            })
+                        # if customer.is_sent_package_change_req == True:
+                        #     updated_customer = customer.update_next_bill_cycle_info(customer=customer)
+                        # else:
+                        #     customer.update({
+                        #         'active_status': CUSTOMER_INACTIVE_STATUS
+                        #     })
+                        customer.update({
+                            'active_status': CUSTOMER_INACTIVE_STATUS
+                        })
             return True
         except Exception as ex:
             print(ex)

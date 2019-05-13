@@ -250,13 +250,24 @@ class Customer(models.Model):
                         package_price=self.current_package_id.lst_price * int(customer_product_line_obj.product_uom_qty)
                     )
 
-                    self.update({
-                        'current_package_id': self.current_package_id,
+                    # self.current_package_id = self.current_package_id
+                    self.current_package_price = self.current_package_id.lst_price * int(
+                        customer_product_line_obj.product_uom_qty)
+                    self.current_package_original_price = self.current_package_id.lst_price
+                    self.current_package_end_date = self.current_package_end_date
+                    self.next_package_id = self.current_package_id
+                    self.next_package_price = self.current_package_id.lst_price * int(
+                        customer_product_line_obj.product_uom_qty)
+                    self.next_package_original_price = self.current_package_id.lst_price
+                    self.next_package_start_date = self.next_package_start_date
+                    self.next_package_sales_order_id = self.current_package_sales_order_id.id
+                    res_partner_obj.write({
+                        'current_package_id': self.current_package_id.id,
                         'current_package_price': self.current_package_id.lst_price * int(
                             customer_product_line_obj.product_uom_qty),
                         'current_package_original_price': self.current_package_id.lst_price,
                         'current_package_end_date': self.current_package_end_date,
-                        'next_package_id': self.current_package_id,
+                        'next_package_id': self.current_package_id.id,
                         'next_package_price': self.current_package_id.lst_price * int(
                             customer_product_line_obj.product_uom_qty),
                         'next_package_original_price': self.current_package_id.lst_price,
@@ -272,17 +283,26 @@ class Customer(models.Model):
                         package_price=self.current_package_id.lst_price
                     )
 
-                    self.update({
-                        'current_package_id': self.current_package_id,
-                        'current_package_price': self.current_package_id.lst_price,
-                        'current_package_original_price': self.current_package_id.lst_price,
-                        'current_package_end_date': self.current_package_end_date,
-                        'next_package_id': self.current_package_id,
-                        'next_package_price': self.current_package_id.lst_price,
-                        'next_package_original_price': self.current_package_id.lst_price,
-                        'next_package_start_date': self.next_package_start_date,
-                        'next_package_sales_order_id': self.current_package_sales_order_id.id,
-                    })
+                    # self.current_package_id = self.current_package_id
+                    self.current_package_price = self.current_package_id.lst_price
+                    self.current_package_original_price = self.current_package_id.lst_price
+                    self.current_package_end_date = self.current_package_end_date
+                    self.next_package_id = self.current_package_id
+                    self.next_package_price = self.current_package_id.lst_price
+                    self.next_package_original_price = self.current_package_id.lst_price
+                    self.next_package_start_date = self.next_package_start_date
+                    self.next_package_sales_order_id = self.current_package_sales_order_id.id
+                    # res_partner_obj.update({
+                    #     'current_package_id': self.current_package_id,
+                    #     'current_package_price': self.current_package_id.lst_price,
+                    #     'current_package_original_price': self.current_package_id.lst_price,
+                    #     'current_package_end_date': self.current_package_end_date,
+                    #     'next_package_id': self.current_package_id,
+                    #     'next_package_price': self.current_package_id.lst_price,
+                    #     'next_package_original_price': self.current_package_id.lst_price,
+                    #     'next_package_start_date': self.next_package_start_date,
+                    #     'next_package_sales_order_id': self.current_package_sales_order_id.id,
+                    # })
 
                 ### Start change customer service info ###
                 created_product_line_list = []
@@ -299,9 +319,10 @@ class Customer(models.Model):
                     'price_total': self.current_package_price,
                 })
                 created_product_line_list.append(created_product_line.id)
-                self.update({
-                    'product_line': [(6, None, created_product_line_list)]
-                })
+                self.product_line = [(6, None, created_product_line_list)]
+                # res_partner_obj.update({
+                #     'product_line': [(6, None, created_product_line_list)]
+                # })
                 ### End change customer service info ###
             else:
                 print("Partner not found.")
