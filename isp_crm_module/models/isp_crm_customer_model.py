@@ -78,6 +78,7 @@ class Customer(models.Model):
     customer_bin = fields.Char(string='Customer BIN', track_visibility='onchange')
     is_service_request_marked_done = fields.Boolean(compute='_get_mark_done_info', default=False, track_visibility='onchange')
     is_sent_package_change_req = fields.Boolean("Is Package Change Request Sent", default=False, track_visibility='onchange')
+    is_sent_package_change_req_from_technical_information = fields.Boolean("Is Package Change Request Made from Technical Information", default=True, track_visibility='onchange')
 
     product_line = fields.One2many('isp_crm_module.customer_product_line', 'customer_id',
                                  string='Customer Product Lines', copy=True, auto_join=True)
@@ -224,8 +225,83 @@ class Customer(models.Model):
             'next_package_price'          : next_package_price,
             'next_package_original_price' : next_package_original_price,
             'next_package_sales_order_id' : next_package_sales_order_id,
+            'is_sent_package_change_req' : False,
+            'is_sent_package_change_req_from_technical_information' : True,
         })
         return customer
+
+    @api.onchange('current_package_id')
+    def onchange_current_package_id(self):
+        """
+
+        :return:
+        """
+        try:
+            # self contains the changed package, so get the old obj.
+            res_partner_obj = self.env['res.partner'].search([('id', '=', self._origin.id)], limit=1)
+            if res_partner_obj.is_sent_package_change_req_from_technical_information:
+
+                customer_product_line_obj = self.env['isp_crm_module.customer_product_line'].search([('customer_id', '=', res_partner_obj.id),('product_id', '=', res_partner_obj.current_package_id.id)], limit=1)
+
+                if customer_product_line_obj:
+                    # updating account moves of customer
+                    payment_obj = self.env['account.payment']
+                    payment_obj.customer_bill_adjustment(
+                        customer=res_partner_obj,
+                        package_price=self.current_package_id.lst_price * int(customer_product_line_obj.product_uom_qty)
+                    )
+
+                    self.update({
+                        'current_package_id': self.current_package_id,
+                        'current_package_price': self.current_package_id.lst_price * int(
+                            customer_product_line_obj.product_uom_qty),
+                        'current_package_original_price': self.current_package_id.lst_price,
+                        'next_package_id': self.current_package_id,
+                        'next_package_price': self.current_package_id.lst_price * int(
+                            customer_product_line_obj.product_uom_qty),
+                        'next_package_original_price': self.current_package_id.lst_price,
+                        'next_package_sales_order_id': self.current_package_sales_order_id.id,
+                    })
+
+                else:
+                    # updating account moves of customer
+                    payment_obj = self.env['account.payment']
+                    payment_obj.customer_bill_adjustment(
+                        customer=res_partner_obj,
+                        package_price=self.current_package_id.lst_price
+                    )
+
+                    self.update({
+                        'current_package_id': self.current_package_id,
+                        'current_package_price': self.current_package_id.lst_price,
+                        'current_package_original_price': self.current_package_id.lst_price,
+                        'next_package_id': self.current_package_id,
+                        'next_package_price': self.current_package_id.lst_price,
+                        'next_package_original_price': self.current_package_id.lst_price,
+                        'next_package_sales_order_id': self.current_package_sales_order_id.id,
+                    })
+
+                ### Start change customer service info ###
+                created_product_line_list = []
+                customer_product_line_obj = self.env['isp_crm_module.customer_product_line']
+                created_product_line = customer_product_line_obj.create({
+                    'customer_id': res_partner_obj.id,
+                    'name': self.current_package_id.name,
+                    'product_id': self.current_package_id.id,
+                    'product_updatable': False,
+                    'product_uom_qty': (self.current_package_price / self.current_package_id.lst_price),
+                    'product_uom': self.current_package_id.uom_id.id,
+                    'price_unit': self.current_package_id.lst_price,
+                    'price_subtotal': self.current_package_price,
+                    'price_total': self.current_package_price,
+                })
+                created_product_line_list.append(created_product_line.id)
+                self.update({
+                    'product_line': [(6, None, created_product_line_list)]
+                })
+                ### End change customer service info ###
+        except Exception as ex:
+            print(ex)
 
     @api.onchange('assigned_rm')
     def onchange_assigned_rm(self):

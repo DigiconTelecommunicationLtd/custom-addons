@@ -334,7 +334,8 @@ class CronJobModel(models.Model):
                                     'next_package_start_date': ticket_obj.proposed_activation_date,
                                     'next_package_price': ticket_obj.proposed_package_price,
                                     'next_package_original_price': ticket_obj.proposed_new_package.lst_price,
-                                    'is_sent_package_change_req': True
+                                    'is_sent_package_change_req': True,
+                                    'is_sent_package_change_req_from_technical_information': False,
                                 })
                                 activation_date = datetime.strptime(ticket_obj.proposed_activation_date, "%Y-%m-%d").date()
                                 if activation_date >= today:
@@ -496,13 +497,6 @@ class CronJobModel(models.Model):
                                 'current_package_price': ticket.proposed_package_price
                             })
 
-                    else:
-                        if customer.is_sent_package_change_req == True:
-                            updated_customer = customer.update_next_bill_cycle_info(customer=customer)
-                        else:
-                            customer.update({
-                                'active_status' : CUSTOMER_INACTIVE_STATUS
-                            })
                 elif customer.next_package_start_date == tomorrow or customer.active_status == CUSTOMER_INACTIVE_STATUS:
                     # updating the customer active_status and package according to their balance
                     if (customer_balance < 0) and (abs(
