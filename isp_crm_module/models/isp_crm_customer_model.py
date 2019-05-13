@@ -256,10 +256,12 @@ class Customer(models.Model):
                         'current_package_price': self.current_package_id.lst_price * int(
                             customer_product_line_obj.product_uom_qty),
                         'current_package_original_price': self.current_package_id.lst_price,
+                        'current_package_end_date': self.current_package_end_date,
                         'next_package_id': self.current_package_id,
                         'next_package_price': self.current_package_id.lst_price * int(
                             customer_product_line_obj.product_uom_qty),
                         'next_package_original_price': self.current_package_id.lst_price,
+                        'next_package_start_date': self.next_package_start_date,
                         'next_package_sales_order_id': self.current_package_sales_order_id.id,
                     })
 
@@ -275,9 +277,11 @@ class Customer(models.Model):
                         'current_package_id': self.current_package_id,
                         'current_package_price': self.current_package_id.lst_price,
                         'current_package_original_price': self.current_package_id.lst_price,
+                        'current_package_end_date': self.current_package_end_date,
                         'next_package_id': self.current_package_id,
                         'next_package_price': self.current_package_id.lst_price,
                         'next_package_original_price': self.current_package_id.lst_price,
+                        'next_package_start_date': self.next_package_start_date,
                         'next_package_sales_order_id': self.current_package_sales_order_id.id,
                     })
 
@@ -300,6 +304,8 @@ class Customer(models.Model):
                     'product_line': [(6, None, created_product_line_list)]
                 })
                 ### End change customer service info ###
+            else:
+                print("Partner not found.")
         except Exception as ex:
             print(ex)
 
