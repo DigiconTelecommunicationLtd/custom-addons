@@ -35,7 +35,7 @@ class ISPCRMInvoice(models.Model):
     corporate_otc_amount = fields.Monetary(string='OTC Amount', store=True, readonly=True)
     toal_amount_otc_mrc = fields.Monetary(string='Total', readonly=True)
     toal_amount_mrc = fields.Monetary(string='MRC Amount', readonly=True)
-    package_change_adjusted_amount = fields.Monetary(string='Amount to be Adjusted', readonly=True, default=0.0)
+    package_change_adjusted_amount = fields.Monetary(string='Bill adjustment from Last Month', readonly=True, default=0.0)
     lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
 
     def _get_origin(self):
