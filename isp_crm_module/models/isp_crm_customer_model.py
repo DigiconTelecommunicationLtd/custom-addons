@@ -161,7 +161,7 @@ class Customer(models.Model):
 
     def update_current_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False, original_price=False, sales_order_id=False):
         """
-        Updates current month's package and bill cycle info of given customer.
+        Updates current month's package and bill cycle info of given customer
         :param customer: package user
         :param start_date: start date of the package
         :param product_id: package id
