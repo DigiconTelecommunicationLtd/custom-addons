@@ -109,6 +109,10 @@ class Customer(models.Model):
     technical_info_gateway = fields.Char('Gateway')
     description_info = fields.Text('Description')
 
+    @api.model
+    def _get_default_address_format(self):
+        return "%(street)s\n%(street2)s\n%(city)s %(state_name)s %(zip)s\n%(country_name)s"
+
     def _get_mark_done_info(self):
         """
         Compute if service request is marked done or not
