@@ -115,7 +115,7 @@ class Customer(models.Model):
 
     def _get_mark_done_info(self):
         """
-        Compute if service request is marked done or not
+        Compute if service request is marked done or not.
         :return:
         """
         for customer in self:
