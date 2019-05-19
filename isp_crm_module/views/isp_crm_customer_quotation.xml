@@ -11,7 +11,7 @@
             </xpath>
             <xpath expr="//group/group/field[@name='partner_id']" position="after">
                 <field name="lead_type"/>
-                <field name="customer_po_no" attrs="{'invisible':[('state','!=', 'sale')]}"/>
+                <field name="customer_po_no" attrs="{'invisible':['|', ('state','!=', 'sale'), ('lead_type', '==', 'corporate')]}"/>
                 <field name="file_name" invisible="1"/>
                 <field name="customer_po_no_upload" filename="file_name" invisible="1"/>
             </xpath>

@@ -307,7 +307,9 @@
                                             <td>
                                                 <span t-field="l.name"/>
                                             </td>
-                                            <td>DTC-CGHQ</td>
+                                            <td>
+                                                <span t-field="o.get_sales_order_origin.destination"/>
+                                            </td>
                                             <td class="hidden">
                                                 <span t-field="l.origin"/>
                                             </td>
@@ -457,7 +459,9 @@
                                             <td>
                                                 <span t-field="l.name"/>
                                             </td>
-                                            <td>DTC-CGHQ</td>
+                                            <td>
+                                                <span t-field="o.get_sales_order_origin.destination"/>
+                                            </td>
                                             <td class="hidden">
                                                 <span t-field="l.origin"/>
                                             </td>

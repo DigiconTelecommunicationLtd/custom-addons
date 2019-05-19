@@ -37,6 +37,12 @@ class ISPCRMInvoice(models.Model):
     toal_amount_mrc = fields.Monetary(string='MRC Amount', readonly=True)
     package_change_adjusted_amount = fields.Monetary(string='Bill adjustment from Last Month', readonly=True, default=0.0)
     lead_type = fields.Char(compute='_get_lead_type', string='Lead Type')
+    customer_street = fields.Char(related='partner_id.street', store=True, string="Street")
+    customer_street2 = fields.Char(related='partner_id.street2', store=True, string="Street2")
+    customer_city = fields.Char(related='partner_id.city', store=True, string="City")
+    customer_zip = fields.Char(related='partner_id.zip', store=True, string="Zip")
+    customer_country = fields.Many2one(related='partner_id.country_id', store=True, string="Country")
+    customer_state = fields.Many2one(related='partner_id.state_id', store=True, string="State")
 
     def _get_origin(self):
         sales_order_obj = self.env['sale.order']
