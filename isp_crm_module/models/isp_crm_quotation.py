@@ -130,7 +130,7 @@ class CustomerQuotation(models.Model):
 
     def _get_destination_address(self):
         """
-        Compute destination address of the customer.
+        Compute destination address of the customer
         :return:
         """
         for order in self:
