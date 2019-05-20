@@ -139,22 +139,37 @@ class CustomerQuotation(models.Model):
 
             if customer.street:
                 street = customer.street
-                destination_address = destination_address + str(street) + ", "
+                destination_address = destination_address + str(street)
             if customer.street2:
                 street2 = customer.street2
-                destination_address = destination_address + str(street2) + ", "
-            if customer.zip:
-                zip = customer.zip
-                destination_address = destination_address + str(zip) + ", "
+                if len(destination_address) > 0:
+                    destination_address = destination_address + ", " + str(street2)
+                else:
+                    destination_address = destination_address + str(street2)
             if customer.city:
                 city = customer.city
-                destination_address = destination_address + str(city) + ", "
+                if len(destination_address) > 0:
+                    destination_address = destination_address + ", " + str(city)
+                else:
+                    destination_address = destination_address + str(city)
             if customer.state_id.name:
                 state_id = customer.state_id.name
-                destination_address = destination_address + str(state_id) + ", "
+                if len(destination_address) > 0:
+                    destination_address = destination_address + ", " + str(state_id)
+                else:
+                    destination_address = destination_address + str(state_id)
+            if customer.zip:
+                zip = customer.zip
+                if len(destination_address) > 0:
+                    destination_address = destination_address + ", " + str(zip)
+                else:
+                    destination_address = destination_address + str(zip)
             if customer.country_id.name:
                 country_id = customer.country_id.name
-                destination_address = destination_address + str(country_id)
+                if len(destination_address) > 0:
+                    destination_address = destination_address + ", " + str(country_id)
+                else:
+                    destination_address = destination_address + str(country_id)
             if destination_address.endswith(','):
                 destination_address = destination_address[:-1]
             order.update({
