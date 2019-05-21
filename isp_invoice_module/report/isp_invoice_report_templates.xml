@@ -23,7 +23,7 @@
                         <table class="table table-condensed table-borderless" name="invoice_footer_left_table">
                             <tbody class="invoice_footer_left_tbody">
                                 <tr>
-                                    <th class="text-left pull-left" style="border:none;">Digicon Telecommunications Limited</th>
+                                    <th class="text-left pull-left" style="border:none;">Digicon Telecommunication Limited</th>
                                 </tr>
                                 <tr>
                                     <td class="text-left pull-left" style="border:none;font-size: 11px;">Awal Center(15th Floor),34,Kamal Ataturk,Banani C/A,Dhaka-1213,Bangladesh</td>
@@ -44,7 +44,7 @@
                                     <td style="border:none;"></td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right pull-right" style="border:none;"><strong>www.mime.com</strong></td>
+                                    <td class="text-right pull-right" style="border:none;"><strong>www.mimebd.com</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="border:none;"></td>
