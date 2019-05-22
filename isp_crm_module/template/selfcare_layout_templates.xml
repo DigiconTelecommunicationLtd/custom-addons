@@ -437,8 +437,6 @@
 
     <!--Payment Template-->
     <template id="template_selfcare_payment">
-         <script src="/bkash/static/src/js/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-                    crossorigin="anonymous"></script>
         <div class="col-md-4 col-md-offset-4">
             <div class="box box-primary">
                 <div class="box-header">
@@ -447,7 +445,7 @@
                   <!--</h3>-->
                 </div>
                 <div class="box-body">
-                    <form id="payment_form" role="form" action="/selfcare/payment" method="POST">
+                    <form role="form" action="/selfcare/payment" method="POST">
                         <!--Info Table-->
                         <table class="table table-striped">
                             <tbody>
@@ -496,25 +494,24 @@
                                         <div class="input-group-addon">
                                             Tk
                                         </div>
-                                        <input type="number" min="1" name="amount" class="form-control pull-right" id="payment_bill_amount" required="1"/>
+                                        <input type="text" name="amount" class="form-control pull-right" id="payment_bill_amount" required="1"/>
                                     </div>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                         <div class="box-footer">
-                            <button id="submit_online" type="submit" class="btn btn-primary">Go for payment</button>
-                            <button style="color:#b9b9b9;" id="bKash_button" disabled="disabled" class="btn btn-primary">Go for bKash payment</button>
+                            <button type="submit" class="btn btn-primary">Go for payment</button>
                         </div>
                     </form>
+
+
                 </div>
                 <!-- /.box-body -->
             </div>
             <!-- /.box -->
         </div>
         <!-- /.col-md -->
-        <script type="text/javascript" src="/bkash/static/src/js/custom_form.js"></script>
-        <script type="text/javascript" src="/bkash/static/src/js/digiconbkash.js"></script>
     </template>
 
     <!--User Payment template-->
