@@ -4,7 +4,7 @@ import re
 import base64
 from odoo import models, fields, api
 from odoo.exceptions import Warning, UserError
-# import datetime
+import datetime
 from datetime import datetime, timezone, timedelta, date
 from dateutil.relativedelta import relativedelta
 
@@ -823,5 +823,191 @@ class CronJobModel(models.Model):
             else:
                 error_message = "Cron Job for creating draft invoice should run only before specified days of the start of next month"
                 print(error_message)
+        except Exception as ex:
+            print(ex)
+
+    # Patch cron job for vat calculation
+    def vat_calculation_patch(self):
+        """
+
+        :return:
+        """
+        try:
+            # Update vat in sale order
+            sale_order_obj = self.env['sale.order'].search([])
+            for order in sale_order_obj:
+                amount_untaxed = amount_tax = 0.0
+                for line in order.order_line:
+                    amount_untaxed += line.price_subtotal
+                    amount_tax += line.price_tax
+                total = amount_untaxed + amount_tax
+                vat = total - ((total * 100.0) / 105.0)
+                total_without_vat = (total * 100.0) / 105.0
+                order.update({
+                    'amount_untaxed': order.pricelist_id.currency_id.round(amount_untaxed),
+                    'amount_tax': order.pricelist_id.currency_id.round(amount_tax),
+                    'amount_total': amount_untaxed + amount_tax,
+                    'amount_without_vat': total_without_vat,
+                    'amount_vat': vat,
+                })
+
+                if order.otc_price:
+                    if order.discount:
+                        total_price = float(order.otc_price) - float(order.discount)
+                    else:
+                        total_price = float(order.otc_price)
+                else:
+                    total_price = 0.0
+                if order.govt_vat:
+                    govt_vat = float(order.govt_vat)
+                    govt_vat = 100.0 + govt_vat
+                    vat = total_price - ((total_price * 100.0)/govt_vat)
+                    govt_vat = float(order.govt_vat)
+                else:
+                    govt_vat = 0
+                    vat = 0.0
+                x = 100.0 + govt_vat
+                without_vat = (total_price * 100.0)/x
+                order.update({
+                    'price_total': total_price,
+                    'price_total_without_vat': without_vat,
+                    'govt_vat_in_amount': str(vat),
+                })
+
+            # Update vat in invoice
+            get_invoice_obj = self.env['account.invoice'].search([])
+            for invoice in get_invoice_obj:
+                # Compute partial bill amount
+                get_customer = invoice.env['res.partner'].search([('id', '=', invoice.partner_id.id)], limit=1)
+                if get_customer:
+                    opportunities = invoice.env['crm.lead'].search([('partner_id', '=', get_customer.id)])
+                    for opportunity in opportunities:
+                        # check if lead type is corporate or soho or sme
+                        if opportunity.lead_type != "retail":
+                            if invoice.corporate_soho_first_month_date_start and invoice.corporate_soho_first_month_date_end:
+
+                                # Convert the given date to specific format
+                                formated_date = datetime.datetime.strptime(
+                                    str(invoice.corporate_soho_first_month_date_start),
+                                    "%Y-%m-%d").strftime(
+                                    "%Y-%m-%d")
+                                # Convert the formated_date to date type from string type.
+                                formated_date = datetime.datetime.strptime(formated_date, "%Y-%m-%d")
+
+                                # Get the first day of the month in order to calculate total days of the month.
+                                corporate_soho_first_month_date_start = formated_date.replace(
+                                    day=1)
+                                corporate_soho_first_month_date_start = \
+                                str(corporate_soho_first_month_date_start).split(" ")[0]
+
+                                # Get the last day of the month.
+                                corporate_soho_first_month_date_end = datetime.date(formated_date.year,
+                                                                                    formated_date.month + 1,
+                                                                                    1) - relativedelta(
+                                    days=1)
+
+                                bill_start_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_start),
+                                                                             "%Y-%m-%d").strftime(
+                                    "%Y-%m-%d %H-%M")
+                                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                                bill_end_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_end),
+                                                                           "%Y-%m-%d").strftime(
+                                    "%Y-%m-%d %H-%M")
+                                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                                difference = bill_end_date - bill_start_date
+                                # total_days_of_the_month = float(difference.days+1)
+                                total_days_of_the_month = 30.0
+
+                                bill_start_date = datetime.datetime.strptime(
+                                    invoice.corporate_soho_first_month_date_start,
+                                    "%Y-%m-%d").strftime(
+                                    "%Y-%m-%d %H-%M")
+                                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                                bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                                                                           "%Y-%m-%d").strftime(
+                                    "%Y-%m-%d %H-%M")
+                                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                                difference = bill_end_date - bill_start_date
+                                difference = float(difference.days + 1)
+
+                                for line in invoice.invoice_line_ids:
+                                    if line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                                        price_subtotal = line.quantity * line.price_unit
+                                        discount = (price_subtotal * line.discount) / 100
+                                        price_subtotal = price_subtotal - discount
+                                        price_subtotal = (price_subtotal * difference) / total_days_of_the_month
+                                        line.write({
+                                            'price_subtotal': price_subtotal,
+                                        })
+                            else:
+                                print("User has not selected service start date and end date")
+                                corporate_soho_first_month_date_start = datetime.date.today()
+                                # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
+                                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                                                                                    datetime.date.today().month + 1,
+                                                                                    1) - relativedelta(
+                                    days=1)
+                                invoice.write({
+                                    'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
+                                    'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
+                                })
+
+                                bill_start_date = datetime.datetime.strptime(
+                                    invoice.corporate_soho_first_month_date_start,
+                                    "%Y-%m-%d").strftime(
+                                    "%Y-%m-%d %H-%M")
+                                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+
+                                bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                                                                           "%Y-%m-%d").strftime(
+                                    "%Y-%m-%d %H-%M")
+                                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+
+                                difference = bill_end_date - bill_start_date
+                                difference = float(difference.days)
+
+                                for line in invoice.invoice_line_ids:
+                                    price_subtotal = line.quantity * line.price_unit
+                                    discount = (price_subtotal * line.discount) / 100
+                                    price_subtotal = price_subtotal - discount
+                                    line.write({
+                                        'price_subtotal': price_subtotal,
+                                    })
+                            sales_order_obj = invoice.env['sale.order']
+                            sales_order = sales_order_obj.search([('name', '=', invoice.origin)], limit=1)
+                            round_curr = invoice.currency_id.round
+                            invoice.amount_untaxed = sum(line.price_subtotal for line in invoice.invoice_line_ids)
+                            invoice.amount_tax = sum(round_curr(line.amount_total) for line in invoice.tax_line_ids)
+                            total = invoice.amount_untaxed + invoice.amount_tax
+                            vat = total - ((total * 100.0) / 105.0)
+                            total_without_vat = (total * 100.0) / 105.0
+                            if sales_order:
+                                invoice.write({
+                                    'corporate_otc_amount': float(sales_order.price_total),
+                                    'toal_amount_otc_mrc': vat + total_without_vat + float(sales_order.price_total),
+                                    'toal_amount_mrc': vat + total_without_vat
+                                })
+                            else:
+                                invoice.write({
+                                    'toal_amount_otc_mrc': vat + total_without_vat,
+                                    'toal_amount_mrc': vat + total_without_vat
+                                })
+                        else:
+                            print("Customer type is not corporate or soho")
+                            round_curr = invoice.currency_id.round
+                            invoice.amount_untaxed = sum(line.price_subtotal for line in invoice.invoice_line_ids)
+                            invoice.amount_tax = sum(round_curr(line.amount_total) for line in invoice.tax_line_ids)
+                            total = invoice.amount_untaxed + invoice.amount_tax
+                            vat = total - ((total * 100.0) / 105.0)
+                            total_without_vat = (total * 100.0) / 105.0
+                            invoice.write({
+                                'toal_amount_otc_mrc': vat + total_without_vat,
+                                'toal_amount_mrc': vat + total_without_vat
+                            })
+                            print("Computed total for retail")
         except Exception as ex:
             print(ex)
