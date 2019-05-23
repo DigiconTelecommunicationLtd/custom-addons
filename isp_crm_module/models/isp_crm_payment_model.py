@@ -50,6 +50,7 @@ class ISPCRMPayment(models.Model):
     full_response = fields.Text(string="Full Response")
     bill_pay_type = fields.Char(compute="_get_bill_pay_type", string="Payment_type")
     customer_type = fields.Selection(related='partner_id.opportunity_ids.lead_type', string='Customer Type')
+    partner_id = fields.Many2one('res.partner', string='Partner', domain=[('subscriber_id', '!=', 'New')])
 
     @api.multi
     def post(self, vals={}, is_mail_sent=False):
