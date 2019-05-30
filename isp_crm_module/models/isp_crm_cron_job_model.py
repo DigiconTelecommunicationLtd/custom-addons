@@ -887,12 +887,12 @@ class CronJobModel(models.Model):
                             if invoice.corporate_soho_first_month_date_start and invoice.corporate_soho_first_month_date_end:
 
                                 # Convert the given date to specific format
-                                formated_date = datetime.datetime.strptime(
+                                formated_date = datetime.strptime(
                                     str(invoice.corporate_soho_first_month_date_start),
                                     "%Y-%m-%d").strftime(
                                     "%Y-%m-%d")
                                 # Convert the formated_date to date type from string type.
-                                formated_date = datetime.datetime.strptime(formated_date, "%Y-%m-%d")
+                                formated_date = datetime.strptime(formated_date, "%Y-%m-%d")
 
                                 # Get the first day of the month in order to calculate total days of the month.
                                 corporate_soho_first_month_date_start = formated_date.replace(
@@ -901,35 +901,35 @@ class CronJobModel(models.Model):
                                 str(corporate_soho_first_month_date_start).split(" ")[0]
 
                                 # Get the last day of the month.
-                                corporate_soho_first_month_date_end = datetime.date(formated_date.year,
+                                corporate_soho_first_month_date_end = date(formated_date.year,
                                                                                     formated_date.month + 1,
                                                                                     1) - relativedelta(
                                     days=1)
 
-                                bill_start_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_start),
+                                bill_start_date = datetime.strptime(str(corporate_soho_first_month_date_start),
                                                                              "%Y-%m-%d").strftime(
                                     "%Y-%m-%d %H-%M")
-                                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+                                bill_start_date = datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
 
-                                bill_end_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_end),
+                                bill_end_date = datetime.strptime(str(corporate_soho_first_month_date_end),
                                                                            "%Y-%m-%d").strftime(
                                     "%Y-%m-%d %H-%M")
-                                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+                                bill_end_date = datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
 
                                 difference = bill_end_date - bill_start_date
                                 # total_days_of_the_month = float(difference.days+1)
                                 total_days_of_the_month = 30.0
 
-                                bill_start_date = datetime.datetime.strptime(
+                                bill_start_date = datetime.strptime(
                                     invoice.corporate_soho_first_month_date_start,
                                     "%Y-%m-%d").strftime(
                                     "%Y-%m-%d %H-%M")
-                                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+                                bill_start_date = datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
 
-                                bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                                bill_end_date = datetime.strptime(invoice.corporate_soho_first_month_date_end,
                                                                            "%Y-%m-%d").strftime(
                                     "%Y-%m-%d %H-%M")
-                                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+                                bill_end_date = datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
 
                                 difference = bill_end_date - bill_start_date
                                 difference = float(difference.days + 1)
@@ -945,10 +945,10 @@ class CronJobModel(models.Model):
                                         })
                             else:
                                 print("User has not selected service start date and end date")
-                                corporate_soho_first_month_date_start = datetime.date.today()
+                                corporate_soho_first_month_date_start = date.today()
                                 # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
-                                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                    datetime.date.today().month + 1,
+                                corporate_soho_first_month_date_end = date(date.today().year,
+                                                                                    date.today().month + 1,
                                                                                     1) - relativedelta(
                                     days=1)
                                 invoice.write({
@@ -956,16 +956,16 @@ class CronJobModel(models.Model):
                                     'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
                                 })
 
-                                bill_start_date = datetime.datetime.strptime(
+                                bill_start_date = datetime.strptime(
                                     invoice.corporate_soho_first_month_date_start,
                                     "%Y-%m-%d").strftime(
                                     "%Y-%m-%d %H-%M")
-                                bill_start_date = datetime.datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
+                                bill_start_date = datetime.strptime(bill_start_date, "%Y-%m-%d %H-%M")
 
-                                bill_end_date = datetime.datetime.strptime(invoice.corporate_soho_first_month_date_end,
+                                bill_end_date = datetime.strptime(invoice.corporate_soho_first_month_date_end,
                                                                            "%Y-%m-%d").strftime(
                                     "%Y-%m-%d %H-%M")
-                                bill_end_date = datetime.datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
+                                bill_end_date = datetime.strptime(bill_end_date, "%Y-%m-%d %H-%M")
 
                                 difference = bill_end_date - bill_start_date
                                 difference = float(difference.days)
