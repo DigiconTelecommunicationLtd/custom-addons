@@ -307,7 +307,10 @@ class ServiceRequest(models.Model):
             #     raise UserError('Please give all the technical information to mark done this ticket.')
 
             # Send mail on mark done
-            self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj)
+            if customer_type == "MC":
+                pass
+            else:
+                self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj)
 
         return True
 
