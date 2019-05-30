@@ -829,7 +829,7 @@ class CronJobModel(models.Model):
     # Patch cron job for vat calculation
     def vat_calculation_patch(self):
         """
-
+        vat calculation.
         :return:
         """
         try:
