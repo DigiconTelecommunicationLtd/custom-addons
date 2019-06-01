@@ -990,12 +990,14 @@ class CronJobModel(models.Model):
                                     'corporate_otc_amount': float(sales_order.price_total),
                                     'toal_amount_otc_mrc': vat + total_without_vat + float(sales_order.price_total),
                                     'toal_amount_mrc': vat + total_without_vat,
+                                    'amount_without_vat': total_without_vat,
                                     'amount_vat': vat
                                 })
                             else:
                                 invoice.write({
                                     'toal_amount_otc_mrc': vat + total_without_vat,
                                     'toal_amount_mrc': vat + total_without_vat,
+                                    'amount_without_vat': total_without_vat,
                                     'amount_vat': vat
                                 })
                         else:
@@ -1009,6 +1011,7 @@ class CronJobModel(models.Model):
                             invoice.write({
                                 'toal_amount_otc_mrc': vat + total_without_vat,
                                 'toal_amount_mrc': vat + total_without_vat,
+                                'amount_without_vat': total_without_vat,
                                 'amount_vat': vat
                             })
                             print("Computed total for retail")
