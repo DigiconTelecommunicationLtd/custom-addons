@@ -117,9 +117,21 @@ class CustomerProductLine(models.Model):
         self.price_subtotal= quantity * self.price_unit
         self.price_total= self.price_total - adjusted_price
 
+        self.update({
+            'price_subtotal': quantity * self.price_unit,
+            'price_total': self.price_total - adjusted_price,
+
+        })
+
     @api.onchange('price_unit')
     def price_unit_change(self):
         unit_price = self.price_unit
         adjusted_price = self.price_subtotal - (self.product_uom_qty * unit_price)
         self.price_subtotal = self.product_uom_qty * unit_price
         self.price_total = self.price_total - adjusted_price
+
+        self.update({
+            'price_subtotal': self.product_uom_qty * unit_price,
+            'price_total': self.price_total - adjusted_price,
+
+        })
