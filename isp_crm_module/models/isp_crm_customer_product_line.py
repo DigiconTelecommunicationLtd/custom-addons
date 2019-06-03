@@ -32,8 +32,8 @@ class CustomerProductLine(models.Model):
                                    default=1.0)
     product_uom = fields.Many2one('product.uom', string='Unit of Measure', )
     price_unit = fields.Float('Unit Price', required=True, digits=dp.get_precision('Product Price'), default=0.0)
-    price_subtotal = fields.Monetary(string='Subtotal', readonly=True, store=True)
-    price_total = fields.Monetary(string='Total', readonly=True, store=True)
+    price_subtotal = fields.Monetary(string='Subtotal', store=True)
+    price_total = fields.Monetary(string='Total', store=True)
     currency_id = fields.Many2one(related='customer_id.currency_id', store=True, string='Currency', readonly=True)
     tax_id = fields.Many2many('account.tax', string='Taxes',
                               domain=['|', ('active', '=', False), ('active', '=', True)])
@@ -117,11 +117,11 @@ class CustomerProductLine(models.Model):
         self.price_subtotal= quantity * self.price_unit
         self.price_total= self.price_total - adjusted_price
 
-        self.update({
-            'price_subtotal': quantity * self.price_unit,
-            'price_total': self.price_total - adjusted_price,
-
-        })
+        # self.update({
+        #     'price_subtotal': quantity * self.price_unit,
+        #     'price_total': price_total
+        #
+        # })
 
     @api.onchange('price_unit')
     def price_unit_change(self):
@@ -130,8 +130,8 @@ class CustomerProductLine(models.Model):
         self.price_subtotal = self.product_uom_qty * unit_price
         self.price_total = self.price_total - adjusted_price
 
-        self.update({
-            'price_subtotal': self.product_uom_qty * unit_price,
-            'price_total': self.price_total - adjusted_price,
-
-        })
+        # self.update({
+        #     'price_subtotal': self.product_uom_qty * unit_price,
+        #     'price_total': price_total
+        #
+        # })
