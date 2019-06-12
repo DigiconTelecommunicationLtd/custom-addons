@@ -1014,6 +1014,6 @@ class CronJobModel(models.Model):
                                 'amount_without_vat': total_without_vat,
                                 'amount_vat': vat
                             })
-                            print("Computed total for retail")
+                            print("Computed total for retail.")
         except Exception as ex:
             print(ex)
