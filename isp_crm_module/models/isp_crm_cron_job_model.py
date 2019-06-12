@@ -498,7 +498,7 @@ class CronJobModel(models.Model):
                                 'current_package_price': ticket.proposed_package_price
                             })
 
-                elif customer.next_package_start_date == tomorrow or customer.active_status == CUSTOMER_INACTIVE_STATUS:
+                elif str(customer.next_package_start_date) == str(tomorrow) or customer.active_status == CUSTOMER_INACTIVE_STATUS:
                     # updating the customer active_status and package according to their balance
                     if (customer_balance < 0) and (abs(
                             customer_balance) >= customer.next_package_price):

@@ -130,7 +130,7 @@ class CustomerProductLine(models.Model):
     @api.onchange('price_unit')
     def price_unit_change(self):
         """
-        
+
         :return:
         """
         unit_price = self.price_unit
