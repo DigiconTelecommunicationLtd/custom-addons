@@ -149,7 +149,7 @@ class Customer(models.Model):
 
     def _get_next_package_start_date(self, given_date):
         """
-        Returns date of after adding DEFAULT_NEXT_MONTH_DAYS days
+        Returns date of after adding DEFAULT_NEXT_MONTH_DAYS days.
         :param given_date: start_date of the package
         :return: date str
         """
