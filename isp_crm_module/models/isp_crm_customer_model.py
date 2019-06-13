@@ -20,8 +20,8 @@ ACTIVE_STATES = [
     ('inactive', _('Inactive')),
 ]
 
-DEFAULT_MONTH_DAYS = 30
-DEFAULT_NEXT_MONTH_DAYS = 31
+DEFAULT_MONTH_DAYS = 29
+DEFAULT_NEXT_MONTH_DAYS = 30
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 DEFAULT_ACCOUNT_CODE = '100001'
 
@@ -142,7 +142,7 @@ class Customer(models.Model):
         today_obj = datetime.strptime(today, DEFAULT_DATE_FORMAT)
         given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
         if today_obj > given_date_obj:
-            package_end_date_obj = today_obj + timedelta(days=DEFAULT_MONTH_DAYS)
+            package_end_date_obj = today_obj + timedelta(days=DEFAULT_MONTH_DAYS + 1)
         else:
             package_end_date_obj    = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
         return package_end_date_obj.strftime(DEFAULT_DATE_FORMAT)
@@ -158,7 +158,7 @@ class Customer(models.Model):
         today_obj = datetime.strptime(today, DEFAULT_DATE_FORMAT)
         given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
         if today_obj > given_date_obj:
-            package_start_date_obj = today_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
+            package_start_date_obj = today_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS + 1)
         else:
             package_start_date_obj  = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
         return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
