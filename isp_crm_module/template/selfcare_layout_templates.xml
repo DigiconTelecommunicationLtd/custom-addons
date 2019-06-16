@@ -504,9 +504,9 @@
                         </table>
                         <div class="box-footer">
                             <button id="submit_online" type="submit" class="btn btn-primary">Go for payment</button>
-<!--                            <button style="color:#b9b9b9;" id="bKash_button" disabled="disabled" class="btn btn-primary">Go for bKash payment</button>-->
-                            <button t-if="customer_id=='MR19060108'" style="color:#b9b9b9;" id="bKash_button" disabled="disabled" class="btn btn-primary">Go for bKash payment</button>
-                            <button t-if="customer_id=='MR19060103'" style="color:#b9b9b9;" id="bKash_button" disabled="disabled" class="btn btn-primary">Go for bKash payment</button>
+                            <button style="color:#b9b9b9;" id="bKash_button" disabled="disabled" class="btn btn-primary">Go for bKash payment</button>
+<!--                            <button t-if="customer_id=='MR19060108'" style="color:#b9b9b9;" id="bKash_button" disabled="disabled" class="btn btn-primary">Go for bKash payment</button>-->
+<!--                            <button t-if="customer_id=='MR19060103'" style="color:#b9b9b9;" id="bKash_button" disabled="disabled" class="btn btn-primary">Go for bKash payment</button>-->
                         </div>
                     </form>
                 </div>

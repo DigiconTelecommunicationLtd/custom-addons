@@ -160,7 +160,7 @@
                             <field name="type" attrs="{'required': True}"/>
                         </group>
                         <group>
-                            <field name="complexity" readonly="1" options="{'no_create_edit': True}"/>
+                            <field name="complexity" attrs="{'required': True}"/>
                         </group>
                         <group>
                             <field name="td_flags"  readonly="1" options="{'no_create_edit': True}" attrs="{'invisible': [('td_flags', '=', '0')]}"/>
