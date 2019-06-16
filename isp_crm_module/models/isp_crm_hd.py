@@ -50,6 +50,10 @@ COMPLEXITY_LEVEL_THREE = [
     ('Name', 'L-3'),
     ('Time', '24 Hours'),
 ]
+COMPLEXITY_PAYMENT_ISSUE = [
+    ('Name', 'Payment Issue'),
+    ('Time', '8 Hours'),
+]
 
 class Helpdesk(models.Model):
     """
