@@ -278,7 +278,10 @@ class ServiceRequest(models.Model):
             # sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date desc', limit=1)
             current_package_id              = customer.invoice_product_id.id
             current_package_price           = customer.invoice_product_price
-            current_package_start_date      = fields.Date.today()
+            if customer.billing_start_date and customer_type != "MR":
+                current_package_start_date = customer.billing_start_date
+            else:
+                current_package_start_date      = fields.Date.today()
 
             # updating current package info
             customer.update_current_bill_cycle_info(

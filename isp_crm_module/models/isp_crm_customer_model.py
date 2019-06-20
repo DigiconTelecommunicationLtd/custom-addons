@@ -110,6 +110,8 @@ class Customer(models.Model):
     description_info = fields.Text('Description')
     emergency_contact_number = fields.Char(related='opportunity_ids.emergency_contact_number', string="Emergency Contact Number", required=False, default='',
                                            track_visibility='onchange')
+    service_activation_date = fields.Date(related='opportunity_ids.service_activation_date', string='Service Activation Date', track_visibility='onchange')
+    billing_start_date = fields.Date(related='opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
 
 
     def _get_default_address_format(self):

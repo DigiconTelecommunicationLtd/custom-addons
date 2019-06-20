@@ -310,6 +310,8 @@
                 <!--<field name="zip"/>-->
                 <!--<field name="function"/>-->
                 <!--<field name="website"/>-->
+                <field name="service_activation_date"/>
+                <field name="billing_start_date"/>
             </xpath>
             <!--Making priority field invisible in opportunity form-->
             <xpath expr="//group/group/field[@name='priority']" position="attributes">
@@ -332,6 +334,8 @@
                 <field name="lead_type" widget="radio"/>
                 <field name="assigned_rm" domain="[('share', '=', False)]"
                                 context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads'], 'team_id': team_id}"/>
+                <field name="service_activation_date"/>
+                <field name="billing_start_date"/>
             </xpath>
         </field>
     </record>

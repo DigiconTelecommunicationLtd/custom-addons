@@ -40,6 +40,8 @@ class Opportunity(models.Model):
     update_date = fields.Datetime(string='Updated time', default=datetime.now())
     emergency_contact_number = fields.Char(string="Emergency Contact Number", required=False, default='',
                                    track_visibility='onchange')
+    service_activation_date = fields.Date(string='Service Activation Date', track_visibility='onchange')
+    billing_start_date = fields.Date(string='Billing Start Date', track_visibility='onchange')
 
 
     def _get_color_on_service_request_status(self):
