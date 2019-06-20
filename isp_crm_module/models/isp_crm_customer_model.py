@@ -108,6 +108,8 @@ class Customer(models.Model):
     technical_info_subnet_mask = fields.Char('Subnet Mask')
     technical_info_gateway = fields.Char('Gateway')
     description_info = fields.Text('Description')
+    emergency_contact_number = fields.Char(related='opportunity_ids.emergency_contact_number', string="Emergency Contact Number", required=False, default='',
+                                           track_visibility='onchange')
 
 
     def _get_default_address_format(self):
@@ -391,6 +393,15 @@ class Customer(models.Model):
             else:
                 validated = False
                 raise UserError(_('Phone number is too long!'))
+
+        if vals.get('emergency_contact_number'):
+            if len(vals.get('emergency_contact_number')) < 15:
+                if re.match("^[+]*([0-9]+-)*[0-9]+$", vals.get('emergency_contact_number')) is None:
+                    validated = False
+                    raise UserError(_('Please Enter a Valid Emergency Contact Number!'))
+            else:
+                validated = False
+                raise UserError(_('Emergency contact number is too long!'))
 
         if validated:
             return super(Customer, self).create(vals)

@@ -50,10 +50,6 @@ COMPLEXITY_LEVEL_THREE = [
     ('Name', 'L-3'),
     ('Time', '24 Hours'),
 ]
-COMPLEXITY_PAYMENT_ISSUE = [
-    ('Name', 'Payment Issue'),
-    ('Time', '8 Hours'),
-]
 
 class Helpdesk(models.Model):
     """
@@ -106,8 +102,8 @@ class Helpdesk(models.Model):
             vals['td_flags'] = TD_FLAGS[0][0]
             helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
             if helpdesk_ticket_complexity:
-                # vals['complexity'] = helpdesk_ticket_complexity.id
-                pass
+                vals['complexity'] = helpdesk_ticket_complexity.id
+                # pass
             else:
                 helpdesk_ticket_complexity = helpdesk_ticket_complexity.env['isp_crm_module.helpdesk_ticket_complexity'].create(
                     {
@@ -115,22 +111,8 @@ class Helpdesk(models.Model):
                         'time_limit': COMPLEXITY_LEVEL_ONE[1][1],
                     }
                 )
-                # vals['complexity'] = helpdesk_ticket_complexity.id
+                vals['complexity'] = helpdesk_ticket_complexity.id
 
-            helpdesk_ticket_complexity_payment_issue = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
-                [('name', '=', COMPLEXITY_PAYMENT_ISSUE[0][1])])
-            if helpdesk_ticket_complexity_payment_issue:
-                # vals['complexity'] = helpdesk_ticket_complexity.id
-                pass
-            else:
-                helpdesk_ticket_complexity_payment_issue = helpdesk_ticket_complexity_payment_issue.env[
-                    'isp_crm_module.helpdesk_ticket_complexity'].create(
-                    {
-                        'name': COMPLEXITY_PAYMENT_ISSUE[0][1],
-                        'time_limit': COMPLEXITY_PAYMENT_ISSUE[1][1],
-                    }
-                )
-                # vals['complexity'] = helpdesk_ticket_complexity.id
         else:
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
             vals['default_stages'] = 'New'
@@ -138,8 +120,8 @@ class Helpdesk(models.Model):
             helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
                 [('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
             if helpdesk_ticket_complexity:
-                # vals['complexity'] = helpdesk_ticket_complexity.id
-                pass
+                vals['complexity'] = helpdesk_ticket_complexity.id
+                # pass
             else:
                 helpdesk_ticket_complexity = helpdesk_ticket_complexity.env[
                     'isp_crm_module.helpdesk_ticket_complexity'].create(
@@ -148,22 +130,7 @@ class Helpdesk(models.Model):
                         'time_limit': COMPLEXITY_LEVEL_ONE[1][1],
                     }
                 )
-                # vals['complexity'] = helpdesk_ticket_complexity.id
-
-            helpdesk_ticket_complexity_payment_issue = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
-                [('name', '=', COMPLEXITY_PAYMENT_ISSUE[0][1])])
-            if helpdesk_ticket_complexity_payment_issue:
-                # vals['complexity'] = helpdesk_ticket_complexity.id
-                pass
-            else:
-                helpdesk_ticket_complexity_payment_issue = helpdesk_ticket_complexity_payment_issue.env[
-                    'isp_crm_module.helpdesk_ticket_complexity'].create(
-                    {
-                        'name': COMPLEXITY_PAYMENT_ISSUE[0][1],
-                        'time_limit': COMPLEXITY_PAYMENT_ISSUE[1][1],
-                    }
-                )
-                # vals['complexity'] = helpdesk_ticket_complexity.id
+                vals['complexity'] = helpdesk_ticket_complexity.id
 
         newrecord = super(Helpdesk, self).create(vals)
         self.env['isp_crm_module.helpdesk_ticket_history'].create(

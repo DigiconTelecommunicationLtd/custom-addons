@@ -122,6 +122,7 @@ class ServiceRequest(models.Model):
     ip = fields.Char('IP Address')
     subnet_mask = fields.Char('Subnet Mask')
     gateway = fields.Char('Gateway')
+    internal_notes = fields.Char(string="Internal Notes", track_visibility='onchange')
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
@@ -168,10 +169,14 @@ class ServiceRequest(models.Model):
 
     @api.model
     def create(self, vals):
+        opportunity_id = vals.get('opportunity_id')
+        opportunity = self.env['crm.lead'].search([('id', '=', opportunity_id)], limit=1)
+        internal_notes = opportunity.description
         first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
             vals['stage'] = first_stage.id
+            vals['internal_notes'] = internal_notes
         return super(ServiceRequest, self).create(vals)
 
     def _default_account(self):

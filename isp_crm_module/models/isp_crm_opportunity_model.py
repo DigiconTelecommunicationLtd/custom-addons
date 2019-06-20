@@ -38,6 +38,8 @@ class Opportunity(models.Model):
     cr = fields.Integer('Color Index', default=0, compute='_get_color_on_service_request_status')
     update_flag = fields.Integer('Is updated', default=1)
     update_date = fields.Datetime(string='Updated time', default=datetime.now())
+    emergency_contact_number = fields.Char(string="Emergency Contact Number", required=False, default='',
+                                   track_visibility='onchange')
 
 
     def _get_color_on_service_request_status(self):
@@ -133,6 +135,15 @@ class Opportunity(models.Model):
         if self.phone:
             if len(self.phone) < 15:
                 if re.match("^([0-9]+-)*[0-9]+$", self.phone) == None:
+                    raise UserError(_('Please Enter a Valid Phone Number!'))
+            else:
+                raise UserError(_('Phone number is too long!'))
+
+    @api.onchange('emergency_contact_number')
+    def onchange_emergency_contact_number(self):
+        if self.emergency_contact_number:
+            if len(self.emergency_contact_number) < 15:
+                if re.match("^[+]*([0-9]+-)*[0-9]+$", self.emergency_contact_number) == None:
                     raise UserError(_('Please Enter a Valid Phone Number!'))
             else:
                 raise UserError(_('Phone number is too long!'))

@@ -289,6 +289,12 @@
                             </group>
                         </page>
                         <!--end of technical info-->
+
+                        <!--showing internal notes-->
+                        <page string="Internal Notes">
+                            <field name="internal_notes"/>
+                        </page>
+                        <!--end of internal notes-->
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
