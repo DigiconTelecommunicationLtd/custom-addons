@@ -1020,6 +1020,10 @@ class CronJobModel(models.Model):
 
     # Change stage of service request from queue to new
     def change_stage_service_request_queue_new(self):
+        """
+        
+        :return:
+        """
         try:
             now = datetime.now().strftime("%Y-%m-%d %H-%M")
             now = datetime.strptime(now, "%Y-%m-%d %H-%M")
