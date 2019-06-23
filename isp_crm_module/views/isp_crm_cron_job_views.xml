@@ -112,5 +112,19 @@
             <field eval="False" name="doall"/>
         </record>
 
+        <!--Cron job for changing stage from queue to new in service request-->
+        <record forcecreate="True" id="isp_crm_cron_job_change_stage_service_request_queue_to_new" model="ir.cron">
+            <field name="name">Change Stage in Service Request from Queue to New</field>
+            <field name="model_id" ref="model_isp_crm_cron_job"/>
+            <field name="state">code</field>
+            <field name="model" eval="'isp_crm.cron_job'" />
+            <field name="code">model.change_stage_service_request_queue_new()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">24</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+
     </data>
 </odoo>

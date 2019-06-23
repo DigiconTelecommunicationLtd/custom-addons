@@ -1017,3 +1017,29 @@ class CronJobModel(models.Model):
                             print("Computed total for retail.")
         except Exception as ex:
             print(ex)
+
+    # Change stage of service request from queue to new
+    def change_stage_service_request_queue_new(self):
+        try:
+            now = datetime.now().strftime("%Y-%m-%d %H-%M")
+            now = datetime.strptime(now, "%Y-%m-%d %H-%M")
+            first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
+            second_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[1]
+            get_all_requests = self.env['isp_crm_module.service_request'].search([('stage', '=', second_stage.id)])
+            for request in get_all_requests:
+                days = 4
+                customer_service_activation_date = request.customer.service_activation_date
+                if customer_service_activation_date:
+                    activation_date = datetime.strptime(customer_service_activation_date, "%Y-%m-%d").strftime(
+                        "%Y-%m-%d %H-%M")
+                    activation_date = datetime.strptime(activation_date, "%Y-%m-%d %H-%M")
+                    get_diff = activation_date - now
+                    days = abs(get_diff.days)
+
+                if days < 4:
+                    request.update({
+                        'stage': first_stage.id
+                    })
+            return True
+        except Exception as ex:
+            print(ex)

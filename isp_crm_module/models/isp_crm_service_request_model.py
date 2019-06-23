@@ -173,9 +173,23 @@ class ServiceRequest(models.Model):
         opportunity = self.env['crm.lead'].search([('id', '=', opportunity_id)], limit=1)
         internal_notes = opportunity.description
         first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
+        second_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[1]
+        customer_service_activation_date = opportunity.service_activation_date
+        now = datetime.now().strftime("%Y-%m-%d %H-%M")
+        now = datetime.strptime(now, "%Y-%m-%d %H-%M")
+        days = 0
+        if customer_service_activation_date:
+            activation_date = datetime.strptime(customer_service_activation_date, "%Y-%m-%d").strftime(
+                "%Y-%m-%d %H-%M")
+            activation_date = datetime.strptime(activation_date, "%Y-%m-%d %H-%M")
+            get_diff = activation_date - now
+            days = abs(get_diff.days)
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
-            vals['stage'] = first_stage.id
+            if days > 3:
+                vals['stage'] = second_stage.id
+            else:
+                vals['stage'] = first_stage.id
             vals['internal_notes'] = internal_notes
         return super(ServiceRequest, self).create(vals)
 
