@@ -24,6 +24,7 @@ DEFAULT_MONTH_DAYS = 29
 DEFAULT_NEXT_MONTH_DAYS = 30
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 DEFAULT_ACCOUNT_CODE = '100001'
+DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 
 class Customer(models.Model):
     """Inherits res.partner and adds Customer info in partner form"""
@@ -112,6 +113,8 @@ class Customer(models.Model):
                                            track_visibility='onchange')
     service_activation_date = fields.Date(related='opportunity_ids.service_activation_date', string='Service Activation Date', track_visibility='onchange')
     billing_start_date = fields.Date(related='opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
+
+    package_product_price = fields.Float('Package Price', required=False, default=0.0)
 
 
     def _get_default_address_format(self):
@@ -506,13 +509,19 @@ class Customer(models.Model):
         """
         Compute the total amounts of the SO.
         """
+        package_price = 0.0
         for order in self:
             amount_untaxed = 0.0
             for line in order.product_line:
                 amount_untaxed += line.price_subtotal
+                if line.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME or line.product_id.categ_id.complete_name == DEFAULT_PACKAGE_CAT_NAME:
+                    package_price += line.price_subtotal
             order.update({
                 'product_line_total': amount_untaxed,
+                'package_product_price': package_price,
             })
+
+
 
 
 
