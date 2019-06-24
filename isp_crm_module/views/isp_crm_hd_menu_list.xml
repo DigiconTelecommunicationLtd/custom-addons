@@ -7,20 +7,20 @@
         name="Helpdesk"
         sequence="6"
      />
-    <menuitem id="menu_isp_crm_helpdesk_history" name="Ticket History" parent="isp_crm_hd" sequence="6"/>
-    <menuitem id="menu_isp_crm_helpdesk_configuration" name="Configuration" parent="isp_crm_hd" sequence="7"/>
+<!--    <menuitem id="menu_isp_crm_helpdesk_history" name="Ticket History" parent="isp_crm_hd" sequence="6"/>-->
+<!--    <menuitem id="menu_isp_crm_helpdesk_configuration" name="Configuration" parent="isp_crm_hd" sequence="7"/>-->
     <!--ISP CRM Helpdesk Configuration-->
-    <menuitem
-        id="isp_crm_hd_config"
-        name="Helpdesk Configuration"
-        parent="menu_isp_crm_helpdesk_configuration"
-     />
+<!--    <menuitem-->
+<!--        id="isp_crm_hd_config"-->
+<!--        name="Helpdesk Configuration"-->
+<!--        parent="menu_isp_crm_helpdesk_configuration"-->
+<!--     />-->
 
     <!--ISP CRM Helpdesk TD Configuration-->
-    <menuitem
-        id="isp_crm_hd_td_config"
-        name="Helpdesk TD Configuration"
-        parent="menu_isp_crm_helpdesk_configuration"
-     />
+<!--    <menuitem-->
+<!--        id="isp_crm_hd_td_config"-->
+<!--        name="Helpdesk TD Configuration"-->
+<!--        parent="menu_isp_crm_helpdesk_configuration"-->
+<!--     />-->
 
 </odoo>

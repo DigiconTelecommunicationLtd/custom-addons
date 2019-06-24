@@ -48,11 +48,11 @@
         </field>
     </record>
 
-    <menuitem
-            id="isp_crm_hd_td_type"
-            name="Ticket Type"
-            parent="isp_crm_hd_td_config"
-            action="isp_crm_helpdesk_td_type"
-    />
+<!--    <menuitem-->
+<!--            id="isp_crm_hd_td_type"-->
+<!--            name="Ticket Type"-->
+<!--            parent="isp_crm_hd_td_config"-->
+<!--            action="isp_crm_helpdesk_td_type"-->
+<!--    />-->
 
 </odoo>

@@ -50,11 +50,11 @@
         </field>
     </record>
 
-    <menuitem
-            id="isp_crm_hd_td_ticket_solution"
-            name="Helpdesk TD Solution"
-            parent="isp_crm_hd_td_config"
-            action="isp_crm_module_hd_td_ticket_solution_action"
-    />
+<!--    <menuitem-->
+<!--            id="isp_crm_hd_td_ticket_solution"-->
+<!--            name="Helpdesk TD Solution"-->
+<!--            parent="isp_crm_hd_td_config"-->
+<!--            action="isp_crm_module_hd_td_ticket_solution_action"-->
+<!--    />-->
 
 </odoo>

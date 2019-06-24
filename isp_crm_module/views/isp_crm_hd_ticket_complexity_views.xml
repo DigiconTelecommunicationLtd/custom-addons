@@ -53,11 +53,11 @@
         </field>
     </record>
 
-    <menuitem
-            id="isp_crm_hd_ticket_complexity"
-            name="Ticket Complexity"
-            parent="isp_crm_hd_config"
-            action="isp_crm_module_hd_ticket_complexity_action"
-    />
+<!--    <menuitem-->
+<!--            id="isp_crm_hd_ticket_complexity"-->
+<!--            name="Ticket Complexity"-->
+<!--            parent="isp_crm_hd_config"-->
+<!--            action="isp_crm_module_hd_ticket_complexity_action"-->
+<!--    />-->
 
 </odoo>
