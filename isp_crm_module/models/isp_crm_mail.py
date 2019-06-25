@@ -172,3 +172,19 @@ class Team(models.Model):
             return True
         else:
             raise UserError('Could Not send the mail.')
+
+    # @api.multi
+    # def action_ticket_reopen(self, subject, mailto, ticketnumber, template_obj):
+    #     body = template_obj.body_html
+    #     body = body.replace('--ticketnumber--', ticketnumber)
+    #     if template_obj:
+    #         mail_values = {
+    #             'subject': subject,
+    #             'body_html': body,
+    #             'email_to': mailto,
+    #             'email_cc': '',
+    #             'email_from': self.DEFAULT_FROM_MAIL,
+    #         }
+    #         create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+    #
+    #     return True

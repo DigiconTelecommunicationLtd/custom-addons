@@ -98,7 +98,7 @@
                         type="object"
                         help="Ticket is resolved by TD-TNOM/TD-CNOM"
                         class="oe_highlight"
-                        attrs="{'invisible': [('td_flags', '!=', '2')]}"
+                        attrs="{'invisible': ['|','|','|','|','|','|',('complexity_name', '=', 'L1'),('td_flags', '=', '0'),('td_flags', '=', '3'),('td_flags', '=', '4'),('td_flags', '=', '5'),('td_flags', '=', '9'),('is_resolved_by_td_tnom_cnom', '=', True)]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button
@@ -107,7 +107,7 @@
                         type="object"
                         help="Send to SD"
                         class="oe_highlight"
-                        attrs="{'invisible': [('td_flags', '!=', '4')]}"
+                        attrs="{'invisible': ['|','|','|','|','|','|','|',('complexity_name', '=', 'L1'),('td_flags', '=', '0'),('td_flags', '=', '2'),('td_flags', '=', '3'),('td_flags', '=', '5'),('td_flags', '=', '9'),('is_resolved_by_td_tnom_cnom', '=', False)]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button
@@ -116,7 +116,7 @@
                         type="object"
                         help="Is Resolved"
                         class="oe_highlight"
-                        attrs="{'invisible': [('td_flags', '!=', '1')]}"
+                        attrs="{'invisible': ['|','|','|','|','|','|',('td_flags', '=', '0'),('td_flags', '=', '2'),('td_flags', '=', '3'),('td_flags', '=', '4'),('td_flags', '=', '5'),('complexity_name', '=', 'L2'),('complexity_name', '=', 'L3')]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button
@@ -125,7 +125,7 @@
                         type="object"
                         help="Assign Complexity L2"
                         class="oe_highlight"
-                        attrs="{'invisible': [('td_flags', '!=', '1')]}"
+                        attrs="{'invisible': ['|','|','|','|','|','|',('td_flags', '=', '0'),('td_flags', '=', '2'),('td_flags', '=', '3'),('td_flags', '=', '4'),('td_flags', '=', '5'),('complexity_name', '=', 'L2'),('complexity_name', '=', 'L3')]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button
@@ -134,7 +134,7 @@
                         type="object"
                         help="Assign Complexity L3"
                         class="oe_highlight"
-                        attrs="{'invisible': [('td_flags', '!=', '1')]}"
+                        attrs="{'invisible': ['|','|','|','|','|',('td_flags', '=', '0'),('td_flags', '=', '3'),('td_flags', '=', '4'),('td_flags', '=', '5'),('complexity_name', '=', 'L3'),('is_resolved_by_td_tnom_cnom', '=', True)]}"
                         confirm="Are you sure you want to continue?"
                     />
                     <button
@@ -171,6 +171,9 @@
                     <group>
                         <group>
                             <field name="type" attrs="{'required': True}"/>
+                            <field name="complexity_name" invisible="1"/>
+                            <field name="is_resolved_by_td_tnom_cnom" invisible="1"/>
+                            <field name="send_to_sd" invisible="1"/>
                         </group>
                         <group>
                             <field name="complexity" readonly="1" options="{'no_create_edit': True}" attrs="{'invisible': [('td_flags', '=', '1')]}"/>

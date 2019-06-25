@@ -20,10 +20,10 @@
         <field name="name">Helpdesk_Ticket_Closing_Mail</field>
         <field name="body_html"><![CDATA[
 
-            <p><strong>Dear Valued Client,</strong></p><br/>
-            <p>We sincerely apologise for any convenience caused due to this service interruption.</p><br/>
-            <p>We believe your issued Ticket Number <strong>(--ticketnumber--)</strong> has been resolved and hence we are closing the ticket.</p><br/>
-            <p>If you still face the same issue or need further assistance, please call our customer care unit at 09609006463 or write us at: nmc.mime@cg-bd.com. We are here for 24/7.</p><br/>
+            <p><strong>Dear Valued Client,</strong></p>
+            <p>We sincerely apologise for any convenience caused due to this service interruption.</p>
+            <p>We believe your issued Ticket Number <strong>(--ticketnumber--)</strong> has been resolved and hence we are closing the ticket.</p>
+            <p>If you still face the same issue or need further assistance, please call our customer care unit at 09609006463 or write us at: nmc.mime@cg-bd.com. We are here for 24/7.</p>
             <p>Thank you for being with MiME.</p>
 
         ]]>
@@ -35,13 +35,28 @@
         <field name="name">Helpdesk_Ticket_Complexity_Mail</field>
         <field name="body_html"><![CDATA[
 
-            <p><strong>Dear Valued Client,</strong></p><br/>
-            <p>Thank you for contacting MIME!</p><br/>
-            <p>We sincerely apologise for any convenience caused due to this service interruption.</p><br/>
-            <p>This is just to let you know that your ticket <strong>--ticketnumber--</strong> has been forwarded to our technical department. It may take up to <strong>--hour--</strong> to resolve your issue.</p><br/>
+            <p><strong>Dear Valued Client,</strong></p>
+            <p>Thank you for contacting MIME!</p>
+            <p>We sincerely apologise for any convenience caused due to this service interruption.</p>
+            <p>This is just to let you know that your ticket <strong>--ticketnumber--</strong> has been forwarded to our technical department. It may take up to <strong>--hour--</strong> to resolve your issue.</p>
             <p>We will let you know as soon as your issue has been resolved.</p>
             <p></p>
             <p>We appreciate your patience. Thanks for being with MIME</p>
+
+        ]]>
+
+        </field>
+    </record>
+
+    <record id="isp_crm_module.mail_template_helpdesk_ticket_reopening" model="isp_crm_module.mail">
+        <field name="name">Helpdesk_Ticket_Reopening_Mail</field>
+        <field name="body_html"><![CDATA[
+
+            <p><strong>Dear Valued Client,</strong></p>
+            <p>Thank you for being with MIME.</p>
+            <p>We understand your logged complaint with Reference Number (--ticketnumber--) has not yet been resolved, hence we are re-opening your ticket.</p>
+            <p>We are extremely apologetic for any inconvenience caused due to this service interruption.</p>
+            <p>We will notify you once your service is resumed. If you still face the same issue or need further assistance, please call our customer care unit at 09609006463 or write us at: nmc.mime@cg-bd.com. We are here for 24/7.</p>
 
         ]]>
 

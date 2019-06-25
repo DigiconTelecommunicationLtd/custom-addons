@@ -61,7 +61,7 @@ COMPLEXITY_LEVEL_THREE = [
 
 SD_GROUP_MAIL_ADDRESS = "sd.mime@cg-bd.com"
 TD_NMC_GROUP_MAIL_ADDRESS = "nmc.mime@cg-bd.com"
-ALL_DEPARTMENTAL_HEAD_GROUP_MAIL = "head@cg-bd.com"
+ALL_DEPARTMENTAL_HEAD_GROUP_MAIL = "hod.mime@cg-bd.com"
 
 class Helpdesk(models.Model):
     """
@@ -108,6 +108,9 @@ class Helpdesk(models.Model):
     assigned_rm = fields.Many2one(string='RM', related='customer.assigned_rm', track_visibility='onchange', readonly=True)
     pending_status = fields.Selection(AVAILABLE_PENDING_STATUS, string="Pending Status", track_visibility='onchange')
     level_change_time = fields.Datetime(string='Level Change Time', default=datetime.datetime.now(), track_visibility='onchange')
+    complexity_name = fields.Char(string='Complexity Name', track_visibility='onchange')
+    is_resolved_by_td_tnom_cnom = fields.Boolean()
+    send_to_sd = fields.Boolean()
 
     @api.model
     def create(self, vals):
@@ -118,6 +121,7 @@ class Helpdesk(models.Model):
             helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search([('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
             if helpdesk_ticket_complexity:
                 vals['complexity'] = helpdesk_ticket_complexity.id
+                vals['complexity_name'] = helpdesk_ticket_complexity.name
                 # pass
             else:
                 helpdesk_ticket_complexity = helpdesk_ticket_complexity.env['isp_crm_module.helpdesk_ticket_complexity'].create(
@@ -127,6 +131,7 @@ class Helpdesk(models.Model):
                     }
                 )
                 vals['complexity'] = helpdesk_ticket_complexity.id
+                vals['complexity_name'] = helpdesk_ticket_complexity.name
 
         else:
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.helpdesk') or '/'
@@ -136,6 +141,7 @@ class Helpdesk(models.Model):
                 [('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
             if helpdesk_ticket_complexity:
                 vals['complexity'] = helpdesk_ticket_complexity.id
+                vals['complexity_name'] = helpdesk_ticket_complexity.name
                 # pass
             else:
                 helpdesk_ticket_complexity = helpdesk_ticket_complexity.env[
@@ -146,6 +152,7 @@ class Helpdesk(models.Model):
                     }
                 )
                 vals['complexity'] = helpdesk_ticket_complexity.id
+                vals['complexity_name'] = helpdesk_ticket_complexity.name
 
         newrecord = super(Helpdesk, self).create(vals)
         self.env['isp_crm_module.helpdesk_ticket_history'].create(
@@ -203,9 +210,13 @@ class Helpdesk(models.Model):
     def _onchange_complexity(self):
         helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
             [('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
+        helpdesk_ticket_complexity_l2 = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
+            [('name', '=', COMPLEXITY_LEVEL_TWO[0][1])])
+        helpdesk_ticket_complexity_l3 = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
+            [('name', '=', COMPLEXITY_LEVEL_THREE[0][1])])
         if self.complexity.id == helpdesk_ticket_complexity.id:
             raise UserError('System does not allow you to change service level to L1 once you have changed it to L2/L3.')
-        elif self.td_flags != '2':
+        elif self.td_flags != '2' and (self.complexity.id == helpdesk_ticket_complexity_l2.id or self.complexity.id == helpdesk_ticket_complexity_l3.id):
             raise UserError(
                 'You must change service level by clicking appropriate button above.')
 
@@ -216,6 +227,7 @@ class Helpdesk(models.Model):
         if helpdesk_ticket_complexity_l2:
             self.update({
                 'complexity': helpdesk_ticket_complexity_l2,
+                'complexity_name': helpdesk_ticket_complexity_l2.name,
                 'level_change_time': datetime.datetime.now(),
                 'td_flags': TD_FLAGS[2][0],
                 'pending_status': 0,
@@ -230,6 +242,7 @@ class Helpdesk(models.Model):
             )
             self.update({
                 'complexity': helpdesk_ticket_complexity_l2,
+                'complexity_name': helpdesk_ticket_complexity_l2.name,
                 'level_change_time': datetime.datetime.now(),
                 'td_flags': TD_FLAGS[2][0],
                 'pending_status': 0,
@@ -258,6 +271,7 @@ class Helpdesk(models.Model):
         if helpdesk_ticket_complexity_l3:
             self.update({
                 'complexity': helpdesk_ticket_complexity_l3,
+                'complexity_name': helpdesk_ticket_complexity_l3.name,
                 'level_change_time': datetime.datetime.now(),
                 'td_flags': TD_FLAGS[2][0],
                 'pending_status': 0,
@@ -272,6 +286,7 @@ class Helpdesk(models.Model):
             )
             self.update({
                 'complexity': helpdesk_ticket_complexity_l3,
+                'complexity_name': helpdesk_ticket_complexity_l3.name,
                 'level_change_time': datetime.datetime.now(),
                 'td_flags': TD_FLAGS[2][0],
                 'pending_status': 0,
@@ -337,12 +352,17 @@ class Helpdesk(models.Model):
         if self.default_stages == 'New':
             raise UserError('You can not change status of a ticket when it is in new stage.')
         elif self.default_stages == 'TD-NMC':
-            if self.td_flags == TD_FLAGS[3][0] or self.td_flags == TD_FLAGS[5][0] or self.td_flags == TD_FLAGS[9][0]:
+            if self.td_flags == TD_FLAGS[0][0] or self.td_flags == TD_FLAGS[3][0] or self.td_flags == TD_FLAGS[5][0] or self.td_flags == TD_FLAGS[9][0]:
                 raise UserError('You can not change status of a ticket from dropdown.')
             elif self.td_flags == TD_FLAGS[2][0] or self.td_flags == TD_FLAGS[4][0]:
                 helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
                     [('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
                 if self.complexity != helpdesk_ticket_complexity.id:
+                    raise UserError('You can not change status of a ticket from dropdown.')
+            elif self.td_flags == TD_FLAGS[6][0] or self.td_flags == TD_FLAGS[7][0] or self.td_flags == TD_FLAGS[8][0]:
+                if self.pending_status:
+                    pass
+                else:
                     raise UserError('You can not change status of a ticket from dropdown.')
 
 
@@ -369,6 +389,8 @@ class Helpdesk(models.Model):
         self.update({
             'td_flags': TD_FLAGS[4][0],
             'color': 4,
+            'pending_status': 0,
+            'is_resolved_by_td_tnom_cnom': True,
         })
 
         return True
@@ -381,6 +403,7 @@ class Helpdesk(models.Model):
             'default_stages': 'SD',
             'sd_resolved_by':self.env.uid,
             'color':7,
+            'send_to_sd':True,
         })
 
         return True
@@ -407,41 +430,25 @@ class Helpdesk(models.Model):
 
     @api.multi
     def action_not_resolved(self):
-        # customer = self.customer
-        # if customer:
-        #     get_assigned_rm_from_customer = customer.assigned_rm
-        #     if get_assigned_rm_from_customer:
-        #         if get_assigned_rm_from_customer.id != self.env.uid:
-        #             raise UserError('This ticket can only be resolved by the assigned RM.')
-        #         else:
-        #             notification_message = "Ticket No. : " + str(self.name) + " marked as not resolved"
-        #             get_user = self.env['res.users'].search([('id', '=', get_assigned_rm_from_customer.id)])
-        #             get_user.notify_info(notification_message)
-        #
-        #             try:
-        #                 recipient_ids = [(get_user.partner_id.id)]
-        #                 channel_ids = [(get_user.partner_id.channel_ids)]
-        #
-        #                 ch = []
-        #                 for channel in channel_ids[0]:
-        #                     ch.append(channel.id)
-        #                     channel.message_post(subject='New notification', body=notification_message,
-        #                                          subtype="mail.mt_comment")
-        #             except Exception as ex:
-        #                 error = 'Failed to send notification. Error Message: ' + str(ex)
-        #                 raise UserError(error)
-
+        helpdesk_ticket_complexity = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
+            [('name', '=', COMPLEXITY_LEVEL_ONE[0][1])])
         self.update({
             'td_flags': TD_FLAGS[9][0],
             'default_stages': 'TD-NMC',
             'color': 3,
+            'complexity': helpdesk_ticket_complexity,
+            'complexity_name': helpdesk_ticket_complexity.name,
+            'pending_status': 0,
+            'is_resolved_by_td_tnom_cnom': False,
+            'send_to_sd': False,
         })
 
         template_obj = self.env['isp_crm_module.mail'].sudo().search(
-            [('name', '=', 'Helpdesk_Ticket_Closing_Mail')],
+            [('name', '=', 'Helpdesk_Ticket_Reopening_Mail')],
             limit=1)
         # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_closing'].sudo().search([],limit=1)
-        subject_mail = "Mime Ticket Reopened"
+        subject_mail = "Mime Ticket Re-opening"
+        self.env['isp_crm_module.mail'].action_send_email(subject_mail, self.customer_email, self.name, template_obj)
         self.env['isp_crm_module.mail'].action_send_email(subject_mail, ALL_DEPARTMENTAL_HEAD_GROUP_MAIL, self.name, template_obj)
 
     @api.multi
