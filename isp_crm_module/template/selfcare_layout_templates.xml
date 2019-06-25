@@ -632,7 +632,7 @@
                 </div>
                 <div class="box-body">
                     <h1>
-                        Your Payment succeeded.
+                        Thank you!<br/>Your payment has been successful.
                     </h1>
                     <a href="/selfcare" class="btn btn-info">
                         Go Back to Dashboard

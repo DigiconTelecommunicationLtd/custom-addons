@@ -52,7 +52,7 @@ class ServiceRequest(models.Model):
     _name = "isp_crm_module.service_request"
     _description = "Service Request To be solved."
     _rec_name = 'name'
-    _order = "create_date desc, name, id"
+    _order = "create_date asc, name, id"
     _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 
     @api.depends('product_line.price_total')

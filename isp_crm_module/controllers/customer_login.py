@@ -575,7 +575,7 @@ class SelfcareController(PaymentController):
                 # })
                 # created_package_change.send_package_change_mail()
 
-                success_msg = "Your Package change request Successfully enlisted."
+                success_msg = "Your package change request has been successful."
 
                 if "MR" in logged_in_user.partner_id.subscriber_id:
                     bandwidth_change_obj = request.env['isp_crm_module.retail_soho_bandwidth_change'].sudo().search([])
@@ -737,7 +737,7 @@ class SelfcareController(PaymentController):
                     else:
                         context['error'] = _("Old Password does not match .")
                 else:
-                    context['error']            = _("Confirm Password does not match with New Password .")
+                    context['error']            = _("Confirmed*** with the New Password. Please try again.")
                     context['csrf_token']       = request.csrf_token()
                     context['user']             = logged_in_user
                     context['full_name']        = logged_in_user.name.title()

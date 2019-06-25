@@ -7,13 +7,14 @@
 
             <p>Dear Valued Subscriber,</p>
 
-            <p>We have received your request for changing Package request.</p>
-            <p>Currently you are enjoying package: <strong>--package_name--</strong></p>
-            <p>You have requested for: <strong>--next_package_name--</strong></p>
+            <p>Thank you for getting in touch with MIME.</p>
+            <p>We have received your package change request.</p>
+            <p>Your current package: <strong>--package_name--</strong></p>
+            <p>Your new package: <strong>--next_package_name--</strong></p>
             <p>--bill_cycle_str--</p>
             <br/>
             <br/>
-            [N.B In case you don't pay the amount you will continue to enjoy your existing package till next bill cycle.]
+            [N.B- In case you don’t pay the amount you will still continue to enjoy your existing package till the next bill cycle.]]
             <br/>
         ]]>
 
