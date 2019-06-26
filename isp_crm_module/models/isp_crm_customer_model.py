@@ -509,8 +509,8 @@ class Customer(models.Model):
         """
         Compute the total amounts of the SO.
         """
-        package_price = 0.0
         for order in self:
+            package_price = 0.0
             amount_untaxed = 0.0
             for line in order.product_line:
                 amount_untaxed += line.price_subtotal

@@ -678,6 +678,15 @@ class CronJobModel(models.Model):
             corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
             corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
 
+            days_diff = corporate_soho_invoice_date_end - corporate_soho_invoice_date_start.date()
+            days_diff = int(abs(days_diff.days))
+
+            if days_diff == 30:
+                pass
+            elif days_diff > 30:
+                corporate_soho_invoice_date_end = date(datetime.today().year, datetime.today().month + 2,
+                                                       1) - relativedelta(days=2)
+
             if difference > 0:
                 sale_order_object = self.env['sale.order']
                 sale_orders = sale_order_object.search([])
@@ -1045,5 +1054,24 @@ class CronJobModel(models.Model):
                         'stage': first_stage.id
                     })
             return True
+        except Exception as ex:
+            print(ex)
+
+    # Selfcare Monthly bill patch
+    def patch_selfcare_monthly_bill(self):
+        """
+
+        :return:
+        """
+        try:
+            res_partner_obj = self.env['res.partner'].search([])
+            for order in res_partner_obj:
+                package_price = 0.0
+                for line in order.product_line:
+                    if line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME or line.product_id.categ_id.complete_name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                        package_price += line.price_subtotal
+                order.update({
+                    'package_product_price': package_price,
+                })
         except Exception as ex:
             print(ex)
