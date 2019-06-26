@@ -222,6 +222,10 @@ class Helpdesk(models.Model):
 
     @api.multi
     def action_assign_complexity_l2(self):
+        """
+        
+        :return:
+        """
         helpdesk_ticket_complexity_l2 = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
             [('name', '=', COMPLEXITY_LEVEL_TWO[0][1])])
         if helpdesk_ticket_complexity_l2:
