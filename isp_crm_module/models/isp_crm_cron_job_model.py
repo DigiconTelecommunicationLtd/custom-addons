@@ -681,6 +681,7 @@ class CronJobModel(models.Model):
             days_diff = corporate_soho_invoice_date_end - corporate_soho_invoice_date_start.date()
             days_diff = int(abs(days_diff.days))
 
+            # difference must be 30 days. So checking if last date is 30 or 31.
             if days_diff == 30:
                 pass
             elif days_diff > 30:
