@@ -214,9 +214,9 @@ class Helpdesk(models.Model):
             [('name', '=', COMPLEXITY_LEVEL_TWO[0][1])])
         helpdesk_ticket_complexity_l3 = self.env['isp_crm_module.helpdesk_ticket_complexity'].search(
             [('name', '=', COMPLEXITY_LEVEL_THREE[0][1])])
-        if self.complexity.id == helpdesk_ticket_complexity.id:
+        if self.complexity.id == helpdesk_ticket_complexity.id and self.default_stages == 'TD-NMC':
             raise UserError('System does not allow you to change service level to L1 once you have changed it to L2/L3.')
-        elif self.td_flags != '2' and (self.complexity.id == helpdesk_ticket_complexity_l2.id or self.complexity.id == helpdesk_ticket_complexity_l3.id):
+        elif self.td_flags != '2' and self.default_stages == 'TD-NMC' and (self.complexity.id == helpdesk_ticket_complexity_l2.id or self.complexity.id == helpdesk_ticket_complexity_l3.id):
             raise UserError(
                 'You must change service level by clicking appropriate button above.')
 
