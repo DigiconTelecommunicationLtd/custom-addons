@@ -55,7 +55,7 @@ class ISPCRMInvoice(models.Model):
     @api.depends('partner_id')
     def _get_lead_type(self):
         """
-        Compute type of customer .(Corporate or Retail)
+        Compute type of customer.(Corporate or Retail)
         :return:
         """
 
