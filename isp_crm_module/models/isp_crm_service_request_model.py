@@ -191,10 +191,10 @@ class ServiceRequest(models.Model):
                 "%Y-%m-%d %H-%M")
             activation_date = datetime.strptime(activation_date, "%Y-%m-%d %H-%M")
             get_diff = activation_date - now
-            days = abs(get_diff.days)
+            days = abs(get_diff.days) + 1
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
-            if days > 3:
+            if days >= 3:
                 vals['stage'] = second_stage.id
             else:
                 vals['stage'] = first_stage.id
