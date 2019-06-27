@@ -62,4 +62,31 @@
 
         </field>
     </record>
+
+    <record id="isp_crm_module.mail_template_ticket_resoved" model="isp_crm_module.mail">
+        <field name="name">Ticket_Resolved</field>
+        <field name="body_html"><![CDATA[
+
+            <p>We believe Ticket Number <strong>--ticketnumber--</strong> has been resolved by Authorized team.</p>
+            <p>This ticket needs SD’s approval to be closed</p>
+            <p></p>
+            <p>Thank you for being with MIME.</p>
+
+        ]]>
+
+        </field>
+    </record>
+
+    <record id="isp_crm_module.mail_template_ticket_assigned" model="isp_crm_module.mail">
+        <field name="name">Ticket_Assignment</field>
+        <field name="body_html"><![CDATA[
+
+            <p>A ticket <strong>--ticketnumber--</strong> has been assigned to you. Please resolve the issue within the provided timeline.</p>
+            <p></p>
+            <p>Thank you for being with MIME.</p>
+
+        ]]>
+
+        </field>
+    </record>
 </odoo>

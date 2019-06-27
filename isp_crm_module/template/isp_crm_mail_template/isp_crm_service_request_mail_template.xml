@@ -22,4 +22,16 @@
 
         </field>
     </record>
+
+    <record id="isp_crm_module.mail_service_request_bill_date_confirmation" model="isp_crm_module.mail">
+        <field name="name">Send_Bill_Date_Confirmation_Service_Request_Mail</field>
+        <field name="body_html"><![CDATA[
+
+            <p>A ticket <strong>--ticketnumber--</strong> has been assigned for billing date confirmation. Please confirm the bill date of customer <strong>--customername--</strong> (<strong>--customernumber--</strong>) within 24 hours.</p>
+            <p>Thank you for being with MIME.</p>
+
+        ]]>
+
+        </field>
+    </record>
 </odoo>

@@ -241,11 +241,10 @@ class ServiceRequest(models.Model):
 
                     print("Sent for bill date confirmation")
                     template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                        [('name', '=', 'Helpdesk_Ticket_Reopening_Mail')],
+                        [('name', '=', 'Send_Bill_Date_Confirmation_Service_Request_Mail')],
                         limit=1)
-                    subject_mail = "Mime Ticket Re-opening"
-                    self.env['isp_crm_module.mail'].action_send_email(subject_mail, BILLING_GROUP_MAIL, self.name,
-                                                                      template_obj)
+                    subject_mail = "Bill Date Confirmation"
+                    self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj)
 
     @api.multi
     def action_make_service_request_done(self):

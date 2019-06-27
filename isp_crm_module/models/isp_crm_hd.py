@@ -319,17 +319,14 @@ class Helpdesk(models.Model):
         self.team = self.assigned_to.department_id
 
         template_obj = self.env['isp_crm_module.mail'].sudo().search(
-            [('name', '=', 'Helpdesk_Ticket_Complexity_Mail')],
+            [('name', '=', 'Ticket_Assignment')],
             limit=1)
         # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
-        subject_mail = "Mime Ticket Update Notice"
-        hour = self.env[
-            'isp_crm_module.helpdesk_ticket_complexity'].search(
-            [('name', '=', COMPLEXITY_LEVEL_THREE[0][1])]).time_limit
-        self.env['isp_crm_module.mail'].action_td_send_email(subject_mail, TD_TNOM_GROUP_MAIL, self.name,
-                                                             template_obj, hour)
-        self.env['isp_crm_module.mail'].action_td_send_email(subject_mail, TD_CNOM_GROUP_MAIL, self.name,
-                                                             template_obj, hour)
+        subject_mail = "New Ticket Assignment"
+        self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_TNOM_GROUP_MAIL, self.name,
+                                                          template_obj)
+        self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_CNOM_GROUP_MAIL, self.name,
+                                                          template_obj)
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
@@ -411,6 +408,17 @@ class Helpdesk(models.Model):
             'pending_status': 0,
             'is_resolved_by_td_tnom_cnom': True,
         })
+
+        template_obj = self.env['isp_crm_module.mail'].sudo().search(
+            [('name', '=', 'Ticket_Resolved')],
+            limit=1)
+        # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_closing'].sudo().search([],limit=1)
+        subject_mail = "Ticket Resolved"
+        self.env['isp_crm_module.mail'].action_send_email(subject_mail, self.assigned_rm.partner_id.email, self.name,
+                                                          template_obj)
+        self.env['isp_crm_module.mail'].action_send_email(subject_mail, SD_GROUP_MAIL_ADDRESS, self.name, template_obj)
+        self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_NMC_GROUP_MAIL_ADDRESS, self.name,
+                                                          template_obj)
 
         return True
 
