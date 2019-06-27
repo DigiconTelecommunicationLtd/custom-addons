@@ -131,7 +131,7 @@ class ServiceRequest(models.Model):
     internal_notes = fields.Char(string="Internal Notes", track_visibility='onchange')
     td_flags = fields.Selection(TD_FLAGS, string="Status", track_visibility='onchange')
     is_send_for_bill_date_confirmation = fields.Boolean("Is Sent for Bill Date Confirmation", default=False)
-    billing_start_date = fields.Date(related='opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
+    billing_start_date = fields.Date(related='customer.opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
