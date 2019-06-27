@@ -109,7 +109,7 @@
                         type="object"
                         help="Mark Done"
                         class="oe_highlight"
-                        attrs="{'invisible': ['|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True)]}"
+                        attrs="{'invisible': ['|','|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True),('lead_type', '!=', 'retail')]}"
                     />
                     <button
                         name="action_make_service_request_done"
@@ -121,11 +121,11 @@
                     />
                     <button
                         name="action_send_for_bill_date_confirmation"
-                        string="Send for Bill Date Confirmation"
+                        string="Mark Done"
                         type="object"
                         help="Send for Bill Date Confirmation"
                         class="oe_highlight"
-                        attrs="{'invisible': ['|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True)]}"
+                        attrs="{'invisible': ['|','|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True),('lead_type', '=', 'retail')]}"
                     />
                     <field name="stage" widget="statusbar" clickable="True"/>
                 </header>
@@ -147,6 +147,7 @@
                             <field name="customer_phone" string="Phone" readonly="1"/>
                             <field name="customer_rm" string="RM" readonly="1"/>
                             <field name="is_send_for_bill_date_confirmation" invisible="1"/>
+                            <field name="lead_type" invisible="1"/>
                         </group>
                         <!--Right-->
                         <group>
@@ -154,6 +155,7 @@
                             <field name="customer_company" string="Customer Company" readonly="1"/>
                             <field name="customer_address" string="Customer Address"/>
                             <field name="billing_start_date" string="Billing Start Date"/>
+                            <field name="service_activation_date" string="Service Activation Date"/>
                         </group>
                     </group>
                     <group string="Team Info">

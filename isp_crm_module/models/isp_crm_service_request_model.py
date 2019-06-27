@@ -86,7 +86,7 @@ class ServiceRequest(models.Model):
     problem = fields.Char(string="Problem", required=True, translate=True, default="Problem")
     description = fields.Text('Description')
     stage = fields.Many2one('isp_crm_module.stage', string='Stage', required=False,
-                            group_expand='_default_stages')
+                            group_expand='_default_stages', track_visibility='onchange')
 
     assigned_to = fields.Many2one('hr.employee', string='Assigned To', index=True, track_visibility='onchange')
     team = fields.Many2one('hr.department', string='Department', store=True)
@@ -132,6 +132,9 @@ class ServiceRequest(models.Model):
     td_flags = fields.Selection(TD_FLAGS, string="Status", track_visibility='onchange')
     is_send_for_bill_date_confirmation = fields.Boolean("Is Sent for Bill Date Confirmation", default=False)
     billing_start_date = fields.Date(related='customer.opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
+    service_activation_date = fields.Date(related='customer.opportunity_ids.service_activation_date',
+                                          string='Service Activation Date', track_visibility='onchange')
+    lead_type = fields.Selection(related='customer.opportunity_ids.lead_type', string='Type', help="Lead and Opportunity Type")
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
@@ -238,6 +241,8 @@ class ServiceRequest(models.Model):
                         'td_flags': TD_FLAGS[0][0],
                         'is_send_for_bill_date_confirmation': True,
                         'stage': stage_obj.id,
+                        'service_activation_date': fields.Date().today(),
+                        'billing_start_date' : fields.Date().today()
                     })
 
                     print("Sent for bill date confirmation")
@@ -285,7 +290,7 @@ class ServiceRequest(models.Model):
             if service_req.is_send_for_bill_date_confirmation:
                 service_req.update({
                     'is_done': True,
-                    'stage': last_stage_obj.id,
+                    # 'stage': last_stage_obj.id,
                     'is_send_for_bill_date_confirmation': False,
                     'td_flags': TD_FLAGS[1][0],
                 })
