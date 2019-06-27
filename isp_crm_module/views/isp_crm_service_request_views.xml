@@ -38,6 +38,7 @@
                                     <strong class="o_kanban_record_title"><field name="td_flags"/></strong><br/><br/>
                                     <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
                                     <strong class="o_kanban_record_title"><field name="customer"/></strong><br/>
+                                    <field name="lead_type"/>
                                     <field name="tagged_product_ids" widget="many2many_tags" options="{'color_field': 'color'}" readonly="1"/>
                                     <small class="o_kanban_record_subtitle text-muted">
                                         <field name="problem" />
@@ -118,6 +119,7 @@
                         help="Confirm Bill Date"
                         class="oe_highlight"
                         attrs="{'invisible': [('is_send_for_bill_date_confirmation', '=', False)]}"
+                        confirm="Are you sure you want to confirm the bill date?"
                     />
                     <button
                         name="action_send_for_bill_date_confirmation"
@@ -147,7 +149,7 @@
                             <field name="customer_phone" string="Phone" readonly="1"/>
                             <field name="customer_rm" string="RM" readonly="1"/>
                             <field name="is_send_for_bill_date_confirmation" invisible="1"/>
-                            <field name="lead_type" invisible="1"/>
+                            <field name="lead_type"/>
                         </group>
                         <!--Right-->
                         <group>
