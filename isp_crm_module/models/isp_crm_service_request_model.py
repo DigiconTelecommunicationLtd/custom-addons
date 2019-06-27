@@ -131,6 +131,7 @@ class ServiceRequest(models.Model):
     internal_notes = fields.Char(string="Internal Notes", track_visibility='onchange')
     td_flags = fields.Selection(TD_FLAGS, string="Status", track_visibility='onchange')
     is_send_for_bill_date_confirmation = fields.Boolean("Is Sent for Bill Date Confirmation", default=False)
+    billing_start_date = fields.Date(string='Billing Start Date', track_visibility='onchange')
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
@@ -311,6 +312,11 @@ class ServiceRequest(models.Model):
             cust_password = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
             encrypted = "abcd1234"
 
+            if customer.billing_start_date and customer_type != "MR":
+                current_package_start_date = customer.billing_start_date
+            else:
+                current_package_start_date      = fields.Date.today()
+
             # updating customer's potentiality
             customer.update({
                 'is_potential_customer' : False,
@@ -319,7 +325,8 @@ class ServiceRequest(models.Model):
                 'technical_info_subnet_mask' : self.subnet_mask,
                 'technical_info_gateway' : self.gateway,
                 'description_info' : self.description,
-                'service_activation_date' : fields.Date().today()
+                'service_activation_date' : fields.Date().today(),
+                'billing_start_date' : current_package_start_date
             })
 
             # Create an user
@@ -340,10 +347,6 @@ class ServiceRequest(models.Model):
             # sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date desc', limit=1)
             current_package_id              = customer.invoice_product_id.id
             current_package_price           = customer.invoice_product_price
-            if customer.billing_start_date and customer_type != "MR":
-                current_package_start_date = customer.billing_start_date
-            else:
-                current_package_start_date      = fields.Date.today()
 
             # updating current package info
             customer.update_current_bill_cycle_info(

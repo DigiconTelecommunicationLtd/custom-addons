@@ -57,6 +57,9 @@
                 <field name="emergency_contact_name" />
 <!--                <field name="emergency_contact_number" widget="phone"/>-->
             </xpath>
+            <xpath expr="//group/field[@name='mobile']" position="after">
+                <field name="proposed_activation_date"/>
+            </xpath>
             <!--Adding reffered by-->
             <xpath expr="//page/group/group/field[@name='referred']" position="replace">
                 <field name="referred_by" options="{'no_create_edit': True}"/>

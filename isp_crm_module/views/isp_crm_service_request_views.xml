@@ -153,6 +153,7 @@
                             <field name="customer_email" string="Customer Email" readonly="1"/>
                             <field name="customer_company" string="Customer Company" readonly="1"/>
                             <field name="customer_address" string="Customer Address"/>
+                            <field name="billing_start_date" string="Billing Start Date" attrs="{'invisible': ['|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True)]}"/>
                         </group>
                     </group>
                     <group string="Team Info">
