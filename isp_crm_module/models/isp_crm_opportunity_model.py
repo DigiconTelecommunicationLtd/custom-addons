@@ -41,6 +41,7 @@ class Opportunity(models.Model):
     emergency_contact_number = fields.Char(string="Emergency Contact Number", required=False, default='',
                                    track_visibility='onchange')
     service_activation_date = fields.Date(string='Service Activation Date', track_visibility='onchange')
+    proposed_activation_date = fields.Date(string='Proposed Service Activation Date', track_visibility='onchange', required=True)
     billing_start_date = fields.Date(string='Billing Start Date', track_visibility='onchange')
 
 

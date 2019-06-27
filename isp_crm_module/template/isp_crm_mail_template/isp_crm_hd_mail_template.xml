@@ -21,7 +21,7 @@
         <field name="body_html"><![CDATA[
 
             <p><strong>Dear Valued Client,</strong></p>
-            <p>We sincerely apologise for any convenience caused due to this service interruption.</p>
+            <p>We sincerely apologize for any inconvenience caused due to this service interruption.</p>
             <p>We believe your issued Ticket Number <strong>(--ticketnumber--)</strong> has been resolved and hence we are closing the ticket.</p>
             <p>If you still face the same issue or need further assistance, please call our customer care unit at 09609006463 or write us at: nmc.mime@cg-bd.com. We are here for 24/7.</p>
             <p>Thank you for being with MiME.</p>
@@ -37,7 +37,7 @@
 
             <p><strong>Dear Valued Client,</strong></p>
             <p>Thank you for contacting MIME!</p>
-            <p>We sincerely apologise for any convenience caused due to this service interruption.</p>
+            <p>We sincerely apologize for any inconvenience caused due to this service interruption.</p>
             <p>This is just to let you know that your ticket <strong>--ticketnumber--</strong> has been forwarded to our technical department. It may take up to <strong>--hour--</strong> to resolve your issue.</p>
             <p>We will let you know as soon as your issue has been resolved.</p>
             <p></p>

@@ -1042,7 +1042,7 @@ class CronJobModel(models.Model):
             get_all_requests = self.env['isp_crm_module.service_request'].search([('stage', '=', second_stage.id)])
             for request in get_all_requests:
                 days = 4
-                customer_service_activation_date = request.customer.service_activation_date
+                customer_service_activation_date = request.customer.proposed_activation_date
                 if customer_service_activation_date:
                     activation_date = datetime.strptime(customer_service_activation_date, "%Y-%m-%d").strftime(
                         "%Y-%m-%d %H-%M")
@@ -1050,7 +1050,7 @@ class CronJobModel(models.Model):
                     get_diff = activation_date - now
                     days = abs(get_diff.days)
 
-                if days < 4:
+                if days > 3:
                     request.update({
                         'stage': first_stage.id
                     })

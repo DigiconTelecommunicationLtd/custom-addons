@@ -32,6 +32,12 @@ DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
 OTC_PRODUCT_CODE = 'ISP-OTC'
 DEFAULT_PACKAGE_CAT_NAME = 'Packages'
+BILLING_GROUP_MAIL = "billing.mime@cg-bd.com"
+
+TD_FLAGS = [
+    ('0', 'Pending'),
+    ('1', 'Confirmed'),
+]
 
 default_crypt_context = CryptContext(
     # kdf which can be verified by the context. The default encryption kdf is
@@ -123,6 +129,8 @@ class ServiceRequest(models.Model):
     subnet_mask = fields.Char('Subnet Mask')
     gateway = fields.Char('Gateway')
     internal_notes = fields.Char(string="Internal Notes", track_visibility='onchange')
+    td_flags = fields.Selection(TD_FLAGS, string="Status", track_visibility='onchange')
+    is_send_for_bill_date_confirmation = fields.Boolean("Is Sent for Bill Date Confirmation", default=False)
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
@@ -174,7 +182,7 @@ class ServiceRequest(models.Model):
         internal_notes = opportunity.description
         first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
         second_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[1]
-        customer_service_activation_date = opportunity.service_activation_date
+        customer_service_activation_date = opportunity.proposed_activation_date
         now = datetime.now().strftime("%Y-%m-%d %H-%M")
         now = datetime.strptime(now, "%Y-%m-%d %H-%M")
         days = 0
@@ -203,15 +211,47 @@ class ServiceRequest(models.Model):
 
     @api.onchange('stage')
     def stage_onchange(self):
-        value = self.stage.id
-        if value == 4:
+        value = self.stage.name
+        sequence = self.stage.sequence
+        if value == 'Done':
             raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
+        if value == 'Bill Date Confirmation':
+            raise UserError('System does not allow you to drag record unless it is send by action.')
+        elif self._origin.is_done:
+            raise UserError(
+                'System does not allow you to change stage once it is marked done.')
+
+    @api.multi
+    def action_send_for_bill_date_confirmation(self):
+        for service_req in self:
+            customer = service_req.customer
+            stage_obj = self.env['isp_crm_module.stage'].search([('name', '=', 'Bill Date Confirmation')], limit=1)
+            # format sequence number based on lead type
+            get_opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
+            if get_opportunity:
+                if get_opportunity.lead_type == "retail":
+                    raise UserError(
+                        'System does not allow you to drag record to this stage unless customer type is corporate or soho.')
+                else:
+                    service_req.update({
+                        'td_flags': TD_FLAGS[0][0],
+                        'is_send_for_bill_date_confirmation': True,
+                        'stage': stage_obj.id,
+                    })
+
+                    print("Sent for bill date confirmation")
+                    template_obj = self.env['isp_crm_module.mail'].sudo().search(
+                        [('name', '=', 'Helpdesk_Ticket_Reopening_Mail')],
+                        limit=1)
+                    subject_mail = "Mime Ticket Re-opening"
+                    self.env['isp_crm_module.mail'].action_send_email(subject_mail, BILLING_GROUP_MAIL, self.name,
+                                                                      template_obj)
 
     @api.multi
     def action_make_service_request_done(self):
         for service_req in self:
             # update the stage of this service request to done
-            last_stage_obj = self.env['isp_crm_module.stage'].search([], order='sequence desc', limit=1)
+            last_stage_obj = self.env['isp_crm_module.stage'].search([('name', '=', 'Done')], limit=1)
 
             # Deduct quantity from stock.
             try:
@@ -242,10 +282,18 @@ class ServiceRequest(models.Model):
             except Exception as ex:
                 print(ex)
 
-            service_req.update({
-                'is_done': True,
-                'stage': last_stage_obj.id,
-            })
+            if service_req.is_send_for_bill_date_confirmation:
+                service_req.update({
+                    'is_done': True,
+                    'stage': last_stage_obj.id,
+                    'is_send_for_bill_date_confirmation': False,
+                    'td_flags': TD_FLAGS[1][0],
+                })
+            else:
+                service_req.update({
+                    'is_done': True,
+                    'stage': last_stage_obj.id,
+                })
             customer = service_req.customer
             # format sequence number based on lead type
             get_opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
@@ -271,7 +319,8 @@ class ServiceRequest(models.Model):
                 'technical_info_ip' : self.ip,
                 'technical_info_subnet_mask' : self.subnet_mask,
                 'technical_info_gateway' : self.gateway,
-                'description_info' : self.description
+                'description_info' : self.description,
+                'service_activation_date' : fields.Date().today()
             })
 
             # Create an user

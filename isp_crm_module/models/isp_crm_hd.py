@@ -62,6 +62,8 @@ COMPLEXITY_LEVEL_THREE = [
 SD_GROUP_MAIL_ADDRESS = "sd.mime@cg-bd.com"
 TD_NMC_GROUP_MAIL_ADDRESS = "nmc.mime@cg-bd.com"
 ALL_DEPARTMENTAL_HEAD_GROUP_MAIL = "hod.mime@cg-bd.com"
+TD_TNOM_GROUP_MAIL = "tnom.mime@cg-bd.com"
+TD_CNOM_GROUP_MAIL = "cnom.mime@cg-bd.com"
 
 class Helpdesk(models.Model):
     """
@@ -315,6 +317,19 @@ class Helpdesk(models.Model):
     def _onchange_assigned_to(self):
         self.team_leader = self.assigned_to and self.assigned_to.parent_id
         self.team = self.assigned_to.department_id
+
+        template_obj = self.env['isp_crm_module.mail'].sudo().search(
+            [('name', '=', 'Helpdesk_Ticket_Complexity_Mail')],
+            limit=1)
+        # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
+        subject_mail = "Mime Ticket Update Notice"
+        hour = self.env[
+            'isp_crm_module.helpdesk_ticket_complexity'].search(
+            [('name', '=', COMPLEXITY_LEVEL_THREE[0][1])]).time_limit
+        self.env['isp_crm_module.mail'].action_td_send_email(subject_mail, TD_TNOM_GROUP_MAIL, self.name,
+                                                             template_obj, hour)
+        self.env['isp_crm_module.mail'].action_td_send_email(subject_mail, TD_CNOM_GROUP_MAIL, self.name,
+                                                             template_obj, hour)
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):

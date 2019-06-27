@@ -35,6 +35,7 @@
                         <div class="oe_kanban_content">
                             <div class="o_kanban_record_top">
                                 <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><field name="td_flags"/></strong><br/><br/>
                                     <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
                                     <strong class="o_kanban_record_title"><field name="customer"/></strong><br/>
                                     <field name="tagged_product_ids" widget="many2many_tags" options="{'color_field': 'color'}" readonly="1"/>
@@ -108,7 +109,23 @@
                         type="object"
                         help="Mark Done"
                         class="oe_highlight"
-                        attrs="{'invisible': [('is_done', '=', True)]}"
+                        attrs="{'invisible': ['|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True)]}"
+                    />
+                    <button
+                        name="action_make_service_request_done"
+                        string="Confirm Bill Date"
+                        type="object"
+                        help="Confirm Bill Date"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('is_send_for_bill_date_confirmation', '=', False)]}"
+                    />
+                    <button
+                        name="action_send_for_bill_date_confirmation"
+                        string="Send for Bill Date Confirmation"
+                        type="object"
+                        help="Send for Bill Date Confirmation"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True)]}"
                     />
                     <field name="stage" widget="statusbar" clickable="True"/>
                 </header>
@@ -129,6 +146,7 @@
                             <field name="customer_mobile" string="Mobile" readonly="1"/>
                             <field name="customer_phone" string="Phone" readonly="1"/>
                             <field name="customer_rm" string="RM" readonly="1"/>
+                            <field name="is_send_for_bill_date_confirmation" invisible="1"/>
                         </group>
                         <!--Right-->
                         <group>

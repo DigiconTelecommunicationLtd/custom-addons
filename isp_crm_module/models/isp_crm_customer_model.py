@@ -113,6 +113,7 @@ class Customer(models.Model):
                                            track_visibility='onchange')
     service_activation_date = fields.Date(related='opportunity_ids.service_activation_date', string='Service Activation Date', track_visibility='onchange')
     billing_start_date = fields.Date(related='opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
+    proposed_activation_date = fields.Date(related='opportunity_ids.proposed_activation_date', string='Proposed Activation Date', track_visibility='onchange')
 
     package_product_price = fields.Float('Package Price', required=False, default=0.0)
 
