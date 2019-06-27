@@ -40,7 +40,7 @@ class Team(models.Model):
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
-        return True
+        # return True
 
     @api.multi
     def action_td_send_email(self, subject, mailto, ticketnumber, template_obj, hour):
@@ -57,7 +57,7 @@ class Team(models.Model):
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
-        return True
+        # return True
 
     def service_request_send_email(self, mailto,userid,password,ip,subnet_mask,gateway,template_obj,attachment=False):
         body = template_obj.body_html

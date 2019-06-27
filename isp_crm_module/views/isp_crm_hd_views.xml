@@ -82,6 +82,7 @@
         <field name="arch" type="xml">
             <search string="Helpdesk Type Search">
                 <field name="type" string="Everywhere" filter_domain="['|','|','|','|',('type','ilike',self),('stage','ilike',self),('assigned_to','ilike',self),('complexity','ilike',self),('td_flags','ilike',self)]"/>
+<!--                <filter string="Assigned To" domain="[]"/>-->
             </search>
         </field>
     </record>
