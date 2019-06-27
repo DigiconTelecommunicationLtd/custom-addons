@@ -1048,9 +1048,9 @@ class CronJobModel(models.Model):
                         "%Y-%m-%d %H-%M")
                     activation_date = datetime.strptime(activation_date, "%Y-%m-%d %H-%M")
                     get_diff = activation_date - now
-                    days = abs(get_diff.days)
+                    days = abs(get_diff.days) + 1
 
-                if days > 3:
+                if days > 2:
                     request.update({
                         'stage': first_stage.id
                     })
