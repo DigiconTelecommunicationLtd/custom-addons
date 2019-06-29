@@ -134,6 +134,7 @@ class ServiceRequest(models.Model):
     billing_start_date = fields.Date(related='customer.opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
     service_activation_date = fields.Date(related='customer.opportunity_ids.service_activation_date',
                                           string='Service Activation Date', track_visibility='onchange')
+    proposed_activation_date = fields.Date(related='customer.opportunity_ids.proposed_activation_date', string='Proposed Service Activation Date', track_visibility='onchange')
     lead_type = fields.Selection(related='customer.opportunity_ids.lead_type', string='Type', help="Lead and Opportunity Type")
 
     def _get_next_package_end_date(self, given_date):
