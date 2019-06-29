@@ -158,6 +158,7 @@
                             <field name="customer_address" string="Customer Address"/>
                             <field name="billing_start_date" string="Billing Start Date"/>
                             <field name="service_activation_date" string="Service Activation Date"/>
+                            <field name="proposed_activation_date" string="Proposed Service Activation Date"/>
                         </group>
                     </group>
                     <group string="Team Info">

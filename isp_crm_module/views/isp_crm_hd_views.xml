@@ -113,7 +113,7 @@
                     />
                     <button
                         name="action_resolved_by_sd"
-                        string="Soleved by L1-NMC"
+                        string="Solved by L1-NMC"
                         type="object"
                         help="Is Resolved"
                         class="oe_highlight"
