@@ -365,6 +365,12 @@ class Helpdesk(models.Model):
         # Prevent dragging back from Done to SD stage
         elif self.default_stages == 'SD' and self.color == 10:
             raise UserError('System does not allow you to drag ticket from Done to SD stage.')
+        # Prevent dragging to Done stage
+        elif self.default_stages == 'Done' and self.td_flags != TD_FLAGS[5][0]:
+            raise UserError('System does not allow you to drag ticket to Done stage.')
+        # Prevent dragging to SD stage
+        elif self.default_stages == 'SD' and self.td_flags != TD_FLAGS[3][0]:
+            raise UserError('System does not allow you to drag ticket to SD stage.')
         # Change ticket color to red
         elif self.default_stages == 'New':
             self.update({
