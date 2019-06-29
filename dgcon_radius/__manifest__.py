@@ -25,7 +25,6 @@
         'python': [
             'sqlalchemy',
             'paramiko',
-            'mysqlclient'
         ],
     },
     # always loaded
