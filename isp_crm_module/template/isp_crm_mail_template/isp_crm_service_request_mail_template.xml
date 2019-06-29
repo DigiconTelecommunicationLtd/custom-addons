@@ -14,8 +14,8 @@
             <p>Your IP :<strong> --ip--</strong></p>
             <p>SubnetMask:<strong> --subnetmask--</strong></p>
             <p>GateWay:<strong> --gateWay--</strong></p>
-            <p>PPoE Username:<strong> --ppoeusername--</strong></p>
-            <p>PPoE Password:<strong> --ppoepassword--</strong></p>
+            <p>PPPoE Username:<strong> --ppoeusername--</strong></p>
+            <p>PPPoE Password:<strong> --ppoepassword--</strong></p>
 
             <p>Thanks,</p>
             <p>Team MIME.</p>

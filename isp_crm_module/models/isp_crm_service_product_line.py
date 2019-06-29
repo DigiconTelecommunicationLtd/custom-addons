@@ -11,7 +11,7 @@ AVAILABLE_PRIORITIES = [
         ('2', 'High'),
 ]
 
-
+DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 
 class ServiceProductLine(models.Model):
     """
@@ -53,7 +53,16 @@ class ServiceProductLine(models.Model):
             })
 
         for line in self:
+            sale_order = self.env['sale.order'].search([('partner_id', '=', line.service_request_id.customer.id)],
+                                                       limit=1)
+            discount = 0
+            for order in sale_order.order_line:
+                if order.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+                    discount = order.discount
+            discount = float(discount)
             price = line.price_unit * line.product_uom_qty
+            discount = (price * discount) / 100.0
+            price = price - discount
             line.update({
                 'price_subtotal': price,
             })
