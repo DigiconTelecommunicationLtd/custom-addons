@@ -504,6 +504,9 @@ class Helpdesk(models.Model):
         """
         try:
             pending_status = int(self.pending_status)
-            self.td_flags = TD_FLAGS[pending_status][0]
+            if pending_status == 0:
+                self.td_flags = TD_FLAGS[3][0]
+            else:
+                self.td_flags = TD_FLAGS[pending_status][0]
         except Exception as ex:
             print(ex)
