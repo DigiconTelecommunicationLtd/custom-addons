@@ -330,8 +330,8 @@ class ServiceRequest(models.Model):
                 'technical_info_subnet_mask' : self.subnet_mask,
                 'technical_info_gateway' : self.gateway,
                 'description_info' : self.description,
-                'service_activation_date' : fields.Date().today()
-                # 'billing_start_date' : current_package_start_date
+                'service_activation_date' : fields.Date().today(),
+                'billing_start_date' : current_package_start_date
             })
 
             # Create an user
