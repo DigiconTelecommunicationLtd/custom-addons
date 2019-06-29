@@ -318,15 +318,29 @@ class Helpdesk(models.Model):
         self.team_leader = self.assigned_to and self.assigned_to.parent_id
         self.team = self.assigned_to.department_id
 
-        template_obj = self.env['isp_crm_module.mail'].sudo().search(
-            [('name', '=', 'Ticket_Assignment')],
-            limit=1)
-        # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
-        subject_mail = "New Ticket Assignment"
-        self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_TNOM_GROUP_MAIL, self.name,
-                                                          template_obj)
-        self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_CNOM_GROUP_MAIL, self.name,
-                                                          template_obj)
+        if self.assigned_to:
+            for ticket in self:
+                if self._origin.name:
+                    template_obj = self.env['isp_crm_module.mail'].sudo().search(
+                        [('name', '=', 'Ticket_Assignment')],
+                        limit=1)
+                    # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
+                    subject_mail = "New Ticket Assignment"
+                    self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_TNOM_GROUP_MAIL, self._origin.name,
+                                                                      template_obj)
+                    self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_CNOM_GROUP_MAIL, self._origin.name,
+                                                                      template_obj)
+                else:
+                    name = 'New'
+                    template_obj = self.env['isp_crm_module.mail'].sudo().search(
+                        [('name', '=', 'Ticket_Assignment')],
+                        limit=1)
+                    # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_complexity'].sudo().search([],limit=1)
+                    subject_mail = "New Ticket Assignment"
+                    self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_TNOM_GROUP_MAIL, name,
+                                                                      template_obj)
+                    self.env['isp_crm_module.mail'].action_send_email(subject_mail, TD_CNOM_GROUP_MAIL, name,
+                                                                      template_obj)
 
     @api.onchange('default_stages')
     def _onchange_default_stages(self):
