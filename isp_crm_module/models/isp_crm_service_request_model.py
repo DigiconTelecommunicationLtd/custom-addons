@@ -353,7 +353,7 @@ class ServiceRequest(models.Model):
             current_package_id              = customer.invoice_product_id.id
             current_package_price           = customer.invoice_product_price
 
-            # updating current package info
+            # updating current package info.
             customer.update_current_bill_cycle_info(
                 customer        = customer,
                 start_date      = current_package_start_date,
