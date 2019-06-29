@@ -5,11 +5,11 @@
         <field name="body_html"><![CDATA[
 
             <p><strong>Dear Valued Client,</strong></p>
-            <p>Thanks for contacting MIME!</p>
+            <p>Thanks for contacting MiME!</p>
             <p>This is just a quick note to let you know, we’ve received your email & created a ticket <strong>--ticketnumber--</strong></p>
             <p>A member of our contact centre team will investigate & follow up with you shortly to resolve your issues & answer your queries.</p>
             <p></p>
-            <p>We appreciate your patience. Thanks for being with MIME</p>
+            <p>We appreciate your patience. Thanks for being with MiME</p>
 
         ]]>
 
@@ -24,7 +24,7 @@
             <p>We sincerely apologize for any inconvenience caused due to this service interruption.</p>
             <p>We believe your issued Ticket Number <strong>(--ticketnumber--)</strong> has been resolved and hence we are closing the ticket.</p>
             <p>If you still face the same issue or need further assistance, please call our customer care unit at 09609006463 or write us at: nmc.mime@cg-bd.com. We are here for 24/7.</p>
-            <p>Thank you for being with MIME.</p>
+            <p>Thank you for being with MiME.</p>
 
         ]]>
 
@@ -36,12 +36,12 @@
         <field name="body_html"><![CDATA[
 
             <p><strong>Dear Valued Client,</strong></p>
-            <p>Thank you for contacting MIME!</p>
+            <p>Thank you for contacting MiME!</p>
             <p>We sincerely apologize for any inconvenience caused due to this service interruption.</p>
             <p>This is just to let you know that your ticket <strong>--ticketnumber--</strong> has been forwarded to our technical department. It may take up to <strong>--hour--</strong> to resolve your issue.</p>
             <p>We will let you know as soon as your issue has been resolved.</p>
             <p></p>
-            <p>We appreciate your patience. Thanks for being with MIME</p>
+            <p>We appreciate your patience. Thanks for being with MiME</p>
 
         ]]>
 
@@ -53,7 +53,7 @@
         <field name="body_html"><![CDATA[
 
             <p><strong>Dear Valued Client,</strong></p>
-            <p>Thank you for being with MIME.</p>
+            <p>Thank you for being with MiME.</p>
             <p>We understand your logged complaint with Reference Number (--ticketnumber--) has not yet been resolved, hence we are re-opening your ticket.</p>
             <p>We are extremely apologetic for any inconvenience caused due to this service interruption.</p>
             <p>We will notify you once your service is resumed. If you still face the same issue or need further assistance, please call our customer care unit at 09609006463 or write us at: nmc.mime@cg-bd.com. We are here for 24/7.</p>
@@ -70,7 +70,7 @@
             <p>We believe Ticket Number <strong>--ticketnumber--</strong> has been resolved by Authorized team.</p>
             <p>This ticket needs SD’s approval to be closed</p>
             <p></p>
-            <p>Thank you for being with MIME.</p>
+            <p>Thank you for being with MiME.</p>
 
         ]]>
 
@@ -83,7 +83,7 @@
 
             <p>A ticket <strong>--ticketnumber--</strong> has been assigned to you. Please resolve the issue within the provided timeline.</p>
             <p></p>
-            <p>Thank you for being with MIME.</p>
+            <p>Thank you for being with MiME.</p>
 
         ]]>
 

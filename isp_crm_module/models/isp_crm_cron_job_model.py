@@ -20,7 +20,7 @@ DEFAULT_DONE_STAGE = 'Done'
 DEFAULT_PACKAGES_CATEGORY_NAME = 'Packages'
 
 INVOICE_PAID_STATUS = 'paid'
-
+from .radius_integration import update_expiry_bandwidth
 class CronJobModel(models.Model):
     _name = 'isp_crm.cron_job'
 
@@ -429,6 +429,7 @@ class CronJobModel(models.Model):
                                 updated_customer = updated_customer.update_next_bill_cycle_info(
                                     customer=updated_customer
                                 )
+
                             else:
                                 # same as corporate
                                 today = datetime.today()
@@ -487,6 +488,10 @@ class CronJobModel(models.Model):
                         customer.update({
                             'active_status': CUSTOMER_ACTIVE_STATUS
                         })
+                        # TODO UPDATE BILL CYCLE AFTER BANDWITDH CHANGE
+                        update_expiry_bandwidth(customer.subscriber_id,
+                                                customer.current_package_end_date,
+                                                customer.current_package_id.name)
                         ticket.write({
                             'color': 7
                         })
@@ -531,6 +536,7 @@ class CronJobModel(models.Model):
                                 updated_customer = updated_customer.update_next_bill_cycle_info(
                                     customer=updated_customer
                                 )
+
                             else:
                                 # if soho and sme, then bill cycle will start form the start of the next month
                                 today = datetime.today()
@@ -550,7 +556,9 @@ class CronJobModel(models.Model):
                         customer.update({
                             'active_status': CUSTOMER_ACTIVE_STATUS
                         })
-
+                        #TODO UPDATE BILL CYCLE
+                        update_expiry_bandwidth(updated_customer.subscriber_id,
+                                                updated_customer.current_package_end_date, customer.current_package_id.name)
                     else:
                         # if customer.is_sent_package_change_req == True:
                         #     updated_customer = customer.update_next_bill_cycle_info(customer=customer)

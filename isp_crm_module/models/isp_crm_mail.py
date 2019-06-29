@@ -59,13 +59,15 @@ class Team(models.Model):
 
         # return True
 
-    def service_request_send_email(self, mailto,userid,password,ip,subnet_mask,gateway,template_obj,attachment=False):
+    def service_request_send_email(self, mailto,userid,password,ip,subnet_mask,gateway,ppoeusername,ppoepassword,template_obj,attachment=False):
         body = template_obj.body_html
         body = body.replace('--userid--', userid)
         body = body.replace('--password--', password)
         body = body.replace('--ip--', str(ip))
         body = body.replace('--subnetmask--', str(subnet_mask))
         body = body.replace('--gateWay--', str(gateway))
+        body = body.replace('--ppoeusername--', str(ppoeusername))
+        body = body.replace('--ppoepassword--', str(ppoepassword))
         if template_obj:
             mail_values = {
                 'subject': template_obj.subject,

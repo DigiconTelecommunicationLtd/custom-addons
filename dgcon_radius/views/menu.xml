@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+    <!-- Top menu item -->
+    <menuitem name="Radius" id="dgcon_radius_menu_root"/>
+
+    <!-- menu categories -->
+    <menuitem name="Radius" id="dgcon_radius_dgcon_radius_logs_menu" parent="dgcon_radius_menu_root"/>
+
+    <!-- actions -->
+    <menuitem name="List" id="dgcon_radius_dgcon_radius_logs_menu_list" parent="dgcon_radius_dgcon_radius_logs_menu"
+              action="dgcon_radius_dgcon_radius_logs_action_window"/>
+
+  </data>
+</odoo>

@@ -1,0 +1,48 @@
+CREATE RADIUS
+isp_crm_service_request_model.py: after line 265
+       #TODO START CREATE RADIUS
+            cust_password_radius=None
+            #This is only for Retail users
+            if customer_type == 'MR':
+                for productline in customer.product_line:
+
+                    cust_password_radius = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
+                    result_radius = create_radius_user(customer_subs_id, cust_password_radius, productline.name,customer._get_package_end_date(fields.Date.today()),customer.id)
+                    if result_radius != 'success':
+                        raise UserError('Radius server issue: ' + result_radius)
+                    else:
+                        customer.update({
+                            'is_potential_customer': False,
+                            'subscriber_id': customer_subs_id,
+                            'technical_info_ip': self.ip,
+                            'technical_info_subnet_mask': self.subnet_mask,
+                            'technical_info_gateway': self.gateway,
+                            'description_info': self.description,
+                            'ppoeuername': customer_subs_id,
+                            'ppoepassword': cust_password_radius,
+                            'real_ip': self.technical_info_real_ip
+                        })
+
+            #Not a retail customer so go as it was before
+            else:
+                customer.update({
+                    'is_potential_customer': False,
+                    'subscriber_id': customer_subs_id,
+                    'technical_info_ip': self.ip,
+                    'technical_info_subnet_mask': self.subnet_mask,
+                    'technical_info_gateway': self.gateway,
+                    'description_info': self.description
+                })
+            # TODO STOP CREATE RADIUS
+
+
+
+isp_crm_cron_job_model.py: after line 429
+ #TODO STUFF FOR BILL UPDATE
+                                for productline in customer.product_line:
+                                    update_expiry_bandwidth(updated_customer.subscriber_id,updated_customer.current_package_end_date,productline.name)
+
+ after line 542
+ #TODO STUFF FOR BILL UPDATE
+                                for productline in customer.product_line:
+                                    update_expiry_bandwidth(updated_customer.subscriber_id,updated_customer.current_package_end_date,productline.name)

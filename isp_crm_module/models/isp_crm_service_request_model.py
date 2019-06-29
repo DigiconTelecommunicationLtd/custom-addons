@@ -11,7 +11,7 @@ from odoo.exceptions import Warning, UserError
 from odoo.tools import email_split
 import base64
 import ctypes
-
+from .radius_integration import create_radius_user
 AVAILABLE_PRIORITIES = [
         ('0', 'Normal'),
         ('1', 'Low'),
@@ -257,6 +257,7 @@ class ServiceRequest(models.Model):
     def action_make_service_request_done(self):
         for service_req in self:
             # update the stage of this service request to done
+            cust_password_radius = None
             last_stage_obj = self.env['isp_crm_module.stage'].search([('name', '=', 'Done')], limit=1)
 
             # Deduct quantity from stock.
@@ -323,17 +324,58 @@ class ServiceRequest(models.Model):
             else:
                 current_package_start_date      = fields.Date.today()
 
+            # TODO START CREATE RADIUS
+
+            # This is only for Retail users
+            if customer_type == 'MR':
+                for productline in service_req.order_line:
+                    if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+                        cust_password_radius = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
+                        result_radius = create_radius_user(customer_subs_id, cust_password_radius, productline.product_id.name,
+                                                           customer._get_package_end_date(fields.Date.today()),
+                                                           customer.id)
+                        if result_radius != 'success':
+                            raise UserError('Radius server issue: ' + result_radius)
+                        else:
+                            customer.update({
+                                'is_potential_customer': False,
+                                'subscriber_id': customer_subs_id,
+                                'technical_info_ip': self.ip,
+                                'technical_info_subnet_mask': self.subnet_mask,
+                                'technical_info_gateway': self.gateway,
+                                'description_info': self.description,
+                                'service_activation_date': fields.Date().today(),
+                                'billing_start_date': current_package_start_date,
+                                'ppoeuername': customer_subs_id,
+                                'ppoepassword': cust_password_radius,
+                                'real_ip': self.technical_info_real_ip
+                            })
+
+
+            # Not a retail customer so go as it was before
+            else:
+                customer.update({
+                    'is_potential_customer': False,
+                    'subscriber_id': customer_subs_id,
+                    'technical_info_ip': self.ip,
+                    'technical_info_subnet_mask': self.subnet_mask,
+                    'technical_info_gateway': self.gateway,
+                    'description_info': self.description,
+                    'service_activation_date': fields.Date().today(),
+                    'billing_start_date': current_package_start_date
+                })
+            # TODO STOP CREATE RADIUS
             # updating customer's potentiality
-            customer.update({
-                'is_potential_customer' : False,
-                'subscriber_id' : customer_subs_id,
-                'technical_info_ip' : self.ip,
-                'technical_info_subnet_mask' : self.subnet_mask,
-                'technical_info_gateway' : self.gateway,
-                'description_info' : self.description,
-                'service_activation_date' : fields.Date().today(),
-                'billing_start_date' : current_package_start_date
-            })
+            # customer.update({
+            #     'is_potential_customer' : False,
+            #     'subscriber_id' : customer_subs_id,
+            #     'technical_info_ip' : self.ip,
+            #     'technical_info_subnet_mask' : self.subnet_mask,
+            #     'technical_info_gateway' : self.gateway,
+            #     'description_info' : self.description,
+            #     'service_activation_date' : fields.Date().today(),
+            #     'billing_start_date' : current_package_start_date
+            # })
 
             # Create an user
             user_created = self._create_user(partner=customer, username=customer_subs_id, password=cust_password)
@@ -389,7 +431,7 @@ class ServiceRequest(models.Model):
             if customer_type == "MC":
                 pass
             else:
-                self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),template_obj)
+                self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),customer_subs_id,cust_password_radius,template_obj)
 
         return True
 

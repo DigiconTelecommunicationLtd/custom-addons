@@ -8,12 +8,14 @@
             <p><strong>Dear Customer,</strong></p>
 
             <p>Welcome to the world of MIME! It is our great pleasure that you have selected MIME services. Please find your User ID and password below. You will need these credentials to log in to our Customer portal.</p>
-            <p>URL: http://crm.mimebd.com:8069/selfcare/login</p>
+            <p>URL: https://crm.mimebd.com/selfcare/login</p>
             <p>Your User ID is:<strong> --userid--</strong></p>
             <p>Your Password is:<strong> --password--</strong></p>
             <p>Your IP :<strong> --ip--</strong></p>
             <p>SubnetMask:<strong> --subnetmask--</strong></p>
             <p>GateWay:<strong> --gateWay--</strong></p>
+            <p>PPoE Username:<strong> --ppoeusername--</strong></p>
+            <p>PPoE Password:<strong> --ppoepassword--</strong></p>
 
             <p>Thanks,</p>
             <p>Team MIME.</p>

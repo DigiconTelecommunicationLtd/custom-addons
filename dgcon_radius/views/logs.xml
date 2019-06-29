@@ -1,0 +1,94 @@
+<odoo>
+  <data>
+    <!-- explicit tree view definition -->
+
+    <record model="ir.ui.view" id="dgcon_radius_dgcon_radius_logs_tree">
+      <field name="name">Radious logs</field>
+      <field name="model">dgcon_radius.logs</field>
+      <field name="arch" type="xml">
+        <tree string="dgcon_radius_logs">
+
+            <field name="username"/>
+            <field name="status"/>
+            <field name="radius_error"/>
+            <field name="type"/>
+            
+        </tree>
+      </field>
+    </record>
+
+     <!-- explicit Form definition -->
+    <record id="dgcon_radius_dgcon_radius_logs_view_form" model="ir.ui.view">
+        <field name="name">dgcon_radius_logs Form</field>
+        <field name="model">dgcon_radius.logs</field>
+        <field name="arch" type="xml">
+            <form string="Radius Log">
+            <!-- Fields name -->
+                <header>
+                    <!--
+                    <button name="do_toggle_done" type="object"
+                    string="Toggle Done" class="oe_highlight" />
+                    <button name="do_clear_done" type="object"
+                    string="Clear All Done" />
+                    -->
+                </header>
+                <sheet>
+
+                    <group name="group_top">
+                        <group name="group_left">
+                          <field name="username"/>
+                          <field name="password"/>
+                          <field name="bandwidth"/>
+                            <field name="ip_pool"/>
+                          <field name="date"/>
+                          <field name="status"/>
+
+                        </group>
+                        <group name="group_right">
+
+                            <field name="message"/>
+                            <field name="radius_error" />
+                            <field name="type"/>
+                            <field name="update_package"/>
+                            <field name="update_expiry"/>
+
+                        </group>
+                    </group>
+
+
+
+                </sheet>
+            </form>
+        </field>
+     </record>
+
+
+     <!-- Search Model -->
+      <record id="dgcon_radius_dgcon_radius_logs_view_filter" model="ir.ui.view">
+        <field name="name">dgcon_radius_logs Filter</field>
+        <field name="model">dgcon_radius.logs</field>
+        <field name="arch" type="xml">
+            <search>
+                <!--
+                <field name="name"/>
+                <filter string="Not Done" domain="[('is_done','=',False)]"/>
+                <filter string="Done" domain="[('is_done','!=',False)]"/>
+                -->
+            </search>
+        </field>
+      </record>
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="dgcon_radius_dgcon_radius_logs_action_window">
+      <field name="name">Radius Logs</field>
+      <field name="res_model">dgcon_radius.logs</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+
+  </data>
+</odoo>

@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="dgcon_radius.list">
+      <field name="name">dgcon_radius list</field>
+      <field name="model">dgcon_radius.dgcon_radius</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="dgcon_radius.action_window">
+      <field name="name">dgcon_radius window</field>
+      <field name="res_model">dgcon_radius.dgcon_radius</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="dgcon_radius.action_server">
+      <field name="name">dgcon_radius server</field>
+      <field name="model_id" ref="model_dgcon_radius_dgcon_radius"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="dgcon_radius" id="dgcon_radius.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="dgcon_radius.menu_1" parent="dgcon_radius.menu_root"/>
+    <menuitem name="Menu 2" id="dgcon_radius.menu_2" parent="dgcon_radius.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="dgcon_radius.menu_1_list" parent="dgcon_radius.menu_1"
+              action="dgcon_radius.action_window"/>
+    <menuitem name="Server to list" id="dgcon_radius" parent="dgcon_radius.menu_2"
+              action="dgcon_radius.action_server"/>
+    -->
+  </data>
+</odoo>
