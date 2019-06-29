@@ -1,2 +1,5 @@
 sqlalchemy
 paramiko
+
+
+sudo apt-get install libmysqlclient-dev

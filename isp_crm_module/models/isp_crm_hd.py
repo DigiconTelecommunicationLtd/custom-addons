@@ -495,7 +495,7 @@ class Helpdesk(models.Model):
             limit=1)
         # template_obj = self.env['isp_crm_module.mail_template_helpdesk_ticket_closing'].sudo().search([],limit=1)
         subject_mail = "Mime Ticket Re-opening"
-        self.env['isp_crm_module.mail'].action_send_email(subject_mail, self.customer_email, self.name, template_obj)
+        #self.env['isp_crm_module.mail'].action_send_email(subject_mail, self.customer_email, self.name, template_obj)
         self.env['isp_crm_module.mail'].action_send_email(subject_mail, ALL_DEPARTMENTAL_HEAD_GROUP_MAIL, self.name, template_obj)
 
     @api.multi
