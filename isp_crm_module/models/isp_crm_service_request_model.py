@@ -516,7 +516,7 @@ class ServiceRequest(models.Model):
     @api.depends('order_line.price_total')
     def _compute_order_line_total(self):
         """
-        Compute the total amounts of the SO
+        Compute the total amounts of the SO.
         """
         for order in self:
             amount_untaxed = 0.0
