@@ -1079,8 +1079,8 @@ class CronJobModel(models.Model):
                 for line in order.product_line:
                     if line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME or line.product_id.categ_id.complete_name == DEFAULT_PACKAGES_CATEGORY_NAME:
                         package_price += line.price_subtotal
-                # order.update({
-                #     'package_product_price': package_price,
-                # })
+                order.update({
+                    'package_product_price': package_price,
+                })
         except Exception as ex:
             print(ex)
