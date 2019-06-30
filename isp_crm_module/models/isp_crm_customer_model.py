@@ -519,7 +519,7 @@ class Customer(models.Model):
                     package_price += line.price_subtotal
             order.update({
                 'product_line_total': amount_untaxed,
-                # 'package_product_price': package_price,
+                'package_product_price': package_price,
             })
 
 
