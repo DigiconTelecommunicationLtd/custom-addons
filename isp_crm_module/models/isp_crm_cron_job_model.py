@@ -1045,8 +1045,8 @@ class CronJobModel(models.Model):
         try:
             now = datetime.now().strftime("%Y-%m-%d %H-%M")
             now = datetime.strptime(now, "%Y-%m-%d %H-%M")
-            first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
-            second_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[1]
+            first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
+            second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
             get_all_requests = self.env['isp_crm_module.service_request'].search([('stage', '=', second_stage.id)])
             for request in get_all_requests:
                 days = 4

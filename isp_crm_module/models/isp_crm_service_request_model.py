@@ -185,8 +185,8 @@ class ServiceRequest(models.Model):
         opportunity_id = vals.get('opportunity_id')
         opportunity = self.env['crm.lead'].search([('id', '=', opportunity_id)], limit=1)
         internal_notes = opportunity.description
-        first_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[0]
-        second_stage = self.env['isp_crm_module.stage'].search([], order="sequence asc")[1]
+        first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
+        second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
         customer_service_activation_date = opportunity.proposed_activation_date
         now = datetime.now().strftime("%Y-%m-%d %H-%M")
         now = datetime.strptime(now, "%Y-%m-%d %H-%M")
