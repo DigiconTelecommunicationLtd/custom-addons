@@ -222,6 +222,10 @@ class ServiceRequest(models.Model):
             raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
         if value == 'Bill Date Confirmation':
             raise UserError('System does not allow you to drag record unless it is send by action.')
+        elif value == 'Queue':
+            raise UserError('System does not allow you to drag record to queue stage.')
+        elif value == 'New':
+            raise UserError('System does not allow you to drag record to new stage.')
         elif self._origin.is_done:
             raise UserError(
                 'System does not allow you to change stage once it is marked done.')

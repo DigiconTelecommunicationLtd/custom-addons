@@ -65,7 +65,7 @@
                         <td> : --card_number--</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left;">Transaction Ammount</th>
+                        <th style="text-align: left;">Transaction Amount</th>
                         <td> : --transaction_ammount--</td>
                     </tr>
                 </table>

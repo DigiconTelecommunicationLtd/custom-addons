@@ -5,11 +5,13 @@
         <field name="body_html"><![CDATA[
 
             <p><strong>Dear Valued Client,</strong></p>
-            <p>Thanks for contacting MiME!</p>
-            <p>This is just a quick note to let you know, we’ve received your email & created a ticket <strong>--ticketnumber--</strong></p>
-            <p>A member of our contact centre team will investigate & follow up with you shortly to resolve your issues & answer your queries.</p>
+            <p>Thank you for contacting MiME!</p>
+            <p>We would like to let you know that we have received your complaint and a ticket has been created, Reference Number: <strong>--ticketnumber--</strong></p>
+            <p>A MiME representative will look into the matter and follow up with you at the earliest.</p>
+            <p>We sincerely apologize for any inconvenience caused due to this service interruption.</p>
             <p></p>
-            <p>We appreciate your patience. Thanks for being with MiME</p>
+            <p>We appreciate your patience.</p>
+            <p>Thank you for being with MiME.</p>
 
         ]]>
 
