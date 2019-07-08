@@ -291,7 +291,9 @@ class CronJobModel(models.Model):
             tomorrow = date.today() + timedelta(days=1)
             for customer in customers_list:
                 # Get customer balance
-                print(customer)
+                print("")
+                print("start")
+                print(customer.name)
                 customer_balance =  customer.get_customer_balance(customer_id=customer.id)
                 print(customer_balance)
                 # get the opportunity of the customer, one customer should have one opportunity.
