@@ -291,10 +291,13 @@ class CronJobModel(models.Model):
             tomorrow = date.today() + timedelta(days=1)
             for customer in customers_list:
                 # Get customer balance
+                print(customer)
                 customer_balance =  customer.get_customer_balance(customer_id=customer.id)
+                print(customer_balance)
                 # get the opportunity of the customer, one customer should have one opportunity.
                 opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
                 if opportunity:
+                    print(opportunity.lead_type)
                     if opportunity.lead_type != "retail":
                         ticket_obj = self.env['isp_crm_module.corporate_bandwidth_change'].search([('customer', '=', customer.id),('color', '=', 0)], order='create_date desc', limit=1)
                         if ticket_obj:
@@ -327,7 +330,9 @@ class CronJobModel(models.Model):
                     else:
                         ticket_obj = self.env['isp_crm_module.retail_soho_bandwidth_change'].search(
                             [('customer', '=', customer.id), ('color', '=', 0)], order='create_date desc', limit=1)
+                        print(ticket_obj)
                         if ticket_obj:
+                            print(ticket_obj.proposed_package_price)
                             # updating the customer active_status and package according to their balance
                             if (customer_balance < 0) and (abs(customer_balance) >= ticket_obj.proposed_package_price):
                                 customer.write({
