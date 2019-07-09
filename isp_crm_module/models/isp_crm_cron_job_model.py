@@ -703,7 +703,7 @@ class CronJobModel(models.Model):
                 corporate_soho_invoice_date_end = date(datetime.today().year, datetime.today().month + 2,
                                                        1) - relativedelta(days=2)
 
-            if difference > 0:
+            if difference == 0:
                 sale_order_object = self.env['sale.order']
                 sale_orders = sale_order_object.search([])
                 for order in sale_orders:

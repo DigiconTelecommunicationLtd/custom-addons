@@ -4,6 +4,7 @@ __pycache__/
 
 # Local Settings
 isp_crm_module/controllers/local_settings.py
+dgcon_radius/controllers/radius_cred.py
 
 # C extensions
 *.so
