@@ -6,7 +6,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
 from odoo.exceptions import Warning, UserError
-
+from datetime import datetime, timezone, timedelta, date
 DEFAULT_MONTH_DAYS = 30
 DEFAULT_NEXT_MONTH_DAYS = 31
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
@@ -137,9 +137,32 @@ class ISPCRMInvoice(models.Model):
                             print("User has not selected service start date and end date")
                             corporate_soho_first_month_date_start = datetime.date.today()
                             # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
-                            corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                datetime.date.today().month + 1, 1) - relativedelta(
-                                days=1)
+
+                            corporate_soho_first_month_date_end = ""
+                            # difference must be 30 days. So checking if last date is 30 or 31.
+
+                            #Updated
+                            start = datetime.today().replace(day=1) + relativedelta(months=1)
+                            end = date(datetime.today().year, datetime.today().month + 2,
+                                                                   1) - relativedelta(days=1)
+
+                            days_diff = end - start.date()
+                            days_diff = int(abs(days_diff.days))
+                            if days_diff == 30:
+                                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                                                                                    datetime.date.today().month + 1,
+                                                                                    1) - relativedelta(
+                                    days=1)
+                            elif days_diff > 30:
+                                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                                                                                    datetime.date.today().month + 1,
+                                                                                    1) - relativedelta(
+                                    days=2)
+
+
+                            # corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                            #                                                     datetime.date.today().month + 1, 1) - relativedelta(
+                            #     days=1)
                             invoice.write({
                                 'corporate_soho_first_month_date_start': corporate_soho_first_month_date_start,
                                 'corporate_soho_first_month_date_end': corporate_soho_first_month_date_end,
