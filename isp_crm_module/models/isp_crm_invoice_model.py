@@ -135,7 +135,7 @@ class ISPCRMInvoice(models.Model):
                                     })
                         else:
                             print("User has not selected service start date and end date")
-                            corporate_soho_first_month_date_start = datetime.date.today()
+                            corporate_soho_first_month_date_start = date.today()
                             # corporate_soho_first_month_date_start = datetime.date.today().replace(day=1) + relativedelta(months=1)
 
                             corporate_soho_first_month_date_end = ""
@@ -149,13 +149,13 @@ class ISPCRMInvoice(models.Model):
                             days_diff = end - start.date()
                             days_diff = int(abs(days_diff.days))
                             if days_diff == 30:
-                                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                    datetime.date.today().month + 1,
+                                corporate_soho_first_month_date_end = datetime.date(date.today().year,
+                                                                                    date.today().month + 1,
                                                                                     1) - relativedelta(
                                     days=1)
                             elif days_diff > 30:
-                                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                    datetime.date.today().month + 1,
+                                corporate_soho_first_month_date_end = datetime.date(date.today().year,
+                                                                                    date.today().month + 1,
                                                                                     1) - relativedelta(
                                     days=2)
 
