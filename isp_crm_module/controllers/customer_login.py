@@ -334,7 +334,7 @@ class SelfcareController(PaymentController):
         content_header = "User Payment"
         template = "isp_crm_module.template_selfcare_login_main"
         template_name = True
-
+        print('show_base_url:', request.httprequest.url_root)
         if self._redirect_if_not_login(req=request):
             template = "isp_crm_module.template_selfcare_user_payment"
             user_id = request.env.context.get('uid')
@@ -345,6 +345,9 @@ class SelfcareController(PaymentController):
                 service_type = request.params["service_type"]
                 transaction_id = service_type + "_" + amount
                 base_url = request.httprequest.url_root
+                # change base url when its for http
+                if base_url == 'http://crm.mimebd.com/':
+                    base_url = 'https://crm.mimebd.com/'
                 # if int(service_type) in self.SERVICE_TYPE_ID_LIST:
                 #     invoice_number = request.params["invoice_number"]
                 #     invoice_id = request.params["invoice_id"]
