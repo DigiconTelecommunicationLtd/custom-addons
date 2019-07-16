@@ -182,12 +182,17 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_res_partner_filter"/>
         <field name="arch" type="xml">
-            <filter name="supplier" position="before">
-                <separator />
-                <filter string="Retail" name="retail_customer" domain="[('opportunity_ids.lead_type', '=', 'retail')]"/>
-                <filter string="Corporate" name="corporate_customer" domain="[('opportunity_ids.lead_type', '=', 'corporate')]"/>
-                <filter string="SOHO and SME" name="soho" domain="[('opportunity_ids.lead_type', '=', 'sohoandsme')]"/>
-            </filter>
+            <field name="name" position="after">
+                <field name="subscriber_id"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+            </field>
+<!--            <filter name="supplier" position="before">-->
+<!--                <separator />-->
+<!--                <filter string="Retail" name="retail_customer" domain="[('opportunity_ids.lead_type', '=', 'retail')]"/>-->
+<!--                <filter string="Corporate" name="corporate_customer" domain="[('opportunity_ids.lead_type', '=', 'corporate')]"/>-->
+<!--                <filter string="SOHO and SME" name="soho" domain="[('opportunity_ids.lead_type', '=', 'sohoandsme')]"/>-->
+<!--            </filter>-->
         </field>
     </record>
 
