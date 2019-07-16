@@ -158,10 +158,15 @@ class CronJobModel(models.Model):
             return created_invoice_obj
 
     def create_customer_invoice_status(self, customer):
-        customer_invoice_status_obj = self.env['isp_crm_module.customer_invoice_status'].search([])
-        customer_invoice_status_obj.create({
-            'customer_id' : customer.id,
-        })
+        customer_invoice_status_obj = self.env['isp_crm_module.customer_invoice_status'].search([('customer_id','=',customer.id)])
+        if customer_invoice_status_obj:
+            customer_invoice_status_obj.update({
+                'customer_id' : customer.id,
+            })
+        else:
+            customer_invoice_status_obj.create({
+                'customer_id': customer.id,
+            })
         return customer_invoice_status_obj
 
     @api.model
