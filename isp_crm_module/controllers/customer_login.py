@@ -334,7 +334,7 @@ class SelfcareController(PaymentController):
         content_header = "User Payment"
         template = "isp_crm_module.template_selfcare_login_main"
         template_name = True
-
+        print('show_base_url:', request.httprequest.url_root)
         if self._redirect_if_not_login(req=request):
             template = "isp_crm_module.template_selfcare_user_payment"
             user_id = request.env.context.get('uid')
