@@ -16,7 +16,7 @@ DEFAULT_PAYMENT_INVOICE = 'account.payment.customer.invoice'
 DEFAULT_BANK_JOURNAL_SHORTCODE = 'BNK1'
 
 class ISPCRMPayment(models.Model):
-    """Inherits account.payment and adds Functionality in account payment"""
+    """Inherits account.payment and adds Functionality in account payment """
     _inherit = 'account.payment'
 
 
