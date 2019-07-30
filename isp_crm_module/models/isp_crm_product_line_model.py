@@ -64,7 +64,9 @@ class ProductLine(models.Model):
             if line.service_request_id.is_done == False:
                 line.product_updatable = True
             else:
-                line.product_updatable = False
+                line.product_updatable = True
+                #v0.2: changed criteria. Make product update true
+                #line.product_updatable = False
 
     @api.multi
     @api.onchange('product_id')
