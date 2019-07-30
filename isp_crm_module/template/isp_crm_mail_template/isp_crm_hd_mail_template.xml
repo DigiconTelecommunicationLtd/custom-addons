@@ -97,7 +97,7 @@
         <field name="name">Ticket_Marked_Done</field>
         <field name="body_html"><![CDATA[
 
-            <p>A ticket <strong>--ticketnumber--</strong> has been marked done.</p>
+            <p>A ticket <strong>TEST TICKET</strong> has been marked done.</p>
             <p></p>
             <p>Thank you for being with MiME.</p>
 

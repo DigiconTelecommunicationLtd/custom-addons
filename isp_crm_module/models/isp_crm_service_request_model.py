@@ -2,7 +2,6 @@
 
 import string
 import random
-import threading
 from datetime import datetime, timedelta
 import logging
 from passlib.context import CryptContext
@@ -258,18 +257,14 @@ class ServiceRequest(models.Model):
                         [('name', '=', 'Send_Bill_Date_Confirmation_Service_Request_Mail')],
                         limit=1)
                     subject_mail = "Bill Date Confirmation"
-                    # self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj)
-                    x = threading.Thread(target=self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation, args=(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj))
-                    x.start()
+                    self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj)
 
                     # **Sending mail to TD/RM on mark done**
                     template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
                         [('name', '=', 'Ticket_Marked_Done')],
                         limit=1)
                     subject_mail = "A ticket is marked done"
-                    # self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL, self.name, customer.name, customer.subscriber_id, template_obj_marked_done)
-                    y = threading.Thread(target=self.env['isp_crm_module.mail'].action_ticket_marked_done_email, args=(subject_mail, MY_MAIL, self.name, customer.name, customer.subscriber_id, template_obj_marked_done))
-                    y.start()
+                    self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL, template_obj_marked_done)
 
     @api.multi
     def action_make_service_request_done(self):
@@ -452,6 +447,14 @@ class ServiceRequest(models.Model):
                 pass
             else:
                 self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),customer_subs_id,cust_password_radius,template_obj)
+                # **Sending mail to TD/RM on mark done**
+                template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
+                    [('name', '=', 'Ticket_Marked_Done')],
+                    limit=1)
+                subject_mail = "A ticket is marked done"
+                self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL,template_obj_marked_done)
+                #y = threading.Thread(target=self.env['isp_crm_module.mail'].action_ticket_marked_done_email, args=(subject_mail, MY_MAIL,template_obj_marked_done))
+                #y.start()
 
         return True
 

@@ -211,10 +211,10 @@ class Team(models.Model):
 
 
     @api.multi
-    def action_ticket_marked_done_email(self, subject, mailto, ticketnumber, template_obj, hour):
+    def action_ticket_marked_done_email(self, subject, mailto, template_obj):
         body = template_obj.body_html
-        body = body.replace('--ticketnumber--', ticketnumber)
-        body = body.replace('--hour--', hour)
+        #body = body.replace('--ticketnumber--', ticketnumber)
+        #body = body.replace('--hour--', hour)
         if template_obj:
             mail_values = {
                 'subject': subject,
