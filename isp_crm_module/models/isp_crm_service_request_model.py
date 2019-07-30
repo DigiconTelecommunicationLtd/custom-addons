@@ -355,6 +355,8 @@ class ServiceRequest(models.Model):
                         if result_radius != 'success':
                             raise UserError('Radius server issue: ' + result_radius)
                         else:
+                            #service_activation_date and billing_start_date is not being set for afew user group
+                            #solution 1: updating it with sudo command. Not yet implemented
                             customer.update({
                                 'is_potential_customer': False,
                                 'subscriber_id': customer_subs_id,
