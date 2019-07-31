@@ -33,6 +33,7 @@ DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 OTC_PRODUCT_CODE = 'ISP-OTC'
 DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 BILLING_GROUP_MAIL = "billing.mime@cg-bd.com"
+MY_MAIL = "taohid.bhuiya@cg-bd.com"
 
 TD_FLAGS = [
     ('0', 'Pending'),
@@ -247,15 +248,23 @@ class ServiceRequest(models.Model):
                         'is_send_for_bill_date_confirmation': True,
                         'stage': stage_obj.id,
                         'service_activation_date': fields.Date().today(),
-                        'billing_start_date' : fields.Date().today()
+                        'billing_start_date': fields.Date().today()
                     })
 
+                    # ** Mail Sent for bill date confirmation **
                     print("Sent for bill date confirmation")
                     template_obj = self.env['isp_crm_module.mail'].sudo().search(
                         [('name', '=', 'Send_Bill_Date_Confirmation_Service_Request_Mail')],
                         limit=1)
                     subject_mail = "Bill Date Confirmation"
                     self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj)
+
+                    # **Sending mail to TD/RM on mark done**
+                    template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
+                        [('name', '=', 'Ticket_Marked_Done')],
+                        limit=1)
+                    subject_mail = "A ticket is marked done"
+                    self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL, template_obj_marked_done)
 
     @api.multi
     def action_make_service_request_done(self):
@@ -438,6 +447,14 @@ class ServiceRequest(models.Model):
                 pass
             else:
                 self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),customer_subs_id,cust_password_radius,template_obj)
+                # **Sending mail to TD/RM on mark done**
+                template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
+                    [('name', '=', 'Ticket_Marked_Done')],
+                    limit=1)
+                subject_mail = "A ticket is marked done"
+                self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL,template_obj_marked_done)
+                #y = threading.Thread(target=self.env['isp_crm_module.mail'].action_ticket_marked_done_email, args=(subject_mail, MY_MAIL,template_obj_marked_done))
+                #y.start()
 
         return True
 

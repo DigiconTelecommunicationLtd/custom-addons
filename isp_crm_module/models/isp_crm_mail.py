@@ -208,3 +208,21 @@ class Team(models.Model):
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
         # return True
+
+
+    @api.multi
+    def action_ticket_marked_done_email(self, subject, mailto, template_obj):
+        body = template_obj.body_html
+        #body = body.replace('--ticketnumber--', ticketnumber)
+        #body = body.replace('--hour--', hour)
+        if template_obj:
+            mail_values = {
+                'subject': subject,
+                'body_html': body,
+                'email_to': mailto,
+                'email_cc': '',
+                'email_from': self.DEFAULT_FROM_MAIL,
+            }
+            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+
+        # return True
