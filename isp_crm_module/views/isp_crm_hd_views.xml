@@ -12,6 +12,7 @@
                 <field name="type"/>
                 <field name="td_flags"/>
                 <field name="assigned_to"/>
+                <field name="resolved_date"  widget="date"/>
                 <field name="complexity"/>
             </tree>
         </field>
