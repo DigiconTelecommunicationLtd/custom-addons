@@ -113,6 +113,9 @@ class Helpdesk(models.Model):
     complexity_name = fields.Char(string='Complexity Name', track_visibility='onchange')
     is_resolved_by_td_tnom_cnom = fields.Boolean()
     send_to_sd = fields.Boolean()
+    #added resolved date. issue ISP-296
+    resolved_date=fields.Datetime(string='Resolved date',track_visibility='onchange')
+
 
     @api.model
     def create(self, vals):
@@ -198,6 +201,8 @@ class Helpdesk(models.Model):
         self.env['isp_crm_module.mail'].action_send_email(subject_mail,TD_NMC_GROUP_MAIL_ADDRESS,newrecord.name,template_obj)
 
         return newrecord
+
+
 
     def _default_stages(self, stages, domain, order):
         stage_ids = self._fields['default_stages'].get_values(self.env)
@@ -425,6 +430,7 @@ class Helpdesk(models.Model):
         self.update({
             'td_flags': TD_FLAGS[4][0],
             'color': 4,
+            'color': 4,
             'pending_status': 0,
             'is_resolved_by_td_tnom_cnom': True,
         })
@@ -462,6 +468,8 @@ class Helpdesk(models.Model):
             'td_flags': TD_FLAGS[5][0],
             'default_stages': 'Done',
             'color': 10,
+            'resolved_date': datetime.date.today()
+
         })
 
         template_obj = self.env['isp_crm_module.mail'].sudo().search(
@@ -487,7 +495,9 @@ class Helpdesk(models.Model):
             'complexity_name': helpdesk_ticket_complexity.name,
             'pending_status': 0,
             'is_resolved_by_td_tnom_cnom': False,
+            'resolved_date': False,
             'send_to_sd': False,
+
         })
 
         template_obj = self.env['isp_crm_module.mail'].sudo().search(

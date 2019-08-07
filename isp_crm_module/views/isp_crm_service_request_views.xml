@@ -90,6 +90,7 @@
                 <field name="priority"/>
                 <field name="team"/>
                 <field name="is_done"/>
+                <field name="mark_done_date" widget="date"/>
             </tree>
         </field>
     </record>

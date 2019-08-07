@@ -150,7 +150,7 @@ class ISPCRMInvoice(models.Model):
 
                             days_diff = end - start
                             days_diff = int(abs(days_diff.days))
-                            if days_diff == 30:
+                            if days_diff <= 30:
                                 corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
                                                                                     datetime.date.today().month + 1,
                                                                                     1) - relativedelta(

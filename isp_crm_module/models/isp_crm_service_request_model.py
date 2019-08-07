@@ -137,6 +137,8 @@ class ServiceRequest(models.Model):
                                           string='Service Activation Date', track_visibility='onchange')
     proposed_activation_date = fields.Date(related='customer.opportunity_ids.proposed_activation_date', string='Proposed Service Activation Date', track_visibility='onchange')
     lead_type = fields.Selection(related='customer.opportunity_ids.lead_type', string='Type', help="Lead and Opportunity Type")
+    # added resolved date. issue ISP-297
+    mark_done_date = fields.Datetime(string='Mark Done Date')
 
     def _get_next_package_end_date(self, given_date):
         given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
@@ -313,11 +315,13 @@ class ServiceRequest(models.Model):
                     # 'stage': last_stage_obj.id,
                     'is_send_for_bill_date_confirmation': False,
                     'td_flags': TD_FLAGS[1][0],
+                    'mark_done_date':datetime.today()
                 })
             else:
                 service_req.update({
                     'is_done': True,
                     'stage': last_stage_obj.id,
+                    'mark_done_date': datetime.today()
                 })
             customer = service_req.customer
             # format sequence number based on lead type
