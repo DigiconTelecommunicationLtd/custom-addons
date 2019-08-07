@@ -96,10 +96,11 @@
     <record id="isp_crm_module.mail_template_RM_SD_on_mark_done" model="isp_crm_module.mail">
         <field name="name">Ticket_Marked_Done</field>
         <field name="body_html"><![CDATA[
-
-            <p>A ticket <strong>TEST TICKET</strong> has been marked done.</p>
-            <p></p>
-            <p>Thank you for being with MiME.</p>
+            <p>Dear Team,</p>
+            <p>Ticket Number <strong>--ticketnumber--</strong> has been marked done. The details of customer is given below: </p>
+            <p>Customer ID: --customernumber-- </p>
+            <p>Customer Name: --customername-- </p>
+            <p>Package: --package-- </p>
 
         ]]>
 

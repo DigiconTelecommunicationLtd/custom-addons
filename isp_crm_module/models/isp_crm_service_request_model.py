@@ -33,7 +33,7 @@ DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 OTC_PRODUCT_CODE = 'ISP-OTC'
 DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 BILLING_GROUP_MAIL = "billing.mime@cg-bd.com"
-MY_MAIL = "taohid.bhuiya@cg-bd.com"
+MY_MAIL = ""
 
 TD_FLAGS = [
     ('0', 'Pending'),
@@ -259,13 +259,18 @@ class ServiceRequest(models.Model):
                     subject_mail = "Bill Date Confirmation"
                     self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj)
 
-                    # **Sending mail to TD/RM on mark done**
+                    # **Sending mail to TD/RM on mark done on Bill**
                     template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
                         [('name', '=', 'Ticket_Marked_Done')],
                         limit=1)
-                    subject_mail = "A ticket is marked done"
-                    self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL, template_obj_marked_done)
-
+                    subject_mail = "Service Delivered"
+                    # mark_done_email_name = customer.name
+                    # mark_done_email_sub_id =
+                    self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, customer.assigned_rm.email, self.name,
+                                                                                    customer.name,
+                                                                                    customer.subscriber_id,
+                                                                                    customer.current_package_id.name,
+                                                                                    template_obj_marked_done)
     @api.multi
     def action_make_service_request_done(self):
         for service_req in self:
@@ -345,8 +350,8 @@ class ServiceRequest(models.Model):
                     if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
                         cust_password_radius = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
                         result_radius = create_radius_user(customer_subs_id, cust_password_radius, productline.product_id.name,
-                                                           customer._get_package_end_date(fields.Date.today()),
-                                                           customer.id)
+                                                           customer._get_package_end_date(fields.Date.today()), customer.id)
+
                         if result_radius != 'success':
                             raise UserError('Radius server issue: ' + result_radius)
                         else:
@@ -447,14 +452,19 @@ class ServiceRequest(models.Model):
                 pass
             else:
                 self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),customer_subs_id,cust_password_radius,template_obj)
-                # **Sending mail to TD/RM on mark done**
+                # **Sending mail to TD/RM on mark done on New Connection**
                 template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
                     [('name', '=', 'Ticket_Marked_Done')],
                     limit=1)
-                subject_mail = "A ticket is marked done"
-                self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL,template_obj_marked_done)
-                #y = threading.Thread(target=self.env['isp_crm_module.mail'].action_ticket_marked_done_email, args=(subject_mail, MY_MAIL,template_obj_marked_done))
-                #y.start()
+                subject_mail = "Service Delivered"
+                # mark_done_email_name = customer.name
+                # mark_done_email_sub_id =
+                self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail,
+                                                                                customer.assigned_rm.email, self.name,
+                                                                                customer.name,
+                                                                                customer.subscriber_id,
+                                                                                customer.current_package_id.name,
+                                                                                template_obj_marked_done)
 
         return True
 
