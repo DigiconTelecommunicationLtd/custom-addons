@@ -373,7 +373,10 @@ class CronJobModel(models.Model):
     @api.model
     def update_customer_package_for_next_bill_cycle(self):
         try:
-            today = date.today()
+            today_new = datetime.now() + timedelta(hours=6)
+            today = today_new.date()
+            #today = date.today()
+
             tomorrow = date.today() + timedelta(days=1)
             # Check if it is a customer,
             # and if the customer is inactive or next package start date is tomorrow.
