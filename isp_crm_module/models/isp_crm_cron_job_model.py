@@ -377,7 +377,7 @@ class CronJobModel(models.Model):
             today = today_new.date()
             #today = date.today()
 
-            tomorrow = date.today() + timedelta(days=1)
+            tomorrow = today + timedelta(days=1)
             # Check if it is a customer,
             # and if the customer is inactive or next package start date is tomorrow.
             # If the customer is inactive, then we will check if
