@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime,timedelta
 root_host='http://127.0.0.1:8069'
 
 def get_package_info(package_name):
@@ -38,6 +38,7 @@ def create_radius_user(username,password,pool,enddate,customer_id):
     bandwidth,ip_pool=get_package_info(pool)
     if bandwidth!=None and ip_pool!=None:
         now = datetime.strptime(enddate,'%Y-%m-%d')
+        now = now + timedelta(hours=23, minutes=59, seconds=59)
         date_time = now.strftime("%d %B %Y %H:%M")
         query=root_host+'/freeradius/create?username={}&password={}&bandwidth={}&pool={}&date={}&customer_id={}'
         r=requests.get(query.format(username, password,bandwidth,ip_pool,date_time,customer_id))
@@ -92,6 +93,7 @@ def update_expiry_bandwidth(username,expirydate,package):
     :return: if successful then returns "success"
     """
     dateobject = datetime.strptime(expirydate, '%Y-%m-%d')
+    dateobject = dateobject + timedelta(hours=23, minutes=59, seconds=59)
     ip_date = dateobject.strftime("%d %B %Y %H:%M")
 
     print(username,expirydate,package)
