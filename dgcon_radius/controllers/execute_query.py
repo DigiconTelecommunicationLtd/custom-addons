@@ -5,9 +5,9 @@
 import traceback
 from sqlalchemy import create_engine
 from .execute_terminal import disconnect
-
+from .radius_cred import *
 # creadiendial to connect to the database
-database_cred = 'mysql://root:my5ql-137967@103.117.192.79:3306/radius'
+#database_cred = 'mysql://root:my5ql-137967@103.117.192.79:3306/radius'
 
 CREATE_USER = "INSERT INTO radcheck ( id , UserName , Attribute , op , Value ) VALUES ( NULL , '{}', 'Cleartext-Password', ':=', '{}')"
 CREATE_EXPIRY = "INSERT INTO radcheck ( id , UserName , Attribute , op , Value ) VALUES ( NULL , '{}', 'Expiration', ':=', '{}')"
