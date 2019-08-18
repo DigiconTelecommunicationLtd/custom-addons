@@ -19,6 +19,7 @@ CUSTOMER_ACTIVE_STATUS = 'active'
 DEFAULT_DONE_STAGE = 'Done'
 DEFAULT_PACKAGES_CATEGORY_NAME = 'Packages'
 
+
 INVOICE_PAID_STATUS = 'paid'
 from .radius_integration import update_expiry_bandwidth
 class CronJobModel(models.Model):
@@ -1071,10 +1072,16 @@ class CronJobModel(models.Model):
                     days = abs(get_diff.days) + 1
 
                 if days < 3:
-                #if days:
+                # if days:
                     request.update({
                         'stage': first_stage.id
                     })
+                    # **Sending mail to TD/NMC on new service request**
+                    template_obj_new_service_request = self.env['isp_crm_module.mail'].sudo().search(
+                        [('name', '=', 'New_Service_Request')],
+                        limit=1)
+                    self.env['isp_crm_module.mail'].action_mail_new_service_request(request.name, template_obj_new_service_request)
+
             return True
         except Exception as ex:
             print(ex)
