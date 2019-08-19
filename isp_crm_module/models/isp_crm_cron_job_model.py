@@ -1073,7 +1073,6 @@ class CronJobModel(models.Model):
                     activation_date = datetime.strptime(activation_date, "%Y-%m-%d %H-%M")
                     get_diff = activation_date - now
                     days = abs(get_diff.days) + 1
-
                 if days < 3:
                 #if days:
                     # request.update({
@@ -1087,7 +1086,6 @@ class CronJobModel(models.Model):
                         [('name', '=', 'New_Service_Request')],
                         limit=1)
                     self.env['isp_crm_module.mail'].action_mail_new_service_request(request.name, template_obj_new_service_request)
-
             return True
         except Exception as ex:
             print(ex)
