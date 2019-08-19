@@ -211,10 +211,38 @@ class Team(models.Model):
 
 
     @api.multi
-    def action_ticket_marked_done_email(self, subject, mailto, template_obj):
+    def action_ticket_marked_done_email(self, subject, mailto, ticketnumber, customername, customernumber, package, template_obj):
         body = template_obj.body_html
-        #body = body.replace('--ticketnumber--', ticketnumber)
-        #body = body.replace('--hour--', hour)
+        body = body.replace('--ticketnumber--', ticketnumber)
+        body = body.replace('--customername--', customername)
+        body = body.replace('--customernumber--', customernumber)
+        email = ''
+        if mailto:
+            email = mailto
+
+        if package:
+            body = body.replace('--package--', package)
+        else:
+            body = body.replace('--package--', '')
+
+        if template_obj:
+            mail_values = {
+                'subject': subject,
+                'body_html': body,
+                'email_to': 'hod.mime@cg-bd.com',
+                'email_cc': 'sd.mime@cg-bd.com,' + email,
+                'email_from': self.DEFAULT_FROM_MAIL,
+            }
+            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+
+        # return True
+
+    @api.multi
+    def action_mail_new_service_request(self, ticketnumber, template_obj):
+        body = template_obj.body_html
+        body = body.replace('--ticketnumber--', ticketnumber)
+        subject = "New Service Request"
+        mailto = "nmc.mime@cg-bd.com"
         if template_obj:
             mail_values = {
                 'subject': subject,

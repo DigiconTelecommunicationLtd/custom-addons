@@ -96,13 +96,35 @@
     <record id="isp_crm_module.mail_template_RM_SD_on_mark_done" model="isp_crm_module.mail">
         <field name="name">Ticket_Marked_Done</field>
         <field name="body_html"><![CDATA[
-
-            <p>A ticket <strong>TEST TICKET</strong> has been marked done.</p>
-            <p></p>
-            <p>Thank you for being with MiME.</p>
+            <p>Dear Team,</p>
+            <p>Ticket Number <strong>--ticketnumber--</strong> has been marked done. The details of customer is given below: </p>
+            <p>Customer ID: --customernumber-- </p>
+            <p>Customer Name: --customername-- </p>
+            <p>Package: --package-- </p>
 
         ]]>
 
+        </field>
+    </record>
+
+
+    <record id="isp_crm_module.mail_template_on_new_service_request" model="isp_crm_module.mail">
+        <field name="name">New_Service_Request</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear Team,</p>
+            <p>A service request <strong>--ticketnumber--</strong> has been created in service request. Please take action. </p>
+            <p>Thanks </p>
+        ]]>
+        </field>
+    </record>
+
+    <record id="isp_crm_module.mail_on_new_service_request_package_change" model="isp_crm_module.mail">
+        <field name="name">New_Service_Request_Package_Change</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear Team,</p>
+            <p>A service request <strong>--ticketnumber--</strong>(package change) has been created in service request. Please take action. </p>
+            <p>Thanks </p>
+        ]]>
         </field>
     </record>
 

@@ -33,7 +33,7 @@ DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 OTC_PRODUCT_CODE = 'ISP-OTC'
 DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 BILLING_GROUP_MAIL = "billing.mime@cg-bd.com"
-MY_MAIL = "taohid.bhuiya@cg-bd.com"
+
 
 TD_FLAGS = [
     ('0', 'Pending'),
@@ -183,21 +183,14 @@ class ServiceRequest(models.Model):
             chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
             return ''.join(random.choice(chars) for _ in range(size))
 
-    #Queue header should be placed before New stage
-
     @api.model
     def create(self, vals):
-
         opportunity_id = vals.get('opportunity_id')
         opportunity = self.env['crm.lead'].search([('id', '=', opportunity_id)], limit=1)
         internal_notes = opportunity.description
-        # first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
-        # second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
-        first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
-        second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
-
-        # customer_service_activation_date = opportunity.proposed_activation_date
-        customer_service_activation_date = vals.get('proposed_activation_date')
+        first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
+        second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
+        customer_service_activation_date = opportunity.proposed_activation_date
         now = datetime.now().strftime("%Y-%m-%d %H-%M")
         now = datetime.strptime(now, "%Y-%m-%d %H-%M")
         days = 0
@@ -213,6 +206,13 @@ class ServiceRequest(models.Model):
                 vals['stage'] = first_stage.id
             else:
                 vals['stage'] = second_stage.id
+                # **Sending mail to TD/NMC on new service request**
+                template_obj_new_service_request = self.env['isp_crm_module.mail'].sudo().search(
+                    [('name', '=', 'New_Service_Request')],
+                    limit=1)
+                subject_mail = "New Service Request"
+                self.env['isp_crm_module.mail'].action_mail_new_service_request(vals.get('name', 'New'), template_obj_new_service_request)
+
             vals['internal_notes'] = internal_notes
         return super(ServiceRequest, self).create(vals)
 
@@ -224,21 +224,21 @@ class ServiceRequest(models.Model):
         stage_ids = self.env['isp_crm_module.stage'].search([('name', '!=', 'Undefined')])
         return stage_ids
 
-    # @api.onchange('stage')
-    # def stage_onchange(self):
-    #     value = self.stage.name
-    #     sequence = self.stage.sequence
-    #     if value == 'Done':
-    #         raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
-    #     if value == 'Bill Date Confirmation':
-    #         raise UserError('System does not allow you to drag record unless it is send by action.')
-    #     elif value == 'Queue':
-    #         raise UserError('System does not allow you to drag record to queue stage.')
-    #     elif value == 'New':
-    #         raise UserError('System does not allow you to drag record to new stage.')
-    #     elif self._origin.is_done:
-    #         raise UserError(
-    #             'System does not allow you to change stage once it is marked done.')
+    @api.onchange('stage')
+    def stage_onchange(self):
+        value = self.stage.name
+        sequence = self.stage.sequence
+        if value == 'Done':
+            raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
+        if value == 'Bill Date Confirmation':
+            raise UserError('System does not allow you to drag record unless it is send by action.')
+        elif value == 'Queue':
+            raise UserError('System does not allow you to drag record to queue stage.')
+        elif value == 'New':
+            raise UserError('System does not allow you to drag record to new stage.')
+        elif self._origin.is_done:
+            raise UserError(
+                'System does not allow you to change stage once it is marked done.')
 
     @api.multi
     def action_send_for_bill_date_confirmation(self):
@@ -268,13 +268,18 @@ class ServiceRequest(models.Model):
                     subject_mail = "Bill Date Confirmation"
                     self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj)
 
-                    # **Sending mail to TD/RM on mark done**
+                    # **Sending mail to TD/RM on mark done on Bill**
                     template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
                         [('name', '=', 'Ticket_Marked_Done')],
                         limit=1)
-                    subject_mail = "A ticket is marked done"
-                    self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL, template_obj_marked_done)
-
+                    subject_mail = "Service Delivered"
+                    # mark_done_email_name = customer.name
+                    # mark_done_email_sub_id =
+                    self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, customer.assigned_rm.email, self.name,
+                                                                                    customer.name,
+                                                                                    customer.subscriber_id,
+                                                                                    customer.current_package_id.name,
+                                                                                    template_obj_marked_done)
     @api.multi
     def action_make_service_request_done(self):
         for service_req in self:
@@ -356,8 +361,8 @@ class ServiceRequest(models.Model):
                     if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
                         cust_password_radius = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
                         result_radius = create_radius_user(customer_subs_id, cust_password_radius, productline.product_id.name,
-                                                           customer._get_package_end_date(fields.Date.today()),
-                                                           customer.id)
+                                                           customer._get_package_end_date(fields.Date.today()), customer.id)
+
                         if result_radius != 'success':
                             raise UserError('Radius server issue: ' + result_radius)
                         else:
@@ -458,14 +463,19 @@ class ServiceRequest(models.Model):
                 pass
             else:
                 self.env['isp_crm_module.mail'].service_request_send_email(customer.email,customer_subs_id,cust_password,str(self.ip),str(self.subnet_mask),str(self.gateway),customer_subs_id,cust_password_radius,template_obj)
-                # **Sending mail to TD/RM on mark done**
+                # **Sending mail to TD/RM on mark done on New Connection**
                 template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
                     [('name', '=', 'Ticket_Marked_Done')],
                     limit=1)
-                subject_mail = "A ticket is marked done"
-                self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, MY_MAIL,template_obj_marked_done)
-                #y = threading.Thread(target=self.env['isp_crm_module.mail'].action_ticket_marked_done_email, args=(subject_mail, MY_MAIL,template_obj_marked_done))
-                #y.start()
+                subject_mail = "Service Delivered"
+                # mark_done_email_name = customer.name
+                # mark_done_email_sub_id =
+                self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail,
+                                                                                customer.assigned_rm.email, self.name,
+                                                                                customer.name,
+                                                                                customer.subscriber_id,
+                                                                                customer.current_package_id.name,
+                                                                                template_obj_marked_done)
 
         return True
 

@@ -19,6 +19,7 @@ CUSTOMER_ACTIVE_STATUS = 'active'
 DEFAULT_DONE_STAGE = 'Done'
 DEFAULT_PACKAGES_CATEGORY_NAME = 'Packages'
 
+
 INVOICE_PAID_STATUS = 'paid'
 from .radius_integration import update_expiry_bandwidth
 class CronJobModel(models.Model):
@@ -373,8 +374,11 @@ class CronJobModel(models.Model):
     @api.model
     def update_customer_package_for_next_bill_cycle(self):
         try:
-            today = date.today()
-            tomorrow = date.today() + timedelta(days=1)
+            today_new = datetime.now() + timedelta(hours=6)
+            today = today_new.date()
+            #today = date.today()
+
+            tomorrow = today + timedelta(days=1)
             # Check if it is a customer,
             # and if the customer is inactive or next package start date is tomorrow.
             # If the customer is inactive, then we will check if
@@ -1049,7 +1053,6 @@ class CronJobModel(models.Model):
             print(ex)
 
     # Change stage of service request from queue to new
-    #Queue header should be placed before New stage
     def change_stage_service_request_queue_new(self):
         """
 
@@ -1058,12 +1061,9 @@ class CronJobModel(models.Model):
         try:
             now = datetime.now().strftime("%Y-%m-%d %H-%M")
             now = datetime.strptime(now, "%Y-%m-%d %H-%M")
-            # first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
-            # second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
-            first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
-            second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
-            # get_all_requests = self.env['isp_crm_module.service_request'].search([('stage', '=', second_stage.id)])
-            get_all_requests = self.env['isp_crm_module.service_request'].search([('stage', '=', first_stage.id)])
+            first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
+            second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
+            get_all_requests = self.env['isp_crm_module.service_request'].search([('stage', '=', second_stage.id)])
             for request in get_all_requests:
                 days = 4
                 customer_service_activation_date = request.customer.proposed_activation_date
@@ -1082,6 +1082,12 @@ class CronJobModel(models.Model):
                     request.update({
                         'stage': second_stage.id
                     })
+                    # **Sending mail to TD/NMC on new service request**
+                    template_obj_new_service_request = self.env['isp_crm_module.mail'].sudo().search(
+                        [('name', '=', 'New_Service_Request')],
+                        limit=1)
+                    self.env['isp_crm_module.mail'].action_mail_new_service_request(request.name, template_obj_new_service_request)
+
             return True
         except Exception as ex:
             print(ex)
