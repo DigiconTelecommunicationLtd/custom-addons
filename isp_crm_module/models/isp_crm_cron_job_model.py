@@ -1078,6 +1078,7 @@ class CronJobModel(models.Model):
                     request.update({
                         'stage': first_stage.id
                     })
+
             return True
         except Exception as ex:
             print(ex)
