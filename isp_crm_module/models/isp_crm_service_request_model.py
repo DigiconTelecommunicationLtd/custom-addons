@@ -183,14 +183,21 @@ class ServiceRequest(models.Model):
             chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
             return ''.join(random.choice(chars) for _ in range(size))
 
+    #Queue header should be placed before New stage
+
     @api.model
     def create(self, vals):
+
         opportunity_id = vals.get('opportunity_id')
         opportunity = self.env['crm.lead'].search([('id', '=', opportunity_id)], limit=1)
         internal_notes = opportunity.description
-        first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
-        second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
-        customer_service_activation_date = opportunity.proposed_activation_date
+        # first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
+        # second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
+        first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
+        second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
+
+        # customer_service_activation_date = opportunity.proposed_activation_date
+        customer_service_activation_date = vals.get('proposed_activation_date')
         now = datetime.now().strftime("%Y-%m-%d %H-%M")
         now = datetime.strptime(now, "%Y-%m-%d %H-%M")
         days = 0
@@ -203,9 +210,9 @@ class ServiceRequest(models.Model):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('isp_crm_module.service_request') or '/'
             if days >= 3:
-                vals['stage'] = second_stage.id
-            else:
                 vals['stage'] = first_stage.id
+            else:
+                vals['stage'] = second_stage.id
             vals['internal_notes'] = internal_notes
         return super(ServiceRequest, self).create(vals)
 
@@ -217,21 +224,21 @@ class ServiceRequest(models.Model):
         stage_ids = self.env['isp_crm_module.stage'].search([('name', '!=', 'Undefined')])
         return stage_ids
 
-    @api.onchange('stage')
-    def stage_onchange(self):
-        value = self.stage.name
-        sequence = self.stage.sequence
-        if value == 'Done':
-            raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
-        if value == 'Bill Date Confirmation':
-            raise UserError('System does not allow you to drag record unless it is send by action.')
-        elif value == 'Queue':
-            raise UserError('System does not allow you to drag record to queue stage.')
-        elif value == 'New':
-            raise UserError('System does not allow you to drag record to new stage.')
-        elif self._origin.is_done:
-            raise UserError(
-                'System does not allow you to change stage once it is marked done.')
+    # @api.onchange('stage')
+    # def stage_onchange(self):
+    #     value = self.stage.name
+    #     sequence = self.stage.sequence
+    #     if value == 'Done':
+    #         raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
+    #     if value == 'Bill Date Confirmation':
+    #         raise UserError('System does not allow you to drag record unless it is send by action.')
+    #     elif value == 'Queue':
+    #         raise UserError('System does not allow you to drag record to queue stage.')
+    #     elif value == 'New':
+    #         raise UserError('System does not allow you to drag record to new stage.')
+    #     elif self._origin.is_done:
+    #         raise UserError(
+    #             'System does not allow you to change stage once it is marked done.')
 
     @api.multi
     def action_send_for_bill_date_confirmation(self):
