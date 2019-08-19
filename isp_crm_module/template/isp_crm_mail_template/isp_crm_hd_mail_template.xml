@@ -107,4 +107,25 @@
         </field>
     </record>
 
+
+    <record id="isp_crm_module.mail_template_on_new_service_request" model="isp_crm_module.mail">
+        <field name="name">New_Service_Request</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear Team,</p>
+            <p>A service request <strong>--ticketnumber--</strong> has been created in service request. Please take action. </p>
+            <p>Thanks </p>
+        ]]>
+        </field>
+    </record>
+
+    <record id="isp_crm_module.mail_on_new_service_request_package_change" model="isp_crm_module.mail">
+        <field name="name">New_Service_Request_Package_Change</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear Team,</p>
+            <p>A service request <strong>--ticketnumber--</strong>(package change) has been created in service request. Please take action. </p>
+            <p>Thanks </p>
+        ]]>
+        </field>
+    </record>
+
 </odoo>

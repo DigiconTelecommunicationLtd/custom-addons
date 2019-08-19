@@ -93,6 +93,13 @@ class CorporateSohoBandwidthChange(models.Model):
         mail_obj = self.env['isp_crm_module.mail'].sending_mail_for_package_change_request(
             package_change_obj=newrecord,
             template_obj=template_obj)
+        # **Sending mail to TD/NMC on new service request**
+        template_obj_new_service_request = self.env['isp_crm_module.mail'].sudo().search(
+            [('name', '=', 'New_Service_Request_Package_Change')],
+            limit=1)
+        self.env['isp_crm_module.mail'].action_mail_new_service_request(vals['ticket_ref'],
+                                                                        template_obj_new_service_request)
+
         return newrecord
 
     def _default_stages(self, stages, domain, order):

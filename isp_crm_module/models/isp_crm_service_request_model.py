@@ -33,7 +33,7 @@ DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 OTC_PRODUCT_CODE = 'ISP-OTC'
 DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 BILLING_GROUP_MAIL = "billing.mime@cg-bd.com"
-MY_MAIL = ""
+
 
 TD_FLAGS = [
     ('0', 'Pending'),
@@ -206,6 +206,13 @@ class ServiceRequest(models.Model):
                 vals['stage'] = second_stage.id
             else:
                 vals['stage'] = first_stage.id
+                # **Sending mail to TD/NMC on new service request**
+                template_obj_new_service_request = self.env['isp_crm_module.mail'].sudo().search(
+                    [('name', '=', 'New_Service_Request')],
+                    limit=1)
+                subject_mail = "New Service Request"
+                self.env['isp_crm_module.mail'].action_mail_new_service_request(vals.get('name', 'New'), template_obj_new_service_request)
+
             vals['internal_notes'] = internal_notes
         return super(ServiceRequest, self).create(vals)
 
