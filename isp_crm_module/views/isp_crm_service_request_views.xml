@@ -20,7 +20,7 @@
         <field name="model">isp_crm_module.service_request</field>
         <field name="type">kanban</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="stage" class="o_kanban_small_column o_kanban_project_tasks">
+            <kanban default_order="mark_done_date desc" default_group_by="stage" class="o_kanban_small_column o_kanban_project_tasks">
                 <field name="stage" options='{"group_by_tooltip": {"requirements": "Description", "legend_priority": "Use of stars"}}'/>
                 <field name="name"/>
                 <field name="color"/>

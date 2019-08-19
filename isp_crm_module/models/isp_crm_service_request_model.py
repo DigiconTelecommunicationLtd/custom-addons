@@ -59,7 +59,7 @@ class ServiceRequest(models.Model):
     _name = "isp_crm_module.service_request"
     _description = "Service Request To be solved."
     _rec_name = 'name'
-    _order = "create_date asc, name, id"
+    # _order = "create_date asc, name, id"
     _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 
     @api.depends('product_line.price_total')
@@ -132,11 +132,11 @@ class ServiceRequest(models.Model):
     internal_notes = fields.Char(string="Internal Notes", track_visibility='onchange')
     td_flags = fields.Selection(TD_FLAGS, string="Status", track_visibility='onchange')
     is_send_for_bill_date_confirmation = fields.Boolean("Is Sent for Bill Date Confirmation", default=False)
-    billing_start_date = fields.Date(related='customer.opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
+    billing_start_date = fields.Date(related='customer.opportunity_ids.billing_start_date', string='Billing Start Date',store=True, track_visibility='onchange')
     service_activation_date = fields.Date(related='customer.opportunity_ids.service_activation_date',
-                                          string='Service Activation Date', track_visibility='onchange')
-    proposed_activation_date = fields.Date(related='customer.opportunity_ids.proposed_activation_date', string='Proposed Service Activation Date', track_visibility='onchange')
-    lead_type = fields.Selection(related='customer.opportunity_ids.lead_type', string='Type', help="Lead and Opportunity Type")
+                                          string='Service Activation Date',store=True, track_visibility='onchange')
+    proposed_activation_date = fields.Date(related='customer.opportunity_ids.proposed_activation_date', string='Proposed Service Activation Date', store=True, track_visibility='onchange')
+    lead_type = fields.Selection(related='customer.opportunity_ids.lead_type', string='Type', store=True, help="Lead and Opportunity Type")
     # added resolved date. issue ISP-297
     mark_done_date = fields.Datetime(string='Mark Done Date')
 
@@ -188,9 +188,13 @@ class ServiceRequest(models.Model):
         opportunity_id = vals.get('opportunity_id')
         opportunity = self.env['crm.lead'].search([('id', '=', opportunity_id)], limit=1)
         internal_notes = opportunity.description
-        first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
-        second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
-        customer_service_activation_date = opportunity.proposed_activation_date
+        # first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
+        # second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
+        first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
+        second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
+
+        # customer_service_activation_date = opportunity.proposed_activation_date
+        customer_service_activation_date = vals.get('proposed_activation_date')
         now = datetime.now().strftime("%Y-%m-%d %H-%M")
         now = datetime.strptime(now, "%Y-%m-%d %H-%M")
         days = 0
@@ -242,6 +246,7 @@ class ServiceRequest(models.Model):
 
     @api.multi
     def action_send_for_bill_date_confirmation(self):
+        print("*********",self)
         for service_req in self:
             customer = service_req.customer
             stage_obj = self.env['isp_crm_module.stage'].search([('name', '=', 'Bill Date Confirmation')], limit=1)
