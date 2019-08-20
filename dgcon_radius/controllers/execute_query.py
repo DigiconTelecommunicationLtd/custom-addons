@@ -5,7 +5,7 @@
 import traceback
 from sqlalchemy import create_engine
 from .execute_terminal import disconnect
-# from .radius_cred import *
+from .radius_cred import *
 # creadiendial to connect to the database
 #database_cred = 'mysql://root:my5ql-137967@103.117.192.79:3306/radius'
 

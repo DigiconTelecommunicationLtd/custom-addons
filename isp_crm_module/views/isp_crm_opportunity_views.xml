@@ -391,7 +391,7 @@
                 <field name="assigned_rm" domain="[('share', '=', False)]"
                                 context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads'], 'team_id': team_id}"/>
             </xpath>
-            <xpath expr="//group/group/field[@name='mobile']" position="after">
+            <xpath expr="//group/group/field[@name='emergency_contact_name']" position="after">
                 <br/>
                 <field name="emergency_contact_number" widget="phone"/>
 
