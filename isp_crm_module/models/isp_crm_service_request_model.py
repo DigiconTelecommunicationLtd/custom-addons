@@ -193,8 +193,8 @@ class ServiceRequest(models.Model):
         first_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Queue')], limit=1)
         second_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'New')], limit=1)
 
-        # customer_service_activation_date = opportunity.proposed_activation_date
-        customer_service_activation_date = vals.get('proposed_activation_date')
+        customer_service_activation_date = opportunity.proposed_activation_date
+        #customer_service_activation_date = vals.get('proposed_activation_date')
         now = datetime.now().strftime("%Y-%m-%d %H-%M")
         now = datetime.strptime(now, "%Y-%m-%d %H-%M")
         days = 0
