@@ -31,6 +31,8 @@
         'data/default_hd_complexity_level.xml',
         'data/default_hd_problems.xml',
         'data/default_ticket_types.xml',
+        'wizard/inherited_crm_lead_lost_inherit_crm_views.xml',
+
         'views/views.xml',
         'views/isp_crm_problem_views.xml',
         'views/isp_crm_solution_views.xml',

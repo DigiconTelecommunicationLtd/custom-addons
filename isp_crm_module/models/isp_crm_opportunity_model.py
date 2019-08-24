@@ -10,6 +10,7 @@ from datetime import datetime, timezone, timedelta, date
 
 DEFAULT_PROBLEM = "There are some Problem"
 INVOICE_PAID_STATUS = 'paid'
+INVOICE_OPEN_STATUS = 'open'
 DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 DEFAULT_PROCESSING_STATUS = 'Processing'
 DEFAULT_DONE_STATUS = 'Done'
@@ -88,6 +89,7 @@ class Opportunity(models.Model):
             ])
         return address_str
 
+    # Provision for service request lost in service request module
     @api.multi
     def action_set_won(self):
         for lead in self:
@@ -101,12 +103,13 @@ class Opportunity(models.Model):
                 if check_customer:
                     invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="create_date desc", limit=1)
                     if invoices:
-                        if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
+                        # if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
+                        if invoices.is_deferred or invoices.state == INVOICE_OPEN_STATUS:
                             self.invoice_state = invoices.state
                             super(Opportunity, lead).action_set_won()
                             self.action_create_new_service_request()
                         else:
-                            raise UserError(_("This Opportunity's invoice is neither paid nor deferred."))
+                            raise UserError(_("This Opportunity's invoice is neither OPEN nor DEFERRED."))
                     else:
                         raise UserError(_("This Opportunity's invoice has not been created yet. Please create the invoice first ."))
                 else:

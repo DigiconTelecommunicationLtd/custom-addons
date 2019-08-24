@@ -27,6 +27,7 @@
             </xpath>
             <xpath expr="//group/field[@name='email_from']" position="attributes">
                 <attribute name="string">Email *</attribute>
+                <attribute name="required">True</attribute>
             </xpath>
             <xpath expr="//group/field[@name='phone']" position="attributes">
                 <attribute name="string">Phone *</attribute>
@@ -126,6 +127,9 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_kanban_view_leads" />
         <field name="arch" type="xml">
+             <xpath expr='//kanban' position='attributes'>
+                <attribute name="create">false</attribute>
+            </xpath>
             <xpath  expr="//div/strong/field[@name='name']" position="before">
                 <p>
                     <field name="opportunity_seq_id" readonly="1"/>
@@ -161,6 +165,9 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
         <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                    <attribute name="create">false</attribute>
+                </xpath>
             <!--Making invisible 'priority'-->
             <xpath expr="//group/field[@name='priority']" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -355,7 +362,7 @@
                     <br/>
                     <br/>
                 <group>
-                <field name="lead_type" string="Lead Type" />
+                <field name="lead_type" string="Lead Type" required="1"/>
                 </group>
 
             </xpath>
