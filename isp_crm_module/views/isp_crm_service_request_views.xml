@@ -117,7 +117,7 @@
                     <button name="%(isp_crm_module.inherited_crm_lead_lost_action)d" string="Mark Lost"
                                 type="action" class="oe_highlight"
                                 context="{'default_test_context': problem}"
-                                attrs="{'invisible': ['|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True)]}"
+                                attrs="{'invisible': ['|','|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True),('stage','=',6)]}"
                                 />
                     <button
                         name="action_make_service_request_done"

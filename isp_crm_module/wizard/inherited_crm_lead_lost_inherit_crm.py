@@ -22,7 +22,7 @@ class InheritedCrmLeadLost(models.TransientModel):
         leads = self.env['crm.lead'].search([('current_service_request_id', '=', service_request.name)], limit=1)
         #change state to mark lost
         service_request.update({
-            # 'is_done': True,
+            'is_done': False,
             'stage': mark_lost_stage.id,
             # 'mark_done_date': datetime.today()
         })
@@ -34,7 +34,7 @@ class InheritedCrmLeadLost(models.TransientModel):
         # leads.write({'lost_reason': self.lost_reason_id.id})
         leads.write({
             'color': 9,
-            'lost_reason': 8,
+            'lost_reason': mark_lost_stage.id,
             'current_service_request_status': MARK_LOST_STATUS,
             'is_service_request_created': False
         })

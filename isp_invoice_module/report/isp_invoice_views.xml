@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="invoice_form" model="ir.ui.view">
+    <record id="inherited_account_invoice_inherit_invoice_form" model="ir.ui.view">
         <field name="name">account.invoice.form</field>
         <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+
         <field name="arch" type="xml">
             <form string="Invoice" class="o_invoice_form">
                 <header>
@@ -280,7 +282,7 @@
     <record id="action_invoice_tree_view2" model="ir.actions.act_window.view">
         <field eval="2" name="sequence"/>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="invoice_form"/>
+        <field name="view_id" ref="inherited_account_invoice_inherit_invoice_form"/>
         <field name="act_window_id" ref="action_invoice_tree"/>
     </record>
 
