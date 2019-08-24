@@ -278,4 +278,12 @@
         </field>
     </record>
 
+    <menuitem
+            id="isp_crm_hd_menu"
+            name="Helpdesk Ticket"
+            parent="isp_crm_hd"
+            action="isp_crm_helpdesk"
+            sequence="1"
+    />
+
 </odoo>
