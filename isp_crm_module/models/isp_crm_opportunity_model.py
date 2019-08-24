@@ -25,6 +25,7 @@ class Opportunity(models.Model):
     _inherit = 'crm.lead'
     _description = "Team of ISP CRM Opportunity."
 
+    name = fields.Char('Opportunity',index=True,required=False)
     opportunity_seq_id = fields.Char('ID', required=True, index=True, copy=False, default='New', readonly=True)
     current_service_request_id = fields.Char(string='Service Request ID', readonly=True, required=False)
     current_service_request_status = fields.Char(string='Service Request ID', readonly=True, required=False)
@@ -42,7 +43,7 @@ class Opportunity(models.Model):
     emergency_contact_number = fields.Char(string="Emergency Contact Number", required=False, default='',
                                    track_visibility='onchange')
     service_activation_date = fields.Date(string='Service Activation Date', track_visibility='onchange')
-    proposed_activation_date = fields.Date(string='Proposed Service Activation Date', track_visibility='onchange', required=True)
+    proposed_activation_date = fields.Date(string='Proposed Service Activation Date', track_visibility='onchange')
     billing_start_date = fields.Date(string='Billing Start Date', track_visibility='onchange')
 
 
@@ -226,11 +227,20 @@ class Opportunity(models.Model):
             sequence_id = self.env['ir.sequence'].next_by_code('crm.lead') or '/'
             vals['opportunity_seq_id'] = sequence_id
 
-        if (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
-            raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
+
 
         if not vals.get('lead_type'):
             raise Warning(_('Please Provide lead type'))
+        elif not vals.get('name'):
+            raise Warning(_('Please Provide lead name'))
+        elif (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
+            raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
+        elif not vals.get('proposed_activation_date'):
+            raise Warning(_('Please Provide activation date'))
+        elif vals.get('lead_type')!= 'retail':
+            if not vals.get('partner_name'):
+                raise Warning(_('Please Provide company name'))
+
 
         # if vals.get('email_from'):
         #     check_customer_email = self.env['res.partner'].search([('email', '=', vals.get('email_from'))], limit=1)

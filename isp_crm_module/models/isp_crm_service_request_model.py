@@ -505,7 +505,7 @@ class ServiceRequest(models.Model):
 
         return True
 
-    #TODO: SERVICE REQUEST LOST
+    #SERVICE REQUEST LOST
 
 
     #########
