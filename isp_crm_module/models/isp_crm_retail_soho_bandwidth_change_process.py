@@ -40,7 +40,7 @@ class RetailSohoBandwidthChange(models.Model):
     _name = "isp_crm_module.retail_soho_bandwidth_change"
     _description = "Retail Bandwidth Change Request."
     _order = "create_date desc, id"
-    _rec_name = 'name'
+    _rec_name = 'ticket_ref'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'utm.mixin', 'format.address.mixin']
 
     name = fields.Char('Request Name', index=True, copy=False, default='New')
