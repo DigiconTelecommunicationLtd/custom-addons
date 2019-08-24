@@ -167,6 +167,7 @@
         <field name="arch" type="xml">
             <xpath expr="//form" position="attributes">
                     <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
                 </xpath>
             <!--Making invisible 'priority'-->
             <xpath expr="//group/field[@name='priority']" position="attributes">

@@ -275,7 +275,6 @@ class ISPInvoice(models.Model):
     _description = "ISP Invoices"
 
     def convert(slef,numbertoconvert):
-        print(numbertoconvert)
         number = numbertoconvert
         number = str(number).split(".")
         myVar = number[0]
@@ -298,7 +297,6 @@ class ISPCRMQuotation(models.Model):
     _description = "ISP CRM Quotation"
 
     def convert(slef,numbertoconvert):
-        print(numbertoconvert)
         number = numbertoconvert
         number = str(number).split(".")
         myVar = number[0]

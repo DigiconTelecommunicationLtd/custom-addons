@@ -94,7 +94,7 @@ def update_expiry_bandwidth(username,expirydate,package):
     dateobject = datetime.strptime(expirydate, '%Y-%m-%d')
     ip_date = dateobject.strftime("%d %B %Y %H:%M")
 
-    print(username,expirydate,package)
+    # print(username,expirydate,package)
     bandwidth,ip_pool=get_package_info(package)
     if bandwidth != None and ip_pool != None:
         query = root_host + '/freeradius/update_expiry_bandwidth?username={}&bandwidth={}&package={}&expirydate={}'

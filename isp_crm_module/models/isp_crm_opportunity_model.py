@@ -26,7 +26,7 @@ class Opportunity(models.Model):
     _description = "Team of ISP CRM Opportunity."
 
     name = fields.Char('Opportunity',index=True,required=False)
-    opportunity_seq_id = fields.Char('ID', required=True, index=True, copy=False, default='New', readonly=True)
+    opportunity_seq_id = fields.Char('ID', index=True, copy=False,  readonly=True)
     current_service_request_id = fields.Char(string='Service Request ID', readonly=True, required=False)
     current_service_request_status = fields.Char(string='Service Request ID', readonly=True, required=False)
     is_service_request_created = fields.Boolean("Is Service Request Created", default=False)

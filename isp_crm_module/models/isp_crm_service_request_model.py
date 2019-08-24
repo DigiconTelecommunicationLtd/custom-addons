@@ -267,7 +267,7 @@ class ServiceRequest(models.Model):
                     })
 
                     # ** Mail Sent for bill date confirmation **
-                    print("Sent for bill date confirmation")
+                    # print("Sent for bill date confirmation")
                     template_obj = self.env['isp_crm_module.mail'].sudo().search(
                         [('name', '=', 'Send_Bill_Date_Confirmation_Service_Request_Mail')],
                         limit=1)

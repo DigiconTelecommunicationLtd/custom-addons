@@ -20,7 +20,6 @@ class InheritedCrmLeadLost(models.TransientModel):
         mark_lost_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Mark Lost')], limit=1)
 
         leads = self.env['crm.lead'].search([('current_service_request_id', '=', service_request.name)], limit=1)
-        print("leads", leads)
         #change state to mark lost
         service_request.update({
             # 'is_done': True,
