@@ -24,7 +24,7 @@ class UpdateCustomerInvoice(models.Model):
                 record.require_approval = True
             else:
                 record.require_approval = False
-
+            print(str(record.require_approval))
             # modified_date_obj = due_date_obj + timedelta(days=1, hours=6)
             # record.new_next_start_date = modified_date_obj.strftime(DEFAULT_DATE_FORMAT)
             # print(record.date_due)

@@ -1,29 +1,28 @@
 <odoo>
     <data>
-<!--        <record id="emergency_balance_addition" model="ir.ui.view">-->
-<!--            <field name="name">account.invoice.form</field>-->
-<!--            <field name="model">account.invoice</field>-->
-<!--            <field name="inherit_id" ref="isp_invoice_module.inherited_account_invoice_inherit_invoice_form"/>-->
-<!--            <field name="mode">primary</field>-->
-<!--            <field name="arch" type="xml">-->
-<!--                <field name="date_due" position="attributes">-->
-<!--                    <attribute name="attrs">{'required':[('is_deferred','=',True)],'invisible':[('is_deferred','=',False)]}</attribute>-->
-<!--                </field>-->
-<!--&lt;!&ndash;                <xpath expr="//button[@string='Validate']" position="attributes">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <attribute name="attrs">{'invisible':[('require_approval','=',True)]}</attribute>&ndash;&gt;-->
-<!--&lt;!&ndash;                </xpath>&ndash;&gt;-->
+        <record id="emergency_balance_addition" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="date_due" position="attributes">
+                    <attribute name="attrs">{'required':[('is_deferred','=',True)],'invisible':[('is_deferred','=',False)]}</attribute>
+                </field>
+                <xpath expr="//button[@name='action_invoice_open']" position="attributes">
+<!--                    <attribute name="attrs">{'invisible':[('require_approval','=',True)]}</attribute>-->
+                    <attribute name="attrs">{'invisible':1}</attribute>
+                </xpath>
 <!--                 <button name="action_invoice_open" position="attributes">-->
 <!--                    <attribute name="attrs">{'invisible':True}</attribute>-->
 <!--                </button>-->
-<!--                <xpath expr="//button[@id='account_invoice_payment_btn']" position="after">-->
-<!--                    <field name="require_approval" invisible="1"/>-->
-<!--                    <field name="approved" invisible="1"/>-->
-
-<!--                    <button name="review_for_defer"  string="Review for Defer Payment" type="object" class="oe_highlight"-->
-<!--                            attrs="{'invisible':[('require_approval','=',False)]}" />-->
-<!--                </xpath>-->
-<!--            </field>-->
-<!--        </record>-->
+                <xpath expr="//button[@id='account_invoice_payment_btn']" position="after">
+                    <field name="require_approval" invisible="1"/>
+                    <field name="approved" invisible="1"/>
+                    <button name="review_for_defer"  string="Review for Defer Payment" type="object" class="oe_highlight"
+                            attrs="{'invisible':[('require_approval','=',False)]}" />
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>
 
