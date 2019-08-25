@@ -104,13 +104,13 @@ class Opportunity(models.Model):
                 if check_customer:
                     invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="create_date desc", limit=1)
                     if invoices:
-                        # if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
-                        if invoices.is_deferred or invoices.state == INVOICE_OPEN_STATUS:
+                        if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
+                        # if invoices.is_deferred or invoices.state == INVOICE_OPEN_STATUS:
                             self.invoice_state = invoices.state
                             super(Opportunity, lead).action_set_won()
                             self.action_create_new_service_request()
                         else:
-                            raise UserError(_("This Opportunity's invoice is neither OPEN nor DEFERRED."))
+                            raise UserError(_("This Opportunity's invoice is neither PAID nor DEFERRED."))
                     else:
                         raise UserError(_("This Opportunity's invoice has not been created yet. Please create the invoice first ."))
                 else:

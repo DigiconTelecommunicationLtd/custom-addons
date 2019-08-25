@@ -27,11 +27,7 @@ class InheritedCrmLeadLost(models.TransientModel):
             # 'mark_done_date': datetime.today()
         })
 
-        # leads1 = self.env['crm.lead'].browse(mark_lost_stage.name)
 
-
-
-        # leads.write({'lost_reason': self.lost_reason_id.id})
         leads.write({
             'color': 9,
             'lost_reason': mark_lost_stage.id,
@@ -40,9 +36,27 @@ class InheritedCrmLeadLost(models.TransientModel):
         })
         leads.write({'lost_reason': mark_lost_stage.id})
         # # checks for invoices
-        invoice = self.env['account.invoice'].search([('partner_id', '=', service_request.customer.id)], limit=1)
+        # invoice = self.env['account.invoice'].search([('partner_id', '=', service_request.customer.id)], limit=1)
 
         # the invoice is canceled -> membership state of the customer goes to canceled
-        invoice.action_invoice_cancel()
+        # invoice.action_invoice_cancel()
+
+        #send email
+        # 'email_to': ", ".join(recipients)
+        template_obj = self.env['mail.mail']
+        template_data = {
+            'subject': 'Mark Lost : ' + service_request.problem,
+            'body_html': "<h1> Lead Lost. Please cancel the invoice manually </h1>",
+            'email_from': 'notice.mime@cg-bd.com',
+            'email_to': 'ripon.kumar@cg-bd.com'
+        }
+        template_id = template_obj.create(template_data)
+        template_obj.send(template_id)
+
+        # self.env['mail.mail'].create(mail_values).send()
+
+        ####
+
+
 
         return leads.action_set_lost()
