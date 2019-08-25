@@ -27,7 +27,6 @@
             </xpath>
             <xpath expr="//group/field[@name='email_from']" position="attributes">
                 <attribute name="string">Email *</attribute>
-                <attribute name="required">True</attribute>
             </xpath>
             <xpath expr="//group/field[@name='phone']" position="attributes">
                 <attribute name="string">Phone *</attribute>
