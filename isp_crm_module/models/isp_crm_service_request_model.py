@@ -134,6 +134,7 @@ class ServiceRequest(models.Model):
     internal_notes = fields.Char(string="Internal Notes", track_visibility='onchange')
     td_flags = fields.Selection(TD_FLAGS, string="Status", track_visibility='onchange')
     is_send_for_bill_date_confirmation = fields.Boolean("Is Sent for Bill Date Confirmation", default=False)
+    is_mark_lost = fields.Boolean("Is Mark Lost", default=False)
     billing_start_date = fields.Date(related='customer.opportunity_ids.billing_start_date', string='Billing Start Date',store=True, track_visibility='onchange')
     service_activation_date = fields.Date(related='customer.opportunity_ids.service_activation_date',
                                           string='Service Activation Date',store=True, track_visibility='onchange')

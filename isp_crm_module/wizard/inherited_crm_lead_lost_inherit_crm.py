@@ -23,6 +23,7 @@ class InheritedCrmLeadLost(models.TransientModel):
         #change state to mark lost
         service_request.update({
             'is_done': False,
+            'is_mark_lost': True,
             'stage': mark_lost_stage.id,
             # 'mark_done_date': datetime.today()
         })
@@ -48,14 +49,12 @@ class InheritedCrmLeadLost(models.TransientModel):
             'subject': 'Mark Lost : ' + service_request.problem,
             'body_html': "<h1> Lead Lost. Please cancel the invoice manually </h1>",
             'email_from': 'notice.mime@cg-bd.com',
+            'email_cc': '',
             'email_to': 'ripon.kumar@cg-bd.com'
         }
-        template_id = template_obj.create(template_data)
-        template_obj.send(template_id)
-
-        # self.env['mail.mail'].create(mail_values).send()
-
-        ####
+        template_id = template_obj.create(template_data).send()
+        #if we want to put some duration
+        #template_obj.send(template_id)
 
 
 
