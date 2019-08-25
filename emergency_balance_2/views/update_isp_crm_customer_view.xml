@@ -14,6 +14,9 @@
 
 
                 </field>
+                <field name="gender" position="before">
+                    <field name="customer_balance"></field>
+                </field>
             </field>
         </record>
   </data>
