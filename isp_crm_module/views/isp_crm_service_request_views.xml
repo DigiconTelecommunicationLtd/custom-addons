@@ -82,7 +82,7 @@
         <field name="problem">isp_crm_module.service_request.tree</field>
         <field name="model">isp_crm_module.service_request</field>
         <field name="arch" type="xml">
-            <tree string="Service Request">
+            <tree default_order="mark_done_date desc" string="Service Request">
                 <field name="name"/>
                 <field name="problem"/>
                 <field name="customer"/>
@@ -105,6 +105,7 @@
                 <field name="is_done" invisible="1"/>
                 <field name="confirmed_sale_order_id" invisible="1"/>
                 <header>
+                    <!--mark done-->
                     <button
                         name="action_make_service_request_done"
                         string="Mark Done"
@@ -113,6 +114,11 @@
                         class="oe_highlight"
                         attrs="{'invisible': ['|','|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True),('lead_type', '!=', 'retail')]}"
                     />
+                    <button name="%(isp_crm_module.inherited_crm_lead_lost_action)d" string="Mark Lost"
+                                type="action" class="oe_highlight"
+                                context="{'default_test_context': problem}"
+                                attrs="{'invisible': ['|','|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True),('stage','=',6)]}"
+                                />
                     <button
                         name="action_make_service_request_done"
                         string="Confirm Bill Date"
@@ -133,6 +139,8 @@
                     <field name="stage" widget="statusbar" clickable="True"/>
                 </header>
                 <sheet>
+                    <field name="name" invisible="1" />
+
                     <div class="oe_title">
                         <label for="problem" string="Name"/>
                         <h1><field name="problem" string="Name" placeholder="Problem Name"/></h1>
