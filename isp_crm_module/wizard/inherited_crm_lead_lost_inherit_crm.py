@@ -6,6 +6,7 @@ MARK_LOST_STATUS = 'Mark Lost'
 class InheritedCrmLeadLost(models.TransientModel):
     _inherit = 'crm.lead.lost'
     _description = 'Get Lost Reason'
+    # lost_reason=fields.Char('Lost Reason', size=100)
 
     @api.multi
     def action_inherit_lost_reason_apply(self):
@@ -20,6 +21,8 @@ class InheritedCrmLeadLost(models.TransientModel):
         mark_lost_stage = self.env['isp_crm_module.stage'].search([('name', '=', 'Mark Lost')], limit=1)
 
         leads = self.env['crm.lead'].search([('current_service_request_id', '=', service_request.name)], limit=1)
+        rm = service_request.customer_rm.login if service_request.customer_rm  else ''
+
         #change state to mark lost
         service_request.update({
             'is_done': False,
@@ -45,17 +48,18 @@ class InheritedCrmLeadLost(models.TransientModel):
         #send email
         # 'email_to': ", ".join(recipients)
         template_obj = self.env['mail.mail']
+        mail_body = "<p>Service Request REQXX has been lost due to </p>" +"<h5> "+ self.lost_reason_id.name +" </h5>"+ " <p>Please cancel it’s invoice and other accounting entries accordingly</p>"
+        # mail_body+= self.lost_reason_id.name
+        # mail_body+="<h5>Please cancel it’s invoice and other accounting entries accordingly</h5>"
         template_data = {
-            'subject': 'Mark Lost : ' + service_request.problem,
-            'body_html': "<h1> Lead Lost. Please cancel the invoice manually </h1>",
+            'subject': ' Service Delivery failed: ' + service_request.problem,
+            'body_html': mail_body,
             'email_from': 'notice.mime@cg-bd.com',
-            'email_cc': '',
-            'email_to': 'ripon.kumar@cg-bd.com'
+            'email_cc': rm,
+            'email_to': 'hod.mime@cg-bd.com'
         }
         template_id = template_obj.create(template_data).send()
         #if we want to put some duration
         #template_obj.send(template_id)
-
-
 
         return leads.action_set_lost()
