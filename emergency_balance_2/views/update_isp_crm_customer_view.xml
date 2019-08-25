@@ -16,6 +16,7 @@
                 </field>
                 <field name="gender" position="before">
                     <field name="customer_balance"></field>
+                    <field name="invoice_id"></field>
                 </field>
             </field>
         </record>
