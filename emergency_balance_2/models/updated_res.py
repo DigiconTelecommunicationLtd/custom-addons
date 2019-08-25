@@ -18,6 +18,7 @@ class updated_res(models.Model):
 
     new_next_start_date =fields.Date(string="New Start Date", compute='_compute_new_start_date')
     invoice_id = fields.Many2one('account.invoice', string='Invoice',ondelete='restrict', track_visibility='onchange',default=False)
+    customer_balance = fields.Char(string='Balance',compute='_compute_customer_balance')
 
     @api.one
     def _compute_new_start_date(self):
@@ -28,6 +29,11 @@ class updated_res(models.Model):
                 record.new_next_start_date=modified_date_obj.strftime(DEFAULT_DATE_FORMAT)
             else:
                 record.new_next_start_date = record.current_package_end_date
+
+    @api.one
+    def _compute_customer_balance(self):
+        for record in self:
+            record.customer_balance=str(abs(record.get_customer_balance(str(self.subscriber_id))))
 
 
     @api.one
