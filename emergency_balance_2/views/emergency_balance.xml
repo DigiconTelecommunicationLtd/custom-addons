@@ -1,0 +1,197 @@
+<odoo>
+  <data>
+    <!-- explicit tree view definition -->
+      <record model="ir.ui.view" id="emergency_balance_view_partner_tree">
+          <field name="name">emergency.balance.res.partner.tree</field>
+          <field name="model">res.partner</field>
+          <field name="inherit_id" ref="base.view_partner_tree" />
+          <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']" position="after">
+               <field name="has_due"/>
+               <field name="emergency_due_date"/>
+           </xpath>
+          </field>
+
+      </record>
+
+    <record model="ir.ui.view" id="emergence_balance_emergency_balance_tree">
+      <field name="name">Emergency Balance</field>
+      <field name="model">emergency.balance</field>
+      <field name="arch" type="xml">
+        <tree create="false" delete="true" edit="false" string="emergency_balance" default_order="id desc">
+            <field name="customer"/>
+            <field name="subscriber_id"/>
+            <field name="emergency_date"/>
+<!--            <field name="approved"/>-->
+<!--            <field name="rejected"/>-->
+<!--            <field name="set_for_approval"/>-->
+
+
+            <!--TODO: Must complete this-->
+          <!-- tree got another editable="top"| "bottom" -->
+          <!--
+          <field name="name"/>
+          <field name="amount"/>
+          <field name="is_done"/>
+          <field name="active"/>
+          shows sum in below
+          <field name="amount" sum="Total value" widget="monetary"/>
+          -->
+        </tree>
+      </field>
+    </record>
+
+     <!-- explicit Form definition -->
+    <record id="emergence_balance_emergency_balance_view_form" model="ir.ui.view">
+        <field name="name">Emergency Balance Form</field>
+        <field name="model">emergency.balance</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="true" edit="false" string="emergence_balance_emergency_balance">
+            <!-- Fields name -->
+               <header>
+                    <field name="disable_header" invisible="1"/>
+                    <button name="on_emergency_approve" type="object"
+                    string="Approve" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'approval')]}" />
+
+                    <button name="on_emergency_reject" type="object"
+                    string="Reject" attrs="{'invisible': [('state', '!=', 'approval')]}" />
+                    <field name="state" widget="statusbar"/>
+
+                </header>
+                <sheet>
+
+                    <group name="group_top">
+                        <group name="group_left">
+                            <field name="customer"  options="{'no_create': True, 'no_create_edit':True}" required="1" />
+
+                        </group>
+                        <group name="group_right" attrs="{'invisible': [('customer', '=', False)]}">
+                            <field name="subscriber_id"/>
+
+                            <field name="current_package"/>
+                            <field name="current_package_price"/>
+                            <field name="current_package_end_date"/>
+                            <field name="next_package_start_date"/>
+                            <field name="assigned_rm" attrs="{'invisible': [('customer', '=', False)]}" readonly="1"/>
+<!--                            <field name="has_due"/>-->
+<!--                            <field name="set_for_approval"/>-->
+<!--                            <field name="approved"/>-->
+                            <field name="approved_by" attrs="{'invisible': [('approved_by', '=', False)]}" readonly="1"/>
+                            <field name="rejected_by" attrs="{'invisible': [('rejected_by', '=', False)]}" readonly="1"/>
+                            <field name="emergency_date" attrs="{'required': [('customer', '!=', False)]}" readonly="1"/>
+
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+     </record>
+
+
+     <!-- Search Model -->
+      <record id="emergence_balance_emergency_balance_view_filter" model="ir.ui.view">
+        <field name="name">emergency_balance Filter</field>
+        <field name="model">emergency.balance</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="customer"/>
+                <field name="subscriber_id"/>
+                <filter string="Due Users" domain="[('has_due','=',True)]"/>
+                <filter string="Rejected Users" domain="[('rejected','=','True')]"/>
+                <filter string="Paid Users" domain="[('due_paid','=','True')]"/>
+                <!--        <field name="domain">[('has_due','=','True')]</field>-->
+
+<!--                <filter string="Done" domain="[('is_done','!=',False)]"/>-->
+
+            </search>
+        </field>
+      </record>
+
+     <record model="ir.ui.view" id="view_emergency_balance_kanban">
+        <field name="problem">emergency_balance.kanban</field>
+        <field name="model">emergency.balance</field>
+        <field name="type">kanban</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column o_kanban_project_tasks" quick_create="false" edit="false" create="false" delete="true">
+                <field name="state" options='{"group_by_tooltip": {"requirements": "Description", "legend_priority": "Use of stars"}}'/>
+                 <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{record.color.raw_value} oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+
+<!--                                        <strong class="o_kanban_record_title"><field name="name"/></strong><br/>-->
+                                         <h6><field name="customer"/></h6>
+                                        Subscriber ID:<strong class="o_kanban_record_title"><field name="subscriber_id"/></strong><br/><br/>
+                                        Current Package:<strong class="o_kanban_record_title"><field name="current_package"/></strong><br/><br/>
+                                        Price:<strong class="o_kanban_record_title"><field name="current_package_price"/></strong><br/><br/>
+                                        Valid Till:<strong class="o_kanban_record_title"><field name="current_package_end_date"/></strong><br/><br/>
+                                        Next Package start Date:<strong class="o_kanban_record_title"><field name="next_package_start_date"/></strong><br/><br/>
+                                        Date Requested:<strong class="o_kanban_record_title"><field name="emergency_date" attrs="{'required': [('customer', '!=', False)]}"/></strong><br/><br/>
+<!--                                        <strong class="o_kanban_record_title"><field name="problem"/></strong><br/><br/>-->
+<!--                                        <strong class="o_kanban_record_title"><field name="type"/></strong><br/>-->
+<!--                                        <strong class="o_kanban_record_title"><field name="assigned_to"/></strong><br/>-->
+                                        <!--<field name="type" widget="many2one_tags" options="{'color_field': 'color'}" readonly="1"/>-->
+
+                                    </div>
+<!--                                    <div class="o_dropdown_kanban dropdown" groups="base.group_user">-->
+<!--                                        <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >-->
+<!--                                            <span class="fa fa-ellipsis-v" aria-hidden="true"/>-->
+<!--                                        </a>-->
+<!--                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">-->
+<!--                                            <li t-if="widget.editable"><a type="edit">Edit Ticket</a></li>-->
+<!--                                            <li t-if="widget.deletable"><a type="delete">Delete</a></li>-->
+<!--                                            <li class="divider"></li>-->
+<!--                                            <li class="dropdown-header">Record's Colour</li>-->
+<!--                                            <li>-->
+<!--                                                <ul class="oe_kanban_colorpicker" data-field="color"/>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
+                                </div>
+                                <div class="o_kanban_record_body">
+                                </div>
+
+                            </div>
+                            <div class="oe_clear"></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="emergence_balance_emergency_balance_action_window">
+      <field name="name">Emergency Balance</field>
+      <field name="res_model">emergency.balance</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">kanban,tree,form</field>
+<!--        <field name="domain">[('has_due','=','True')]</field>-->
+       <!-- <field name="context">{}</field> -->
+        <!-- <field name="target">new</field> -->
+      <!--        Setting default search-->
+<!--        <field name="context">{"search_default_successful_transaction":1}</field>-->
+    </record>
+<!--     <record model="ir.actions.act_window.view" id="emergence_balance_emergency_balance_tree_view">-->
+<!--            <field eval="1" name="sequence"/>-->
+<!--            <field name="view_mode">tree</field>-->
+<!--            <field name="view_id" ref="emergence_balance_emergency_balance_tree"/>-->
+<!--            <field name="act_window_id" ref="emergence_balance_emergency_balance_action_window"/>-->
+<!--        </record>-->
+
+<!--        <record model="ir.actions.act_window.view" id="emergence_balance_emergency_balance_form_view">-->
+<!--            <field eval="2" name="sequence"/>-->
+<!--            <field name="view_mode">form</field>-->
+<!--            <field name="view_id" ref="emergence_balance_emergency_balance_view_form"/>-->
+<!--            <field name="act_window_id" ref="emergence_balance_emergency_balance_action_window"/>-->
+<!--        </record>-->
+
+
+
+
+  </data>
+</odoo>

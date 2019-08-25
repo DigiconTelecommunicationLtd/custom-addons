@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+    <record id="emergency_balance_addition" model="ir.ui.view">
+            <field name="name">emergency.balance.addition</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="active_status" position="after">
+
+                        <field name="has_due" invisible="1"/>
+                        <field name="emergency_date" attrs="{'invisible': [('has_due', '=', False)]}"/>
+                        <field name="emergency_due_date" attrs="{'invisible': [('has_due', '=', False)]}"/>
+                        <field name="emergency_balance_due_amount" attrs="{'invisible': [('has_due', '=', False)]}"/>
+
+
+                </field>
+            </field>
+        </record>
+  </data>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="emergency_balance_2.new_emergency_balance_approval" model="emergency_balance.mail">
+        <field name="name">new_emergency_balance_approval</field>
+        <field name="body_html"><![CDATA[
+
+            <p><strong>Dear sir,</strong></p>
+            <p>An approval is required for emergency balance for --emergencydays-- days. Customer info is given below:</p>
+            <p>Customer Name:--customername--</p>
+            <p>Customer ID:--customerid--</p>
+            <p>Package Name:--packagename--</p>
+            <p>Package Price:--packageprice--</p>
+
+        ]]>
+
+        </field>
+    </record>
+</odoo>

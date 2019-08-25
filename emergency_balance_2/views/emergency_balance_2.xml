@@ -1,0 +1,100 @@
+<odoo>
+  <data>
+    <!-- explicit tree view definition -->
+
+    <record model="ir.ui.view" id="emergency_balance2_res_partner_tree">
+      <field name="name">Emergency balance</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree create="false" delete="false" edit="false" string="res_partner" default_order="id desc">
+           <field name="name"/>
+            <field name="email"/>
+            <field name="mobile"/>
+            <field name="phone"/>
+            <field name="current_package_id"/>
+            <field name="current_package_price"/>
+            <field name="current_package_end_date" widget="date"/>
+            <field name="next_package_start_date" widget="date"/>
+        </tree>
+      </field>
+    </record>
+
+     <!-- explicit Form definition -->
+    <record id="emergency_balance2_res_partner_view_form" model="ir.ui.view">
+        <field name="name">res_partner Form</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false" edit="false" string="emergency_balance_res_partner">
+
+                <sheet>
+                    <group name="group_top">
+                        <field name="subscriber_id" readonly="1"/>
+                         <field name="name" readonly="1"/>
+                        <field name="email" readonly="1"/>
+                        <field name="mobile" readonly="1"/>
+                        <field name="phone" readonly="1"/>
+                        <field name="current_package_id" readonly="1"/>
+                        <field name="current_package_price" readonly="1"/>
+                        <field name="current_package_end_date" widget="date" readonly="1" />
+                        <field name="next_package_start_date" widget="date" readonly="1" />
+                        <field name="assigned_rm" readonly="1" />
+                        <field name="emergency_date"/>
+
+<!--                        for testing-->
+                        <field name="due_amount" readonly="1"/>
+                        <field name="has_due" readonly="1"/>
+                        <field name="set_for_approval" readonly="1"/>
+                        <field name="approved" readonly="1"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+     </record>
+
+
+     <!-- Search Model -->
+      <record id="emergency_balance2_res_partner_view_filter" model="ir.ui.view">
+        <field name="name">res_partner Filter</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="subscriber_id"/>
+                <field name="mobile"/>
+                <field name="name"/>
+                <field name="email"/>
+            </search>
+        </field>
+      </record>
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="emergency_balance2_res_partner_action_window">
+      <field name="name">emergency_balance2 res_partner</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+        <field name="domain">[('subscriber_id','!=','New')]</field>
+       <!-- <field name="context">{}</field> -->
+        <!-- <field name="target">new</field> -->
+      <!--        Setting default search-->
+<!--        <field name="context">{"search_default_successful_transaction":1}</field>-->
+    </record>
+     <record model="ir.actions.act_window.view" id="emergency_balance2_res_partner_tree_view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="emergency_balance2_res_partner_tree"/>
+            <field name="act_window_id" ref="emergency_balance2_res_partner_action_window"/>
+     </record>
+      <record model="ir.actions.act_window.view" id="emergency_balance2_res_partner_form_view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="emergency_balance2_res_partner_view_form"/>
+            <field name="act_window_id" ref="emergency_balance2_res_partner_action_window"/>
+      </record>
+
+
+
+
+  </data>
+</odoo>

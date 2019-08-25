@@ -1,0 +1,37 @@
+<odoo>
+  <data>
+    <!-- Top menu item -->
+
+    <menuitem
+            id="isp_crm_module.isp_crm_hd_menu"
+            name="Bandwidth"
+            parent="isp_crm_module.isp_crm_hd"
+            action="isp_crm_module.isp_crm_helpdesk"
+            sequence="1"
+    />
+
+    <!-- menu categories -->
+    <menuitem name="emergency balance" id="emergency_balance_res_partner_menu" parent="isp_crm_module.isp_crm_hd"/>
+
+    <!-- actions -->
+<!--    <menuitem name="Create ticket" id="emergency_balance_res_partner_menu_list" parent="emergency_balance_res_partner_menu"-->
+<!--              action="emergency_balance2_res_partner_action_window"/>-->
+      <menuitem name="Create Ticket" id="emergency_balance_ticket_create" parent="emergency_balance_res_partner_menu"
+              action="emergency_balance_create_ticket_wizard_action_window"/>
+
+     <menuitem name="Emergency Balance tickets" id="emergency_balance_res_partner_menu_list" parent="emergency_balance_res_partner_menu"
+              action="emergence_balance_emergency_balance_action_window"/>
+
+<!--    <menuitem name="Approval tickets" id="emergency_balance_approval_list" parent="emergency_balance_res_partner_menu"-->
+<!--              action="emergence_balance_approval_balance_action_window"/>-->
+
+<!--    <menuitem name="Rejected tickets" id="emergency_balance_reject_list" parent="emergency_balance_res_partner_menu"-->
+<!--              action="emergence_balance_rejected_balance_action_window"/>-->
+
+<!--    <menuitem name="Paid tickets" id="emergency_balance_paid_list" parent="emergency_balance_res_partner_menu"-->
+<!--              action="emergence_balance_paid_balance_action_window"/>-->
+
+
+
+  </data>
+</odoo>

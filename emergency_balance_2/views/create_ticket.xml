@@ -1,0 +1,74 @@
+<odoo>
+  <data>
+    <!-- explicit tree view definition -->
+
+
+     <!-- explicit Form definition -->
+    <record id="emergency_balance_create_ticket_wizard_view_form" model="ir.ui.view">
+        <field name="name">Create Ticket</field>
+        <field name="model">emergency.wizard.balance</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false" edit="false" string="emergency_balance_create_ticket_wizard">
+            <!-- Fields name -->
+                <header>
+
+                    <!--
+                    <button name="do_toggle_done" type="object"
+                    string="Toggle Done" class="oe_highlight" />
+                    <button name="do_clear_done" type="object"
+                    string="Clear All Done" />
+                    -->
+                    <h2>Create a new ticket</h2>
+                </header>
+                <sheet>
+                   <sheet>
+
+                    <group name="group_top">
+                        <group name="group_left">
+                            <field name="customer"  options="{'no_create': True, 'no_create_edit':True}" required="1" />
+
+
+                        </group>
+                        <group name="group_right" attrs="{'invisible': [('customer', '=', False)]}">
+                            <field name="subscriber_id"/>
+
+                            <field name="current_package"/>
+                            <field name="current_package_price"/>
+                            <field name="current_package_end_date"/>
+                            <field name="next_package_start_date"/>
+                            <field name="assigned_rm" attrs="{'invisible': [('customer', '=', False)]}" />
+<!--                            <field name="has_due"/>-->
+<!--                            <field name="set_for_approval"/>-->
+<!--                            <field name="approved"/>-->
+                            <field name="approved_by" attrs="{'invisible': [('approved_by', '=', False)]}" />
+                            <field name="balance" attrs="{'invisible': [('customer', '=', False)]}"/>
+                             <field name="emergency_date" attrs="{'required': [('customer', '!=', False)]}"/>
+                            <button name="on_submit" type="object" class="oe_highlight" string="Submit ticket"
+                                    confirm="Are you sure you want to create this ticket?"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                </sheet>
+            </form>
+        </field>
+     </record>
+
+
+
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="emergency_balance_create_ticket_wizard_action_window">
+      <field name="name">emergency_balance create_ticket_wizard</field>
+      <field name="res_model">emergency.wizard.balance</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+        <field name="target">inline</field>
+    </record>
+
+
+
+
+  </data>
+</odoo>
