@@ -6,7 +6,7 @@
             <field name="arch" type="xml">
                 <form string="Lost Reason">
                     <group class="oe_title">
-                        <field name="lost_reason_id"/>
+                        <field name="lost_reason_id" required="1"/>
                     </group>
                     <footer>
                         <button name="action_inherit_lost_reason_apply" string="Submit"

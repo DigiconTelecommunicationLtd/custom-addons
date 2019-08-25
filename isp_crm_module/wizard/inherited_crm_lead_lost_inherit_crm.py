@@ -23,6 +23,7 @@ class InheritedCrmLeadLost(models.TransientModel):
         #change state to mark lost
         service_request.update({
             'is_done': False,
+            'is_mark_lost': True,
             'stage': mark_lost_stage.id,
             # 'mark_done_date': datetime.today()
         })

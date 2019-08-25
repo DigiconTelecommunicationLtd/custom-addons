@@ -112,12 +112,20 @@
                         type="object"
                         help="Mark Done"
                         class="oe_highlight"
-                        attrs="{'invisible': ['|','|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True),('lead_type', '!=', 'retail')]}"
+                        attrs="{'invisible': ['|','|','|','|',
+                        ('is_done', '=', True),
+                        ('is_send_for_bill_date_confirmation', '=', True),
+                        ('is_send_for_bill_date_confirmation', '=', True),
+                        ('is_mark_lost', '=', True),
+                        ('lead_type', '!=', 'retail')]}"
                     />
                     <button name="%(isp_crm_module.inherited_crm_lead_lost_action)d" string="Mark Lost"
                                 type="action" class="oe_highlight"
                                 context="{'default_test_context': problem}"
-                                attrs="{'invisible': ['|','|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True),('stage','=',6)]}"
+                                attrs="{'invisible': ['|','|',
+                                ('is_done', '=', True),
+                                ('is_send_for_bill_date_confirmation', '=', True),
+                                ('is_mark_lost', '=', True)]}"
                                 />
                     <button
                         name="action_make_service_request_done"
@@ -134,7 +142,11 @@
                         type="object"
                         help="Send for Bill Date Confirmation"
                         class="oe_highlight"
-                        attrs="{'invisible': ['|','|',('is_done', '=', True),('is_send_for_bill_date_confirmation', '=', True),('lead_type', '=', 'retail')]}"
+                        attrs="{'invisible': ['|','|','|',
+                        ('is_done', '=', True),
+                        ('is_send_for_bill_date_confirmation', '=', True),
+                        ('is_mark_lost', '=', True),
+                        ('lead_type', '=', 'retail')]}"
                     />
                     <field name="stage" widget="statusbar" clickable="True"/>
                 </header>
@@ -158,6 +170,7 @@
                             <field name="customer_phone" string="Phone" readonly="1"/>
                             <field name="customer_rm" string="RM" readonly="1"/>
                             <field name="is_send_for_bill_date_confirmation" invisible="1"/>
+                            <field name="is_mark_lost" invisible="1"/>
                             <field name="lead_type"/>
                         </group>
                         <!--Right-->
