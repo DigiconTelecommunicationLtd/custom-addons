@@ -50,7 +50,7 @@
                 <field name="corporate_soho_first_month_date_end" string="Service End Date" attrs ="{'invisible':[('lead_type','==', 'retail')]}"/>
             </xpath>
             <xpath expr="//sheet/group/group[2]/field[@name='date_due']" position="replace" >
-                <field name="date_due" force_save="1" attrs ="{'required':[('is_deferred','==', True)]}"/>
+                <field name="date_due" force_save="1" attrs ="{'required':[('is_deferred','=', True)]}"/>
             </xpath>
         </field>
     </record>
