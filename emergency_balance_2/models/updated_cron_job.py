@@ -52,7 +52,7 @@ class UpdateCronJobModel(models.Model):
                 #update customer balance for emergency. add due only if today passed emergency valid till
                 if customer.has_due:
                     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
-                    if today > custom_valid_till:
+                    if today_new > custom_valid_till:
                         customer_balance = customer_balance + customer.emergency_balance_due_amount
                 # find their invoices that are paid
                 current_month_invoice = self.env['account.invoice'].search([
@@ -249,9 +249,10 @@ class UpdateCronJobModel(models.Model):
                         if customer.has_due:
                             custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
                             today_new = datetime.now() + timedelta(hours=6)
-                            today = today_new.date()
 
-                            if today > custom_valid_till:
+                            print(today_new,custom_valid_till)
+
+                            if today_new > custom_valid_till:
                                 customer.update({
                                     'active_status': CUSTOMER_INACTIVE_STATUS
                                 })
@@ -259,6 +260,19 @@ class UpdateCronJobModel(models.Model):
                             customer.update({
                                 'active_status': CUSTOMER_INACTIVE_STATUS
                             })
+
+                #TEST PURPOSE
+                elif customer.has_due:
+                    custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
+                    today_new = datetime.now() + timedelta(hours=6)
+
+                    print(today_new, custom_valid_till)
+
+                    if today_new > custom_valid_till:
+                        customer.update({
+                            'active_status': CUSTOMER_INACTIVE_STATUS
+                        })
+
             return True
         except Exception as ex:
             print(ex)
