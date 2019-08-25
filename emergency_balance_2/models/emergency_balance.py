@@ -172,6 +172,7 @@ class emergency_balance(models.Model):
              due_amount = current_unit_price * (record.emergency_date - 2)
              record.customer.emergency_balance_due_amount = due_amount
 
+             modified_date = modified_date + timedelta(hours=6)
              status = update_expiry_bandwidth(record.customer.subscriber_id,
                                               modified_date.strftime(DEFAULT_DATE_FORMAT),
                                               record.customer.current_package_id.name)

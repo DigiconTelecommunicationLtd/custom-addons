@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['isp_crm_module'],
+    'depends': ['isp_crm_module','account'],
 
     # always loaded
     'data': [
@@ -30,7 +30,7 @@
         'views/approval_balance.xml',
         'views/rejected_balance.xml',
         'views/update_isp_crm_customer_view.xml',
-        #'views/emergency_balance_2.xml',
+        'views/update_invoice_form.xml',
         'views/paid_balance.xml',
         'views/menu.xml',
         'views/views.xml',

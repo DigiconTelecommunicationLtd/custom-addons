@@ -22,19 +22,24 @@
                 </header>
                 <sheet>
                    <sheet>
+                        <group>
+                        </group>
+                       <group><field name="customer"  options="{'no_create': True, 'no_create_edit':True}" required="1" /></group>
+                       <group>
 
+                       </group>
                     <group name="group_top">
-                        <group name="group_left">
-                            <field name="customer"  options="{'no_create': True, 'no_create_edit':True}" required="1" />
+
+                        <group name="group_left" attrs="{'invisible': [('customer', '=', False)]}">
+                            <field name="subscriber_id"/>
+                            <field name="current_package"/>
+                            <field name="current_package_price"/>
+                            <field name="current_package_end_date"/>
 
 
                         </group>
                         <group name="group_right" attrs="{'invisible': [('customer', '=', False)]}">
-                            <field name="subscriber_id"/>
 
-                            <field name="current_package"/>
-                            <field name="current_package_price"/>
-                            <field name="current_package_end_date"/>
                             <field name="next_package_start_date"/>
                             <field name="assigned_rm" attrs="{'invisible': [('customer', '=', False)]}" />
 <!--                            <field name="has_due"/>-->
