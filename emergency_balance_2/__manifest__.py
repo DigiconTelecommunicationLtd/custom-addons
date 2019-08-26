@@ -30,12 +30,13 @@
         'views/approval_balance.xml',
         'views/rejected_balance.xml',
         'views/update_isp_crm_customer_view.xml',
-        #'views/update_invoice_form.xml',
+        'views/update_invoice_form.xml',
         'views/paid_balance.xml',
         'views/menu.xml',
         'views/views.xml',
         'views/templates.xml',
-        'templates/email_templates.xml'
+        'templates/email_templates.xml',
+        'templates/profile_templates.xml',
 
     ],
     # only loaded in demonstration mode

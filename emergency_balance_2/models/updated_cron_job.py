@@ -280,6 +280,50 @@ class UpdateCronJobModel(models.Model):
                             'active_status': CUSTOMER_INACTIVE_STATUS
                         })
 
+                #deffered payment
+                if customer.is_deferred:
+                    opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
+                    if opportunity:
+                        if opportunity.lead_type == "retail":
+                            due_date = customer.isp_invoice_id.date_due
+                            customer_state = str(customer.customer_state)
+                            #check if paid or not
+                            if customer_state!= 'False':
+                                if customer_state!='paid':
+                                    # check if date expired
+                                    today_new = datetime.now() + timedelta(hours=6)
+                                    two_days = today_new +  timedelta(days=2)
+
+                                    custom_due_date = datetime.strptime(due_date, DEFAULT_DATE_FORMAT)
+                                    custom_due_date = custom_due_date + timedelta(hours=6)
+
+                                    if(today_new > custom_due_date):
+                                        update_expiry_bandwidth(customer.subscriber_id,
+                                                                custom_due_date.strftime(DEFAULT_DATE_FORMAT),
+                                                                customer.current_package_id.name)
+
+                                        customer.update({
+                                            'active_status': CUSTOMER_INACTIVE_STATUS
+                                        })
+
+                                    if two_days == custom_due_date:
+                                        #shoot the email
+                                        template_obj_new_service_request = self.env[
+                                            'emergency_balance.mail'].sudo().search(
+                                            [('name', '=', 'new_reminder_for_deferred_mail')],
+                                            limit=1)
+                                        days=custom_due_date.strftime('%d, %b %Y')
+                                        self.env['emergency_balance.mail'].action_send_defer_email(days,customer.name,
+                                                                                                   customer.subscriber_id,
+                                                                                                   customer.current_package_id.name,
+                                                                                                   str(customer.current_package_price),
+                                                                                                   customer.email,
+                                                                                                   template_obj_new_service_request
+                                                                                                   )
+
+
+
+
             return True
         except Exception as ex:
             print(ex)
