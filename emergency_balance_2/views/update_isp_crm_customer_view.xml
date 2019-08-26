@@ -8,7 +8,7 @@
                 <field name="active_status" position="after">
 
                         <field name="has_due" invisible="1"/>
-                        <field name="emergency_date" attrs="{'invisible': [('has_due', '=', False)]}"/>
+                        <field name="emergency_date" string="Emergency Balance(Days)" attrs="{'invisible': [('has_due', '=', False)]}"/>
                         <field name="emergency_due_date" attrs="{'invisible': [('has_due', '=', False)]}"/>
                         <field name="emergency_balance_due_amount" attrs="{'invisible': [('has_due', '=', False)]}"/>
 
