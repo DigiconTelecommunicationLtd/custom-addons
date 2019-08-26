@@ -48,7 +48,7 @@ class InheritedCrmLeadLost(models.TransientModel):
         #send email
         # 'email_to': ", ".join(recipients)
         template_obj = self.env['mail.mail']
-        mail_body = "<p>Service Request </p>"+ service_request.name+ "<p>has been lost due to " +"<h5> "+ self.lost_reason_id.name +" </h5>"+ "Please cancel it’s invoice and other accounting entries accordingly</p>"
+        mail_body = "Service Request "+ service_request.name+ " has been lost due to '"+ self.lost_reason_id.name + "'"+ " <p>Please cancel it’s invoice and other accounting entries accordingly</p>"
         # mail_body+= self.lost_reason_id.name
         # mail_body+="<h5>Please cancel it’s invoice and other accounting entries accordingly</h5>"
         template_data = {

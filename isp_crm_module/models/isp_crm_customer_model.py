@@ -116,7 +116,14 @@ class Customer(models.Model):
     proposed_activation_date = fields.Date(related='opportunity_ids.proposed_activation_date', string='Proposed Activation Date', track_visibility='onchange')
 
     package_product_price = fields.Float('Package Price', required=False, default=0.0)
+    connectivity_address = fields.Char(string='Connectivity Address', size=100)
 
+
+
+    # @api.depends(lambda self: self._display_con_address_depends())
+    def _compute_connectivity_address(self):
+        for partner in self:
+            partner.connectivity_address = partner._display_address()
 
     def _get_default_address_format(self):
         return "%(street)s\n%(street2)s\n%(city)s %(state_name)s %(zip)s\n%(country_name)s"
