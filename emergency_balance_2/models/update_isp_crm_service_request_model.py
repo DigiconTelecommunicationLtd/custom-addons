@@ -61,9 +61,12 @@ class UpdatedServiceRequest(models.Model):
         customer = self.customer.id
         check_customer = self.env['res.partner'].search([('id', '=', customer)], limit=1)
         opportunity = self.env['crm.lead']
+        print('customer',customer)
+        print('opportunity', opportunity)
         if check_customer:
             invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="create_date desc",
                                                           limit=1)
+            print('invoices', invoices)
             if invoices:
                 # if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
                 if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
@@ -123,8 +126,10 @@ class UpdatedServiceRequest(models.Model):
                                 'mark_done_date': datetime.today()
                             })
                         customer = service_req.customer
+                        print('service_req.customer',customer)
                         # format sequence number based on lead type
                         get_opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
+                        print('get_opportunity', get_opportunity)
                         if get_opportunity:
                             if get_opportunity.lead_type == "retail":
                                 customer_type = "MR"
@@ -148,6 +153,7 @@ class UpdatedServiceRequest(models.Model):
                         # TODO START CREATE RADIUS
 
                         # This is only for Retail users
+                        print('customer_type', customer_type)
                         if customer_type == 'MR':
                             for productline in service_req.order_line:
                                 if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
@@ -190,7 +196,8 @@ class UpdatedServiceRequest(models.Model):
                                 'description_info': self.description,
                                 'service_activation_date': fields.Date().today(),
                                 'billing_start_date': current_package_start_date,
-                                'isp_invoice_id': invoices.id
+                                'isp_invoice_id': invoices.id,
+                                'is_deferred': invoices.is_deferred
                             })
                         # TODO STOP CREATE RADIUS
                         # updating customer's potentiality

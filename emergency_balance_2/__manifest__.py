@@ -35,8 +35,10 @@
         'views/menu.xml',
         'views/views.xml',
         'views/templates.xml',
+        'views/emergency_balance_cron_job_views.xml',
         'templates/email_templates.xml',
         'templates/profile_templates.xml',
+
 
     ],
     # only loaded in demonstration mode
