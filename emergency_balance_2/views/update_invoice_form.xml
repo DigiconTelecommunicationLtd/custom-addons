@@ -5,18 +5,14 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
-                <field name="date_due" position="attributes">
+                <xpath expr="//form/header/field[@name='date_due']" position="attributes">
                     <attribute name="attrs">{'required':[('is_deferred','=',True)],'invisible':[('is_deferred','=',False)]}</attribute>
-                </field>
+                </xpath>
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="replace">
-<!--                    <attribute name="attrs">{'invisible':[('require_approval','=',True)]}</attribute>-->
 
                     <field name="status" invisible="1"/>
                     <button attrs="{'invisible':['|',('status','!=',2)]}" name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight o_invoice_validate" groups="account.group_account_invoice"/>
                 </xpath>
-<!--                 <button name="action_invoice_open" position="attributes">-->
-<!--                    <attribute name="attrs">{'invisible':True}</attribute>-->
-<!--                </button>-->
                 <xpath expr="//button[@id='account_invoice_payment_btn']" position="after">
 
                     <button name="review_for_defer"  string="Review for Defer Payment" type="object" class="oe_highlight"
