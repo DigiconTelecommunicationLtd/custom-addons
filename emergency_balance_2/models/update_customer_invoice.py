@@ -16,7 +16,8 @@ class UpdateCustomerInvoice(models.Model):
         for record in self:
             due_date_obj = datetime.strptime(record.date_due, DEFAULT_DATE_FORMAT)
             today_new = datetime.now() + timedelta(hours=6)
-            diff =abs((due_date_obj - today_new).days)
+            #diff =abs((due_date_obj - today_new).days)
+            diff =(due_date_obj - today_new).days
             diff = diff + 1
             if diff > 10:
                record.status = REQUIRE_APPROVAL

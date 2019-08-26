@@ -1,23 +1,31 @@
 <odoo>
     <data>
-        <record id="emergency_balance_addition" model="ir.ui.view">
+        <record id="emergency_balance_additional_invoice" model="ir.ui.view">
             <field name="name">account.invoice.form</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//form/header/field[@name='date_due']" position="attributes">
+                <field name="date_due" position="attributes">
                     <attribute name="attrs">{'required':[('is_deferred','=',True)],'invisible':[('is_deferred','=',False)]}</attribute>
-                </xpath>
-                <xpath expr="//form/header/button[@name='action_invoice_open']" position="replace">
-
+                </field>
+                <field name="date_due" position="after">
                     <field name="status" invisible="1"/>
-                    <button attrs="{'invisible':['|',('status','!=',2)]}" name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight o_invoice_validate" groups="account.group_account_invoice"/>
-                </xpath>
-                <xpath expr="//button[@id='account_invoice_payment_btn']" position="after">
+                    <field name="approval_reason" attrs="{'required':[('status','=',1)],'invisible':[('status','!=',1)]}" />
+                </field>
+<!--                <field name="date_due" position="attributes">-->
+<!--                    <attribute name="optons">{'datepicker':{'minDate': 0}}</attribute>-->
+<!--                </field>-->
+<!--                <xpath expr="//form/header/button[@name='action_invoice_open']" position="replace">-->
 
-                    <button name="review_for_defer"  string="Review for Defer Payment" type="object" class="oe_highlight"
-                            attrs="{'invisible':[('status','!=',1)]}" />
-                </xpath>
+<!--                    <field name="status" invisible="1"/>-->
+<!--                    <button attrs="{'invisible':['|',('status','!=',2)]}" name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight o_invoice_validate" groups="account.group_account_invoice"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//button[@id='account_invoice_payment_btn']" position="after">-->
+<!--                    <field name="status" invisible="1"/>-->
+<!--                    <field name="approval_reason" attrs="{'invisible':[('status','=',2)],'required':[('status','=',2)]}" />-->
+<!--&lt;!&ndash;                    <button name="review_for_defer"  string="Review for Defer Payment" type="object" class="oe_highlight"&ndash;&gt;-->
+<!--&lt;!&ndash;                            attrs="{'invisible':[('status','!=',1)]}" />&ndash;&gt;-->
+<!--                </xpath>-->
             </field>
         </record>
     </data>

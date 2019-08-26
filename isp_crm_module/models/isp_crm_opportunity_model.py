@@ -45,6 +45,7 @@ class Opportunity(models.Model):
     service_activation_date = fields.Date(string='Service Activation Date', track_visibility='onchange')
     proposed_activation_date = fields.Date(string='Proposed Service Activation Date', track_visibility='onchange')
     billing_start_date = fields.Date(string='Billing Start Date', track_visibility='onchange')
+    connectivityAddress = fields.Char('Connectivity Address',size=100)
 
 
     def _get_color_on_service_request_status(self):

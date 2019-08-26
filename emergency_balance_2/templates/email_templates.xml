@@ -15,4 +15,25 @@
 
         </field>
     </record>
+
+     <record id="emergency_balance_2.new_reminder_for_deferred" model="emergency_balance.mail">
+        <field name="name">new_reminder_for_deferred_mail</field>
+        <field name="body_html"><![CDATA[
+
+            <p><strong>Dear Valued Customer,</strong></p>
+            <p>Greetings from MiME.</p>
+            <p>We are reaching out to you to let you know that you have a payment due on --emergencydays--. Please make the payment by the due time to stay connected with us.</p>
+            <p>Customer Name:--customername--</p>
+            <p>Customer ID:--customerid--</p>
+            <p>Package Name:--packagename--</p>
+            <p>Package Price:--packageprice--</p>
+            <br>
+            <p>Thanks,</p>
+            <p>Team MiME.</p>
+
+        ]]>
+
+        </field>
+    </record>
+
 </odoo>

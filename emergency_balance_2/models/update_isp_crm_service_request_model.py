@@ -175,6 +175,7 @@ class UpdatedServiceRequest(models.Model):
                                             'ppoepassword': cust_password_radius,
                                             'real_ip': self.technical_info_real_ip,
                                             'is_deferred':invoices.is_deferred,
+                                            'isp_invoice_id':invoices.id
                                         })
 
 
@@ -188,7 +189,8 @@ class UpdatedServiceRequest(models.Model):
                                 'technical_info_gateway': self.gateway,
                                 'description_info': self.description,
                                 'service_activation_date': fields.Date().today(),
-                                'billing_start_date': current_package_start_date
+                                'billing_start_date': current_package_start_date,
+                                'isp_invoice_id': invoices.id
                             })
                         # TODO STOP CREATE RADIUS
                         # updating customer's potentiality

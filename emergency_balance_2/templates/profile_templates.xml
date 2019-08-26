@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <template id="emergency_balance_template_selfcare_profile_inherit" inherit_id="isp_crm_module.template_selfcare_user_profile">
+            <xpath expr="//body/div/div/section[@class='content']" position="replace">
+                <div class="row">
+                     <div class="col-md-4 col-md-offset-4">
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <img itemprop="image" t-att-src="website.image_url(user, 'image')" class="profile-user-img img-responsive img-circle" alt="User Image"/>
+
+                    <h3 class="profile-username text-center">
+                      <t t-esc="user.name" />
+                    </h3>
+
+                    <p class="text-muted text-center">
+                      <t t-esc="user.subscriber_id" />
+                    </p>
+
+                    <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item">
+                            <b>Package Name</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.current_package_id.name" />
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Original Package Price</b>
+                            <b class="pull-right text-info">
+                                Tk. <t t-esc="user.current_package_original_price" />
+                            </b>
+                        </li>
+                        <t t-if="user.property_product_pricelist">
+                            <li class="list-group-item">
+                                <b>Discounted Package Price</b>
+                                <b class="pull-right text-info">
+                                    Tk. <t t-esc="user.current_package_price" />
+                                </b>
+                            </li>
+                        </t>
+                        <li class="list-group-item">
+                            <b>Valid till</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.current_package_end_date" />
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Due</b>
+                            <b class="pull-right text-info">
+                                <t t-esc="user.emergency_balance_due_amount" />
+                            </b>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Status</b>
+                            <b class="pull-right text-info">
+                                <t t-if="user.active_status == 'inactive'">
+                                    <span class="text-danger">Inactive</span>
+                                </t>
+                                <t t-else="">
+                                    <span>Active</span>
+                                </t>
+                            </b>
+                        </li>
+                    </ul>
+                </div>
+            <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+                </div>
+
+            </xpath>
+    </template>
+    </data>
+</odoo>

@@ -62,7 +62,10 @@
                 <field name="customer_bin" attrs="{'invisible': [('is_service_request_marked_done', '=', False)]}"/>
             </field>
             <xpath expr="//group/label" position="replace">
-                <label for="street" string="Connection Address"/>
+                <label for="street" string="Billing Address"/>
+            </xpath>
+            <xpath expr="//group/label" position="before">
+               <field name="connectivity_address" />
             </xpath>
             <field name="function" position="replace">
                 <field name="function" string="Designation" />

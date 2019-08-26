@@ -17,7 +17,32 @@ class updated_res(models.Model):
                             track_visibility='onchange')
 
     new_next_start_date =fields.Date(string="New Start Date", compute='_compute_new_start_date')
+    isp_invoice_id = fields.Many2one('account.invoice', string='Invoice',ondelete='restrict', track_visibility='onchange',default=False)
     customer_balance = fields.Char(string='Balance',compute='_compute_customer_balance')
+    customer_state = fields.Char(compute='_compute_state', string="State")
+    amount_total_signed = fields.Float(compute='_compute_state', string="Invoiced Amount")
+    customer_total_due = fields.Float(compute='_compute_due', string="Due")
+
+    @api.one
+    def _compute_due(self):
+        total_due = 0.0
+        for record in self:
+            if record.is_deferred and str(record.customer_state)!='paid':
+                total_due = record.amount_total_signed
+            if record.has_due:
+                today_new = datetime.now() + timedelta(hours=6)
+                custom_valid_till = datetime.strptime(record.new_next_start_date, DEFAULT_DATE_FORMAT)
+                if today_new > custom_valid_till:
+                    total_due = record.emergency_balance_due_amount
+        self.customer_total_due = total_due
+
+    @api.one
+    def _compute_state(self):
+        for record in self:
+            record.customer_state=str(self.isp_invoice_id.state)
+            print(str(self.isp_invoice_id.amount_total_signed))
+            record.amount_total_signed = self.isp_invoice_id.amount_total_signed
+
 
     @api.one
     def _compute_new_start_date(self):
