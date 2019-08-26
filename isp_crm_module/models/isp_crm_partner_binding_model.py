@@ -12,7 +12,7 @@ class PartnerBinding(models.TransientModel):
         ('exist', 'Link to an existing customer'),
         ('create', 'Create a new Potential customer'),
         ('nothing', 'Do not link to a customer')
-        ], 'Related Customer', required=True)
+        ], 'Related Customer', required=True,default='create')
     # action = fields.Selection([
     #     ('exist', 'Link to an existing customer'),
     #     ('create', 'Create a new Potential customer'),
