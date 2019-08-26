@@ -37,3 +37,22 @@ class UpdateCustomerInvoice(models.Model):
         for record in self:
             record.status = APPROVED
 
+    @api.onchange('payment_term_id', 'date_invoice')
+    def _onchange_payment_term_date_invoice(self):
+        print('********************')
+        date_invoice = self.date_invoice
+        print('date_invoice before if ',date_invoice)
+        if not date_invoice:
+            date_invoice = fields.Date.context_today(self)
+            print('date_invoice after if ', date_invoice)
+
+        print('self.payment_term_id', self.payment_term_id)
+        if self.payment_term_id:
+            pterm = self.payment_term_id
+            pterm_list = \
+            pterm.with_context(currency_id=self.company_id.currency_id.id).compute(value=1, date_ref=date_invoice)[0]
+            self.date_due = max(line[0] for line in pterm_list)
+            print('self.date_due', self.date_due)
+        elif self.date_due and (date_invoice > self.date_due):
+            self.date_due = date_invoice
+            print('self.date_due2', self.date_due)
