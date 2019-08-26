@@ -175,7 +175,6 @@ class UpdatedServiceRequest(models.Model):
                                             'ppoepassword': cust_password_radius,
                                             'real_ip': self.technical_info_real_ip,
                                             'is_deferred':invoices.is_deferred,
-                                            'invoice_id':invoices.id
                                         })
 
 

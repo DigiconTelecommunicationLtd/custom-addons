@@ -17,7 +17,6 @@ class updated_res(models.Model):
                             track_visibility='onchange')
 
     new_next_start_date =fields.Date(string="New Start Date", compute='_compute_new_start_date')
-    invoice_id = fields.Many2one('account.invoice', string='Invoice',ondelete='restrict', track_visibility='onchange',default=False)
     customer_balance = fields.Char(string='Balance',compute='_compute_customer_balance')
 
     @api.one
