@@ -38,6 +38,7 @@
         'views/emergency_balance_cron_job_views.xml',
         'templates/email_templates.xml',
         'templates/profile_templates.xml',
+        'data/ir_sequence_data.xml'
 
 
     ],

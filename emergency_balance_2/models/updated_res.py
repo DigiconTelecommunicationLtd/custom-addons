@@ -56,8 +56,11 @@ class updated_res(models.Model):
 
     @api.one
     def _compute_customer_balance(self):
-        for record in self:
-            record.customer_balance=str(abs(record.get_customer_balance(str(self.subscriber_id))))
+        balance="{0:.2f}".format(abs(self.env['res.partner'].get_customer_balance(self.id)))
+        self.customer_balance = balance
+        # for record in self:
+        #     print(record)
+        #     record.customer_balance=str(abs(record.get_customer_balance(record.subscriber_id)))
 
 
     @api.one
