@@ -187,10 +187,17 @@ class UpdateCronJobModel(models.Model):
                             customer_balance) >= customer.next_package_price):
                         # updating account moves of customer
                         payment_obj = self.env['account.payment']
-                        payment_obj.customer_bill_adjustment(
-                            customer=customer,
-                            package_price=customer.next_package_price
-                        )
+                        #adjust if customer has due
+                        if customer.has_due:
+                            payment_obj.customer_bill_adjustment(
+                                customer=customer,
+                                package_price=customer.next_package_price+customer.emergency_balance_due_amount
+                            )
+                        else:
+                            payment_obj.customer_bill_adjustment(
+                                customer=customer,
+                                package_price=customer.next_package_price
+                            )
                         # updating package info of customer
                         sale_order_lines = customer.next_package_sales_order_id.order_line
                         original_price = 0.0
