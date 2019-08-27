@@ -94,9 +94,13 @@
                                             </td>
                                         </tr>
                                         <tr style="border:none;">
-                                            <th>Billing Address</th>
+                                            <th>Billing Addresss</th>
                                             <td style="padding-left:5px;">
                                                 <span t-field="o.partner_id.contact_address"/>
+                                            </td>
+                                            <th>Connectivity Address</th>
+                                            <td style="padding-left:5px;">
+                                                <span t-field="o.partner_id.connectivity_address"/>
                                             </td>
                                         </tr>
                                     </table>
