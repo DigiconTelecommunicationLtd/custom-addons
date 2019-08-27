@@ -50,7 +50,7 @@ class Team(models.Model):
             sent_email = 'hod.mime@cg-bd.com,'+email
         if template_obj:
             mail_values = {
-                'subject': 'Emergency Balance Approval Request',
+                'subject': 'Deferred Payment Reminder',
                 'body_html': body,
                 'email_to': sent_email,
                 'email_cc': 'sd.mime@cg-bd.com',
