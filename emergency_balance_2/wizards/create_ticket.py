@@ -99,7 +99,8 @@ class DashboardOne(models.TransientModel):
                 'set_for_approval': True,
                 'approved_by': self.env.uid,
                 'emergency_date': self.emergency_date,
-                'color':WAITING_FOR_APPROVAL
+                'color':WAITING_FOR_APPROVAL,
+                'name':self.env['ir.sequence'].next_by_code('emergency_balance.emergency_balance')
             })
             template_obj_new_service_request = self.env['emergency_balance.mail'].sudo().search(
                 [('name', '=', 'new_emergency_balance_approval')],

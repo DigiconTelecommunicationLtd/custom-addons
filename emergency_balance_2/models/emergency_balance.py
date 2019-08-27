@@ -19,7 +19,8 @@ EMERGENCY_TYPE = [
 
 class emergency_balance(models.Model):
      _name = 'emergency.balance'
-
+     _rec_name = 'name'
+     name = fields.Char(string='name',track_visibility='onchange',default="")
      has_due = fields.Boolean(string='due?',
                               track_visibility='onchange',default=False)
 
