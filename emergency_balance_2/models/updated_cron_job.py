@@ -226,7 +226,10 @@ class UpdateCronJobModel(models.Model):
                                         updated_customer = updated_customer.update_next_bill_cycle_info(
                                             customer=updated_customer
                                         )
-                                        updated_customer.is_deferred = False
+                                        updated_customer.update({
+                                            'is_deferred':False
+                                        })
+                                        #updated_customer.is_deferred = False
                                         print('dinffered',str(updated_customer.is_deferred))
 
                                 else:
