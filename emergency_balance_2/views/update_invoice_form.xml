@@ -5,6 +5,9 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
+                  <field name="payment_term_id" position="attributes">
+                         <attribute name="invisible">1</attribute>
+                     </field>
                 <field name="date_due" position="attributes">
                     <attribute name="attrs">{'required':[('is_deferred','=',True)],'invisible':[('is_deferred','=',False)]}</attribute>
                 </field>

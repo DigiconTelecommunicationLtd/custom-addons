@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api,_
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 from datetime import datetime, timezone, timedelta, date
+from odoo.exceptions import Warning, UserError
+
 REQUIRE_APPROVAL = 1
 APPROVED = 2
 class UpdateCustomerInvoice(models.Model):
@@ -14,7 +16,10 @@ class UpdateCustomerInvoice(models.Model):
     @api.onchange('date_due')
     def date_due_thing(self):
         for record in self:
-            due_date_obj = datetime.strptime(record.date_due, DEFAULT_DATE_FORMAT)
+            if str(record.date_due)!= 'False':
+                due_date_obj = datetime.strptime(record.date_due, DEFAULT_DATE_FORMAT)
+            else:
+                raise UserError(_('Please Enter a Valid Due Date!'))
             today_new = datetime.now() + timedelta(hours=6)
             #diff =abs((due_date_obj - today_new).days)
             diff =(due_date_obj - today_new).days
