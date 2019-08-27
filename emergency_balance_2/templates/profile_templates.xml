@@ -50,7 +50,7 @@
                         <li class="list-group-item">
                             <b>Due</b>
                             <b class="pull-right text-info">
-                                <t t-esc="user.emergency_balance_due_amount" />
+                                <t t-esc="user.customer_total_due" />
                             </b>
                         </li>
                         <li class="list-group-item">
