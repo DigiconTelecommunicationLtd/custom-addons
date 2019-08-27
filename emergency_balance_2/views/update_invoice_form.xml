@@ -9,7 +9,8 @@
                          <attribute name="invisible">1</attribute>
                      </field>
                 <field name="date_due" position="attributes">
-                    <attribute name="attrs">{'required':[('is_deferred','=',True)],'invisible':[('is_deferred','=',False)]}</attribute>
+                    <attribute name="attrs">{'required':[('is_deferred','=',True)],'invisible':[('is_deferred','=',False)],'readonly':False}</attribute>
+
                 </field>
                 <field name="date_due" position="after">
                     <field name="status" invisible="1"/>
