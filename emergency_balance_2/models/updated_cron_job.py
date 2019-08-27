@@ -212,16 +212,34 @@ class UpdateCronJobModel(models.Model):
                             # get the opportunity of the customer, one customer should have one opportunity.
                             opportunity = self.env['crm.lead'].search([('partner_id', '=', check_customer.id)], limit=1)
                             if opportunity and opportunity.lead_type != "sohoandsme":
-                                updated_customer = customer.update_current_bill_cycle_info(
-                                    customer=customer,
-                                    product_id=customer.next_package_id.id,
-                                    price=customer.next_package_price,
-                                    original_price=customer.next_package_original_price,
-                                    start_date=customer.next_package_start_date,
-                                )
-                                updated_customer = updated_customer.update_next_bill_cycle_info(
-                                    customer=updated_customer
-                                )
+                                #custom_due_date.strftime(DEFAULT_DATE_FORMAT)
+                                #fix deferred thing
+                                if customer.is_deferred == True:
+                                    if str(customer.customer_state) == 'paid':
+                                        updated_customer = customer.update_current_bill_cycle_info(
+                                            customer=customer,
+                                            product_id=customer.next_package_id.id,
+                                            price=customer.next_package_price,
+                                            original_price=customer.next_package_original_price,
+                                            start_date=today.strftime(DEFAULT_DATE_FORMAT),
+                                        )
+                                        updated_customer = updated_customer.update_next_bill_cycle_info(
+                                            customer=updated_customer
+                                        )
+                                        updated_customer.is_deferred = False
+                                        print('dinffered',str(updated_customer.is_deferred))
+
+                                else:
+                                    updated_customer = customer.update_current_bill_cycle_info(
+                                        customer=customer,
+                                        product_id=customer.next_package_id.id,
+                                        price=customer.next_package_price,
+                                        original_price=customer.next_package_original_price,
+                                        start_date=customer.next_package_start_date,
+                                    )
+                                    updated_customer = updated_customer.update_next_bill_cycle_info(
+                                        customer=updated_customer
+                                    )
 
                             else:
                                 # if soho and sme, then bill cycle will start form the start of the next month
@@ -282,7 +300,9 @@ class UpdateCronJobModel(models.Model):
                         })
 
                 #deffered payment
+
                 if customer.is_deferred:
+
                     opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
                     if opportunity:
                         if opportunity.lead_type == "retail":

@@ -27,13 +27,22 @@ class updated_res(models.Model):
     def _compute_due(self):
         total_due = 0.0
         for record in self:
-            if record.is_deferred and str(record.customer_state)!='paid':
-                total_due = record.amount_total_signed
+        #     if record.is_deferred and str(record.customer_state)!='paid':
+        #         total_due = record.amount_total_signed
+        #         print('total_sign',str(total_due))
+        #     if record.has_due:
+        #         today_new = datetime.now() + timedelta(hours=6)
+        #         custom_valid_till = datetime.strptime(record.new_next_start_date, DEFAULT_DATE_FORMAT)
+        #         if today_new > custom_valid_till:
+        #             total_due = record.emergency_balance_due_amount
+        #         print('total_sign', str(total_due))
+        # print('total_sign', str(total_due))
             if record.has_due:
                 today_new = datetime.now() + timedelta(hours=6)
                 custom_valid_till = datetime.strptime(record.new_next_start_date, DEFAULT_DATE_FORMAT)
                 if today_new > custom_valid_till:
                     total_due = record.emergency_balance_due_amount
+
         self.customer_total_due = total_due
 
     @api.one
