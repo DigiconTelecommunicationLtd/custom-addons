@@ -276,7 +276,7 @@ class Opportunity(models.Model):
         elif (not vals.get('email_from')) and (not vals.get('phone')) and (not vals.get('mobile')):
             raise Warning(_('Please Provide any of this Email, Phone or Mobile'))
         elif not vals.get('proposed_activation_date'):
-            raise Warning(_('Please Provide activation date'))
+            raise Warning(_('Please Provide Service Activation Date'))
         elif vals.get('lead_type')!= 'retail':
             if not vals.get('partner_name'):
                 raise Warning(_('Please Provide company name'))

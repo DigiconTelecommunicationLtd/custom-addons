@@ -8,12 +8,14 @@
                 </div>
             </div>
             <div class="text-center" style="margin-bottom:10%;padding-left:10px;">
-                <u><h3>Invoice</h3></u>
+                <u>
+                    <h3>Invoice</h3>
+                </u>
             </div>
         </div>
 
         <div class="article o_report_layout_standard">
-            <t t-raw="0" />
+            <t t-raw="0"/>
         </div>
 
         <div class="footer">
@@ -23,17 +25,24 @@
                         <table class="table table-condensed table-borderless" name="invoice_footer_left_table">
                             <tbody class="invoice_footer_left_tbody">
                                 <tr>
-                                    <th class="text-left pull-left" style="border:none;">Digicon Telecommunication Limited</th>
+                                    <th class="text-left pull-left" style="border:none;">Digicon Telecommunication
+                                        Limited
+                                    </th>
                                 </tr>
                                 <tr>
-                                    <td class="text-left pull-left" style="border:none;font-size: 11px;">Awal Center(15th Floor),34,Kamal Ataturk,Banani C/A,Dhaka-1213,Bangladesh Tel: +88-02-9822056-9, Cell: +88-01704119545, Hotline: 09609-006463,  E-mail: info.mime@cg-bd.com, Web: www.mimebd.com, Facebook: https://www.facebook.com/MIMECG</td>
+                                    <td class="text-left pull-left" style="border:none;font-size: 11px;">Awal
+                                        Center(15th Floor),34,Kamal Ataturk,Banani C/A,Dhaka-1213,Bangladesh Tel:
+                                        +88-02-9822056-9, Cell: +88-01704119545, Hotline: 09609-006463, E-mail:
+                                        info.mime@cg-bd.com, Web: www.mimebd.com, Facebook:
+                                        https://www.facebook.com/MIMECG
+                                    </td>
                                 </tr>
-<!--                                <tr>-->
-<!--                                    <td class="text-left pull-left" style="border:none;font-size: 11px;">Tel: +88-02-9822056-9, Cell: +88-01704119545, Hotline: 09609-006463,  E-mail: info.mime@cg-bd.com, Web: www.mimebd.com, Facebook: https://www.facebook.com/MIMECG</td>-->
-<!--                                </tr>-->
-<!--                                <tr>-->
-<!--                                    <td class="text-left pull-left" style="border:none;font-size: 11px;">E-mail: info.mime@cg-bd.com, Web: www.mimebd.com, Facebook: https://www.facebook.com/MIMECG</td>-->
-<!--                                </tr>-->
+                                <!--                                <tr>-->
+                                <!--                                    <td class="text-left pull-left" style="border:none;font-size: 11px;">Tel: +88-02-9822056-9, Cell: +88-01704119545, Hotline: 09609-006463,  E-mail: info.mime@cg-bd.com, Web: www.mimebd.com, Facebook: https://www.facebook.com/MIMECG</td>-->
+                                <!--                                </tr>-->
+                                <!--                                <tr>-->
+                                <!--                                    <td class="text-left pull-left" style="border:none;font-size: 11px;">E-mail: info.mime@cg-bd.com, Web: www.mimebd.com, Facebook: https://www.facebook.com/MIMECG</td>-->
+                                <!--                                </tr>-->
                             </tbody>
                         </table>
                     </div>
@@ -44,7 +53,9 @@
                                     <td style="border:none;"></td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right pull-right" style="border:none;"><strong>www.mimebd.com</strong></td>
+                                    <td class="text-right pull-right" style="border:none;">
+                                        <strong>www.mimebd.com</strong>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="border:none;"></td>
@@ -55,7 +66,10 @@
                 </div>
 
                 <div class="text-muted">
-                    Page: <span class="page"/> / <span class="topage"/>
+                    Page:
+                    <span class="page"/>
+                    /
+                    <span class="topage"/>
                 </div>
             </div>
         </div>
@@ -73,7 +87,9 @@
         <t t-if="not o or not 'company_id' in o">
             <t t-set="company" t-value="res_company"/>
         </t>
-        <t t-call="isp_invoice_module.external_layout_standard_custom"><t t-raw="0"/></t>
+        <t t-call="isp_invoice_module.external_layout_standard_custom">
+            <t t-raw="0"/>
+        </t>
     </template>
 
     <!-- Retail and corporate customer invoice template -->
@@ -84,28 +100,54 @@
                     <div class="page">
                         <!-- Check if customer is retail or corporate -->
                         <t t-if="o.partner_id.opportunity_ids.lead_type!='retail'">
-                            <div class="row" style="padding-left:10px;padding-top:3%;">
-                                 <div class="col-xs-6">
-                                    <table name="invoice_customer_table" style="border:none;width:70%;">
-                                        <tr style="border:none;">
-                                            <th>Name</th>
-                                            <td style="padding-left:5px;">
-                                                <span t-field="o.partner_id.name"/>
-                                            </td>
-                                        </tr>
-                                        <tr style="border:none;">
-                                            <th>Billing Address</th>
-                                            <td style="padding-left:5px;">
-                                                <span t-field="o.partner_id.contact_address"/>
-                                            </td>
-                                            <th>Connectivity Address</th>
-                                            <td style="padding-left:5px;">
-                                                <span t-field="o.partner_id.connectivity_address"/>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
+
+
+                            <!---->
+                            <table style="width: 100%;">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Billing Start Date</th>
+                                    <th>Billing End Date</th>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.partner_id.current_package_start_date"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.partner_id.current_package_end_date"/>
+                                    </td>
+
+                                </tr>
+
+                            </table>
+                            <br/>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <th>Billing Address:</th>
+                                    <td>
+                                        <span t-field="o.partner_id.contact_address"/>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+                            <table>
+                                <tr>
+                                    <th>Connectivity Address:</th>
+                                    <td>
+                                        <span t-field="o.partner_id.connectivity_address"/>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+
                             <br/>
                             <div class="row" style="padding-left:10px;margin-top:3%;">
                                 <div class="col-xs-6">
@@ -172,7 +214,9 @@
                                             </tr>
                                             <tr>
                                                 <th>Customer PO No.</th>
-                                                <td><span t-field="o.customer_po_no"/></td>
+                                                <td>
+                                                    <span t-field="o.customer_po_no"/>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th>Bill Date</th>
@@ -389,8 +433,9 @@
                                                 <th>Adjusted Amount</th>
                                                 <th>
                                                     <span class="text-right pull-right">
-                                                        <strong>BDT </strong>
-                                                        <span t-field="o.package_change_adjusted_amount" t-field-options='{"widget": "False"}'/>
+                                                        <strong>BDT</strong>
+                                                        <span t-field="o.package_change_adjusted_amount"
+                                                              t-field-options='{"widget": "False"}'/>
                                                     </span>
                                                 </th>
                                             </tr>
@@ -399,15 +444,18 @@
                                             <th>Total Outstanding</th>
                                             <th>
                                                 <span class="text-right pull-right">
-                                                    <strong>BDT </strong>
-                                                    <span t-field="o.amount_total" t-field-options='{"widget": "False"}'/>
+                                                    <strong>BDT</strong>
+                                                    <span t-field="o.amount_total"
+                                                          t-field-options='{"widget": "False"}'/>
                                                 </span>
                                             </th>
                                         </tr>
                                     </tbody>
                                 </table>
                                 <div id="inword">
-                                    <p>In Word: Taka <t t-esc="o.convert(o.amount_total)"></t> </p>
+                                    <p>In Word: Taka
+                                        <t t-esc="o.convert(o.amount_total)"></t>
+                                    </p>
                                 </div>
                             </div>
                             <div style="padding-left:10px;">
@@ -428,23 +476,39 @@
                         </t>
                         <!-- if retail customer -->
                         <t t-if="o.partner_id.opportunity_ids.lead_type=='retail'">
-                            <div class="row" style="padding-left:10px;padding-top:3%;">
+                            <table>
+                                <tr>
+                                    <th>Name:</th>
+                                    <td>
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+                                </tr>
 
 
-                                <div class="col-md-2">
-                                    <span>Name: </span>
-                                    <span t-field="o.partner_id.name"/>
-                                </div>
-                                <div class="col-md-5">
-                                    <span>Billing Address: </span>
-                                    <span t-field="o.partner_id.contact_address"/>
-                                </div>
-                                <div class="col-md-5">
-                                    <span>Connectivity Address: </span>
-                                    <span t-field="o.partner_id.connectivity_address"/>
-                                </div>
+                            </table>
 
-                            </div>
+                             <table>
+                                <tr>
+                                    <th>Billing Address:</th>
+                                    <td>
+                                        <span t-field="o.partner_id.contact_address"/>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+                            <table>
+                                <tr>
+                                    <th>Connectivity Address:</th>
+                                    <td>
+                                        <span t-field="o.partner_id.connectivity_address"/>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+
                             <br/>
                             <div style="padding-left:10px;margin-top:3%;">
                                 <table class="table table-bordered table-condensed" name="invoice_line_table">
@@ -532,8 +596,9 @@
                                                 <th>Adjusted Amount</th>
                                                 <th>
                                                     <span class="text-right pull-right">
-                                                        <strong>BDT </strong>
-                                                        <span t-field="o.package_change_adjusted_amount" t-field-options='{"widget": "False"}'/>
+                                                        <strong>BDT</strong>
+                                                        <span t-field="o.package_change_adjusted_amount"
+                                                              t-field-options='{"widget": "False"}'/>
                                                     </span>
                                                 </th>
                                             </tr>
@@ -542,15 +607,18 @@
                                             <th>Total Outstanding</th>
                                             <th>
                                                 <span class="text-right pull-right">
-                                                    <strong>BDT </strong>
-                                                    <span t-field="o.amount_total" t-field-options='{"widget": "False"}'/>
+                                                    <strong>BDT</strong>
+                                                    <span t-field="o.amount_total"
+                                                          t-field-options='{"widget": "False"}'/>
                                                 </span>
                                             </th>
                                         </tr>
                                     </tbody>
                                 </table>
                                 <div id="inword">
-                                    <p>In Word: Taka <t t-esc="o.convert(o.amount_total)"></t> </p>
+                                    <p>In Word: Taka
+                                        <t t-esc="o.convert(o.amount_total)"></t>
+                                    </p>
                                 </div>
                             </div>
                             <div style="padding-left:10px;">
