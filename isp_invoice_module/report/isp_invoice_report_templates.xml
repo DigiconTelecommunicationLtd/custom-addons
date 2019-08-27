@@ -476,23 +476,39 @@
                         </t>
                         <!-- if retail customer -->
                         <t t-if="o.partner_id.opportunity_ids.lead_type=='retail'">
-                            <div class="row">
+                            <table>
+                                <tr>
+                                    <th>Name:</th>
+                                    <td>
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+                                </tr>
 
 
-                                <div class="col-md-2">
-                                    <span>Name:</span>
-                                    <span t-field="o.partner_id.name"/>
-                                </div>
-                                <div class="col-md-5">
-                                    <span>Billing Address:</span>
-                                    <span t-field="o.partner_id.contact_address"/>
-                                </div>
-                                <div class="col-md-5">
-                                    <span>Connectivity Address:</span>
-                                    <span t-field="o.partner_id.connectivity_address"/>
-                                </div>
+                            </table>
 
-                            </div>
+                             <table>
+                                <tr>
+                                    <th>Billing Address:</th>
+                                    <td>
+                                        <span t-field="o.partner_id.contact_address"/>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+                            <table>
+                                <tr>
+                                    <th>Connectivity Address:</th>
+                                    <td>
+                                        <span t-field="o.partner_id.connectivity_address"/>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+
                             <br/>
                             <div style="padding-left:10px;margin-top:3%;">
                                 <table class="table table-bordered table-condensed" name="invoice_line_table">
