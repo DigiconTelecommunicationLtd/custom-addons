@@ -98,9 +98,9 @@
                 <field name="customer"/>
                 <field name="subscriber_id"/>
                 <filter string="Due Users" domain="[('has_due','=',True)]"/>
-                <filter string="Rejected Users" domain="[('rejected','=','True')]"/>
-                <filter string="Paid Users" domain="[('due_paid','=','True')]"/>
-                <filter string="Unpaid Users" domain="[('due_paid','=','True'),('customer.active_status','=','False')]"/>
+                <filter string="Rejected Users" domain="[('rejected','=',True)]"/>
+                <filter string="Paid Users" domain="[('due_paid','=',True)]"/>
+                <filter string="Unpaid Users" domain="[('has_due','=',True),('customer.active_status','=','inactive')]"/>
                 <!--        <field name="domain">[('has_due','=','True')]</field>-->
 
 <!--                <filter string="Done" domain="[('is_done','!=',False)]"/>-->
