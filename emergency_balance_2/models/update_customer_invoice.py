@@ -17,24 +17,26 @@ class UpdateCustomerInvoice(models.Model):
     @api.onchange('date_due')
     def date_due_thing(self):
         for record in self:
-            if str(record.date_due)!= 'False':
-                due_date_obj = datetime.strptime(record.date_due, DEFAULT_DATE_FORMAT)
-            else:
-                raise UserError(_('Please Enter a Valid Due Date!'))
-            today_new = datetime.now() + timedelta(hours=6)
-            #diff =abs((due_date_obj - today_new).days)
-            diff =(due_date_obj - today_new).days
-            diff = diff + 1
-            if diff > 10:
-               record.status = REQUIRE_APPROVAL
-            else:
-                record.status = APPROVED
-            print(today_new)
-            print (due_date_obj)
-            print(str(record.status))
-            # modified_date_obj = due_date_obj + timedelta(days=1, hours=6)
-            # record.new_next_start_date = modified_date_obj.strftime(DEFAULT_DATE_FORMAT)
-            # print(record.date_due)
+            if record.is_deferred == True:
+                if str(record.date_due)!= 'False':
+                    due_date_obj = datetime.strptime(record.date_due, DEFAULT_DATE_FORMAT)
+                else:
+                    if record.is_deferred == True:
+                        raise UserError(_('Please Enter a Valid Due Date!'))
+                today_new = datetime.now() + timedelta(hours=6)
+                #diff =abs((due_date_obj - today_new).days)
+                diff =(due_date_obj - today_new).days
+                diff = diff + 1
+                if diff > 10:
+                   record.status = REQUIRE_APPROVAL
+                else:
+                    record.status = APPROVED
+                print(today_new)
+                print (due_date_obj)
+                print(str(record.status))
+                # modified_date_obj = due_date_obj + timedelta(days=1, hours=6)
+                # record.new_next_start_date = modified_date_obj.strftime(DEFAULT_DATE_FORMAT)
+                # print(record.date_due)
 
 
     @api.one
