@@ -7,7 +7,7 @@ from odoo.exceptions import Warning, UserError
 
 REQUIRE_APPROVAL = 1
 APPROVED = 2
-STAGE = 3
+NEED_APPROVAL = 3
 class UpdateCustomerInvoice(models.Model):
     _inherit = "account.invoice"
     require_approval = fields.Boolean(string='approval?',
@@ -30,7 +30,7 @@ class UpdateCustomerInvoice(models.Model):
                record.status = REQUIRE_APPROVAL
                record.show_reason = False
             else:
-                record.status = STAGE
+                record.status = APPROVED
                 record.show_reason = False
             print(today_new)
             print (due_date_obj)
@@ -43,6 +43,6 @@ class UpdateCustomerInvoice(models.Model):
     @api.one
     def review_for_defer(self):
         for record in self:
-            record.status = APPROVED
+            record.status = NEED_APPROVAL
             record.show_reason = True
 

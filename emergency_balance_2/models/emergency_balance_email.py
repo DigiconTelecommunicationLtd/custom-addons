@@ -59,3 +59,27 @@ class Team(models.Model):
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
 
         return True
+
+    @api.multi
+    def action_send_defer_review_email(self, invoiceno, name, subid, package, price, reason,deferdays, template_obj):
+        body = template_obj.body_html
+        body = body.replace('--invoiceno--', invoiceno)
+        body = body.replace('--customername--', name)
+        body = body.replace('--customerid--', subid)
+        body = body.replace('--packagename--', package)
+        body = body.replace('--packageprice--', price)
+        body = body.replace('--deferredreason--', reason)
+        body = body.replace('--deferreddays--', deferdays)
+        sent_email = 'hod.mime@cg-bd.com'
+
+        if template_obj:
+            mail_values = {
+                'subject': 'Approval for Deferred Payment',
+                'body_html': body,
+                'email_to': sent_email,
+                'email_cc': '',
+                'email_from': self.DEFAULT_FROM_MAIL,
+            }
+            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+
+        return True

@@ -16,14 +16,14 @@
                     <field name="status" invisible="1"/>
                     <field name="show_reason" invisible="1"/>
                     <field name="approval_reason" attrs="{'required':[('status','=',1)],'invisible':[('status','!=',1)]}" />
-                    <field name="approval_reason" attrs="{'invisible':[('show_reason','!=',True)]}" />
+
 
                 </field>
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="replace">
                  <button attrs="{'invisible':['|',('status','=',1)]}" name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight o_invoice_validate" groups="account.group_account_invoice"/>
                 </xpath>
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="after">
-                        <button name="review_for_defer" string="Approve invoice" type="object" attrs="{'invisible':[('status','!=',1)]}" />
+                        <button name="review_for_defer" string="Send for approval" type="object" attrs="{'invisible':[('status','!=',1)]}" />
                 </xpath>
 
 <!--                <field name="date_due" position="attributes">-->
