@@ -267,26 +267,29 @@ class ServiceRequest(models.Model):
                         'billing_start_date': fields.Date().today()
                     })
 
-                    # ** Mail Sent for bill date confirmation **
-                    # print("Sent for bill date confirmation")
-                    template_obj = self.env['isp_crm_module.mail'].sudo().search(
-                        [('name', '=', 'Send_Bill_Date_Confirmation_Service_Request_Mail')],
-                        limit=1)
-                    subject_mail = "Bill Date Confirmation"
-                    self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj)
+                    ##### Email will send for corporate Mark Done###########
 
-                    # **Sending mail to TD/RM on mark done on Bill**
-                    template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
-                        [('name', '=', 'Ticket_Marked_Done')],
-                        limit=1)
-                    subject_mail = "Service Delivered"
-                    # mark_done_email_name = customer.name
-                    # mark_done_email_sub_id =
-                    self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, customer.assigned_rm.email, self.name,
-                                                                                    customer.name,
-                                                                                    customer.subscriber_id,
-                                                                                    customer.current_package_id.name,
-                                                                                    template_obj_marked_done)
+
+                    # # ** Mail Sent for bill date confirmation **
+                    # # print("Sent for bill date confirmation")
+                    # template_obj = self.env['isp_crm_module.mail'].sudo().search(
+                    #     [('name', '=', 'Send_Bill_Date_Confirmation_Service_Request_Mail')],
+                    #     limit=1)
+                    # subject_mail = "Bill Date Confirmation"
+                    # self.env['isp_crm_module.mail'].action_send_email_bill_date_confirmation(subject_mail, BILLING_GROUP_MAIL, self.name, customer.name, customer.subscriber_id, template_obj)
+                    #
+                    # # **Sending mail to TD/RM on mark done on Bill**
+                    # template_obj_marked_done = self.env['isp_crm_module.mail'].sudo().search(
+                    #     [('name', '=', 'Ticket_Marked_Done')],
+                    #     limit=1)
+                    # subject_mail = "Service Delivered"
+                    # # mark_done_email_name = customer.name
+                    # # mark_done_email_sub_id =
+                    # self.env['isp_crm_module.mail'].action_ticket_marked_done_email(subject_mail, customer.assigned_rm.email, self.name,
+                    #                                                                 customer.name,
+                    #                                                                 customer.subscriber_id,
+                    #                                                                 customer.current_package_id.name,
+                    #                                                                 template_obj_marked_done)
     @api.multi
     def action_make_service_request_done(self):
 
