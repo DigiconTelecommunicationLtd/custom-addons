@@ -20,10 +20,11 @@
 
                 </field>
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="replace">
-                 <button attrs="{'invisible':['|',('status','=',1)]}" name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight o_invoice_validate" groups="account.group_account_invoice"/>
+                 <button attrs="{'invisible':['|',('status','=',1),'|',('status','=',3)]}" name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight o_invoice_validate" groups="account.group_account_invoice"/>
                 </xpath>
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="after">
                         <button name="review_for_defer" string="Send for approval" type="object" attrs="{'invisible':[('status','!=',1)]}" />
+                        <button name="approve_defer" string="Approve Defer Dayment" type="object" attrs="{'invisible':[('status','!=',3)]}" />
                 </xpath>
 
 <!--                <field name="date_due" position="attributes">-->

@@ -329,21 +329,25 @@ class UpdateCronJobModel(models.Model):
                                         customer.update({
                                             'active_status': CUSTOMER_INACTIVE_STATUS
                                         })
+                                elif customer_state == 'paid':
+                                    customer.update({
+                                        'active_status': CUSTOMER_ACTIVE_STATUS
+                                    })
 
-                                    if two_days == custom_due_date:
-                                        #shoot the email
-                                        template_obj_new_service_request = self.env[
-                                            'emergency_balance.mail'].sudo().search(
-                                            [('name', '=', 'new_reminder_for_deferred_mail')],
-                                            limit=1)
-                                        days=custom_due_date.strftime('%d, %b %Y')
-                                        self.env['emergency_balance.mail'].action_send_defer_email(days,customer.name,
-                                                                                                   customer.subscriber_id,
-                                                                                                   customer.current_package_id.name,
-                                                                                                   str(customer.current_package_price),
-                                                                                                   customer.email,
-                                                                                                   template_obj_new_service_request
-                                                                                                   )
+                                    # if two_days == custom_due_date:
+                                    #     #shoot the email
+                                    #     template_obj_new_service_request = self.env[
+                                    #         'emergency_balance.mail'].sudo().search(
+                                    #         [('name', '=', 'new_reminder_for_deferred_mail')],
+                                    #         limit=1)
+                                    #     days=custom_due_date.strftime('%d, %b %Y')
+                                    #     self.env['emergency_balance.mail'].action_send_defer_email(days,customer.name,
+                                    #                                                                customer.subscriber_id,
+                                    #                                                                customer.current_package_id.name,
+                                    #                                                                str(customer.current_package_price),
+                                    #                                                                customer.email,
+                                    #                                                                template_obj_new_service_request
+                                    #                                                                )
 
 
 

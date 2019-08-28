@@ -41,5 +41,38 @@ class UpdateCustomerInvoice(models.Model):
     def review_for_defer(self):
         for record in self:
             record.status = NEED_APPROVAL
-            record.show_reason = True
+            print(record.status)
+            template_obj_new_service_request = self.env['emergency_balance.mail'].sudo().search(
+                [('name', '=', 'new_reminder_for_deferred_approval_mail')],
+                limit=1)
+
+            product_name=str(record.invoice_line_ids[0].product_id.name)
+            product_price =record.invoice_line_ids[0].quantity * record.invoice_line_ids[0].price_unit
+
+            line = record.invoice_line_ids[0]
+            price_subtotal = line.quantity * line.price_unit
+            discount = (price_subtotal * line.discount) / 100
+            price_subtotal = price_subtotal - discount
+
+            due_date_obj = datetime.strptime(record.date_due, DEFAULT_DATE_FORMAT)
+            modified_date_obj = due_date_obj + timedelta(days=1, hours=6)
+            number_of_days = (modified_date_obj - datetime.now()).days
+
+
+            self.env['emergency_balance.mail'].action_send_defer_review_email(str(record.name),
+                                                                 record.partner_id.name,
+                                                                 product_name,
+                                                                 str(price_subtotal),
+                                                                 str(record.approval_reason),
+                                                                 str(number_of_days),
+                                                                 template_obj_new_service_request
+                                                                 )
+
+
+    @api.one
+    def approve_defer(self):
+        for record in self:
+            record.status = APPROVED
+            print(record.status)
+
 
