@@ -265,9 +265,9 @@ class UpdatedServiceRequest(models.Model):
                         #     raise UserError('Please give all the technical information to mark done this ticket.')
 
                         # Send mail on mark done
-                        if customer_type == "MC":
-                            pass
-                        else:
+                        if customer_type == "MC" or customer_type == "MS":
+                        #     pass
+                        # else:
                             self.env['isp_crm_module.mail'].service_request_send_email(customer.email, customer_subs_id,
                                                                                        cust_password, str(self.ip),
                                                                                        str(self.subnet_mask),
