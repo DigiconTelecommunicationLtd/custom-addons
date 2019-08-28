@@ -54,12 +54,17 @@ class UpdateCustomerInvoice(models.Model):
             discount = (price_subtotal * line.discount) / 100
             price_subtotal = price_subtotal - discount
 
+            due_date_obj = datetime.strptime(record.date_due, DEFAULT_DATE_FORMAT)
+            modified_date_obj = due_date_obj + timedelta(days=1, hours=6)
+            number_of_days = (modified_date_obj - datetime.now()).days
+
+
             self.env['emergency_balance.mail'].action_send_defer_review_email(str(record.name),
                                                                  record.partner_id.name,
                                                                  product_name,
                                                                  str(price_subtotal),
-                                                                 str(record.date_due),
                                                                  str(record.approval_reason),
+                                                                 str(number_of_days),
                                                                  template_obj_new_service_request
                                                                  )
 
