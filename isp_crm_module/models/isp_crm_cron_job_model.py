@@ -376,8 +376,6 @@ class CronJobModel(models.Model):
         try:
             today_new = datetime.now() + timedelta(hours=6)
             today = today_new.date()
-            #today = date.today()
-
             tomorrow = today + timedelta(days=1)
             # Check if it is a customer,
             # and if the customer is inactive or next package start date is tomorrow.
