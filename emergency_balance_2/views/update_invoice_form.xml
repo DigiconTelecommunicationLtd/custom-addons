@@ -14,7 +14,7 @@
                 </field>
                 <field name="date_due" position="after">
                     <field name="status" invisible="1"/>
-                    <field name="show_reason" invisible="1"/>
+
                     <field name="approval_reason" attrs="{'required':[('status','=',1)],'invisible':[('status','!=',1)]}" />
 
 

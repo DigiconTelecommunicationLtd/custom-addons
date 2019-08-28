@@ -14,7 +14,6 @@ class UpdateCustomerInvoice(models.Model):
                              track_visibility='onchange',default=False)
     approval_reason = fields.Char(string='reason')
     status = fields.Integer(default=2)
-    show_reason = fields.Boolean(string="show reason", default=False)
     @api.onchange('date_due')
     def date_due_thing(self):
         for record in self:
@@ -28,10 +27,8 @@ class UpdateCustomerInvoice(models.Model):
             diff = diff + 1
             if diff > 10:
                record.status = REQUIRE_APPROVAL
-               record.show_reason = False
             else:
                 record.status = APPROVED
-                record.show_reason = False
             print(today_new)
             print (due_date_obj)
             print(str(record.status))
