@@ -59,29 +59,38 @@
 
                 </header>
                 <sheet>
-
-                    <group name="group_top">
-                        <group name="group_left">
-                            <field name="customer"  options="{'no_create': True, 'no_create_edit':True}" required="1" />
-
+                   <sheet>
+                        <group>
                         </group>
-                        <group name="group_right" attrs="{'invisible': [('customer', '=', False)]}">
-                            <field name="subscriber_id"/>
+                       <group><field name="customer"  options="{'no_create': True, 'no_create_edit':True}" readonly="1" /></group>
+                       <group>
 
+                       </group>
+                    <group name="group_top">
+
+                        <group name="group_left" attrs="{'invisible': [('customer', '=', False)]}">
+                            <field name="subscriber_id"/>
                             <field name="current_package"/>
                             <field name="current_package_price"/>
                             <field name="current_package_end_date"/>
+
+
+                        </group>
+                        <group name="group_right" attrs="{'invisible': [('customer', '=', False)]}">
+
                             <field name="next_package_start_date"/>
-                            <field name="assigned_rm" attrs="{'invisible': [('customer', '=', False)]}" readonly="1"/>
+                            <field name="assigned_rm" attrs="{'invisible': [('customer', '=', False)]}" />
 <!--                            <field name="has_due"/>-->
 <!--                            <field name="set_for_approval"/>-->
 <!--                            <field name="approved"/>-->
-                            <field name="approved_by" attrs="{'invisible': [('approved_by', '=', False)]}" readonly="1"/>
-                            <field name="rejected_by" attrs="{'invisible': [('rejected_by', '=', False)]}" readonly="1"/>
-                            <field name="emergency_date" attrs="{'required': [('customer', '!=', False)]}" readonly="1"/>
+                            <field name="approved_by" attrs="{'invisible': [('approved_by', '=', False)]}" />
+<!--                            <field name="balance" attrs="{'invisible': [('customer', '=', False)]}"/>-->
+                             <field name="emergency_date" attrs="{'required': [('customer', '!=', False)]}"/>
 
                         </group>
                     </group>
+                </sheet>
+
                 </sheet>
             </form>
         </field>
