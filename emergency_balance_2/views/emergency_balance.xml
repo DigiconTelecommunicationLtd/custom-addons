@@ -100,7 +100,7 @@
                 <filter string="Due Users" domain="[('has_due','=',True)]"/>
                 <filter string="Rejected Users" domain="[('rejected','=','True')]"/>
                 <filter string="Paid Users" domain="[('due_paid','=','True')]"/>
-                <filter string="Unpaid Users" domain="[('due_paid','=','True'),('active_status','=','False')]"/>
+                <filter string="Unpaid Users" domain="[('due_paid','=','True'),('customer.active_status','=','False')]"/>
                 <!--        <field name="domain">[('has_due','=','True')]</field>-->
 
 <!--                <filter string="Done" domain="[('is_done','!=',False)]"/>-->
