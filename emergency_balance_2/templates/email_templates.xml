@@ -43,7 +43,6 @@
             <p><strong>Dear Sir,</strong></p>
             <p>Dear Sir,An invoice --invoiceno-- has been created for approval for deferred payment. Please take necessary action to proceed. Customer info is given below:.</p>
             <p>Customer Name:--customername--</p>
-            <p>Customer ID:--customerid--</p>
             <p>Package Name:--packagename--</p>
             <p>Package Price:--packageprice--</p>
             <p>Deferred Reason:--deferredreason--</p>
