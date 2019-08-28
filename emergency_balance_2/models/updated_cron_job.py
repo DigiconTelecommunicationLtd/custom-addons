@@ -329,6 +329,10 @@ class UpdateCronJobModel(models.Model):
                                         customer.update({
                                             'active_status': CUSTOMER_INACTIVE_STATUS
                                         })
+                                elif customer_state == 'paid':
+                                    customer.update({
+                                        'active_status': CUSTOMER_ACTIVE_STATUS
+                                    })
 
                                     # if two_days == custom_due_date:
                                     #     #shoot the email
