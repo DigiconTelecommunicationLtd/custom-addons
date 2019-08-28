@@ -24,7 +24,7 @@
                 </xpath>
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="after">
                         <button name="review_for_defer" string="Send for approval" type="object" attrs="{'invisible':[('status','!=',1)]}" />
-                        <button name="approve_defer" string="Approve Defer Dayment" type="object" attrs="{'invisible':[('status','!=',3)]}" />
+                        <button name="approve_defer" string="Approve Defer Payment" type="object" attrs="{'invisible':[('status','!=',3)]}" />
                 </xpath>
 
 <!--                <field name="date_due" position="attributes">-->
