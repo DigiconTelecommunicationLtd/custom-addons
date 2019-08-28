@@ -123,7 +123,8 @@ class DashboardOne(models.TransientModel):
                 'set_for_approval': False,
                 'state': 'due',
                 'emergency_date': self.emergency_date,
-                'color': DUE_ACCEPTED
+                'color': DUE_ACCEPTED,
+                'name': self.env['ir.sequence'].next_by_code('emergency_balance.emergency_balance')
             })
             customer_ref = self.env['res.partner'].search([('subscriber_id', '=', self.customer.subscriber_id)], limit=1)
             print('customer_red', customer_ref)
