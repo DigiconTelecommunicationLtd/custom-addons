@@ -11,7 +11,7 @@
     />
 
     <!-- menu categories -->
-    <menuitem name="emergency balance" id="emergency_balance_res_partner_menu" parent="isp_crm_module.isp_crm_hd"/>
+    <menuitem name="Emergency Balance" id="emergency_balance_res_partner_menu" parent="isp_crm_module.isp_crm_hd"/>
 
     <!-- actions -->
 <!--    <menuitem name="Create ticket" id="emergency_balance_res_partner_menu_list" parent="emergency_balance_res_partner_menu"-->

@@ -182,7 +182,7 @@ class UpdateCronJobModel(models.Model):
                                 'current_package_price': ticket.proposed_package_price
                             })
 
-                elif str(customer.next_package_start_date) == str(tomorrow) or customer.active_status == CUSTOMER_INACTIVE_STATUS:
+                elif str(customer.next_package_start_date) == str(tomorrow) or customer.active_status == CUSTOMER_INACTIVE_STATUS or customer.has_due == True:
                     # updating the customer active_status and package according to their balance
                     if (customer_balance < 0) and (abs(
                             customer_balance) >= customer.next_package_price):
@@ -333,21 +333,10 @@ class UpdateCronJobModel(models.Model):
                                     customer.update({
                                         'active_status': CUSTOMER_ACTIVE_STATUS
                                     })
-
-                                    # if two_days == custom_due_date:
-                                    #     #shoot the email
-                                    #     template_obj_new_service_request = self.env[
-                                    #         'emergency_balance.mail'].sudo().search(
-                                    #         [('name', '=', 'new_reminder_for_deferred_mail')],
-                                    #         limit=1)
-                                    #     days=custom_due_date.strftime('%d, %b %Y')
-                                    #     self.env['emergency_balance.mail'].action_send_defer_email(days,customer.name,
-                                    #                                                                customer.subscriber_id,
-                                    #                                                                customer.current_package_id.name,
-                                    #                                                                str(customer.current_package_price),
-                                    #                                                                customer.email,
-                                    #                                                                template_obj_new_service_request
-                                    #                                                                )
+                                    #update radius database
+                                    update_expiry_bandwidth(customer.subscriber_id,
+                                                            customer.current_package_end_date,
+                                                            customer.current_package_id.name)
 
 
 
