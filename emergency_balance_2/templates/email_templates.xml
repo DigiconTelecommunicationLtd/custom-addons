@@ -41,7 +41,7 @@
         <field name="body_html"><![CDATA[
 
             <p><strong>Dear Sir,</strong></p>
-            <p>An invoice --invoiceno-- has been created for approval for deferred payment. Please take necessary action to proceed. Customer info is given below:.</p>
+            <p>An invoice has been created for approval for deferred payment. Please take necessary action to proceed. Customer info is given below:</p>
             <p>Customer Name:--customername--</p>
             <p>Package Name:--packagename--</p>
             <p>Package Price:--packageprice--</p>
