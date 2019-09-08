@@ -11,6 +11,12 @@ from odoo.exceptions import Warning, UserError
 from odoo.tools import email_split
 import base64
 import ctypes
+
+#0 added
+#1 changed
+#2 deleted
+#4 unchanged
+
 from odoo.addons.isp_crm_module.models.radius_integration import *
 AVAILABLE_PRIORITIES = [
         ('0', 'Normal'),
@@ -54,6 +60,71 @@ default_crypt_context = CryptContext(
 
 class UpdatedServiceRequest(models.Model):
     _inherit =  "isp_crm_module.service_request"
+    technical_info_real_ip = fields.Char(string='Real IP Address')
+    is_real_ip = fields.Boolean(compute='_compute_show_hide')
+
+    @api.one
+    def _compute_show_hide(self):
+        self.is_real_ip = False
+        for product in self.tagged_product_ids:
+            for attribute in product.attribute_line_ids:
+                if 'real' in attribute.display_name.lower() and 'ip' in attribute.display_name.lower().lower():
+                    self.is_real_ip = True
+    # @api.multi
+    # def write(self, vals):
+    #     print("from write*****************************************************************")
+    #     print("before",self.product_line)
+    #     print("after", vals)
+    #     if 'product_line' in vals:
+    #         for lines in vals['product_line']:
+    #             if lines[0]!=4:
+    #                 print(lines)
+    #                 self.update_product_quantity(lines[1], 1, 1)
+    #                 #product added. reduce quantity
+    #                 # if lines[0]==0:
+    #                 #     self.update_product_quantity(lines[1],1,1)
+    #
+    #     res = super(UpdatedServiceRequest, self).write(vals)
+    #
+    #     return res
+    #
+    # def update_product_quantity(self,product_id,quantity,status):
+    #     print(product_id)
+    #     product = self.env['product.product'].search([('id', '=', product_id)], limit=1)
+    #     print("product",product)
+    #     # get_product = self.env['stock.quant'].search(
+    #     #     [('product_id', '=', product.product_id.id)], order='create_date desc', limit=1)
+    #     # print("quantity",get_product)
+    #     # if get_product:
+    #     #     print(get_product)
+    #     #     current_stock_quantity = get_product.quantity
+    #     #     if abs(current_stock_quantity) <= 0.0:
+    #     #         raise UserError('Not enough quantity available in stock.')
+    #     #
+    #     #     new_available_quantity = abs(current_stock_quantity) - abs(quantity)
+    #
+    #         # if new_available_quantity:
+    #         #     inventory_name = str(get_product.product_id.display_name) + "-" + str(
+    #         #         datetime.now())
+    #         #     create_inventory = self.env['stock.inventory'].create({
+    #         #         'name': inventory_name,
+    #         #         'filter': 'product',
+    #         #         'product_id': get_product.product_id.id,
+    #         #         'accounting_date': datetime.today(),
+    #         #     }).action_start()
+    #         #     get_inventory = self.env['stock.inventory'].search(
+    #         #         [('name', '=', inventory_name)], order='create_date desc', limit=1)
+    #         #     if get_inventory:
+    #         #         get_inventory_lines = get_inventory.line_ids
+    #         #         for line in get_inventory_lines:
+    #         #             line.update({
+    #         #                 'product_qty': float(abs(new_available_quantity))
+    #         #             })
+    #         #         get_inventory.action_done()
+
+
+
+
 
     @api.multi
     def action_make_service_request_done(self):
@@ -300,3 +371,4 @@ class UpdatedServiceRequest(models.Model):
     # SERVICE REQUEST LOST
 
     #########
+

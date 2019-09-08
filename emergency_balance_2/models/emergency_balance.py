@@ -158,6 +158,7 @@ class emergency_balance(models.Model):
 
              record.customer.has_due = True
              record.customer.emergency_date = record.emergency_date
+             record.customer.active_status = 'active'
              record.approved_by = self.env.uid
              record.disable_header = True
              record.state = 'due'
