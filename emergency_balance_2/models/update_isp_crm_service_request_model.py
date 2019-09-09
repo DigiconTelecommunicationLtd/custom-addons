@@ -70,55 +70,63 @@ class UpdatedServiceRequest(models.Model):
     #         for attribute in product.attribute_line_ids:
     #             if 'real' in attribute.display_name.lower() and 'ip' in attribute.display_name.lower().lower():
     #                 self.is_real_ip = True
-    # @api.multi
-    # def write(self, vals):
-    #     print("from write*****************************************************************")
-    #     print("before",self.product_line)
-    #     print("after", vals)
-    #     if 'product_line' in vals:
-    #         for lines in vals['product_line']:
-    #
-    #             if lines[0]==1:
-    #                 current_quantity=lines[2]['product_uom_qty']
-    #
-    #                 self.update_product_quantity(lines[1],current_quantity)
-    #
-    #                 #self.update_product_quantity(lines[1], 1, 1)
-    #                 #product added. reduce quantity
-    #                 # if lines[0]==0:
-    #                 #     self.update_product_quantity(lines[1],1,1)
-    #
-    #     res = super(UpdatedServiceRequest, self).write(vals)
-    #
-    #     return res
-    #
-    # def update_product_quantity(self,product_id,current_quantity):
-    #
-    #     new_available_quantity = None
-    #     quantity = None
-    #     product_line_data=self.env['isp_crm_module.product_line'].search([('id', '=', product_id)], limit=1)
-    #     print("present_quantity", current_quantity)
-    #     print("past_quantity", product_line_data.product_uom_qty)
-    #     prev_quantity = float(product_line_data.product_uom_qty)
-    #
-    #     get_product = self.env['stock.quant'].search(
-    #         [('product_id', '=', product_line_data.product_id.id)], order='create_date desc', limit=1)
-    #     print("quantity",get_product)
-    #     if get_product:
-    #         print(get_product)
-    #         current_stock_quantity = get_product.quantity
-    #         if abs(current_stock_quantity) <= 0.0:
-    #             raise UserError('Not enough quantity available in stock.')
-    #
-    #         if abs(prev_quantity) > abs(current_quantity):
-    #             quantity = abs(prev_quantity) - abs(current_quantity)
-    #             new_available_quantity = abs(current_stock_quantity) + abs(quantity)
-    #             print("barse stock",new_available_quantity)
-    #         elif abs(current_quantity) > abs(prev_quantity):
-    #             quantity = abs(current_quantity) - abs(prev_quantity)
-    #             new_available_quantity = abs(quantity) - abs(current_stock_quantity)
-    #             print("komse stock", new_available_quantity)
+    @api.multi
+    def write(self, vals):
+        print("from write*****************************************************************")
+        print("before",self.product_line)
+        print("after", vals)
+        if 'product_line' in vals:
+            for lines in vals['product_line']:
 
+                if lines[0]==1:
+                    current_quantity=lines[2]['product_uom_qty']
+
+                    self.update_product_quantity(lines[1],current_quantity)
+
+                elif lines[0]==0:
+                    product_id = lines[2]['product_id']
+                    product_uom_qty = lines[2]['product_uom_qty']
+                    print('inside',product_id,product_uom_qty)
+                    self.add_product_quantity(product_id,product_uom_qty)
+
+                elif lines[0]==2:
+                    self.delete_product_quantity(lines[1])
+
+        res = super(UpdatedServiceRequest, self).write(vals)
+
+        return res
+
+    def update_product_quantity(self,product_id,current_quantity):
+
+        new_available_quantity = None
+        quantity = None
+        product_line_data=self.env['isp_crm_module.product_line'].search([('id', '=', product_id)], limit=1)
+        print("present_quantity", current_quantity)
+        print("past_quantity", product_line_data.product_uom_qty)
+        prev_quantity = float(product_line_data.product_uom_qty)
+
+        get_product = self.env['stock.quant'].search(
+            [('product_id', '=', product_line_data.product_id.id)], order='create_date desc', limit=1)
+        print("quantity",get_product)
+        if get_product:
+            print(get_product)
+            current_stock_quantity = get_product.quantity
+            if abs(current_stock_quantity) <= 0.0:
+                raise UserError('Not enough quantity available in stock.')
+
+            if abs(prev_quantity) > abs(current_quantity):
+                quantity = abs(prev_quantity) - abs(current_quantity)
+                print("barse", quantity)
+                new_available_quantity = abs(current_stock_quantity) + abs(quantity)
+                print("barse stock",new_available_quantity)
+            elif abs(current_quantity) > abs(prev_quantity):
+                quantity = abs(current_quantity) - abs(prev_quantity)
+                print("komse",quantity)
+                new_available_quantity = abs(current_stock_quantity) - abs(quantity)
+                print("komse stock", new_available_quantity)
+
+            if new_available_quantity <= 0.0:
+                raise UserError('Not enough quantity available in stock.')
             # if new_available_quantity:
             #     inventory_name = str(get_product.product_id.display_name) + "-" + str(
             #         datetime.now())
@@ -138,7 +146,40 @@ class UpdatedServiceRequest(models.Model):
             #             })
             #         get_inventory.action_done()
 
+    def add_product_quantity(self,product_id,quantity):
+        print('in add product')
+        new_available_quantity = None
+        get_product = self.env['stock.quant'].search(
+            [('product_id', '=', product_id)], order='create_date desc', limit=1)
 
+        if get_product:
+            print(get_product)
+            current_stock_quantity = get_product.quantity
+            if abs(current_stock_quantity) <= 0.0:
+                raise UserError('Not enough quantity available in stock.')
+            elif quantity > abs(current_stock_quantity):
+                raise UserError('Not enough quantity available in stock.')
+            else:
+                new_available_quantity = abs(current_stock_quantity) - abs(quantity)
+
+            if new_available_quantity <= 0.0:
+                raise UserError('Not enough quantity available in stock.')
+            print(new_available_quantity)
+
+    def delete_product_quantity(self,product_id):
+        print('in delete product')
+        new_available_quantity = None
+        product_line_data = self.env['isp_crm_module.product_line'].search([('id', '=', product_id)], limit=1)
+        get_product = self.env['stock.quant'].search(
+            [('product_id', '=', product_line_data.product_id.id)], order='create_date desc', limit=1)
+        if get_product:
+            print(get_product)
+            current_stock_quantity = get_product.quantity
+            new_available_quantity = abs(current_stock_quantity) + abs(product_line_data.product_uom_qty)
+            print(new_available_quantity)
+
+    def update_stock_quantity(self,):
+        pass
 
 
 
