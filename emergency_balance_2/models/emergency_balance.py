@@ -158,7 +158,7 @@ class emergency_balance(models.Model):
 
              record.customer.has_due = True
              record.customer.emergency_date = record.emergency_date
-             record.customer.active_status = 'active'
+
              record.approved_by = self.env.uid
              record.disable_header = True
              record.state = 'due'
@@ -184,7 +184,7 @@ class emergency_balance(models.Model):
              current_unit_price=(record.customer.current_package_price)/30
              due_amount = current_unit_price * (record.emergency_date - 2)
              record.customer.emergency_balance_due_amount = due_amount
-
+             record.customer.active_status = 'active'
              modified_date = modified_date + timedelta(hours=6)
              status = update_expiry_bandwidth(record.customer.subscriber_id,
                                               modified_date.strftime(DEFAULT_DATE_FORMAT),

@@ -60,16 +60,16 @@ default_crypt_context = CryptContext(
 
 class UpdatedServiceRequest(models.Model):
     _inherit =  "isp_crm_module.service_request"
-    technical_info_real_ip = fields.Char(string='Real IP Address')
-    is_real_ip = fields.Boolean(compute='_compute_show_hide')
-
-    @api.one
-    def _compute_show_hide(self):
-        self.is_real_ip = False
-        for product in self.tagged_product_ids:
-            for attribute in product.attribute_line_ids:
-                if 'real' in attribute.display_name.lower() and 'ip' in attribute.display_name.lower().lower():
-                    self.is_real_ip = True
+    # technical_info_real_ip = fields.Char(string='Real IP Address')
+    # is_real_ip = fields.Boolean(compute='_compute_show_hide')
+    #
+    # @api.one
+    # def _compute_show_hide(self):
+    #     self.is_real_ip = False
+    #     for product in self.tagged_product_ids:
+    #         for attribute in product.attribute_line_ids:
+    #             if 'real' in attribute.display_name.lower() and 'ip' in attribute.display_name.lower().lower():
+    #                 self.is_real_ip = True
     # @api.multi
     # def write(self, vals):
     #     print("from write*****************************************************************")
@@ -77,9 +77,13 @@ class UpdatedServiceRequest(models.Model):
     #     print("after", vals)
     #     if 'product_line' in vals:
     #         for lines in vals['product_line']:
-    #             if lines[0]!=4:
-    #                 print(lines)
-    #                 self.update_product_quantity(lines[1], 1, 1)
+    #
+    #             if lines[0]==1:
+    #                 current_quantity=lines[2]['product_uom_qty']
+    #
+    #                 self.update_product_quantity(lines[1],current_quantity)
+    #
+    #                 #self.update_product_quantity(lines[1], 1, 1)
     #                 #product added. reduce quantity
     #                 # if lines[0]==0:
     #                 #     self.update_product_quantity(lines[1],1,1)
@@ -88,39 +92,51 @@ class UpdatedServiceRequest(models.Model):
     #
     #     return res
     #
-    # def update_product_quantity(self,product_id,quantity,status):
-    #     print(product_id)
-    #     product = self.env['product.product'].search([('id', '=', product_id)], limit=1)
-    #     print("product",product)
-    #     # get_product = self.env['stock.quant'].search(
-    #     #     [('product_id', '=', product.product_id.id)], order='create_date desc', limit=1)
-    #     # print("quantity",get_product)
-    #     # if get_product:
-    #     #     print(get_product)
-    #     #     current_stock_quantity = get_product.quantity
-    #     #     if abs(current_stock_quantity) <= 0.0:
-    #     #         raise UserError('Not enough quantity available in stock.')
-    #     #
-    #     #     new_available_quantity = abs(current_stock_quantity) - abs(quantity)
+    # def update_product_quantity(self,product_id,current_quantity):
     #
-    #         # if new_available_quantity:
-    #         #     inventory_name = str(get_product.product_id.display_name) + "-" + str(
-    #         #         datetime.now())
-    #         #     create_inventory = self.env['stock.inventory'].create({
-    #         #         'name': inventory_name,
-    #         #         'filter': 'product',
-    #         #         'product_id': get_product.product_id.id,
-    #         #         'accounting_date': datetime.today(),
-    #         #     }).action_start()
-    #         #     get_inventory = self.env['stock.inventory'].search(
-    #         #         [('name', '=', inventory_name)], order='create_date desc', limit=1)
-    #         #     if get_inventory:
-    #         #         get_inventory_lines = get_inventory.line_ids
-    #         #         for line in get_inventory_lines:
-    #         #             line.update({
-    #         #                 'product_qty': float(abs(new_available_quantity))
-    #         #             })
-    #         #         get_inventory.action_done()
+    #     new_available_quantity = None
+    #     quantity = None
+    #     product_line_data=self.env['isp_crm_module.product_line'].search([('id', '=', product_id)], limit=1)
+    #     print("present_quantity", current_quantity)
+    #     print("past_quantity", product_line_data.product_uom_qty)
+    #     prev_quantity = float(product_line_data.product_uom_qty)
+    #
+    #     get_product = self.env['stock.quant'].search(
+    #         [('product_id', '=', product_line_data.product_id.id)], order='create_date desc', limit=1)
+    #     print("quantity",get_product)
+    #     if get_product:
+    #         print(get_product)
+    #         current_stock_quantity = get_product.quantity
+    #         if abs(current_stock_quantity) <= 0.0:
+    #             raise UserError('Not enough quantity available in stock.')
+    #
+    #         if abs(prev_quantity) > abs(current_quantity):
+    #             quantity = abs(prev_quantity) - abs(current_quantity)
+    #             new_available_quantity = abs(current_stock_quantity) + abs(quantity)
+    #             print("barse stock",new_available_quantity)
+    #         elif abs(current_quantity) > abs(prev_quantity):
+    #             quantity = abs(current_quantity) - abs(prev_quantity)
+    #             new_available_quantity = abs(quantity) - abs(current_stock_quantity)
+    #             print("komse stock", new_available_quantity)
+
+            # if new_available_quantity:
+            #     inventory_name = str(get_product.product_id.display_name) + "-" + str(
+            #         datetime.now())
+            #     create_inventory = self.env['stock.inventory'].create({
+            #         'name': inventory_name,
+            #         'filter': 'product',
+            #         'product_id': get_product.product_id.id,
+            #         'accounting_date': datetime.today(),
+            #     }).action_start()
+            #     get_inventory = self.env['stock.inventory'].search(
+            #         [('name', '=', inventory_name)], order='create_date desc', limit=1)
+            #     if get_inventory:
+            #         get_inventory_lines = get_inventory.line_ids
+            #         for line in get_inventory_lines:
+            #             line.update({
+            #                 'product_qty': float(abs(new_available_quantity))
+            #             })
+            #         get_inventory.action_done()
 
 
 
