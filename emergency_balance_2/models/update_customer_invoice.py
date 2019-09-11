@@ -77,4 +77,16 @@ class UpdateCustomerInvoice(models.Model):
             record.status = APPROVED
             print(record.status)
 
-
+    @api.multi
+    def action_invoice_paid(self):
+        # Updating the package change info
+        if self.payment_service_id.id == self.PAYMENT_SERVICE_TYPE_ID:
+            last_package_change_obj = self.env['isp_crm_module.change_package'].sudo().search(
+                [('customer_id', '=', self.partner_id.id)], order='create_date desc', limit=1)
+            if last_package_change_obj:
+                last_package_change_obj.update({
+                    'state': 'invoice_paid',
+                    'is_invoice_paid': True
+                })
+        super(UpdateCustomerInvoice, self).action_invoice_paid()
+        return True
