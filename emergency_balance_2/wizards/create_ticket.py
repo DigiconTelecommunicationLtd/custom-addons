@@ -43,12 +43,14 @@ class DashboardOne(models.TransientModel):
                                domain=[('subscriber_id', '!=', 'New'), ('subscriber_id', 'like', 'MR')])
     emergency_date = fields.Selection(EMERGENCY_TYPE, string='Emergency Balance', help="Emergency Balance",
                                       required=True, track_visibility='onchange')
+
     due_amount = fields.Float('Due Amount', required=True,
                               default=0.0,
                               track_visibility='onchange')
 
     subscriber_id = fields.Char(compute='change_emergency_date', string='Subscriber ID')
     current_package = fields.Char(compute='change_emergency_date', string='Current Package')
+    active_status = fields.Char(compute='change_emergency_date', string='Active Status')
     current_package_price = fields.Char(compute='change_emergency_date', string='Current Package Price')
     current_package_end_date = fields.Char(compute='change_emergency_date', string='Valid Till')
     next_package_start_date = fields.Char(compute='change_emergency_date', string='Next Start Date')
@@ -72,7 +74,7 @@ class DashboardOne(models.TransientModel):
             records.assigned_rm = str(self.customer.assigned_rm.name)
             records.subscriber_id = str(self.customer.subscriber_id)
             records.balance = str(abs(self.customer.get_customer_balance(self.customer.id)))
-
+            records.active_status = str(self.customer.active_status)
 
     def on_submit(self):
         form_view_id = self.env.ref('emergency_balance_2.emergency_balance_create_ticket_wizard_view_form').ids

@@ -318,7 +318,7 @@ class UpdatedServiceRequest(models.Model):
                                     else:
                                         # service_activation_date and billing_start_date is not being set for afew user group
                                         # solution 1: updating it with sudo command. Not yet implemented
-                                        customer.update({
+                                        customer.sudo().update({
                                             'is_potential_customer': False,
                                             'subscriber_id': customer_subs_id,
                                             'technical_info_ip': self.ip,
@@ -450,4 +450,21 @@ class UpdatedServiceRequest(models.Model):
     # SERVICE REQUEST LOST
 
     #########
+    @api.onchange('stage')
+    def stage_onchange(self):
+        value = self.stage.name
+        sequence = self.stage.sequence
+        if value == 'Done':
+            raise UserError('System does not allow you to drag record unless mark done is confirmed by action.')
+        if value == 'Bill Date Confirmation':
+            raise UserError('System does not allow you to drag record unless it is send by action.')
+        elif value == 'Queue':
+            raise UserError('System does not allow you to drag record to queue stage.')
+        elif value == 'New':
+            raise UserError('System does not allow you to drag record to new stage.')
+        elif value == 'Mark Lost':
+            raise UserError('System does not allow you to drag record to mark lost stage.')
+        elif self._origin.is_done:
+            raise UserError(
+                'System does not allow you to change stage once it is marked done.')
 

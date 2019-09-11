@@ -4,7 +4,7 @@
 
     <menuitem
             id="isp_crm_module.isp_crm_hd_menu"
-            name="Bandwidth"
+            name="Internet service ticket"
             parent="isp_crm_module.isp_crm_hd"
             action="isp_crm_module.isp_crm_helpdesk"
             sequence="1"

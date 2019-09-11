@@ -42,6 +42,8 @@ class updated_res(models.Model):
                 custom_valid_till = datetime.strptime(record.new_next_start_date, DEFAULT_DATE_FORMAT)
                 if today_new > custom_valid_till:
                     total_due = record.emergency_balance_due_amount
+            else:
+                total_due = str(0.0)
 
         self.customer_total_due = total_due
 

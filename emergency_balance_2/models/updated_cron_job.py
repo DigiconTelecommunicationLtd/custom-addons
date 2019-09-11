@@ -214,7 +214,7 @@ class UpdateCronJobModel(models.Model):
                             if opportunity and opportunity.lead_type != "sohoandsme":
                                 #custom_due_date.strftime(DEFAULT_DATE_FORMAT)
                                 #fix deferred thing
-                                if customer.is_deferred == True:
+                                if customer.is_deferred == True and opportunity.lead_type == "retail":
                                     if str(customer.customer_state) == 'paid':
                                         updated_customer = customer.update_current_bill_cycle_info(
                                             customer=customer,
@@ -305,7 +305,6 @@ class UpdateCronJobModel(models.Model):
                 #deffered payment
 
                 if customer.is_deferred:
-
                     opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
                     if opportunity:
                         if opportunity.lead_type == "retail":
