@@ -8,4 +8,4 @@ from . import update_isp_crm_service_request_model
 from . import update_customer_invoice
 from . import emergency_balance_cron_job
 from . import updated_cron_job
-from . import inherited_sale_order_eb
+

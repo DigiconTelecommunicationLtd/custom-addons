@@ -17,7 +17,7 @@ class CustomerQuotation(models.Model):
     _sql_constraints = [
         ('customer_po_no', 'unique(customer_po_no)', 'Customer PO No. already exists!')
     ]
-
+    new_lead_type = fields.Char(compute='_get_new_lead_type', string='Lead Type')
     foundation = fields.Many2one('isp_crm_module.mime_pop', string='Foundation')
     connectivity_media = fields.Selection(CONNECTIVITY_MEDIA, string='Connectivity Media', required=False,  help="Connectivity Media")
     required_tower_height = fields.Char(string='Required Tower Height', required=False)
@@ -37,6 +37,16 @@ class CustomerQuotation(models.Model):
     amount_without_vat = fields.Monetary(string='Amount Without VAT', store=True, readonly=True, compute='_amount_all',
                                      track_visibility='onchange')
     amount_vat = fields.Monetary(string='VAT', store=True, readonly=True, compute='_amount_all')
+
+    @api.multi
+    def _get_new_lead_type(self):
+        for record in self:
+            if record.lead_type == 'retail':
+                record.new_lead_type = 'Retail'
+            elif record.lead_type == 'corporate':
+                record.new_lead_type = 'Corporate'
+            elif record.lead_type == 'sohoandsme':
+                record.new_lead_type = 'SOHO and SME'
 
     @api.depends('order_line.price_total')
     def _amount_all(self):

@@ -230,7 +230,7 @@ class Team(models.Model):
                 'subject': subject,
                 'body_html': body,
                 'email_to': 'hod.mime@cg-bd.com',
-                'email_cc': 'sd.mime@cg-bd.com,' + email,
+                'email_cc': 'sd.mime@cg-bd.com,'+'nmc.mime@cg-bd.com,' + email,
                 'email_from': self.DEFAULT_FROM_MAIL,
             }
             create_and_send_email = self.env['mail.mail'].create(mail_values).send()
