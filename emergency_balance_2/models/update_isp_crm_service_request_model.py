@@ -127,6 +127,7 @@ class UpdatedServiceRequest(models.Model):
 
             if new_available_quantity <= 0.0:
                 raise UserError('Not enough quantity available in stock.')
+            self.update_stock_quantity(new_available_quantity,get_product.product_id)
             # if new_available_quantity:
             #     inventory_name = str(get_product.product_id.display_name) + "-" + str(
             #         datetime.now())
@@ -165,7 +166,7 @@ class UpdatedServiceRequest(models.Model):
             if new_available_quantity <= 0.0:
                 raise UserError('Not enough quantity available in stock.')
             print(new_available_quantity)
-
+            self.update_stock_quantity(new_available_quantity, get_product.product_id)
     def delete_product_quantity(self,product_id):
         print('in delete product')
         new_available_quantity = None
@@ -177,9 +178,30 @@ class UpdatedServiceRequest(models.Model):
             current_stock_quantity = get_product.quantity
             new_available_quantity = abs(current_stock_quantity) + abs(product_line_data.product_uom_qty)
             print(new_available_quantity)
+            self.update_stock_quantity(new_available_quantity, get_product.product_id)
 
-    def update_stock_quantity(self,):
-        pass
+
+    @api.multi
+    def update_stock_quantity(self,new_available_quantity,product_id):
+        if new_available_quantity:
+            inventory_name = str(product_id.display_name) + "-" + str(
+                datetime.now())
+            print('inventory_name',inventory_name)
+            create_inventory = self.env['stock.inventory'].create({
+                'name': inventory_name,
+                'filter': 'product',
+                'product_id': product_id.id,
+                'accounting_date': datetime.today(),
+            }).action_start()
+            get_inventory = self.env['stock.inventory'].search(
+                [('name', '=', inventory_name)], order='create_date desc', limit=1)
+            if get_inventory:
+                get_inventory_lines = get_inventory.line_ids
+                for line in get_inventory_lines:
+                    line.update({
+                        'product_qty': float(abs(new_available_quantity))
+                    })
+                get_inventory.action_done()
 
 
 
