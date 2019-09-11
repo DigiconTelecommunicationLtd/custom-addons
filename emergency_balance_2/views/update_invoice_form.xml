@@ -51,9 +51,19 @@
                      <field name="payment_term_id" position="attributes">
                          <attribute name="invisible">1</attribute>
                      </field>
-
                  </field>
          </record>
+<!--         <record id="emergency_balance_view_add_otc_tab_in_quotation_form_inherit" model="ir.ui.view">-->
+<!--                <field name="name">emergency_balance_view_add_otc_tab_in_quotation_form_inherit</field>-->
+<!--                <field name="model">sale.order</field>-->
+<!--                <field name="inherit_id" ref="isp_crm_module.view_add_otc_tab_in_quotation_form"/>-->
+<!--                 <field name="arch" type="xml">-->
+<!--                     <field name="lead_type" position="replace">-->
+<!--                         <field name="new_lead_type"/>-->
+<!--                     </field>-->
+<!--                 </field>-->
+<!--         </record>-->
+
     </data>
 </odoo>
 

@@ -60,8 +60,8 @@ class updated_res(models.Model):
         for record in self:
             if record.has_due:
                 due_date_obj = datetime.strptime(record.emergency_due_date, DEFAULT_DATE_FORMAT)
-                modified_date_obj=due_date_obj + timedelta(days=1,hours=6)
-                record.new_next_start_date=modified_date_obj.strftime(DEFAULT_DATE_FORMAT)
+                modified_date_obj=due_date_obj + timedelta(hours=6)
+                record.new_next_start_date = modified_date_obj.strftime(DEFAULT_DATE_FORMAT)
             else:
                 record.new_next_start_date = record.current_package_end_date
 

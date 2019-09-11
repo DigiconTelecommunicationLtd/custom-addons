@@ -51,10 +51,10 @@ class UpdateCronJobModel(models.Model):
                 # Get customer balance
                 customer_balance =  customer.get_customer_balance(customer_id=customer.id)
                 #update customer balance for emergency. add due only if today passed emergency valid till
-                if customer.has_due:
-                    custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
-                    if today_new > custom_valid_till:
-                        customer_balance = customer_balance + customer.emergency_balance_due_amount
+                # if customer.has_due:
+                #     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
+                #     if today_new > custom_valid_till:
+                #         customer_balance = customer_balance + customer.emergency_balance_due_amount
                 # find their invoices that are paid
                 current_month_invoice = self.env['account.invoice'].search([
                     ('partner_id', '=', customer.id),
@@ -190,9 +190,14 @@ class UpdateCronJobModel(models.Model):
                         payment_obj = self.env['account.payment']
                         #adjust if customer has due
                         if customer.has_due:
+                            custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
+                            due_amount_for_customer = 0
+                            if today_new > custom_valid_till:
+                                due_amount_for_customer = customer.emergency_balance_due_amount
+
                             payment_obj.customer_bill_adjustment(
                                 customer=customer,
-                                package_price=customer.next_package_price+customer.emergency_balance_due_amount
+                                package_price=customer.next_package_price+due_amount_for_customer
                             )
                         else:
                             payment_obj.customer_bill_adjustment(
@@ -229,6 +234,10 @@ class UpdateCronJobModel(models.Model):
                                         updated_customer.update({
                                             'is_deferred':False
                                         })
+                                        update_expiry_bandwidth(updated_customer.subscriber_id,
+                                                                updated_customer.current_package_end_date,
+                                                                updated_customer.current_package_id.name)
+
                                         #updated_customer.is_deferred = False
                                         print('dinffered',str(updated_customer.is_deferred))
 
