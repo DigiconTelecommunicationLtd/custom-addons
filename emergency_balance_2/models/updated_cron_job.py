@@ -239,7 +239,6 @@ class UpdateCronJobModel(models.Model):
                                                                 updated_customer.current_package_id.name)
 
                                         #updated_customer.is_deferred = False
-                                        print('dinffered',str(updated_customer.is_deferred))
 
                                 else:
                                     updated_customer = customer.update_current_bill_cycle_info(
@@ -288,7 +287,7 @@ class UpdateCronJobModel(models.Model):
                             custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
                             today_new = datetime.now() + timedelta(hours=6)
 
-                            print(today_new,custom_valid_till)
+
 
                             if today_new > custom_valid_till:
                                 customer.update({
@@ -304,7 +303,7 @@ class UpdateCronJobModel(models.Model):
                     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
                     today_new = datetime.now() + timedelta(hours=6)
 
-                    print(today_new, custom_valid_till)
+
 
                     if today_new > custom_valid_till:
                         customer.update({

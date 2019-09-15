@@ -5,22 +5,39 @@ root_host='http://127.0.0.1:8069'
 def get_package_info(package_name):
     bandwidth = None
     ip_pool = None
-    if "package" in package_name.lower() and "1" in package_name.lower():
-        bandwidth = '20M/20M'
-        ip_pool = 'PKG-1'
-    elif "package" in package_name.lower() and "2" in package_name.lower():
-        bandwidth = '30M/30M'
-        ip_pool = 'PKG-2'
-    elif "package" in package_name.lower() and "3" in package_name.lower():
-        bandwidth = '40M/40M'
-        ip_pool = 'PKG-3'
-    elif "package" in package_name.lower() and "4" in package_name.lower():
-        bandwidth = '50M/50M'
-        ip_pool = 'PKG-4'
-
+    if 'prime' in package_name.lower():
+        if "package" in package_name.lower() and "1" in package_name.lower():
+            bandwidth = '10M/10M'
+            ip_pool = 'PKG-201'
+        elif "package" in package_name.lower() and "2" in package_name.lower():
+            bandwidth = '20M/20M'
+            ip_pool = 'PKG-202'
+        elif "package" in package_name.lower() and "3" in package_name.lower():
+            bandwidth = '25M/25M'
+            ip_pool = 'PKG-203'
+        elif "package" in package_name.lower() and "4" in package_name.lower():
+            bandwidth = '30M/30M'
+            ip_pool = 'PKG-204'
+        elif "package" in package_name.lower() and "5" in package_name.lower():
+            bandwidth = '40M/40M'
+            ip_pool = 'PKG-205'
     else:
-        bandwidth = None
-        ip_pool = None
+        if "package" in package_name.lower() and "1" in package_name.lower():
+            bandwidth = '20M/20M'
+            ip_pool = 'PKG-1'
+        elif "package" in package_name.lower() and "2" in package_name.lower():
+            bandwidth = '30M/30M'
+            ip_pool = 'PKG-2'
+        elif "package" in package_name.lower() and "3" in package_name.lower():
+            bandwidth = '40M/40M'
+            ip_pool = 'PKG-3'
+        elif "package" in package_name.lower() and "4" in package_name.lower():
+            bandwidth = '50M/50M'
+            ip_pool = 'PKG-4'
+
+        else:
+            bandwidth = None
+            ip_pool = None
     return bandwidth,ip_pool
 
 
