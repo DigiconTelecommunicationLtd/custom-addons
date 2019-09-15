@@ -184,26 +184,28 @@ class UpdateCronJobModel(models.Model):
 
                 elif str(customer.next_package_start_date) == str(tomorrow) or customer.active_status == CUSTOMER_INACTIVE_STATUS or customer.has_due == True:
                     # updating the customer active_status and package according to their balance
+                    due_amount_for_customer = 0.0
+                    if customer.has_due:
+                        custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
+                        custom_valid_till = custom_valid_till + timedelta(hours=6)
+                        if today_new > custom_valid_till:
+                            # due_amount_for_customer = customer.emergency_balance_due_amount
+                            due_amount_for_customer = customer.customer_total_due
+
                     if (customer_balance < 0) and (abs(
-                            customer_balance) >= customer.next_package_price):
+                            customer_balance) >= customer.next_package_price+due_amount_for_customer):
                         # updating account moves of customer
                         payment_obj = self.env['account.payment']
                         #adjust if customer has due
-                        if customer.has_due:
-                            custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
-                            due_amount_for_customer = 0
-                            if today_new > custom_valid_till:
-                                due_amount_for_customer = customer.emergency_balance_due_amount
-
-                            payment_obj.customer_bill_adjustment(
+                        payment_obj.customer_bill_adjustment(
                                 customer=customer,
-                                package_price=customer.next_package_price+due_amount_for_customer
+                                package_price=customer.next_package_price + due_amount_for_customer
                             )
-                        else:
-                            payment_obj.customer_bill_adjustment(
-                                customer=customer,
-                                package_price=customer.next_package_price
-                            )
+                        # else:
+                        #     payment_obj.customer_bill_adjustment(
+                        #         customer=customer,
+                        #         package_price=customer.next_package_price
+                        #     )
                         # updating package info of customer
                         sale_order_lines = customer.next_package_sales_order_id.order_line
                         original_price = 0.0
@@ -301,6 +303,7 @@ class UpdateCronJobModel(models.Model):
                 #TEST PURPOSE
                 elif customer.has_due:
                     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
+                    custom_valid_till = custom_valid_till + timedelta(hours=6)
                     today_new = datetime.now() + timedelta(hours=6)
 
 
