@@ -40,7 +40,8 @@ class updated_res(models.Model):
             if record.has_due:
                 today_new = datetime.now() + timedelta(hours=6)
                 custom_valid_till = datetime.strptime(record.new_next_start_date, DEFAULT_DATE_FORMAT)
-                custom_valid_till = custom_valid_till + timedelta(hours=6)
+                #custom_valid_till = custom_valid_till + timedelta(hours=6)
+                custom_valid_till = custom_valid_till + timedelta(hours=30)
                 if today_new > custom_valid_till:
                     total_due = record.emergency_balance_due_amount
             else:

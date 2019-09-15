@@ -187,7 +187,8 @@ class UpdateCronJobModel(models.Model):
                     due_amount_for_customer = 0.0
                     if customer.has_due:
                         custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
-                        custom_valid_till = custom_valid_till + timedelta(hours=6)
+                        #custom_valid_till = custom_valid_till + timedelta(hours=6)
+                        custom_valid_till = custom_valid_till + timedelta(hours=30)
                         if today_new > custom_valid_till:
                             # due_amount_for_customer = customer.emergency_balance_due_amount
                             due_amount_for_customer = customer.customer_total_due
@@ -288,8 +289,8 @@ class UpdateCronJobModel(models.Model):
                         if customer.has_due:
                             custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
                             today_new = datetime.now() + timedelta(hours=6)
-                            custom_valid_till = custom_valid_till + timedelta(hours=6)
-
+                            #custom_valid_till = custom_valid_till + timedelta(hours=6)
+                            custom_valid_till = custom_valid_till + timedelta(hours=30)
 
                             if today_new > custom_valid_till:
                                 customer.update({
@@ -303,7 +304,8 @@ class UpdateCronJobModel(models.Model):
                 #TEST PURPOSE
                 elif customer.has_due:
                     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
-                    custom_valid_till = custom_valid_till + timedelta(hours=6)
+                    #custom_valid_till = custom_valid_till + timedelta(hours=6)
+                    custom_valid_till = custom_valid_till + timedelta(hours=30)
                     today_new = datetime.now() + timedelta(hours=6)
 
 
