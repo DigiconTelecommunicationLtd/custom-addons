@@ -412,8 +412,8 @@ class UpdatedServiceRequest(models.Model):
 
                         # Send mail on mark done
                         if customer_type == "MC" or customer_type == "MS":
-                        #     pass
-                        # else:
+                             pass
+                        else:
                             self.env['isp_crm_module.mail'].service_request_send_email(customer.email, customer_subs_id,
                                                                                        cust_password, str(self.ip),
                                                                                        str(self.subnet_mask),
