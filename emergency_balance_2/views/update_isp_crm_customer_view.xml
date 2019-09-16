@@ -16,8 +16,6 @@
                 </field>
                 <field name="gender" position="before">
                     <field name="customer_balance" />
-                    <field name="package_product_price"/>
-                    <field name="next_package_price"/>
 <!--                    <field name="is_deferred" />-->
 <!--                    <field name="customer_state" attrs="{'invisible': [('is_deferred', '=', False)]}" />-->
 <!--                    <field name="amount_total_signed" attrs="{'invisible': [('is_deferred', '=', False)]}" />-->
