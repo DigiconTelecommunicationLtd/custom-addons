@@ -95,7 +95,7 @@
                             <tr>
                                 <th>Balance</th>
                                 <td>
-                                    <t t-esc="customer_balance"/>
+                                    <t t-esc="user.customer_balance"/>
                                 </td>
                             </tr>
                                 <tr>

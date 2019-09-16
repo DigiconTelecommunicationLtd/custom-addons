@@ -1,10 +1,9 @@
-from odoo import models, fields, api,_
+from odoo import models, fields, api,_,registry, SUPERUSER_ID
 from odoo.exceptions import Warning, UserError
 from datetime import datetime, timezone, timedelta, date
 from odoo.addons.isp_crm_module.models.radius_integration import *
 from odoo.addons.emergency_balance_2.models.color_code import *
-
-
+import threading
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 EMERGENCY_TYPE = [
     (1, _('1 Day')),
@@ -110,13 +109,21 @@ class DashboardOne(models.TransientModel):
             template_obj_new_service_request = self.env['emergency_balance.mail'].sudo().search(
                 [('name', '=', 'new_emergency_balance_approval')],
                 limit=1)
-            self.env['emergency_balance.mail'].action_send_email(str(self.emergency_date),
+            email_thread = threading.Thread(target=self._sent_email, args=(str(self.emergency_date),
                                                                  self.customer.name,
                                                                  self.customer.subscriber_id,
                                                                  self.customer.current_package_id.name,
-                                                                 str(self.customer.current_package_price),
-                                                                 template_obj_new_service_request
-                                                                 )
+                                                                 str(self.customer.current_package_price)
+
+                                                                 ))
+            email_thread.start()
+            # self.env['emergency_balance.mail'].action_send_email(str(self.emergency_date),
+            #                                                      self.customer.name,
+            #                                                      self.customer.subscriber_id,
+            #                                                      self.customer.current_package_id.name,
+            #                                                      str(self.customer.current_package_price),
+            #                                                      template_obj_new_service_request
+            #                                                      )
             # self.approved = False
             # self.has_due = False
             # self.set_for_approval = True
@@ -172,3 +179,20 @@ class DashboardOne(models.TransientModel):
             'type': 'ir.actions.act_window',
             'target': 'inline',
         }
+
+    def _sent_email(self,emergency_date,name,subscriber_id,current_package_id,current_package_price):
+        dbname = self.env.cr.dbname
+        db_registry = registry(dbname)
+        _context = self._context
+        with api.Environment.manage(), db_registry.cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, _context)
+            template_obj_new_service_request = env['emergency_balance.mail'].sudo().search(
+                [('name', '=', 'new_emergency_balance_approval')],
+                limit=1)
+            env['emergency_balance.mail'].action_send_email(str(emergency_date),
+                                                                 name,
+                                                                 subscriber_id,
+                                                                 current_package_id,
+                                                                 current_package_price,
+                                                                 template_obj_new_service_request
+                                                                 )
