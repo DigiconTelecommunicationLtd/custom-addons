@@ -498,7 +498,9 @@
                                             Tk
                                         </div>
                                         <p id="monthly_payment_bill_amount" class="hidden">
-                                            <t t-esc="user.package_product_price"/>
+<!--                                            <t t-esc="user.package_product_price"/>-->
+                                            <t t-esc="user.next_package_price"/>
+
                                         </p>
                                         <input type="number" min="1" name="amount" class="form-control pull-right" id="payment_bill_amount" required="1" value=""/>
                                     </div>
