@@ -72,7 +72,7 @@ class DashboardOne(models.TransientModel):
             records.next_package_start_date = str(self.customer.next_package_start_date)
             records.assigned_rm = str(self.customer.assigned_rm.name)
             records.subscriber_id = str(self.customer.subscriber_id)
-            records.balance = str(abs(self.customer.get_customer_balance(self.customer.id)))
+            records.balance = "{0:.2f}".format(abs(self.customer.get_customer_balance(self.customer.id)))
             records.active_status = str(self.customer.active_status)
 
     def on_submit(self):
