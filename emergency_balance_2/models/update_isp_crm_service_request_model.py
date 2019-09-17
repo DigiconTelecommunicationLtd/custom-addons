@@ -60,7 +60,8 @@ default_crypt_context = CryptContext(
 
 class UpdatedServiceRequest(models.Model):
     _inherit =  "isp_crm_module.service_request"
-    internal_notes = fields.Text(string="Internal Notes", track_visibility='onchange')
+    #internal_notes = fields.Text(string="Internal Notes", track_visibility='onchange')
+    internal_notes = fields.Html(string="Internal Notes", track_visibility='onchange')
     # technical_info_real_ip = fields.Char(string='Real IP Address')
     # is_real_ip = fields.Boolean(compute='_compute_show_hide')
     #

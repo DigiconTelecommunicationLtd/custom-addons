@@ -48,7 +48,7 @@ class Opportunity(models.Model):
     proposed_activation_date = fields.Date(string='Proposed Service Activation Date', track_visibility='onchange')
     billing_start_date = fields.Date(string='Billing Start Date', track_visibility='onchange')
     connectivityAddress = fields.Char('Connectivity Address',size=100)
-
+    description = fields.Html('Notes')
 
 
     @api.multi
