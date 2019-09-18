@@ -45,11 +45,11 @@ class UpdateCronJobModel(models.Model):
             # the customer has sufficient balance.
             # If the customer has sufficient balance then reactivate the customer
             customers_list = self.env['res.partner'].search([
-                ('customer', '=', True)
-            ])
+                ('customer', '=', True)])
             for customer in customers_list:
                 # Get customer balance
                 customer_balance =  customer.get_customer_balance(customer_id=customer.id)
+                print(customer_balance)
                 #update customer balance for emergency. add due only if today passed emergency valid till
                 # if customer.has_due:
                 #     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
@@ -331,7 +331,7 @@ class UpdateCronJobModel(models.Model):
                                     two_days = today_new +  timedelta(days=2)
 
                                     custom_due_date = datetime.strptime(due_date, DEFAULT_DATE_FORMAT)
-                                    custom_due_date = custom_due_date + timedelta(hours=6)
+                                    custom_due_date = custom_due_date + timedelta(hours=30)
 
                                     if(today_new > custom_due_date):
                                         update_expiry_bandwidth(customer.subscriber_id,
