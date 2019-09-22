@@ -286,7 +286,7 @@ class UpdateCronJobModel(models.Model):
                         #     customer.update({
                         #         'active_status': CUSTOMER_INACTIVE_STATUS
                         #     })
-                        if customer.has_due:
+                        if customer.has_due and opportunity.lead_type == "retail":
                             custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
                             today_new = datetime.now() + timedelta(hours=6)
                             #custom_valid_till = custom_valid_till + timedelta(hours=6)
@@ -296,13 +296,13 @@ class UpdateCronJobModel(models.Model):
                                 customer.update({
                                     'active_status': CUSTOMER_INACTIVE_STATUS
                                 })
-                        else:
+                        elif opportunity.lead_type == "retail":
                             customer.update({
                                 'active_status': CUSTOMER_INACTIVE_STATUS
                             })
 
                 #TEST PURPOSE
-                elif customer.has_due:
+                elif opportunity.lead_type == "retail" and customer.has_due:
                     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
                     #custom_valid_till = custom_valid_till + timedelta(hours=6)
                     custom_valid_till = custom_valid_till + timedelta(hours=30)
@@ -317,7 +317,7 @@ class UpdateCronJobModel(models.Model):
 
                 #deffered payment
 
-                if customer.is_deferred:
+                if opportunity.lead_type == "retail" and customer.is_deferred:
                     opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
                     if opportunity:
                         if opportunity.lead_type == "retail":

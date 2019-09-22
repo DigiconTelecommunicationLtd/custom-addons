@@ -288,29 +288,30 @@ class ISPCRMInvoice(models.Model):
         customer = self.partner_id
         invoice_lines = self.invoice_line_ids
         customer_product_line_obj = self.env['isp_crm_module.customer_product_line']
-        for invoice_line in invoice_lines:
-            if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
-                package_line = invoice_line
-            created_product_line = customer_product_line_obj.create({
-                'customer_id': customer.id,
-                'name': invoice_line.name,
-                'product_id': invoice_line.product_id.id,
-                'product_updatable': False,
-                'product_uom_qty': invoice_line.quantity,
-                'product_uom': invoice_line.product_id.uom_id.id,
-                'price_unit': invoice_line.price_unit,
-                'price_subtotal': invoice_line.price_subtotal,
-                'price_total': self.amount_total,
-            })
-            created_product_line_list.append(created_product_line.id)
-        if package_line != '':
-            customer.update({
-                'invoice_product_id': package_line.product_id.id,
-                'invoice_product_price': package_line.price_subtotal,
-                'invoice_product_original_price': package_line.product_id.list_price,
-                'invoice_sales_order_name': self.origin,
-                'product_line': [(6, None, created_product_line_list)]
-            })
+        if customer.is_potential_customer == True:
+            for invoice_line in invoice_lines:
+                if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                    package_line = invoice_line
+                created_product_line = customer_product_line_obj.create({
+                    'customer_id': customer.id,
+                    'name': invoice_line.name,
+                    'product_id': invoice_line.product_id.id,
+                    'product_updatable': False,
+                    'product_uom_qty': invoice_line.quantity,
+                    'product_uom': invoice_line.product_id.uom_id.id,
+                    'price_unit': invoice_line.price_unit,
+                    'price_subtotal': invoice_line.price_subtotal,
+                    'price_total': self.amount_total,
+                })
+                created_product_line_list.append(created_product_line.id)
+            if package_line != '':
+                customer.update({
+                    'invoice_product_id': package_line.product_id.id,
+                    'invoice_product_price': package_line.price_subtotal,
+                    'invoice_product_original_price': package_line.product_id.list_price,
+                    'invoice_sales_order_name': self.origin,
+                    'product_line': [(6, None, created_product_line_list)]
+                })
 
         super(ISPCRMInvoice, self).action_invoice_open()
 
