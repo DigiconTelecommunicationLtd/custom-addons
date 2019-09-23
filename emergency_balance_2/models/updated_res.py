@@ -22,7 +22,7 @@ class updated_res(models.Model):
     customer_state = fields.Char(compute='_compute_state', string="State")
     amount_total_signed = fields.Float(compute='_compute_state', string="Invoiced Amount")
     customer_total_due = fields.Float(compute='_compute_due', string="Due")
-
+    comment = fields.Html('Notes')
     @api.one
     def _compute_due(self):
         total_due = 0.0
