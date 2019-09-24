@@ -390,6 +390,10 @@ class UpdatedServiceRequest(models.Model):
                         customer.update_next_bill_cycle_info(
                             customer=customer,
                         )
+                        #code to fix service request to customer carry forward
+                        customer.update({
+                            'comment': self.internal_notes
+                        })
 
                         # Adding the package change history
                         package_history_obj = self.env['isp_crm_module.customer_package_history'].search([])
