@@ -207,7 +207,8 @@ class ISPCRMPayment(models.Model):
             'partner_id': customer.id,
             'name': name,
             'account_id': revenue_acc_obj.id,
-            'debit': package_price,
+            'credit': package_price,
         })
+        acc_move.post()
         return True
 
