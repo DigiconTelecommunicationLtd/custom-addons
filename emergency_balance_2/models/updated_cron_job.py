@@ -184,6 +184,12 @@ class UpdateCronJobModel(models.Model):
 
                 elif str(customer.next_package_start_date) == str(tomorrow) or customer.active_status == CUSTOMER_INACTIVE_STATUS or customer.has_due == True:
                     # updating the customer active_status and package according to their balance
+
+                    # add deferred payment patch
+                    if str(customer.customer_state) == 'paid':
+                        customer.update({
+                            'is_deferred': False
+                        })
                     due_amount_for_customer = 0.0
                     if customer.has_due:
                         custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
