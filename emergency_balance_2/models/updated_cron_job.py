@@ -49,7 +49,7 @@ class UpdateCronJobModel(models.Model):
             for customer in customers_list:
                 # Get customer balance
                 customer_balance =  customer.get_customer_balance(customer_id=customer.id)
-                print(customer_balance)
+                #print(customer_balance)
                 #update customer balance for emergency. add due only if today passed emergency valid till
                 # if customer.has_due:
                 #     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)

@@ -69,8 +69,12 @@ class updated_res(models.Model):
 
     @api.one
     def _compute_customer_balance(self):
-        balance="{0:.2f}".format(abs(self.env['res.partner'].get_customer_balance(self.id)))
-        self.customer_balance = balance
+        #balance="{0:.2f}".format(abs(self.env['res.partner'].get_customer_balance(self.id)))
+        #balance = "{0:.2f}".format(self.env['res.partner'].get_customer_balance(self.id))
+        customer_balance_temp =(self.env['res.partner'].get_customer_balance(self.id)) * -1.0
+        if self.env['res.partner'].get_customer_balance(self.id) == 0.0:
+            customer_balance_temp = 0.0
+        self.customer_balance = "{0:.2f}".format(customer_balance_temp)
         # for record in self:
         #     print(record)
         #     record.customer_balance=str(abs(record.get_customer_balance(record.subscriber_id)))
