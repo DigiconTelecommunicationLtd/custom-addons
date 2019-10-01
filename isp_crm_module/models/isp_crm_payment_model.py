@@ -54,6 +54,7 @@ class ISPCRMPayment(models.Model):
 
     @api.multi
     def post(self, vals={}, is_mail_sent=False):
+
         """
         Overrides the default post function for advance payment option
         :return:
@@ -106,7 +107,6 @@ class ISPCRMPayment(models.Model):
         for record in self:
             mail_obj = self.env['isp_crm_module.mail'].sending_mail_for_payment(payment_obj=record, template_obj=template_obj)
 
-        self.payment_confirm()
 
     def make_advance_payment(self, records):
         """
@@ -161,7 +161,7 @@ class ISPCRMPayment(models.Model):
             created_unearned_revenue_move_line.update({
                 'payment_id': rec.id
             })
-
+            acc_move.post()
             rec.partner_id.get_customer_balance(customer_id=rec.partner_id.id)
         return True
 
@@ -213,41 +213,5 @@ class ISPCRMPayment(models.Model):
         acc_move.post()
         return True
 
-    def payment_confirm(self):
 
-        for rec in self:
-
-            # keep the name in case of a payment reset to draft
-            if not rec.name:
-                # Use the right sequence to set the name
-                if rec.payment_type == 'transfer':
-                    sequence_code = 'account.payment.transfer'
-                else:
-                    if rec.partner_type == 'customer':
-                        if rec.payment_type == 'inbound':
-                            sequence_code = 'account.payment.customer.invoice'
-                        if rec.payment_type == 'outbound':
-                            sequence_code = 'account.payment.customer.refund'
-                    if rec.partner_type == 'supplier':
-                        if rec.payment_type == 'inbound':
-                            sequence_code = 'account.payment.supplier.refund'
-                        if rec.payment_type == 'outbound':
-                            sequence_code = 'account.payment.supplier.invoice'
-                rec.name = self.env['ir.sequence'].with_context(ir_sequence_date=rec.payment_date).next_by_code(sequence_code)
-                if not rec.name and rec.payment_type != 'transfer':
-                    raise UserError(_("You have to define a sequence for %s in your company.") % (sequence_code,))
-
-            # Create the journal entry
-            amount = rec.amount * (rec.payment_type in ('outbound', 'transfer') and 1 or -1)
-            move = rec._create_payment_entry(amount)
-
-            # In case of a transfer, the first journal entry created debited the source liquidity account and credited
-            # the transfer account. Now we debit the transfer account and credit the destination liquidity account.
-            if rec.payment_type == 'transfer':
-                transfer_credit_aml = move.line_ids.filtered(lambda r: r.account_id == rec.company_id.transfer_account_id)
-                transfer_debit_aml = rec._create_transfer_entry(amount)
-                (transfer_credit_aml + transfer_debit_aml).reconcile()
-
-            rec.write({'state': 'posted', 'move_name': move.name})
-        return True
 
