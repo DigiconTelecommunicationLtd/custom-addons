@@ -182,7 +182,7 @@ class UpdateCronJobModel(models.Model):
                                 'current_package_price': ticket.proposed_package_price
                             })
 
-                elif str(customer.next_package_start_date) == str(tomorrow) or customer.active_status == CUSTOMER_INACTIVE_STATUS or customer.has_due == True:
+                elif str(customer.next_package_start_date) == str(today) or customer.active_status == CUSTOMER_INACTIVE_STATUS or customer.has_due == True:
                     # updating the customer active_status and package according to their balance
 
                     # add deferred payment patch
