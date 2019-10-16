@@ -45,6 +45,8 @@ class MimeSalesReportRetailNewCustomer(models.TransientModel):
 
 
 
+
+
     @api.model_cr
     def init(self):
         tools.drop_view_if_exists(self._cr, 'mime_sales_report_new_customer_transient')
@@ -323,14 +325,25 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                 total_paid = 0.0
                 total_due = 0.0
                 for invoice in invoices:
+                    otc = 0.0
+                    mrc = 0.0
+                    if invoice.corporate_otc_amount > 0.0:
+                        otc = invoice.corporate_otc_amount
+                        mrc = invoice.amount_total_signed - invoice.corporate_otc_amount
+                    else:
+                        if invoice.state == 'paid':
+                            mrc = invoice.amount_total_signed
+                        if invoice.state == 'open':
+                            mrc = invoice.residual_signed
+
                     if invoice.state == 'paid':
                         total_recieveable = total_recieveable + invoice.amount_total_signed
                         total_paid = total_paid + invoice.amount_total_signed
                         docs_new.append({
                             'date_maturity': invoice.date_due,
                             'customer_name': partner.name,
-                            'mrc': '',
-                            'otc': '',
+                            'mrc': "{0:.2f}".format(mrc),
+                            'otc': "{0:.2f}".format(otc),
                             'total_recieveable': "{0:.2f}".format(invoice.amount_total_signed),
                             'total_paid': "{0:.2f}".format(invoice.amount_total_signed),
                             'total_due': "{0:.2f}".format(0.0)
@@ -342,8 +355,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                         docs_new.append({
                             'date_maturity': invoice.date_due,
                             'customer_name': partner.name,
-                            'mrc': '',
-                            'otc': '',
+                            'mrc': "{0:.2f}".format(mrc),
+                            'otc': "{0:.2f}".format(otc),
                             'total_recieveable': "{0:.2f}".format(invoice.amount_total_signed),
                             'total_paid': "{0:.2f}".format(0.0),
                             'total_due': "{0:.2f}".format(invoice.residual_signed)
@@ -369,7 +382,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             existing_total_due = 0.0
             docs_old = []
             for partner in existing_corporate_partners:
-                print(partner.subscriber_id)
+
+
                 invoices = self.env['account.invoice'].search([
                     ('partner_id', '=', partner.id),
                     ('state', 'not in', ['draft', 'cancel']),
@@ -380,14 +394,25 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                 total_paid = 0.0
                 total_due = 0.0
                 for invoice in invoices:
+                    otc = 0.0
+                    mrc = 0.0
+                    if invoice.corporate_otc_amount > 0.0:
+                        otc = invoice.corporate_otc_amount
+                        mrc = invoice.amount_total_signed - invoice.corporate_otc_amount
+                    else:
+                        if invoice.state == 'paid':
+                            mrc = invoice.amount_total_signed
+                        if invoice.state == 'open':
+                            mrc = invoice.residual_signed
+
                     if invoice.state == 'paid':
                         total_recieveable = total_recieveable + invoice.amount_total_signed
                         total_paid = total_paid + invoice.amount_total_signed
                         docs_old.append({
                             'date_maturity': invoice.date_due,
                             'customer_name': partner.name,
-                            'mrc': '',
-                            'otc': '',
+                            'mrc': "{0:.2f}".format(mrc),
+                            'otc': "{0:.2f}".format(otc),
                             'total_recieveable': "{0:.2f}".format(invoice.amount_total_signed),
                             'total_paid': "{0:.2f}".format(invoice.amount_total_signed),
                             'total_due': "{0:.2f}".format(0.0)
@@ -399,8 +424,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                         docs_old.append({
                             'date_maturity': invoice.date_due,
                             'customer_name': partner.name,
-                            'mrc': '',
-                            'otc': '',
+                            'mrc': "{0:.2f}".format(mrc),
+                            'otc': "{0:.2f}".format(otc),
                             'total_recieveable': "{0:.2f}".format(invoice.amount_total_signed),
                             'total_paid': "{0:.2f}".format(0.0),
                             'total_due': "{0:.2f}".format(invoice.residual_signed)
