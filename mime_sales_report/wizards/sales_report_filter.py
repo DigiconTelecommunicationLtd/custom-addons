@@ -34,9 +34,9 @@ class DashboardOne(models.Model):
         print("You click finish")
         print(str(self.from_date))
         print(str(self.to_date))
-        tree_view_id=self.env.ref('mime_sales_report.mime_sales_report_new_customer').ids
+        # tree_view_id=self.env.ref('mime_sales_report.mime_sales_report_new_customer').ids
         #form_view_id = self.env.ref('dgcon_radius.dgcon_radius_dgcon_radius_logs_view_form').ids
-        print(str(tree_view_id))
+        # print(str(tree_view_id))
         from_date_obj = datetime.strptime(self.from_date, DEFAULT_DATE_FORMAT)
         to_date_obj = datetime.strptime(self.to_date, DEFAULT_DATE_FORMAT)
 
@@ -63,17 +63,11 @@ class DashboardOne(models.Model):
         #     domain.append(('opportunity_ids.lead_type', '=', self.customer_type))
         # print(domain)
         #last_paid_date = ('past_paid_date','&gt;=',str(self.from_date))
-        domain=[]
-        retail =('lead_type','=',self.customer_type)
+        #domain=[]
+        #retail =('lead_type','=',self.customer_type)
 
-        filtered_customers = None
-        domain.append(retail)
-        data = ('date_maturity', '>=', str(self.from_date))
-        domain.append(data)
-        data = ('date_maturity', '<=', str(self.to_date))
-        domain.append(data)
-        data = ('credit', '!=', 0)
-        domain.append(data)
+        #filtered_customers = None
+        #domain.append(retail)
         # if self.sub_type == 'existing':
         #
         #      data=('billing_start_date', '<=', str(self.from_date))
@@ -104,8 +98,8 @@ class DashboardOne(models.Model):
         #     data = ('credit', '!=', 0)
         #     domain.append(data)
 
-        filtered_customers=self.env['mime_sales_report.new_customer_transient'].search(domain)
-        print(len(filtered_customers))
+        #filtered_customers=self.env['mime_sales_report.new_customer_transient'].search(domain)
+        #print(len(filtered_customers))
         # return {
         #     'name': 'Customer Dashboard',
         #     'view_mode': 'tree',

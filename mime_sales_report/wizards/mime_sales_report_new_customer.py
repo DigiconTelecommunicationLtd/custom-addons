@@ -14,110 +14,64 @@ class MimeSalesReportRetailNewCustomer(models.TransientModel):
     _log_access = True
     create_uid = fields.Integer('ID')
     res_id = fields.Integer()
-    date_maturity = fields.Date()
     customer_name = fields.Char()
-    subscriber_id = fields.Char()
-    label = fields.Char()
+    amount = fields.Float()
+    payment_date = fields.Date()
+    communication = fields.Char()
     lead_type = fields.Char()
-    debit = fields.Float()
-    credit = fields.Float()
-    account_code = fields.Char()
-    account_name = fields.Char()
+    is_existing_user = fields.Boolean()
+    new_customer_date = fields.Date()
     billing_start_date = fields.Date()
-    current_package_end_date = fields.Date()
-    billing_type  = fields.Char(compute='_calculate_type')
-    move_id = fields.Integer()
     mrc = fields.Float(compute='_calculate_billing_type')
     otc = fields.Float(compute='_calculate_billing_type')
 
-    # total_recieveable = fields.Float(string='Total Receivable')
-    # total_paid = fields.Float(string='Total Paid')
-    # total_due = fields.Float(string='Total Due')
-
-
-
     @api.one
     def _calculate_billing_type(self):
-        if 'retail' in self.lead_type:
-            if 'Retail Installation Fee' in self.label:
-                self.otc = self.credit
-            else:
-                self.mrc = self.credit
 
-            self.total_recieveable = self.credit
-            self.total_paid  = self.credit
-            self.total_due = 0
+        if self.communication!=False and (len(self.communication) > 0) and self.is_existing_user==False:
+            invoice_ref=self.env['account.invoice'].search([('number','=',self.communication)])
+            for invoice in invoice_ref:
+                if invoice.state == 'paid':
+                    for invoiced_products in invoice.invoice_line_ids:
+                        if 'Retail Installation Fee' in invoiced_products.product_id.name:
+                            self.otc = invoiced_products.price_subtotal
 
-    @api.one
-    def _calculate_type(self):
-        if 'Retail Installation Fee' in self.label:
-            self.billing_type = 'OTC'
+                    self.mrc = (self.amount - self.otc)
         else:
-            self.billing_type = 'MRC'
+            self.mrc = self.amount
+
 
 
     @api.model_cr
     def init(self):
         tools.drop_view_if_exists(self._cr, 'mime_sales_report_new_customer_transient')
-        self._cr.execute("""
-                   CREATE OR REPLACE VIEW mime_sales_report_new_customer_transient AS (
-                       SELECT
-                        row_number() OVER () as id,
-                        row_number() OVER () as create_uid,
-                        row_number() OVER () as write_uid, 
-                        res_partner.id as res_id,
-                        date_maturity,
-                        res_partner.name as customer_name,
-                        res_partner.subscriber_id as subscriber_id,
-                        account_move_line.name as label,
-                        lead_type,
-                        billing_start_date,
-                        current_package_end_date,
-                        current_package_start_date as write_date,
-                        next_package_start_date as create_date,
-                        debit,
-                        credit,
-                        account_account.code as account_code,
-                        account_account.name as account_name,
-                        move_id
-                        FROM res_partner
-                        RIGHT OUTER JOIN crm_lead on res_partner.id=crm_lead.partner_id
-                        RIGHT OUTER JOIN account_move_line on res_partner.id=account_move_line.partner_id
-                        RIGHT OUTER JOIN account_account on account_move_line.account_id=account_account.id
-                        where
-                        is_potential_customer = false
-                        ORDER BY res_partner.name,date_maturity desc
-                   )""")
 
-    @api.multi
-    def get_filtered_data(self,lead_type=None,subtype=None,to_date=None,from_date=None):
-        sql ="""
-                   CREATE OR REPLACE VIEW mime_sales_report_new_customer_transient AS (
-                       SELECT
-                        row_number() OVER () as id,
-                        res_partner.id as res_id,
-                        date_maturity,
-                        res_partner.name as customer_name,
-                        account_move_line.name as label,
-                        lead_type,
-                        billing_start_date,
-                        current_package_end_date,
-                        debit,
-                        credit,
-                        account_account.code as account_code,
-                        account_account.name as account_name,
-                        move_id
-                        FROM res_partner
-                        RIGHT OUTER JOIN crm_lead on res_partner.id=crm_lead.partner_id
-                        RIGHT OUTER JOIN account_move_line on res_partner.id=account_move_line.partner_id
-                        RIGHT OUTER JOIN account_account on account_move_line.account_id=account_account.id
-                        where
-                        is_potential_customer = false and
-                        lead_type like '%s'
-                        ORDER BY res_partner.name,date_maturity desc
-                   )"""%(lead_type)
-        res_data=self.env.cr.execute(sql).fetchall()
-        return res_data
+        self._cr.execute("""
+            CREATE OR REPLACE VIEW mime_sales_report_new_customer_transient AS (
+                            SELECT
+                             row_number() OVER () as id,
+                             res_partner.id as res_id,
+                             res_partner.name as customer_name,
+                             account_payment.amount as amount,
+                             account_payment.payment_date,
+                             billing_start_date,
+                             account_payment.communication as communication,
+                             row_number() OVER () as create_uid,
+                             row_number() OVER () as write_uid, 
+                             current_package_start_date as write_date,
+                             next_package_start_date as create_date,
+                             is_existing_user,
+                             new_customer_date,
+                             lead_type
+                             FROM res_partner
+                             RIGHT OUTER JOIN account_payment on res_partner.id=account_payment.partner_id
+                             RIGHT OUTER JOIN crm_lead on account_payment.partner_id=crm_lead.partner_id
+                             where
+                             is_potential_customer = false
+                             ORDER BY res_partner.name,account_payment.payment_date desc
+                     )""")
+
+
 
     @api.multi
     def get_report(self,start_date,end_date,lead_type):
@@ -146,7 +100,6 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
 
     @api.model
     def get_report_values(self, docids, data=None):
-        print("asdad",data)
         date_start = data['form']['date_start']
         date_end = data['form']['date_end']
 
@@ -158,17 +111,11 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             docs_new = []
             domain_new = []
             domain_new.append(lead_type_report)
-            domain_data = ('credit', '!=', 0)
+            domain_data = ('new_customer_date', '>=', str(date_start))
             domain_new.append(domain_data)
-
-            #condition for new customer
-            domain_data=('billing_start_date', '>=', str(date_start))
+            domain_data = ('new_customer_date', '<=', str(date_end))
             domain_new.append(domain_data)
-            # domain_data = ('current_package_end_date', '<=', str(date_end))
-            # domain_new.append(domain_data)
-            domain_data = ('date_maturity', '>=', str(date_start))
-            domain_new.append(domain_data)
-            domain_data = ('date_maturity', '<=', str(date_end))
+            domain_data = ('is_existing_user', '=', False)
             domain_new.append(domain_data)
 
             #total for new customers
@@ -176,19 +123,20 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             new_total_paid = 0.0
             new_total_due = 0.0
             filtered_customers_new = self.env['mime_sales_report.new_customer_transient'].search(domain_new)
+            print('****** new customer',len(filtered_customers_new))
             for customer in filtered_customers_new:
-                new_total_recieveable = new_total_recieveable + (customer.mrc+customer.otc)
-                new_total_paid = new_total_paid + (customer.mrc+customer.otc)
+                new_total_recieveable = new_total_recieveable + customer.amount
+                new_total_paid = new_total_paid + customer.amount
                 new_total_due = new_total_due + 0.0
 
                 if data['form']['lead_type'] == 'retail':
                     docs_new.append({
-                        'date_maturity': customer.date_maturity,
+                        'date_maturity': customer.payment_date,
                         'customer_name': customer.customer_name,
-                        'mrc': "{0:.2f}".format(customer.mrc),
-                        'otc': "{0:.2f}".format(customer.otc),
-                        'total_recieveable': "{0:.2f}".format(customer.mrc+customer.otc),
-                        'total_paid': "{0:.2f}".format(customer.mrc+customer.otc),
+                        'mrc':customer.mrc,
+                        'otc':customer.otc,
+                        'total_recieveable': "{0:.2f}".format(customer.amount),
+                        'total_paid': "{0:.2f}".format(customer.amount),
                         'total_due': 0.0,
                     })
                 # else:
@@ -218,21 +166,22 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             ######################### OLD CUSTOMERS ######################################
             docs_old = []
             domain_old = []
-            domain_old.append(lead_type_report)
-            domain_data = ('credit', '!=', 0)
+
+
+
+
             old_total_recieveable=0.0
             old_total_paid=0.0
             old_total_due=0.0
-            domain_old.append(domain_data)
+
 
             # condition for Existing customer
-            domain_data = ('billing_start_date', '<', str(date_start))
+            domain_old.append(lead_type_report)
+            domain_data = ('billing_start_date', '>=', str(date_start))
             domain_old.append(domain_data)
-            domain_data = ('current_package_end_date', '<=', str(date_end))
+            domain_data = ('billing_start_date', '<=', str(date_end))
             domain_old.append(domain_data)
-            domain_data = ('date_maturity', '>=', str(date_start))
-            domain_old.append(domain_data)
-            domain_data = ('date_maturity', '<=', str(date_end))
+            domain_data = ('is_existing_user', '=', True)
             domain_old.append(domain_data)
 
             filtered_customers_old = self.env['mime_sales_report.new_customer_transient'].search(domain_old)
@@ -244,7 +193,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
 
                 if data['form']['lead_type'] == 'retail':
                     docs_old.append({
-                        'date_maturity': customer.date_maturity,
+                        'date_maturity': customer.payment_date,
                         'customer_name': customer.customer_name,
                         'mrc': "{0:.2f}".format(customer.mrc),
                         'otc': "{0:.2f}".format(customer.otc),
