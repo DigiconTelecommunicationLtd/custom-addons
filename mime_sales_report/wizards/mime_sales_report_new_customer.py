@@ -124,7 +124,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             domain_new.append(domain_data)
             domain_data = ('new_customer_date', '<=', str(date_end))
             domain_new.append(domain_data)
-            domain_data = ('is_existing_user', '=', False)
+            # domain_data = ('is_existing_user', '=', False)
             domain_new.append(domain_data)
             domain_data=('payment_state','=','posted')
             domain_new.append(domain_data)
