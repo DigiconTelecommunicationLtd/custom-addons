@@ -24,6 +24,7 @@ class MimeSalesReportRetailNewCustomer(models.TransientModel):
     new_customer_date = fields.Date()
     billing_start_date = fields.Date()
     current_package_end_date = fields.Date()
+    payment_state = fields.Char()
     mrc = fields.Float(compute='_calculate_billing_type')
     otc = fields.Float(compute='_calculate_billing_type')
 
@@ -59,6 +60,7 @@ class MimeSalesReportRetailNewCustomer(models.TransientModel):
                              billing_start_date,
                              current_package_end_date,
                              account_payment.communication as communication,
+                             account_payment.state as payment_state
                              row_number() OVER () as create_uid,
                              row_number() OVER () as write_uid, 
                              current_package_start_date as write_date,
@@ -123,6 +125,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             domain_data = ('new_customer_date', '<=', str(date_end))
             domain_new.append(domain_data)
             domain_data = ('is_existing_user', '=', False)
+            domain_new.append(domain_data)
+            domain_data=('payment_state','=','paid')
             domain_new.append(domain_data)
 
             #total for new customers
@@ -189,6 +193,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             domain_data = ('current_package_end_date', '<=', str(date_end))
             domain_old.append(domain_data)
             domain_data = ('is_existing_user', '=', True)
+            domain_old.append(domain_data)
+            domain_data = ('payment_state', '=', 'paid')
             domain_old.append(domain_data)
 
             filtered_customers_old = self.env['mime_sales_report.new_customer_transient'].search(domain_old)
