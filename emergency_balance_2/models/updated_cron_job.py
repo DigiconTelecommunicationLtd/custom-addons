@@ -183,6 +183,12 @@ class UpdateCronJobModel(models.Model):
                             })
 
                 elif str(customer.next_package_start_date) == str(today) or customer.active_status == CUSTOMER_INACTIVE_STATUS or customer.has_due == True:
+                    #change the status of customer from new to existing
+                    if str(customer.next_package_start_date) == str(today):
+                        customer.update({
+                            'is_existing_user': True
+                        })
+
                     # updating the customer active_status and package according to their balance
 
                     # add deferred payment patch

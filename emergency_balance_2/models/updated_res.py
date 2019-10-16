@@ -23,6 +23,12 @@ class updated_res(models.Model):
     amount_total_signed = fields.Float(compute='_compute_state', string="Invoiced Amount")
     customer_total_due = fields.Float(compute='_compute_due', string="Due")
     comment = fields.Html('Notes')
+
+    #for the report
+    is_existing_user = fields.Boolean(string='existing?',
+                            track_visibility='onchange',default=True)
+    new_customer_date =  fields.Date(string='New Customer Date',default=False,track_visibility='onchange')
+
     @api.one
     def _compute_due(self):
         total_due = 0.0

@@ -315,6 +315,8 @@ class UpdatedServiceRequest(models.Model):
                                     else:
                                         # service_activation_date and billing_start_date is not being set for afew user group
                                         # solution 1: updating it with sudo command. Not yet implemented
+                                        today_new = datetime.now() + timedelta(hours=6)
+                                        today = today_new.date()
                                         customer.sudo().update({
                                             'is_potential_customer': False,
                                             'subscriber_id': customer_subs_id,
@@ -328,13 +330,15 @@ class UpdatedServiceRequest(models.Model):
                                             'ppoepassword': cust_password_radius,
                                             'real_ip': self.technical_info_real_ip,
                                             'is_deferred':invoices.is_deferred,
-                                            'isp_invoice_id':invoices.id
+                                            'isp_invoice_id':invoices.id,
+                                            'is_existing_user':False,
+                                            'new_customer_date':today.strftime(DEFAULT_DATE_FORMAT)
                                         })
 
 
                         # Not a retail customer so go as it was before
                         else:
-                            customer.update({
+                            customer.sudo().update({
                                 'is_potential_customer': False,
                                 'subscriber_id': customer_subs_id,
                                 'technical_info_ip': self.ip,
@@ -344,7 +348,10 @@ class UpdatedServiceRequest(models.Model):
                                 'service_activation_date': fields.Date().today(),
                                 'billing_start_date': current_package_start_date,
                                 'isp_invoice_id': invoices.id,
-                                'is_deferred': invoices.is_deferred
+                                'is_deferred': invoices.is_deferred,
+                                'is_existing_user': False,
+                                'new_customer_date': today.strftime(DEFAULT_DATE_FORMAT)
+
                             })
                         # TODO STOP CREATE RADIUS
                         # updating customer's potentiality
