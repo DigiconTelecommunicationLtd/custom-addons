@@ -60,7 +60,7 @@ class MimeSalesReportRetailNewCustomer(models.TransientModel):
                              billing_start_date,
                              current_package_end_date,
                              account_payment.communication as communication,
-                             account_payment.state as payment_state
+                             account_payment.state as payment_state,
                              row_number() OVER () as create_uid,
                              row_number() OVER () as write_uid, 
                              current_package_start_date as write_date,
