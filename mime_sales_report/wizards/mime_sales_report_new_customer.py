@@ -424,9 +424,9 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                 'lead_type': data['form']['lead_type'],
                 'docs_new': docs_new,
                 'docs_old': docs_old,
-                'grand_recieveable': new_total_recieveable + existing_total_recieveable,
-                'grand_paid': new_total_paid + existing_total_paid,
-                'grand_due': new_total_due + existing_total_due
+                'grand_recieveable': "{0:.2f}".format(new_total_recieveable + existing_total_recieveable),
+                'grand_paid': "{0:.2f}".format(new_total_paid + existing_total_paid),
+                'grand_due': "{0:.2f}".format(new_total_due + existing_total_due)
             }
 
 
