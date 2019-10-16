@@ -22,6 +22,7 @@ class MimeSalesReportRetailNewCustomer(models.TransientModel):
     is_existing_user = fields.Boolean()
     new_customer_date = fields.Date()
     billing_start_date = fields.Date()
+    current_package_end_date = fields.Date()
     mrc = fields.Float(compute='_calculate_billing_type')
     otc = fields.Float(compute='_calculate_billing_type')
 
@@ -55,6 +56,7 @@ class MimeSalesReportRetailNewCustomer(models.TransientModel):
                              account_payment.amount as amount,
                              account_payment.payment_date,
                              billing_start_date,
+                             current_package_end_date,
                              account_payment.communication as communication,
                              row_number() OVER () as create_uid,
                              row_number() OVER () as write_uid, 
@@ -68,7 +70,7 @@ class MimeSalesReportRetailNewCustomer(models.TransientModel):
                              RIGHT OUTER JOIN crm_lead on account_payment.partner_id=crm_lead.partner_id
                              where
                              is_potential_customer = false
-                             ORDER BY res_partner.name,account_payment.payment_date desc
+                             ORDER BY account_payment.payment_date desc
                      )""")
 
 
@@ -107,7 +109,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
         print('********************',data['form']['lead_type'])
         if data['form']['lead_type'] == 'retail':
 
-            ######################### NEW CUSTOMERS ######################################
+            ######################### NEW  RETAIL CUSTOMERS ######################################
             docs_new = []
             domain_new = []
             domain_new.append(lead_type_report)
@@ -163,7 +165,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                 'total_due': "{0:.2f}".format(new_total_due)
             })
 
-            ######################### OLD CUSTOMERS ######################################
+            ######################### OLD RETAIL CUSTOMERS ######################################
             docs_old = []
             domain_old = []
 
@@ -177,9 +179,9 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
 
             # condition for Existing customer
             domain_old.append(lead_type_report)
-            domain_data = ('billing_start_date', '>=', str(date_start))
+            domain_data = ('current_package_end_date', '>=', str(date_start))
             domain_old.append(domain_data)
-            domain_data = ('billing_start_date', '<=', str(date_end))
+            domain_data = ('current_package_end_date', '<=', str(date_end))
             domain_old.append(domain_data)
             domain_data = ('is_existing_user', '=', True)
             domain_old.append(domain_data)
@@ -249,7 +251,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
         else:
             #get all non retail customers
 
-            ########################### NEW CUSTOMERS ###############################
+            ########################### CORPORATE/SOHO CUSTOMERS ###############################
             new_total_recieveable = 0.0
             new_total_paid = 0.0
             new_total_due = 0.0
@@ -268,7 +270,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                 existing_corporate_partners = self.env['res.partner'].search([
                     ('subscriber_id', 'like', 'MS'),
                     ('is_potential_customer', '=', False),
-                    ('billing_start_date', '<=', str(date_start)),
+                    ('billing_start_date', '<', str(date_start)),
 
                 ])
 
@@ -283,7 +285,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                 existing_corporate_partners = self.env['res.partner'].search([
                     ('subscriber_id', 'like', 'MC'),
                     ('is_potential_customer', '=', False),
-                    ('billing_start_date', '<=', str(date_start)),
+                    ('billing_start_date', '<', str(date_start)),
 
                 ])
 
