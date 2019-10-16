@@ -129,6 +129,14 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             domain_data=('payment_state','=','posted')
             domain_new.append(domain_data)
 
+            domain_data = ('payment_date', '>=', str(date_start))
+            domain_new.append(domain_data)
+            domain_data = ('payment_date', '<=', str(date_end))
+            domain_new.append(domain_data)
+
+
+
+
             #total for new customers
             new_total_recieveable = 0.0
             new_total_paid = 0.0
@@ -196,6 +204,11 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             domain_old.append(domain_data)
             domain_data = ('payment_state', '=', 'posted')
             domain_old.append(domain_data)
+
+            domain_data = ('payment_date', '>=', str(date_start))
+            domain_new.append(domain_data)
+            domain_data = ('payment_date', '<=', str(date_end))
+            domain_new.append(domain_data)
 
             filtered_customers_old = self.env['mime_sales_report.new_customer_transient'].search(domain_old)
             #for existing customers
