@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, tools
-
+from datetime import datetime, timezone, timedelta, date
+DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 CUSTOMER_TYPE = [
     ('retail', 'Retail'),
     ('corporate', 'Corporate'),
@@ -107,6 +108,10 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
 
         lead_type_report = ('lead_type', '=', data['form']['lead_type'])
         print('********************',data['form']['lead_type'])
+
+        start_date_obj=datetime.strptime(date_start, DEFAULT_DATE_FORMAT)
+        end_date_obj = datetime.strptime(date_end, DEFAULT_DATE_FORMAT)
+
         if data['form']['lead_type'] == 'retail':
 
             ######################### NEW  RETAIL CUSTOMERS ######################################
@@ -238,8 +243,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             return {
                 'doc_ids': 2323223,
                 'doc_model': 'mime_sales_report.new_customer_transient',
-                'date_start': date_start,
-                'date_end': date_end,
+                'date_start': start_date_obj.strftime('%d, %b %Y'),
+                'date_end': end_date_obj.strftime('%d, %b %Y'),
                 'lead_type':lead_type_display,
                 'docs_new': docs_new,
                 'docs_old':docs_old,
@@ -419,8 +424,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             return {
                 'doc_ids': 2323223,
                 'doc_model': 'mime_sales_report.new_customer_transient',
-                'date_start': date_start,
-                'date_end': date_end,
+                'date_start': start_date_obj.strftime('%d, %b %Y'),
+                'date_end': end_date_obj.strftime('%d, %b %Y'),
                 'lead_type': data['form']['lead_type'],
                 'docs_new': docs_new,
                 'docs_old': docs_old,
