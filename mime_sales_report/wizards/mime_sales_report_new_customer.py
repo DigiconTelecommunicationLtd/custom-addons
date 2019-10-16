@@ -126,7 +126,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             domain_new.append(domain_data)
             domain_data = ('is_existing_user', '=', False)
             domain_new.append(domain_data)
-            domain_data=('payment_state','=','paid')
+            domain_data=('payment_state','=','posted')
             domain_new.append(domain_data)
 
             #total for new customers
@@ -194,7 +194,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             domain_old.append(domain_data)
             domain_data = ('is_existing_user', '=', True)
             domain_old.append(domain_data)
-            domain_data = ('payment_state', '=', 'paid')
+            domain_data = ('payment_state', '=', 'posted')
             domain_old.append(domain_data)
 
             filtered_customers_old = self.env['mime_sales_report.new_customer_transient'].search(domain_old)
