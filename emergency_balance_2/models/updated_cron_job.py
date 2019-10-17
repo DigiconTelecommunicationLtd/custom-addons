@@ -207,12 +207,15 @@ class UpdateCronJobModel(models.Model):
 
                     if (customer_balance < 0) and (abs(
                             customer_balance) >= customer.next_package_price+due_amount_for_customer):
+                    # if (customer_balance < 0) and (abs(
+                    #             customer_balance) >= customer.total_monthly_bill + due_amount_for_customer):
                         # updating account moves of customer
                         payment_obj = self.env['account.payment']
                         #adjust if customer has due
                         payment_obj.customer_bill_adjustment(
                                 customer=customer,
                                 package_price=customer.next_package_price + due_amount_for_customer
+                                # package_price=customer.total_monthly_bill + due_amount_for_customer
                             )
                         # else:
                         #     payment_obj.customer_bill_adjustment(
@@ -240,6 +243,7 @@ class UpdateCronJobModel(models.Model):
                                             customer=customer,
                                             product_id=customer.next_package_id.id,
                                             price=customer.next_package_price,
+                                            # price=customer.total_monthly_bill,
                                             original_price=customer.next_package_original_price,
                                             start_date=today.strftime(DEFAULT_DATE_FORMAT),
                                         )
@@ -260,6 +264,7 @@ class UpdateCronJobModel(models.Model):
                                         customer=customer,
                                         product_id=customer.next_package_id.id,
                                         price=customer.next_package_price,
+                                        # price=customer.total_monthly_bill,
                                         original_price=customer.next_package_original_price,
                                         start_date=customer.next_package_start_date,
                                     )
@@ -275,6 +280,7 @@ class UpdateCronJobModel(models.Model):
                                     customer=customer,
                                     product_id=customer.next_package_id.id,
                                     price=customer.next_package_price,
+                                    # price=customer.total_monthly_bill,
                                     original_price=customer.next_package_original_price,
                                     start_date=customer.next_package_start_date,
                                 )

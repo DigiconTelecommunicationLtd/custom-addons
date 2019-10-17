@@ -210,19 +210,31 @@ class UpdatedServiceRequest(models.Model):
         opportunity = self.env['crm.lead']
         print('customer',customer)
         print('opportunity', opportunity)
+
+
         if check_customer:
             invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="create_date desc",
                                                           limit=1)
             print('invoices', invoices)
             if invoices:
                 # if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
+                real_ip = False
+                product_name = None
+                real_ip_subtotal = 0.0
+                reaL_ip_original = 0.0
                 if invoices.is_deferred or invoices.state == INVOICE_PAID_STATUS:
                     self.invoice_state = invoices.state
                     opportunity.action_set_won()
                     opportunity.action_create_new_service_request()
 
                     for service_req in self:
+                        # condition to check real ip
+                        for productline in service_req.order_line:
+                            if 'real' in productline.product_id.name.lower() and 'ip' in productline.product_id.name.lower():
+                                if  self.technical_info_real_ip == False or  len(self.technical_info_real_ip)==0:
+                                    raise UserError('Real IP found in order line. Please fill up REAL IP section in technical info')
                         # update the stage of this service request to done
+
                         cust_password_radius = None
                         last_stage_obj = self.env['isp_crm_module.stage'].search([('name', '=', 'Done')], limit=1)
 
@@ -302,8 +314,7 @@ class UpdatedServiceRequest(models.Model):
                         # This is only for Retail users
                         print('customer_type', customer_type)
                         if customer_type == 'MR':
-                            real_ip = False
-                            product_name = None
+
                             result_radius = False
                             for productline in service_req.order_line:
                                 if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
@@ -311,6 +322,8 @@ class UpdatedServiceRequest(models.Model):
                                     #make sure real ip does not hit radius
                                     if 'real' in productline.product_id.name.lower() and 'ip' in productline.product_id.name.lower():
                                         real_ip = True
+                                        real_ip_subtotal = productline.price_subtotal
+                                        reaL_ip_original = productline.product_id.list_price
                                     else:
                                         product_name = productline.product_id.name
 
@@ -326,7 +339,7 @@ class UpdatedServiceRequest(models.Model):
                             else:
                                 #real ip process
                                 result_radius= create_radius_user_real_ip(customer_subs_id,cust_password_radius,product_name,customer._get_package_end_date(
-                                                                       fields.Date.today()),self.technical_info_real_ip)
+                                                                       fields.Date.today()),self.technical_info_real_ip.strip())
 
 
                             if result_radius != 'success':
@@ -347,8 +360,10 @@ class UpdatedServiceRequest(models.Model):
                                     'billing_start_date': current_package_start_date,
                                     'ppoeuername': customer_subs_id,
                                     'ppoepassword': cust_password_radius,
-                                    'real_ip': self.technical_info_real_ip.strip(),
+                                    'real_ip': self.technical_info_real_ip,
+                                    'real_ip_subtotal':real_ip_subtotal,
                                      'has_real_ip':real_ip,
+                                    'reaL_ip_original':reaL_ip_original,
                                     'is_deferred':invoices.is_deferred,
                                     'isp_invoice_id':invoices.id,
                                     'is_existing_user':False,
@@ -405,6 +420,7 @@ class UpdatedServiceRequest(models.Model):
                         # sales_order_obj                 = self.env['sale.order'].search([('name', '=', last_invoice.origin)], order='create_date desc', limit=1)
                         current_package_id = customer.invoice_product_id.id
                         current_package_price = customer.invoice_product_price
+
 
                         # updating current package info.
                         customer.update_current_bill_cycle_info(

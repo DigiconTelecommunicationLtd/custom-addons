@@ -291,7 +291,13 @@ class ISPCRMInvoice(models.Model):
         if customer.is_potential_customer == True:
             for invoice_line in invoice_lines:
                 if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
-                    package_line = invoice_line
+                    print('************************************', invoice_line.product_id.name)
+                    if 'real' in invoice_line.product_id.name.lower() and 'ip' in invoice_line.product_id.name.lower():
+                        print('************************************', invoice_line.product_id.name)
+
+                    else:
+                        print('************************************', invoice_line.product_id.name)
+                        package_line = invoice_line
                 created_product_line = customer_product_line_obj.create({
                     'customer_id': customer.id,
                     'name': invoice_line.name,

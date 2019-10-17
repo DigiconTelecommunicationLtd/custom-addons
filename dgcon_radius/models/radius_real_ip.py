@@ -23,3 +23,5 @@ class dgcon_real_ip_radius_res_partner(models.Model):
     _inherit = 'res.partner'
     real_ip = fields.Char(string='Real IP Address')
     has_real_ip = fields.Boolean(default=False)
+    real_ip_subtotal = fields.Float(default=0.0)
+    reaL_ip_original =fields.Float(default=0.0)

@@ -4,7 +4,7 @@ from odoo import models, fields, api,_
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 from datetime import datetime, timezone, timedelta, date
 from odoo.exceptions import Warning, UserError
-
+DEFAULT_PACKAGES_CATEGORY_NAME = 'Packages'
 REQUIRE_APPROVAL = 1
 APPROVED = 2
 NEED_APPROVAL = 3
@@ -90,3 +90,4 @@ class UpdateCustomerInvoice(models.Model):
                 })
         super(UpdateCustomerInvoice, self).action_invoice_paid()
         return True
+
