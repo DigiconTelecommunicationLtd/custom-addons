@@ -302,38 +302,58 @@ class UpdatedServiceRequest(models.Model):
                         # This is only for Retail users
                         print('customer_type', customer_type)
                         if customer_type == 'MR':
+                            real_ip = False
+                            product_name = None
+                            result_radius = False
                             for productline in service_req.order_line:
                                 if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
                                     cust_password_radius = self._create_random_password(size=DEFAULT_PASSWORD_SIZE)
-                                    result_radius = create_radius_user(customer_subs_id, cust_password_radius,
-                                                                       productline.product_id.name,
-                                                                       customer._get_package_end_date(
-                                                                           fields.Date.today()), customer.id)
-
-                                    if result_radius != 'success':
-                                        raise UserError('Radius server issue: ' + result_radius)
+                                    #make sure real ip does not hit radius
+                                    if 'real' in productline.product_id.name.lower() and 'ip' in productline.product_id.name.lower():
+                                        real_ip = True
                                     else:
-                                        # service_activation_date and billing_start_date is not being set for afew user group
-                                        # solution 1: updating it with sudo command. Not yet implemented
-                                        today_new = datetime.now() + timedelta(hours=6)
-                                        today = today_new.date()
-                                        customer.sudo().update({
-                                            'is_potential_customer': False,
-                                            'subscriber_id': customer_subs_id,
-                                            'technical_info_ip': self.ip,
-                                            'technical_info_subnet_mask': self.subnet_mask,
-                                            'technical_info_gateway': self.gateway,
-                                            'description_info': self.description,
-                                            'service_activation_date': fields.Date().today(),
-                                            'billing_start_date': current_package_start_date,
-                                            'ppoeuername': customer_subs_id,
-                                            'ppoepassword': cust_password_radius,
-                                            'real_ip': self.technical_info_real_ip,
-                                            'is_deferred':invoices.is_deferred,
-                                            'isp_invoice_id':invoices.id,
-                                            'is_existing_user':False,
-                                            'new_customer_date':today.strftime(DEFAULT_DATE_FORMAT)
-                                        })
+                                        product_name = productline.product_id.name
+
+
+                            print('real_ip',real_ip)
+                            print('product', product_name)
+                            if real_ip!= True:
+                                result_radius = create_radius_user(customer_subs_id, cust_password_radius,
+                                                                   product_name,
+                                                                   customer._get_package_end_date(
+                                                                       fields.Date.today()), customer.id)
+
+                            else:
+                                #real ip process
+                                result_radius= create_radius_user_real_ip(customer_subs_id,cust_password_radius,product_name,customer._get_package_end_date(
+                                                                       fields.Date.today()),self.technical_info_real_ip)
+
+
+                            if result_radius != 'success':
+                                raise UserError('Radius server issue: ' + result_radius)
+                            else:
+                                # service_activation_date and billing_start_date is not being set for afew user group
+                                # solution 1: updating it with sudo command. Not yet implemented
+                                today_new = datetime.now() + timedelta(hours=6)
+                                today = today_new.date()
+                                customer.sudo().update({
+                                    'is_potential_customer': False,
+                                    'subscriber_id': customer_subs_id,
+                                    'technical_info_ip': self.ip,
+                                    'technical_info_subnet_mask': self.subnet_mask,
+                                    'technical_info_gateway': self.gateway,
+                                    'description_info': self.description,
+                                    'service_activation_date': fields.Date().today(),
+                                    'billing_start_date': current_package_start_date,
+                                    'ppoeuername': customer_subs_id,
+                                    'ppoepassword': cust_password_radius,
+                                    'real_ip': self.technical_info_real_ip.strip(),
+                                     'has_real_ip':real_ip,
+                                    'is_deferred':invoices.is_deferred,
+                                    'isp_invoice_id':invoices.id,
+                                    'is_existing_user':False,
+                                    'new_customer_date':today.strftime(DEFAULT_DATE_FORMAT)
+                                })
 
 
                         # Not a retail customer so go as it was before

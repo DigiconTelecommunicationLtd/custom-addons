@@ -33,8 +33,9 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='ip']" position="before">
 
-                        <field name="technical_info_real_ip" attrs="{'invisible': [('is_real_ip', '=', False)]}" />
-                        <field name="is_real_ip" invisible="1"/>
+                    <field name="is_real_ip" string="Assign Real ip?"/>
+                    <field name="technical_info_real_ip" attrs="{'invisible': [('is_real_ip', '=', False)]}" />
+
 
 
 

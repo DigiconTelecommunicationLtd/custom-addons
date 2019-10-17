@@ -29,6 +29,16 @@ class updated_res(models.Model):
                             track_visibility='onchange',default=True)
     new_customer_date =  fields.Date(string='New Customer Date',default=False,track_visibility='onchange')
 
+    #get bill from service request line
+    total_monthly_bill = fields.Float(string="Monthly Bill",compute="_compute_bill_from_serivce_line")
+
+    @api.multi
+    def _compute_bill_from_serivce_line(self):
+        total = 0.0
+        for product in self.product_line:
+            total=total+product.price_subtotal
+        self.total_monthly_bill = total
+
     @api.one
     def _compute_due(self):
         total_due = 0.0

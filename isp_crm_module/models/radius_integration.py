@@ -63,6 +63,28 @@ def create_radius_user(username,password,pool,enddate,customer_id):
     else:
         return 'error'
 
+def create_radius_user_real_ip(username,password,pool,enddate,real_ip):
+    """
+    Creating user for mime isp
+    :param username: username for PPoE
+    :param password: password for PPoE
+    :param bandwidth: user bandwidth 10M/10M,30M/30M
+    :param pool: ip pool name PKG-1, PKG-2, PKG-3, PKG-4 or Package name of ERP
+    :param date: next expiry date
+    :return: if successful then returns "success"
+    """
+
+    bandwidth,ip_pool=get_package_info(pool)
+    if bandwidth!=None and ip_pool!=None:
+        now = datetime.strptime(enddate,'%Y-%m-%d')
+        now = now + timedelta(hours=23, minutes=59, seconds=59)
+        date_time = now.strftime("%d %B %Y %H:%M")
+        query=root_host+'/freeradius/createrealip?username={}&password={}&bandwidth={}&pool={}&date={}&real_ip={}'
+        r=requests.get(query.format(username, password,bandwidth,ip_pool,date_time,real_ip))
+        return str(r.text)
+    else:
+        return 'error'
+
 def update_billing_date(username,date):
 
     """
