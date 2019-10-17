@@ -374,3 +374,114 @@ class UpdateCronJobModel(models.Model):
             return True
         except Exception as ex:
             print(ex)
+
+    @api.model
+    def send_customer_invoice_in_email(self):
+        print('************************************** updated cusomter invoice email')
+        """
+        Function for running in a cron job to send mail to the customer which
+        bill cycle will be completed after 7days
+        :return: boolean response
+        """
+        today = datetime.today()
+        after_threshold_days_date = today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
+        after_threshold_days_date_str = after_threshold_days_date.strftime("%Y-%m-%d")
+
+        after_second_threshold_days_date = today + timedelta(days=DEFAULT_SECOND_THRESHOLD_DAYS)
+        after_second_threshold_days_date_str = after_second_threshold_days_date.strftime("%Y-%m-%d")
+
+        customers_list = self.env['res.partner'].search([
+            ('customer', '=', True),
+            '|',
+            ('current_package_end_date', '=', after_threshold_days_date),
+            ('current_package_end_date', '=', after_second_threshold_days_date)
+        ])
+
+        # customers_list = self.env['res.partner'].search([
+        #     ('customer', '=', True)
+        # ])
+
+        service_request_obj = self.env['isp_crm_module.service_request']
+
+        for customer in customers_list:
+            # Check if the customer is corporate or not
+            opportunities = self.env['crm.lead'].search([('partner_id', '=', customer.id)])
+            for opportunity in opportunities:
+                # check if lead type is corporate or soho or sme
+                if opportunity.lead_type != "corporate":
+                    # print("Creating Invoice for customer:- " + customer.name)
+                    customer_invoice_status = self.create_customer_invoice_status(customer=customer)
+                    try:
+                        # print("mail sending.....")
+                        if customer.real_ip:
+                            mail_sent = self._send_mail_to_customer_before_some_days_real_ip(customer=customer)
+                        else:
+                            mail_sent = self._send_mail_to_customer_before_some_days(customer=customer)
+                        # print("mail sent")
+                    except Exception as ex:
+                        print(ex)
+
+    def _send_mail_to_customer_before_some_days_real_ip(self, customer):
+        """
+        Sending mail to the customers which bill cycle date will end next week
+        :param customer: to whom the mail is to be sent
+        :return: boolean response
+        """
+        template_obj = self.env['res.partner'].sudo().search(
+                [('name', '=', 'sending_invoice_for_warning_the_customer_real_ip')],
+                limit=1)
+        self.mail_to = customer.email
+        # self.mail_cc = customer.email
+        body = template_obj.body_html
+        body = body.replace('--customer_id--', str(customer.subscriber_id))
+        if len(str(customer.name)) > 1:
+            body = body.replace('--customer_name--', str(customer.name))
+        else:
+            body = body.replace('--customer_name--', "N/A")
+        # show package info from customer's technical information.
+        if customer.opportunity_ids.lead_type != "corporate":
+            body = body.replace('--package--', str(customer.current_package_id.name or ""))
+            body = body.replace('--price--', str(customer.current_package_price-customer.real_ip_subtotal))
+            body = body.replace('--realipprice--', str(customer.real_ip_subtotal))
+            body = body.replace('--totalprice--', str(customer.current_package_price))
+
+            if customer.current_package_end_date:
+                body = body.replace('--last_payment_date--', str(datetime.strptime(str(customer.current_package_end_date),'%Y-%m-%d').strftime("%d-%m-%Y")))
+            else:
+                body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
+        else:
+            body = body.replace('--package--', str(customer.next_package_id.name or ""))
+            body = body.replace('--price--', str(customer.next_package_price))
+            if customer.current_package_end_date:
+                body = body.replace('--last_payment_date--', str(
+                    datetime.strptime(str(customer.current_package_end_date), '%Y-%m-%d').strftime("%d-%m-%Y")))
+            else:
+                body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
+
+        # Creating attachment file of the invoice
+        # sales_order_obj = self.env['sale.order'].search([], order='create_date asc', limit=1)
+        # pdf = self.env.ref('isp_crm_module.action_report_receipt_attachment').render_qweb_pdf([sales_order_obj[0].id])
+        #
+        # # save pdf as attachment
+        # # ATTACHMENT_NAME = customer.name + "_" + invoice.number
+        # ATTACHMENT_NAME = customer.name
+        # attachment = self.env['ir.attachment'].create({
+        #     'name': ATTACHMENT_NAME,
+        #     'type': 'binary',
+        #     'datas_fname': ATTACHMENT_NAME + '.pdf',
+        #     'store_fname': ATTACHMENT_NAME,
+        #     'datas': base64.encodestring(pdf[0]),
+        #     'mimetype': 'application/x-pdf'
+        # })
+
+        if template_obj:
+            mail_values = {
+                'subject': template_obj.subject_mail,
+                'body_html': body,
+                'email_to': self.mail_to,
+                # 'email_cc': self.mail_cc,
+                'email_from': 'notice.mime@cg-bd.com',
+                # 'attachment_ids': [(6, 0, [attachment.id])],
+            }
+            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+        return create_and_send_email
