@@ -15,12 +15,14 @@ CREATE_EXPIRY = "INSERT INTO radcheck ( id , UserName , Attribute , op , Value )
 CREATE_BANDWITDH = "INSERT INTO radreply (username, attribute, op, value) VALUES ('{}', 'Mikrotik-Rate-Limit', '==', '{}')"
 CREATE_IP_POOL = "INSERT INTO radreply ( id , UserName , Attribute , op , Value ) VALUES ( NULL , '{}', 'Framed-Pool', '==' , '{}')"
 
-CREATE_REAL_IP_POOL = "INSERT INTO radreply ( id , UserName , Attribute , op , Value ) VALUES ( NULL , '{}', 'Real-IP', '==' , '{}')"
+CREATE_REAL_IP_POOL = "INSERT INTO radreply ( id , UserName , Attribute , op , Value ) VALUES ( NULL , '{}', 'Framed-IP-Address', '==' , '{}')"
 
 UPDATE_EXPIRY = "UPDATE radcheck set value = '{}' where  username = '{}' AND attribute = 'Expiration'"
 DISCONNECT = "UPDATE radreply SET value = '1k/1k' where username = '{}'"
 UPDATE_BANDWIDTH = "UPDATE radreply SET value = '{}' where username = '{}' AND attribute = 'Mikrotik-Rate-Limit'"
 UPDATE_POOL = "UPDATE radreply SET Value = '{}' where username = '{}' AND attribute = 'Framed-Pool' AND op = '=='"
+
+UPDATE_REAL_IP_POOL = "UPDATE radreply SET Value = '{}' where username = '{}' AND attribute = 'Framed-IP-Address' AND op = '=='"
 
 
 PKG1='PKG-1'
@@ -187,6 +189,41 @@ def update_connection(username, bandwidth, update_package):
     else:
         return str(status) + ' ' + str(data)
 
+def update_connection_real_ip(username, bandwidth, update_package):
+
+    """
+    Function responsible for connecting and updating bandwidth.
+    This performs two database write operation and one server.
+        1. Update bandwidth info in radreply
+        2. Update IP POOL data in radreply
+        3. Disconnects the user to ensure user bandwidth is updated
+    Parameters
+    ----------
+    username : str
+        username for the client. This will be needed for PPoE access
+
+    bandwidth: str
+        assign bandwidth for the client. Format 10M/10M
+
+    update_package: str
+        name of the updated package
+
+    Returns
+    -------
+    str
+        returns 'success' if successful, otherwise returns debug data.
+    """
+
+    sum = 'START TRANSACTION;'+UPDATE_BANDWIDTH.format(bandwidth, username)+';'+UPDATE_POOL.format(update_package, username)+';'+'COMMIT;'
+    status, data = execute(sum)
+
+
+    disconnect(username)
+    if status:
+        return 'success'
+    else:
+        return str(status) + ' ' + str(data)
+
 
 def update_expiry(username, date):
     """
@@ -241,6 +278,46 @@ def update_bandwitdh_expiry(username,expirydate,bandwidth, package):
         UPDATE_POOL.format(package, username)+';'+ \
         UPDATE_EXPIRY.format(expirydate, username)+';'+ \
         'COMMIT;'
+
+    status, data = execute(sum)
+    if status:
+        return 'success'
+    else:
+        return str(status) + ' ' + str(data)
+
+
+def update_bandwitdh_expiry_real_ip(username,expirydate,bandwidth, package):
+    """
+       Updates expiry and bandwitdh
+
+       Parameters
+       ----------
+       username : str
+           username for the client for PPoE
+
+        bandwidth: str
+            assign bandwidth for the client. Format 10M/10M
+
+       expirydate : str
+            Billing cycle
+
+       package: str
+            name of the updated package
+       Returns
+       -------
+       str
+           returns 'success' if successful, otherwise returns debug data.
+       """
+    # sum='START TRANSACTION;'+\
+    #     UPDATE_BANDWIDTH.format(bandwidth, username)+';'+\
+    #     UPDATE_POOL.format(package, username)+';'+ \
+    #     UPDATE_EXPIRY.format(expirydate, username)+';'+ \
+    #     'COMMIT;'
+
+    sum = 'START TRANSACTION;' + \
+          UPDATE_BANDWIDTH.format(bandwidth, username) + ';' + \
+          UPDATE_EXPIRY.format(expirydate, username) + ';' + \
+          'COMMIT;'
 
     status, data = execute(sum)
     if status:

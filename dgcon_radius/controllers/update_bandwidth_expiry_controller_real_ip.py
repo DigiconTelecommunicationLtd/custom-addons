@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import traceback
 from odoo import http
-from .execute_query import update_bandwitdh_expiry
+from .execute_query import update_bandwitdh_expiry_real_ip
 
 
-class FreeradiusExpiryUpdateExpiry(http.Controller):
-    @http.route('/freeradius/update_expiry_bandwidth', auth='public')
+class FreeradiusExpiryUpdateExpiryRealIp(http.Controller):
+    @http.route('/freeradius/update_expiry_bandwidth_real_ip', auth='public')
     def index(self, **kw):
         """
         Update expiry date
@@ -33,9 +33,10 @@ class FreeradiusExpiryUpdateExpiry(http.Controller):
         expirydate=kw['expirydate']
         bandwidth=kw['bandwidth']
         package=kw['package']
-
+        print(bandwidth)
+        print(package)
         try:
-            result = update_bandwitdh_expiry(username,expirydate,bandwidth,package)
+            result = update_bandwitdh_expiry_real_ip(username,expirydate,bandwidth,package)
             if result == 'success':
                 http.request.env['dgcon_radius.logs'].sudo().create(
                     {
