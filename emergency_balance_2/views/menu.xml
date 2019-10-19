@@ -22,6 +22,11 @@
      <menuitem name="Emergency Balance tickets" id="emergency_balance_res_partner_menu_list" parent="emergency_balance_res_partner_menu"
               action="emergence_balance_emergency_balance_action_window"/>
 
+    <menuitem name="Real IP Change Request" id="real_ip_change_request_menu_item" parent="emergency_balance_res_partner_menu"
+              action="real_ip_change_action_window"/>
+
+
+
 <!--    <menuitem name="Approval tickets" id="emergency_balance_approval_list" parent="emergency_balance_res_partner_menu"-->
 <!--              action="emergence_balance_approval_balance_action_window"/>-->
 

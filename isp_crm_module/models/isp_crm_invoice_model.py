@@ -22,7 +22,7 @@ class ISPCRMInvoice(models.Model):
 
     _inherit = 'account.invoice'
 
-    payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type', default=1)
+    payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type')
     is_deferred = fields.Boolean("Is Deferred", default=False)
     customer_po_no = fields.Char(compute='_get_customer_po_no', string='Customer PO No')
     billing_due_date = fields.Char(compute='_get_billing_due_date', string='Due Date', default="", readonly=False)
