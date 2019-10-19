@@ -4,7 +4,7 @@ from odoo import models, fields, api,_
 from datetime import datetime, timezone, timedelta, date
 from odoo.addons.emergency_balance_2.models.color_code import *
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
-
+DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 class updated_res(models.Model):
     _inherit = 'res.partner'
 
@@ -145,8 +145,9 @@ class updated_res(models.Model):
         current_package_price = 0.0
         current_package_original_price = 0.0
         for productline in customer.product_line:
-            current_package_price= current_package_price + productline.price_subtotal
-            current_package_original_price = current_package_original_price + productline.product_id.list_price
+            if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+                current_package_price= current_package_price + productline.price_subtotal
+                current_package_original_price = current_package_original_price + productline.product_id.list_price
 
 
         print('******current_package_price',current_package_price)
@@ -182,8 +183,9 @@ class updated_res(models.Model):
         next_package_price = 0.0
         next_package_original_price = 0.0
         for productline in customer.product_line:
-            next_package_price = next_package_price + productline.price_subtotal
-            next_package_original_price = next_package_original_price + productline.product_id.list_price
+            if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+                next_package_price = next_package_price + productline.price_subtotal
+                next_package_original_price = next_package_original_price + productline.product_id.list_price
 
         print('******next_package_price', next_package_price)
         print('******next_package_original_price', next_package_original_price)
