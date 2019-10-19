@@ -4,7 +4,7 @@ from odoo import models, fields, api,_
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 from datetime import datetime, timezone, timedelta, date
 from odoo.exceptions import Warning, UserError
-from odoo.addons.emergency_balance_2.models.update_isp_crm_service_request_model import *
+
 DEFAULT_PACKAGES_CATEGORY_NAME = 'Packages'
 REQUIRE_APPROVAL = 1
 APPROVED = 2
