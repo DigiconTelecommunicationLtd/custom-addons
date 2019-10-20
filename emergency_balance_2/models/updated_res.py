@@ -32,7 +32,7 @@ class updated_res(models.Model):
     #get bill from service request line
     total_monthly_bill = fields.Float(string="Monthly Bill",compute="_compute_bill_from_serivce_line")
 
-    @api.multi
+    @api.one
     def _compute_bill_from_serivce_line(self):
         total = 0.0
         for product in self.product_line:
