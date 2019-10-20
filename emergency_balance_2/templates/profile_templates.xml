@@ -30,16 +30,28 @@
                         <li class="list-group-item">
                             <b>Original Package Price</b>
                             <b class="pull-right text-info">
-                                Tk. <t t-esc="user.current_package_original_price" />
+<!--                                Tk. <t t-esc="user.current_package_original_price" />-->
+                                Tk. <t t-esc="user.total_monthly_bill" />
+
                             </b>
                         </li>
                         <t t-if="user.property_product_pricelist">
                             <li class="list-group-item">
                                 <b>Discounted Package Price</b>
                                 <b class="pull-right text-info">
-                                    Tk. <t t-esc="user.current_package_price" />
+<!--                                    Tk. <t t-esc="user.current_package_price" />-->
+                                    Tk. <t t-esc="user.total_monthly_bill" />
                                 </b>
                             </li>
+                             <t t-if="user.has_real_ip == True">
+                                <li class="list-group-item">
+                                    <b>Real IP</b>
+                                    <b class="pull-right text-info">
+    <!--                                    Tk. <t t-esc="user.current_package_price" />-->
+                                        Tk. <t t-esc="user.real_ip_subtotal" />
+                                    </b>
+                                </li>
+                             </t>
                         </t>
                         <li class="list-group-item">
                             <b>Valid till</b>
@@ -132,7 +144,7 @@
                                             Tk
                                         </div>
                                         <p id="monthly_payment_bill_amount" class="hidden">
-                                            <t t-esc="user.next_package_price"/>
+                                            <t t-esc="user.total_monthly_bill"/>
                                         </p>
                                         <input type="number" min="1" name="amount" class="form-control pull-right" id="payment_bill_amount" required="1" value=""/>
                                     </div>

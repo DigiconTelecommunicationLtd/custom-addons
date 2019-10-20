@@ -74,8 +74,7 @@ class RealIpChangeRequest(models.Model):
                 record.approved_by = self.env.uid
                 record.customer.real_ip=record.real_ip
                 record.customer.has_real_ip = True
-                record.customer.real_ip_subtotal=1.0
-                record.customer.reaL_ip_original=1.0
+
 
                 real_ip=self.env['product.product'].sudo().search([('name', '=', 'Real IP')])
 
@@ -89,6 +88,8 @@ class RealIpChangeRequest(models.Model):
                     'price_subtotal': real_ip.lst_price,
                     'price_total': real_ip.lst_price,
                 })
+                record.customer.real_ip_subtotal = real_ip.lst_price
+                record.customer.reaL_ip_original = real_ip.lst_price
                 # created_product_line_list.append(created_product_line.id)
                 # record.customer.sudo().update({
                 #     'product_line': [(6, None, created_product_line_list)]

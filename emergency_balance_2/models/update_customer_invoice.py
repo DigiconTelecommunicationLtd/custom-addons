@@ -89,6 +89,20 @@ class UpdateCustomerInvoice(models.Model):
                     'state': 'invoice_paid',
                     'is_invoice_paid': True
                 })
+
+        for line in self.invoice_line_ids:
+            print('******from action paid**********', line.product_id.categ_id.name, line.quantity)
+            if line.product_id.categ_id.name=='OFC':
+                print('******from action paid**********',line.product_id.categ_id.name,line.quantity)
+                self.add_product_quantity(line.product_id.id, line.quantity)
+
+                # get_product = self.env['stock.quant'].search(
+                #     [('product_id', '=', line.product_id.id)], order='create_date desc', limit=1)
+                # print(get_product)
+                # current_stock_quantity = get_product.product_tmpl_id.qty_available
+                # print('current stock quantity', current_stock_quantity)
+
+
         super(UpdateCustomerInvoice, self).action_invoice_paid()
         return True
 
