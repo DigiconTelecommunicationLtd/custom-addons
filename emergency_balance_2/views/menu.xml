@@ -22,7 +22,7 @@
      <menuitem name="Emergency Balance tickets" id="emergency_balance_res_partner_menu_list" parent="emergency_balance_res_partner_menu"
               action="emergence_balance_emergency_balance_action_window"/>
 
-    <menuitem name="Real IP Change Request" id="real_ip_change_request_menu_item" parent="emergency_balance_res_partner_menu"
+    <menuitem name="Real IP Change Request" id="real_ip_change_request_menu_item" parent="isp_crm_module.menu_isp_crm_module_service_request_act"
               action="real_ip_change_action_window"/>
 
 

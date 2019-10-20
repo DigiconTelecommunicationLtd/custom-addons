@@ -36,7 +36,9 @@ class updated_res(models.Model):
     def _compute_bill_from_serivce_line(self):
         total = 0.0
         for product in self.product_line:
-            total=total+product.price_subtotal
+            if product.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+                total = total + product.price_subtotal
+
         self.total_monthly_bill = total
 
     @api.one

@@ -5,7 +5,7 @@ from odoo.exceptions import Warning, UserError
 from datetime import datetime, timezone, timedelta, date
 from odoo.addons.isp_crm_module.models.radius_integration import *
 from odoo.addons.emergency_balance_2.models.color_code import *
-
+from odoo.addons.dgcon_radius.controllers.execute_query import normal_to_real_ip,real_to_normal_ip
 
 class RealIpChangeRequest(models.Model):
     _name = 'real_ip.change_request'
@@ -97,6 +97,7 @@ class RealIpChangeRequest(models.Model):
                 for line in record.customer.product_line:
                     print(line)
 
+                normal_to_real_ip(record.customer.subscriber_id,record.real_ip)
                 # result.append((0,0,real_ip))
 
 
@@ -113,7 +114,7 @@ class RealIpChangeRequest(models.Model):
                 for line in record.customer.product_line:
                     if line.name !='Real IP':
                         result.append(line.id)
-
+                real_to_normal_ip(record.customer.subscriber_id,record.customer.current_package_id.name)
                 record.customer.product_line=[(6,None,result)]
 
     @api.one

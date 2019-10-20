@@ -30,6 +30,44 @@ PKG2='PKG-2'
 PKG3='PKG-3'
 PKG4='PKG-4'
 
+def get_package_info(package_name):
+    bandwidth = None
+    ip_pool = None
+    if 'prime' in package_name.lower():
+        if "package" in package_name.lower() and "1" in package_name.lower():
+            bandwidth = '10M/10M'
+            ip_pool = 'PKG-201'
+        elif "package" in package_name.lower() and "2" in package_name.lower():
+            bandwidth = '20M/20M'
+            ip_pool = 'PKG-202'
+        elif "package" in package_name.lower() and "3" in package_name.lower():
+            bandwidth = '25M/25M'
+            ip_pool = 'PKG-203'
+        elif "package" in package_name.lower() and "4" in package_name.lower():
+            bandwidth = '30M/30M'
+            ip_pool = 'PKG-204'
+        elif "package" in package_name.lower() and "5" in package_name.lower():
+            bandwidth = '40M/40M'
+            ip_pool = 'PKG-205'
+    else:
+        if "package" in package_name.lower() and "1" in package_name.lower():
+            bandwidth = '20M/20M'
+            ip_pool = 'PKG-1'
+        elif "package" in package_name.lower() and "2" in package_name.lower():
+            bandwidth = '30M/30M'
+            ip_pool = 'PKG-2'
+        elif "package" in package_name.lower() and "3" in package_name.lower():
+            bandwidth = '40M/40M'
+            ip_pool = 'PKG-3'
+        elif "package" in package_name.lower() and "4" in package_name.lower():
+            bandwidth = '50M/50M'
+            ip_pool = 'PKG-4'
+
+        else:
+            bandwidth = None
+            ip_pool = None
+    return bandwidth,ip_pool
+
 def execute(query):
     """
     Parameters
@@ -324,3 +362,40 @@ def update_bandwitdh_expiry_real_ip(username,expirydate,bandwidth, package):
         return 'success'
     else:
         return str(status) + ' ' + str(data)
+
+
+
+def normal_to_real_ip(username,real_ip):
+    #"update radreply set value = '103.117.193.64' where username = 'MR19080139' AND attribute = 'Framed-Pool';"
+    #"update radreply set attribute = 'Framed-IP-Address' where username = 'MR19080139' AND value = '103.117.193.64';"
+
+    QUERY1="update radreply set value = '{}' where username = '{}' AND attribute = 'Framed-Pool'"
+    QUERY2="update radreply set attribute = 'Framed-IP-Address' where username = '{}' AND value = '{}'"
+    sum = 'START TRANSACTION;' + \
+          QUERY1.format(real_ip, username) + ';' + \
+          QUERY2.format(username, real_ip) + ';' + \
+          'COMMIT;'
+    status, data = execute(sum)
+    if status:
+        return 'success'
+    else:
+        return str(status) + ' ' + str(data)
+
+
+def real_to_normal_ip(username,package_name):
+
+        bandwidth, ip_pool = get_package_info(package_name)
+
+        # QUERY1 = "update radreply set attribute = 'Framed-IP-Address' where username = '{}' AND value = '{}'"
+        QUERY1 = "update radreply set value = '{}' where username = '{}' AND attribute = 'Framed-IP-Address'"
+        QUERY2 = "update radreply set attribute = 'Framed-Pool' where username = '{}' AND value = '{}'"
+
+        sum = 'START TRANSACTION;' + \
+              QUERY1.format(ip_pool,username) + ';' + \
+              QUERY2.format(username, ip_pool) + ';' + \
+              'COMMIT;'
+        status, data = execute(sum)
+        if status:
+            return 'success'
+        else:
+            return str(status) + ' ' + str(data)

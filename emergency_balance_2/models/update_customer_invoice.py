@@ -92,30 +92,30 @@ class UpdateCustomerInvoice(models.Model):
         super(UpdateCustomerInvoice, self).action_invoice_paid()
         return True
 
-    @api.model
-    def create(self, vals):
-        #TODO:FIX THIS FOR ONLY STOCKABLE
-        print("from invoice create*****************************************************************")
-        print("before", self.invoice_line_ids)
-        print("after", vals['invoice_line_ids'])
-        if 'invoice_line_ids' in vals:
-            for lines in vals['invoice_line_ids']:
-                print(lines)
-                if lines[0] == 1:
-                    current_quantity = lines[2]['quantity']
-
-                    self.update_product_quantity(lines[1], current_quantity)
-
-                elif lines[0] == 0:
-                    product_id = lines[2]['product_id']
-                    product_uom_qty = lines[2]['quantity']
-                    print('inside', product_id, product_uom_qty)
-                    self.add_product_quantity(product_id, product_uom_qty)
-
-                elif lines[0] == 2:
-                    self.delete_product_quantity(lines[1])
-
-        return super(UpdateCustomerInvoice, self).create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     #TODO:FIX THIS FOR ONLY STOCKABLE
+    #     print("from invoice create*****************************************************************")
+    #     print("before", self.invoice_line_ids)
+    #     print("after", vals['invoice_line_ids'])
+    #     if 'invoice_line_ids' in vals:
+    #         for lines in vals['invoice_line_ids']:
+    #             print(lines)
+    #             if lines[0] == 1:
+    #                 current_quantity = lines[2]['quantity']
+    #
+    #                 self.update_product_quantity(lines[1], current_quantity)
+    #
+    #             elif lines[0] == 0:
+    #                 product_id = lines[2]['product_id']
+    #                 product_uom_qty = lines[2]['quantity']
+    #                 print('inside', product_id, product_uom_qty)
+    #                 self.add_product_quantity(product_id, product_uom_qty)
+    #
+    #             elif lines[0] == 2:
+    #                 self.delete_product_quantity(lines[1])
+    #
+    #     return super(UpdateCustomerInvoice, self).create(vals)
 
 
     def add_product_quantity(self,product_id,quantity):
