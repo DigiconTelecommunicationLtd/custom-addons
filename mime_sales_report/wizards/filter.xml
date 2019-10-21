@@ -19,13 +19,13 @@
 
                 </header>
                 <sheet>
-                <separator string="Filters" colspan="4"/>
+                <separator string="Please Select" colspan="4"/>
 
                       <group col="4" colspan="2">
                           <field name="customer_type"/>
                       </group>
 
-                    <separator string="Filter By Date" colspan="4"/>
+                    <separator string="Please Select Date" colspan="4"/>
                     <group col="4" colspan="2">
 
                             <field name="from_date"/>

@@ -210,7 +210,8 @@ class UpdatedServiceRequest(models.Model):
         opportunity = self.env['crm.lead']
         print('customer',customer)
         print('opportunity', opportunity)
-
+        today_new = datetime.now() + timedelta(hours=6)
+        today = today_new.date()
 
         if check_customer:
             invoices = self.env['account.invoice'].search([('partner_id', '=', customer)], order="create_date desc",
@@ -347,8 +348,8 @@ class UpdatedServiceRequest(models.Model):
                             else:
                                 # service_activation_date and billing_start_date is not being set for afew user group
                                 # solution 1: updating it with sudo command. Not yet implemented
-                                today_new = datetime.now() + timedelta(hours=6)
-                                today = today_new.date()
+                                # today_new = datetime.now() + timedelta(hours=6)
+                                # today = today_new.date()
                                 customer.sudo().update({
                                     'is_potential_customer': False,
                                     'subscriber_id': customer_subs_id,
