@@ -64,7 +64,7 @@
                     <th class="text-center" >Customer Name</th>
                     <th class="text-center" >MRC</th>
                     <th class="text-center" >OTC</th>
-                    <th class="text-center">Total Recieveable</th>
+                    <th class="text-center">Total Receivable</th>
                     <th class="text-center" >Total Paid</th>
                     <th class="text-center" >Total Due</th>
                 </thead>
@@ -118,7 +118,7 @@
                     <th class="text-center" >Customer Name</th>
                     <th class="text-center" >MRC</th>
                     <th class="text-center" >OTC</th>
-                    <th class="text-center" >Total Recieveable</th>
+                    <th class="text-center" >Total Receivable</th>
                     <th class="text-center" >Total Paid</th>
                     <th class="text-center" >Total Due</th>
                 </thead>
@@ -156,7 +156,7 @@
 <!--                    <th class="text-center" style="width: 70%">Grand Paid</th>-->
 <!--                    <th class="text-center" style="width: 70%">Grand Due</th>-->
 
-                     <th class="text-center" >Grand Recieveable</th>
+                     <th class="text-center" >Grand Receivable</th>
                     <th class="text-center" >Grand Paid</th>
                     <th class="text-center" >Grand Due</th>
 
