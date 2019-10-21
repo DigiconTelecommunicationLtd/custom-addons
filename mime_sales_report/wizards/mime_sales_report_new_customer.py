@@ -3,6 +3,7 @@
 from odoo import models, fields, api, tools
 from datetime import datetime, timezone, timedelta, date
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
+REPORT_DATE_FORMAT = '%B {S}, %Y'
 CUSTOMER_TYPE = [
     ('retail', 'Retail'),
     ('corporate', 'Corporate'),
@@ -266,8 +267,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                 'doc_model': 'mime_sales_report.new_customer_transient',
                 # 'date_start': start_date_obj.strftime('%d, %b %Y'),
                 # 'date_end': end_date_obj.strftime('%d, %b %Y'),
-                'date_start':self.custom_strftime('%B {S}, %Y',start_date_obj),
-                'date_end': self.custom_strftime('%B {S}, %Y',end_date_obj),
+                'date_start':self.custom_strftime(REPORT_DATE_FORMAT, start_date_obj),
+                'date_end': self.custom_strftime(REPORT_DATE_FORMAT, end_date_obj),
                 'lead_type':lead_type_display,
                 'docs_new': docs_new,
                 'docs_old':docs_old,
@@ -472,8 +473,8 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                 'doc_model': 'mime_sales_report.new_customer_transient',
                 # 'date_start': start_date_obj.strftime('%d, %b %Y'),
                 # 'date_end': end_date_obj.strftime('%d, %b %Y'),
-                'date_start': self.custom_strftime('%B {S}, %Y', start_date_obj),
-                'date_end': self.custom_strftime('%B {S}, %Y', end_date_obj),
+                'date_start': self.custom_strftime(REPORT_DATE_FORMAT, start_date_obj),
+                'date_end': self.custom_strftime(REPORT_DATE_FORMAT, end_date_obj),
                 'lead_type': data['form']['lead_type'],
                 'docs_new': docs_new,
                 'docs_old': docs_old,
