@@ -52,13 +52,21 @@
             <table class="table table-condensed table-bordered" style="width: 100%">
 
                 <thead>
-                    <th class="text-center" style="width: 70%">Date</th>
-                    <th class="text-center" style="width: 70%">Customer Name</th>
-                    <th class="text-center" style="width: 70%">MRC</th>
-                    <th class="text-center" style="width: 70%">OTC</th>
-                    <th class="text-center" style="width: 70%">Total Recieveable</th>
-                    <th class="text-center" style="width: 70%">Total Paid</th>
-                    <th class="text-center" style="width: 70%">Total Due</th>
+<!--                    <th class="text-center" style="width: 70%">Date</th>-->
+<!--                    <th class="text-center" style="width: 70%">Customer Name</th>-->
+<!--                    <th class="text-center" style="width: 70%">MRC</th>-->
+<!--                    <th class="text-center" style="width: 70%">OTC</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Recieveable</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Paid</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Due</th>-->
+
+                     <th class="text-center" >Date</th>
+                    <th class="text-center" >Customer Name</th>
+                    <th class="text-center" >MRC</th>
+                    <th class="text-center" >OTC</th>
+                    <th class="text-center">Total Recieveable</th>
+                    <th class="text-center" >Total Paid</th>
+                    <th class="text-center" >Total Due</th>
                 </thead>
 
                 <tbody>
@@ -98,13 +106,21 @@
 
             <table class="table table-condensed table-bordered" style="width: 100%">
                 <thead>
-                    <th class="text-center" style="width: 70%">Date</th>
-                    <th class="text-center" style="width: 70%">Customer Name</th>
-                    <th class="text-center" style="width: 70%">MRC</th>
-                    <th class="text-center" style="width: 70%">OTC</th>
-                    <th class="text-center" style="width: 70%">Total Recieveable</th>
-                    <th class="text-center" style="width: 70%">Total Paid</th>
-                    <th class="text-center" style="width: 70%">Total Due</th>
+<!--                    <th class="text-center" style="width: 70%">Date</th>-->
+<!--                    <th class="text-center" style="width: 70%">Customer Name</th>-->
+<!--                    <th class="text-center" style="width: 70%">MRC</th>-->
+<!--                    <th class="text-center" style="width: 70%">OTC</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Recieveable</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Paid</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Due</th>-->
+
+                     <th class="text-center" >Date</th>
+                    <th class="text-center" >Customer Name</th>
+                    <th class="text-center" >MRC</th>
+                    <th class="text-center" >OTC</th>
+                    <th class="text-center" >Total Recieveable</th>
+                    <th class="text-center" >Total Paid</th>
+                    <th class="text-center" >Total Due</th>
                 </thead>
                 <tbody>
                     <t t-foreach="docs_old" t-as="doc">
@@ -136,9 +152,13 @@
             </table>
              <table class="table table-condensed table-bordered" style="width: 100%">
                 <thead>
-                    <th class="text-center" style="width: 70%">Grand Recieveable</th>
-                    <th class="text-center" style="width: 70%">Grand Paid</th>
-                    <th class="text-center" style="width: 70%">Grand Due</th>
+<!--                    <th class="text-center" style="width: 70%">Grand Recieveable</th>-->
+<!--                    <th class="text-center" style="width: 70%">Grand Paid</th>-->
+<!--                    <th class="text-center" style="width: 70%">Grand Due</th>-->
+
+                     <th class="text-center" >Grand Recieveable</th>
+                    <th class="text-center" >Grand Paid</th>
+                    <th class="text-center" >Grand Due</th>
 
                 </thead>
                 <tbody>

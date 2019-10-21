@@ -264,10 +264,10 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             return {
                 'doc_ids': 2323223,
                 'doc_model': 'mime_sales_report.new_customer_transient',
-                'date_start': start_date_obj.strftime('%d, %b %Y'),
-                'date_end': end_date_obj.strftime('%d, %b %Y'),
-                # 'date_start':self.custom_strftime('%B {S}, %Y',start_date_obj),
-                # 'date_end': self.custom_strftime('%B {S}, %Y',end_date_obj),
+                # 'date_start': start_date_obj.strftime('%d, %b %Y'),
+                # 'date_end': end_date_obj.strftime('%d, %b %Y'),
+                'date_start':self.custom_strftime('%B {S}, %Y',start_date_obj),
+                'date_end': self.custom_strftime('%B {S}, %Y',end_date_obj),
                 'lead_type':lead_type_display,
                 'docs_new': docs_new,
                 'docs_old':docs_old,
@@ -470,10 +470,10 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
             return {
                 'doc_ids': 2323223,
                 'doc_model': 'mime_sales_report.new_customer_transient',
-                'date_start': start_date_obj.strftime('%d, %b %Y'),
-                'date_end': end_date_obj.strftime('%d, %b %Y'),
-                # 'date_start': self.custom_strftime('%B {S}, %Y', start_date_obj),
-                # 'date_end': self.custom_strftime('%B {S}, %Y', end_date_obj),
+                # 'date_start': start_date_obj.strftime('%d, %b %Y'),
+                # 'date_end': end_date_obj.strftime('%d, %b %Y'),
+                'date_start': self.custom_strftime('%B {S}, %Y', start_date_obj),
+                'date_end': self.custom_strftime('%B {S}, %Y', end_date_obj),
                 'lead_type': data['form']['lead_type'],
                 'docs_new': docs_new,
                 'docs_old': docs_old,
@@ -485,7 +485,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
     def custom_strftime(self,format, t):
         return t.strftime(format).replace('{S}', str(t.day) + self.suffix(t.day))
 
-    def suffix(d):
+    def suffix(self,d):
         return 'th' if 11 <= d <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(d % 10, 'th')
 
 
