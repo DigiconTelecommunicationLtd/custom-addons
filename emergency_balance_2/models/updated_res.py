@@ -35,11 +35,13 @@ class updated_res(models.Model):
     @api.one
     def _compute_bill_from_serivce_line(self):
         total = 0.0
-        for product in self.product_line:
-            if product.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
-                total = total + product.price_subtotal
-
-        self.total_monthly_bill = total
+        # for product in self.product_line:
+        #     if product.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+        #         total = total + product.price_subtotal
+        if self.has_real_ip:
+            self.total_monthly_bill = self.next_package_price + self.real_ip_subtotal
+        else:
+            self.total_monthly_bill = self.next_package_price
 
     @api.one
     def _compute_due(self):
@@ -138,19 +140,19 @@ class updated_res(models.Model):
             original_price = customer.invoice_product_original_price
 
         current_package_id              = product_id if product_id else customer.current_package_id.id
-        # current_package_price           = price if price else customer.current_package_price
-        # current_package_original_price  = original_price if original_price else customer.current_package_id.list_price
+        current_package_price           = price if price else customer.current_package_price
+        current_package_original_price  = original_price if original_price else customer.current_package_id.list_price
         current_package_start_date      = start_date if start_date else datetime.today().strftime(DEFAULT_DATE_FORMAT)
         current_package_end_date        = self._get_package_end_date(given_date=current_package_start_date)
         current_package_sales_order_id  = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
 
-        current_package_price = 0.0
-        current_package_original_price = 0.0
-        for productline in customer.product_line:
-            if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
-                current_package_price= current_package_price + productline.price_subtotal
-                current_package_original_price = current_package_original_price + productline.product_id.list_price
+        # for productline in customer.product_line:
+        #     if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
+        #         current_package_price= current_package_price + productline.price_subtotal
+        #         current_package_original_price = current_package_original_price + productline.product_id.list_price
 
+        # if customer.has_real_ip:
+        #     current_package_price = current_package_price + customer.real_ip_subtotal
 
         print('******current_package_price',current_package_price)
         print('******current_package_original_price', current_package_original_price)
@@ -178,19 +180,11 @@ class updated_res(models.Model):
 
         next_package_id             = product_id if product_id else customer.current_package_id.id
         next_package_start_date     = start_date if start_date else self._get_next_package_start_date(given_date=customer.current_package_start_date)
-        # next_package_price          = price if price else customer.current_package_price
-        # next_package_original_price = price if price else customer.current_package_original_price
+        next_package_price          = price if price else customer.current_package_price
+        next_package_original_price = price if price else customer.current_package_original_price
         next_package_sales_order_id = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
 
-        next_package_price = 0.0
-        next_package_original_price = 0.0
-        for productline in customer.product_line:
-            if productline.product_id.categ_id.name == DEFAULT_PACKAGE_CAT_NAME:
-                next_package_price = next_package_price + productline.price_subtotal
-                next_package_original_price = next_package_original_price + productline.product_id.list_price
 
-        print('******next_package_price', next_package_price)
-        print('******next_package_original_price', next_package_original_price)
         customer.update({
             'next_package_id'             : next_package_id,
             'next_package_start_date'     : next_package_start_date,

@@ -206,7 +206,7 @@ class UpdateCronJobModel(models.Model):
                             due_amount_for_customer = customer.customer_total_due
 
                     if (customer_balance < 0) and (abs(
-                            customer_balance) >= customer.next_package_price+due_amount_for_customer):
+                            customer_balance) >= customer.total_monthly_bill+due_amount_for_customer):
                     # if (customer_balance < 0) and (abs(
                     #             customer_balance) >= customer.total_monthly_bill + due_amount_for_customer):
                         # updating account moves of customer
@@ -441,9 +441,9 @@ class UpdateCronJobModel(models.Model):
         # show package info from customer's technical information.
         if customer.opportunity_ids.lead_type != "corporate":
             body = body.replace('--package--', str(customer.current_package_id.name or ""))
-            body = body.replace('--price--', str(customer.current_package_price-customer.real_ip_subtotal))
+            body = body.replace('--price--', str(customer.next_package_price))
             body = body.replace('--realipprice--', str(customer.real_ip_subtotal))
-            body = body.replace('--totalprice--', str(customer.current_package_price))
+            body = body.replace('--totalprice--', str(customer.next_package_price+customer.real_ip_subtotal))
 
             if customer.current_package_end_date:
                 body = body.replace('--last_payment_date--', str(datetime.strptime(str(customer.current_package_end_date),'%Y-%m-%d').strftime("%d-%m-%Y")))

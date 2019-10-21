@@ -11,7 +11,7 @@ class RealIpChangeRequest(models.Model):
     _name = 'real_ip.change_request'
     _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    name = fields.Char(string='name', track_visibility='onchange', default="")
+    name = fields.Char(string='name', track_visibility='onchange', default="Real IP Change Request")
 
     color = fields.Integer(default=1)
     customer = fields.Many2one('res.partner', String='Customer', track_visibility='onchange',default=False,
@@ -90,6 +90,8 @@ class RealIpChangeRequest(models.Model):
                 })
                 record.customer.real_ip_subtotal = real_ip.lst_price
                 record.customer.reaL_ip_original = real_ip.lst_price
+                # record.customer.next_package_price = record.customer.next_package_price + real_ip.lst_price
+                # record.customer.current_package_price = record.customer.next_package_price + real_ip.lst_price
                 # created_product_line_list.append(created_product_line.id)
                 # record.customer.sudo().update({
                 #     'product_line': [(6, None, created_product_line_list)]
@@ -111,6 +113,8 @@ class RealIpChangeRequest(models.Model):
                 record.customer.has_real_ip = False
                 record.customer.real_ip_subtotal = 0.0
                 record.customer.reaL_ip_original = 0.0
+                # record.customer.next_package_price = record.customer.next_package_price - real_ip.lst_price
+                # record.customer.current_package_price = record.customer.next_package_price + real_ip.lst_price
                 result=[]
                 for line in record.customer.product_line:
                     if line.name !='Real IP':

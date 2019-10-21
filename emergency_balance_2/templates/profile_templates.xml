@@ -30,8 +30,8 @@
                         <li class="list-group-item">
                             <b>Original Package Price</b>
                             <b class="pull-right text-info">
-<!--                                Tk. <t t-esc="user.current_package_original_price" />-->
-                                Tk. <t t-esc="user.total_monthly_bill" />
+                                Tk. <t t-esc="user.current_package_original_price" />
+
 
                             </b>
                         </li>
@@ -39,8 +39,8 @@
                             <li class="list-group-item">
                                 <b>Discounted Package Price</b>
                                 <b class="pull-right text-info">
-<!--                                    Tk. <t t-esc="user.current_package_price" />-->
-                                    Tk. <t t-esc="user.total_monthly_bill" />
+                                    Tk. <t t-esc="user.current_package_price" />
+
                                 </b>
                             </li>
                              <t t-if="user.has_real_ip == True">
@@ -104,6 +104,26 @@
                                     <t t-esc="user.current_package_id.name"/>
                                 </td>
                             </tr>
+                                <tr>
+                                    <th>Package Price</th>
+                                    <td>
+                                       Tk. <t t-esc="user.current_package_price"/>
+                                    </td>
+                               </tr>
+                                <t t-if="user.has_real_ip == True">
+                                    <tr>
+                                    <th>Real IP</th>
+                                    <td>
+                                        <t t-esc="user.real_ip"/>
+                                    </td>
+                               </tr>
+                                     <tr>
+                                    <th>Real IP Price</th>
+                                    <td>
+                                       Tk. <t t-esc="user.real_ip_subtotal"/>
+                                    </td>
+                               </tr>
+                             </t>
                             <tr>
                                 <th>Balance</th>
                                 <td>
