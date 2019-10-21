@@ -198,10 +198,10 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
 
             # condition for Existing customer
             domain_old.append(lead_type_report)
-            domain_data = ('current_package_end_date', '>=', str(date_start))
-            domain_old.append(domain_data)
-            domain_data = ('current_package_end_date', '<=', str(date_end))
-            domain_old.append(domain_data)
+            # domain_data = ('current_package_end_date', '>=', str(date_start))
+            # domain_old.append(domain_data)
+            # domain_data = ('current_package_end_date', '<=', str(date_end))
+            # domain_old.append(domain_data)
             domain_data = ('is_existing_user', '=', True)
             domain_old.append(domain_data)
             domain_data = ('payment_state', '=', 'posted')
