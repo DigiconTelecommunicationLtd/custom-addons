@@ -214,7 +214,7 @@ class UpdateCronJobModel(models.Model):
                         #adjust if customer has due
                         payment_obj.customer_bill_adjustment(
                                 customer=customer,
-                                package_price=customer.next_package_price + due_amount_for_customer
+                                package_price=customer.total_monthly_bill + due_amount_for_customer
                                 # package_price=customer.total_monthly_bill + due_amount_for_customer
                             )
                         # else:
