@@ -92,7 +92,7 @@ class UpdateCustomerInvoice(models.Model):
 
         for line in self.invoice_line_ids:
             print('******from action paid**********', line.product_id.categ_id.name, line.quantity)
-            if line.product_id.categ_id.name=='OFC':
+            if line.product_id.product_tmpl_id.type !='consu' and line.product_id.product_tmpl_id.type !='service':
                 print('******from action paid**********',line.product_id.categ_id.name,line.quantity)
                 self.add_product_quantity(line.product_id.id, line.quantity)
 

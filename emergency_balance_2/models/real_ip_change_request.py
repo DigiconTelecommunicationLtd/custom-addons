@@ -9,6 +9,7 @@ from odoo.addons.dgcon_radius.controllers.execute_query import normal_to_real_ip
 
 class RealIpChangeRequest(models.Model):
     _name = 'real_ip.change_request'
+    _description = "Real IP Change Request"
     _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     name = fields.Char(string='name', track_visibility='onchange', default="Real IP Change Request")
