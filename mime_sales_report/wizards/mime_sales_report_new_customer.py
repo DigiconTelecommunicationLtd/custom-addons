@@ -401,7 +401,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                     mrc = 0.0
                     if invoice.corporate_otc_amount > 0.0:
                         otc = invoice.corporate_otc_amount
-                        mrc = invoice.amount_total_signed - invoice.corporate_otc_amount
+                        mrc = invoice.toal_amount_otc_mrc - invoice.corporate_otc_amount
                     else:
                         if invoice.state == 'paid':
                             mrc = invoice.amount_total_signed
