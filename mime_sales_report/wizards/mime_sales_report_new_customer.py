@@ -332,23 +332,25 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                     mrc = 0.0
                     if invoice.corporate_otc_amount > 0.0:
                         otc = invoice.corporate_otc_amount
-                        mrc = invoice.amount_total_signed - invoice.corporate_otc_amount
+                        #mrc = invoice.amount_total_signed - invoice.corporate_otc_amount
+                        mrc = invoice.toal_amount_otc_mrc - invoice.corporate_otc_amount
                     else:
                         if invoice.state == 'paid':
-                            mrc = invoice.amount_total_signed
+                            mrc = invoice.corporate_otc_amount
                         if invoice.state == 'open':
                             mrc = invoice.residual_signed
 
                     if invoice.state == 'paid':
-                        total_recieveable = total_recieveable + invoice.amount_total_signed
-                        total_paid = total_paid + invoice.amount_total_signed
+                        # total_recieveable = total_recieveable + invoice.amount_total_signed
+                        total_recieveable = total_recieveable + invoice.toal_amount_otc_mrc
+                        total_paid = total_paid + invoice.toal_amount_otc_mrc
                         docs_new.append({
                             'date_maturity': invoice.date_due,
                             'customer_name': partner.name,
                             'mrc': "{0:.2f}".format(mrc),
                             'otc': "{0:.2f}".format(otc),
-                            'total_recieveable': "{0:.2f}".format(invoice.amount_total_signed),
-                            'total_paid': "{0:.2f}".format(invoice.amount_total_signed),
+                            'total_recieveable': "{0:.2f}".format(invoice.toal_amount_otc_mrc),
+                            'total_paid': "{0:.2f}".format(invoice.toal_amount_otc_mrc),
                             'total_due': "{0:.2f}".format(0.0)
                         })
 
@@ -360,7 +362,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                             'customer_name': partner.name,
                             'mrc': "{0:.2f}".format(mrc),
                             'otc': "{0:.2f}".format(otc),
-                            'total_recieveable': "{0:.2f}".format(invoice.amount_total_signed),
+                            'total_recieveable': "{0:.2f}".format(invoice.corporate_otc_amount),
                             'total_paid': "{0:.2f}".format(0.0),
                             'total_due': "{0:.2f}".format(invoice.residual_signed)
                         })
@@ -404,20 +406,20 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                         mrc = invoice.toal_amount_otc_mrc - invoice.corporate_otc_amount
                     else:
                         if invoice.state == 'paid':
-                            mrc = invoice.amount_total_signed
+                            mrc = invoice.corporate_otc_amount
                         if invoice.state == 'open':
                             mrc = invoice.residual_signed
 
                     if invoice.state == 'paid':
-                        total_recieveable = total_recieveable + invoice.amount_total_signed
-                        total_paid = total_paid + invoice.amount_total_signed
+                        total_recieveable = total_recieveable + invoice.corporate_otc_amount
+                        total_paid = total_paid + invoice.corporate_otc_amount
                         docs_old.append({
                             'date_maturity': invoice.date_due,
                             'customer_name': partner.name,
                             'mrc': "{0:.2f}".format(mrc),
                             'otc': "{0:.2f}".format(otc),
-                            'total_recieveable': "{0:.2f}".format(invoice.amount_total_signed),
-                            'total_paid': "{0:.2f}".format(invoice.amount_total_signed),
+                            'total_recieveable': "{0:.2f}".format(invoice.corporate_otc_amount),
+                            'total_paid': "{0:.2f}".format(invoice.corporate_otc_amount),
                             'total_due': "{0:.2f}".format(0.0)
                         })
 
@@ -429,7 +431,7 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
                             'customer_name': partner.name,
                             'mrc': "{0:.2f}".format(mrc),
                             'otc': "{0:.2f}".format(otc),
-                            'total_recieveable': "{0:.2f}".format(invoice.amount_total_signed),
+                            'total_recieveable': "{0:.2f}".format(invoice.corporate_otc_amount),
                             'total_paid': "{0:.2f}".format(0.0),
                             'total_due': "{0:.2f}".format(invoice.residual_signed)
                         })
