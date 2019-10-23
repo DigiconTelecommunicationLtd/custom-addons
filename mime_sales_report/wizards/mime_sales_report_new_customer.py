@@ -360,15 +360,15 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
 
                     elif invoice.state == 'open':
                         total_recieveable = total_recieveable + invoice.toal_amount_otc_mrc
-                        total_due = total_due + invoice.toal_amount_otc_mrc
+                        total_due = total_due + invoice.residual
                         docs_new.append({
                             'date_maturity': invoice.date_due,
                             'customer_name': partner.name,
                             'mrc': "{0:.2f}".format(mrc),
                             'otc': "{0:.2f}".format(otc),
                             'total_recieveable': "{0:.2f}".format(invoice.toal_amount_otc_mrc),
-                            'total_paid': "{0:.2f}".format(0.0),
-                            'total_due': "{0:.2f}".format(invoice.toal_amount_otc_mrc)
+                            'total_paid': "{0:.2f}".format(invoice.toal_amount_otc_mrc - invoice.residual),
+                            'total_due': "{0:.2f}".format(invoice.residual)
                         })
 
 
@@ -431,15 +431,15 @@ class MimeSalesReportRetailNewCustomerAbstract(models.AbstractModel):
 
                     elif invoice.state == 'open':
                         total_recieveable = total_recieveable + invoice.toal_amount_otc_mrc
-                        total_due = total_due + invoice.toal_amount_otc_mrc
+                        total_due = total_due + invoice.residual
                         docs_old.append({
                             'date_maturity': invoice.date_due,
                             'customer_name': partner.name,
                             'mrc': "{0:.2f}".format(mrc),
                             'otc': "{0:.2f}".format(otc),
                             'total_recieveable': "{0:.2f}".format(invoice.toal_amount_otc_mrc),
-                            'total_paid': "{0:.2f}".format(0.0),
-                            'total_due': "{0:.2f}".format(invoice.toal_amount_otc_mrc)
+                            'total_paid': "{0:.2f}".format(invoice.toal_amount_otc_mrc- invoice.residual),
+                            'total_due': "{0:.2f}".format(invoice.residual)
                         })
 
                     # docs_old.append({
