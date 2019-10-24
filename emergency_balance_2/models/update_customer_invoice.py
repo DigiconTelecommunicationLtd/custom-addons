@@ -142,7 +142,7 @@ class UpdateCustomerInvoice(models.Model):
             print(get_product)
             current_stock_quantity = get_product.product_tmpl_id.qty_available
             print('current stock quantity',current_stock_quantity)
-            print('komse',quantity)
+            print('reduced',quantity)
             if abs(current_stock_quantity) <= 0.0:
                 raise UserError('Not enough quantity available in stock.')
             elif quantity > abs(current_stock_quantity):
@@ -150,8 +150,8 @@ class UpdateCustomerInvoice(models.Model):
             else:
                 new_available_quantity = abs(current_stock_quantity) - abs(quantity)
 
-            if new_available_quantity <= 0.0:
-                raise UserError('Not enough quantity available in stock.')
+            # if new_available_quantity <= 0.0:
+            #     raise UserError('Not enough quantity available in stock.3')
             print('new stock',new_available_quantity)
             self.update_stock_quantity(new_available_quantity, get_product.product_id.id)
 

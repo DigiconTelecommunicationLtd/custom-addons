@@ -60,7 +60,7 @@
 <!--                    <th class="text-center" style="width: 70%">Total Paid</th>-->
 <!--                    <th class="text-center" style="width: 70%">Total Due</th>-->
 
-                     <th class="text-center" >Date</th>
+                    <th class="text-center" >Date</th>
                     <th class="text-center" >Customer Name</th>
                     <th class="text-center" >MRC</th>
                     <th class="text-center" >OTC</th>
