@@ -26,8 +26,10 @@
         # 'security/ir.model.access.csv',
         #'wizards/new_customer.xml',
         'wizards/filter.xml',
+        'wizards/individual_filter.xml',
         'views/menu.xml',
         'views/report.xml',
+        'views/individual_report.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

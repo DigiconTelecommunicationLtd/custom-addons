@@ -1,0 +1,65 @@
+<odoo>
+  <data>
+
+
+     <!-- explicit Form definition -->
+    <record id="mime_sale_report_individual_filter_form" model="ir.ui.view">
+        <field name="name">MIME Individual Filter</field>
+        <field name="model">mime_sales_report.sales_individual_filter</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false" edit="false" string="MIME SALES REPORT">
+            <!-- Fields name -->
+                <header>
+                    <!--
+                    <button name="do_toggle_done" type="object"
+                    string="Toggle Done" class="oe_highlight" />
+                    <button name="do_clear_done" type="object"
+                    string="Clear All Done" />
+                    -->
+
+                </header>
+                <sheet>
+                <separator string="Please Select" colspan="4"/>
+
+                      <group col="4" colspan="2">
+                          <field name="customer" required="1"/>
+                      </group>
+
+<!--                    <separator string="Please Select Date" colspan="4"/>-->
+<!--                    <group col="4" colspan="2">-->
+
+<!--                            <field name="from_date"/>-->
+<!--                            <field name="to_date" />-->
+<!--                    </group>-->
+
+
+
+                <footer>
+                    <button name="individual_filter" string="Filter" type="object" class="oe_highlight"/>
+<!--                    <button string="Cancel" type="cancel" class="oe_link"/>-->
+                </footer>
+                </sheet>
+
+            </form>
+        </field>
+     </record>
+
+
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="mime_sale_report_individual_filter_form_action_window">
+        <field name="name">MiMe sales filter</field>
+        <field name="res_model">mime_sales_report.sales_individual_filter</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+      <!--        Setting default search-->
+<!--        <field name="context">{"search_default_successful_transaction":1}</field>-->
+    </record>
+
+
+
+
+  </data>
+</odoo>
