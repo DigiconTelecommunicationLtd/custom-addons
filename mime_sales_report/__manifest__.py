@@ -27,9 +27,12 @@
         #'wizards/new_customer.xml',
         'wizards/filter.xml',
         'wizards/individual_filter.xml',
+        'wizards/group_by_filter.xml',
         'views/menu.xml',
         'views/report.xml',
+        'views/group_by_report.xml',
         'views/individual_report.xml',
+        'views/retail_group_by_report.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

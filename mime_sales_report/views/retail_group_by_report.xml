@@ -1,0 +1,85 @@
+<odoo>
+    <data>
+
+
+<report id="mime_sales_report.group_retail_sales_report"
+            model="mime_sales_report.new_customer_retail_transient"
+            string="Mime Sales Report"
+            report_type="qweb-pdf"
+            name="mime_sales_report.sales_group_retail_report_view"
+            paperformat="paperformat_sales_report"
+            menu="False"/>
+
+    <template id="mime_sales_report.sales_group_retail_report_view">
+        <div class="header" style="border-bottom: 2px solid black">
+            <div class="row">
+                <div class="col-xs-3 mb4">
+                    <img src="isp_invoice_module/static/src/assets/images/logo.png" style="max-height: 85px;"/>
+                </div>
+            </div>
+        </div>
+        <div class="article">
+            <br/>
+
+             <div class="row">
+
+
+            </div>
+            <table class="table table-condensed table-bordered" style="width: 100%">
+
+                <thead>
+<!--                    <th class="text-center" style="width: 70%">Date</th>-->
+<!--                    <th class="text-center" style="width: 70%">Customer Name</th>-->
+<!--                    <th class="text-center" style="width: 70%">MRC</th>-->
+<!--                    <th class="text-center" style="width: 70%">OTC</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Recieveable</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Paid</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Due</th>-->
+                    <th class="text-center" >Customer Name</th>
+                    <th class="text-center">Total Receivable</th>
+                    <th class="text-center" >Total Paid</th>
+                    <th class="text-center" >Total Due</th>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="docs" t-as="doc">
+                        <tr>
+                            <td>
+                                <span t-esc="doc['customer_name']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_recieveable']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_paid']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_due']"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+
+        </div>
+        <div class="footer">
+            <div class="row text-center" style="border-top: 1px solid black;">
+                <div class="col-xs-3 col-xs-offset-9 text-right">
+                    <ul class="list-inline" style="margin-top:10px;">
+                        <li>Page:</li>
+                        <li>
+                            <span class="page"/>
+                        </li>
+                        <li>/</li>
+                        <li>
+                            <span class="topage"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </template>
+    </data>
+</odoo>

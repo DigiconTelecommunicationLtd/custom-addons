@@ -48,6 +48,8 @@ class UpdateCustomerInvoice(models.Model):
             template_obj_new_service_request = self.env['emergency_balance.mail'].sudo().search(
                 [('name', '=', 'new_reminder_for_deferred_approval_mail')],
                 limit=1)
+            if(len(record.invoice_line_ids)==0):
+                raise UserError('Invoice line is empty, please provide a product invoice line')
 
             product_name=str(record.invoice_line_ids[0].product_id.name)
             product_price =record.invoice_line_ids[0].quantity * record.invoice_line_ids[0].price_unit
