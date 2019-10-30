@@ -79,11 +79,16 @@ class UpdatedServiceRequest(models.Model):
         print("after", vals)
         if 'product_line' in vals:
             for lines in vals['product_line']:
-
+                print('lines',lines)
                 if lines[0]==1:
-                    current_quantity=lines[2]['product_uom_qty']
+                    if 'product_uom_qty' in lines[2]:
+                        current_quantity=lines[2]['product_uom_qty']
+                        self.update_product_quantity(lines[1],current_quantity)
 
-                    self.update_product_quantity(lines[1],current_quantity)
+                    else:
+                        print('2nd')
+                        self.delete_product_quantity(lines[1])
+                        self.add_product_quantity(lines[1], product_uom_qty)
 
                 elif lines[0]==0:
                     product_id = lines[2]['product_id']
@@ -104,9 +109,9 @@ class UpdatedServiceRequest(models.Model):
         quantity = None
         product_line_data=self.env['isp_crm_module.product_line'].search([('id', '=', product_id)], limit=1)
         print("present_quantity", current_quantity)
-        print("past_quantity", product_line_data.product_uom_qty)
+        # print("past_quantity", product_line_data.product_uom_qty)
         prev_quantity = float(product_line_data.product_uom_qty)
-
+        print("past_quantity", prev_quantity)
         get_product = self.env['stock.quant'].search(
             [('product_id', '=', product_line_data.product_id.id)], order='create_date desc', limit=1)
         print("quantity",get_product)
@@ -114,8 +119,8 @@ class UpdatedServiceRequest(models.Model):
 
             current_stock_quantity = get_product.product_tmpl_id.qty_available
             print("current stock before change", current_stock_quantity)
-            if abs(current_stock_quantity) <= 0.0:
-                raise UserError('Not enough quantity available in stock.')
+            # if abs(current_stock_quantity) <= 0.0:
+            #     raise UserError('Not enough quantity available in stock.')
 
             if abs(prev_quantity) > abs(current_quantity):
                 quantity = abs(prev_quantity) - abs(current_quantity)
@@ -128,7 +133,7 @@ class UpdatedServiceRequest(models.Model):
                 new_available_quantity = abs(current_stock_quantity) - abs(quantity)
                 print("komse stock", new_available_quantity)
 
-            if new_available_quantity <= 0.0:
+            if new_available_quantity < 0.0:
                 raise UserError('Not enough quantity available in stock.')
             self.update_stock_quantity(new_available_quantity, get_product.product_id.id)
 
