@@ -43,7 +43,6 @@ class MimeSalesReportRetailGroupBYCustomer(models.TransientModel):
                              where
                              is_potential_customer = false and 
                              lead_type = 'retail' and 
-                             is_potential_customer = false and 
                              account_payment.state = 'posted'
                              GROUP BY res_id
                      )""")
