@@ -88,7 +88,7 @@ class UpdatedServiceRequest(models.Model):
                     else:
                         print('2nd')
                         self.delete_product_quantity(lines[1])
-                        self.add_product_quantity(lines[1], product_uom_qty)
+                        self.add_product_quantity(lines[1], lines[2]['product_uom_qty'])
 
                 elif lines[0]==0:
                     product_id = lines[2]['product_id']
