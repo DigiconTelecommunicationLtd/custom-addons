@@ -146,7 +146,7 @@ class ISPCRMInvoice(models.Model):
                             #Updated
                             start = datetime.date.today().replace(day=1) + relativedelta(months=1)
 
-                            end = start + relativedelta(months=1) - relativedelta(days=1)
+                            end = datetime.date.today().replace(day=1)+ relativedelta(months=2) - relativedelta(days=1)
                             # end = datetime.date(datetime.date.today().year, datetime.date.today().month + 2,
                             #                                        1) - relativedelta(days=1)
                             print('start', start)
@@ -158,14 +158,13 @@ class ISPCRMInvoice(models.Model):
                                 #                                                     datetime.date.today().month + 1,
                                 #                                                     1) - relativedelta(
                                 #     days=1)
-                                corporate_soho_first_month_date_end = start + relativedelta(months=1) - relativedelta(days=1)
+                                corporate_soho_first_month_date_end = datetime.date.today().replace(day=1)+ relativedelta(months=1) - relativedelta(days=1)
                             elif days_diff > 30:
                                 # corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
                                 #                                                     datetime.date.today().month + 1,
                                 #                                                     1) - relativedelta(
                                 #     days=2)
-                                corporate_soho_first_month_date_end = start + relativedelta(months=1) - relativedelta(
-                                    days=2)
+                                corporate_soho_first_month_date_end = datetime.date.today().replace(day=1)+ relativedelta(months=1) - relativedelta(days=2)
 
                             # corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
                             #                                                     datetime.date.today().month + 1, 1) - relativedelta(
