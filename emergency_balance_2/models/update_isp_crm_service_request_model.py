@@ -88,7 +88,7 @@ class UpdatedServiceRequest(models.Model):
                     else:
                         print('2nd')
                         self.delete_product_quantity(lines[1])
-                        self.add_product_quantity(lines[1], lines[2]['product_uom_qty'])
+                        self.add_product_quantity(lines[1], 1)
 
                 elif lines[0]==0:
                     product_id = lines[2]['product_id']
@@ -156,7 +156,7 @@ class UpdatedServiceRequest(models.Model):
             else:
                 new_available_quantity = abs(current_stock_quantity) - abs(quantity)
 
-            if new_available_quantity <= 0.0:
+            if new_available_quantity < 0.0:
                 raise UserError('Not enough quantity available in stock.')
             print('new stock',new_available_quantity)
             self.update_stock_quantity(new_available_quantity, get_product.product_id.id)
