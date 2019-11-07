@@ -711,7 +711,7 @@ class CronJobModel(models.Model):
                                                        1) - relativedelta(days=2)
             #TEST BASIS#
             # if difference == 0:
-            if difference == 0:
+            if difference:
                 sale_order_object = self.env['sale.order']
                 sale_orders = sale_order_object.search([])
                 for order in sale_orders:
