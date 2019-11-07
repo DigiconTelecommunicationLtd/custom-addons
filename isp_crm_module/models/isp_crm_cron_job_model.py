@@ -698,8 +698,8 @@ class CronJobModel(models.Model):
             difference = int(abs(difference.days))
             # corporate_soho_invoice_date_start = datetime.today()
             corporate_soho_invoice_date_start = datetime.today().replace(day=1) + relativedelta(months=1)
-            corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
-
+            # corporate_soho_invoice_date_end = date(datetime.today().year,datetime.today().month + 2, 1) - relativedelta(days=1)
+            corporate_soho_invoice_date_end = datetime.date.today().replace(day=1)+ relativedelta(months=2) - relativedelta(days=1)
             days_diff = corporate_soho_invoice_date_end - corporate_soho_invoice_date_start.date()
             days_diff = int(abs(days_diff.days))
 
@@ -707,8 +707,9 @@ class CronJobModel(models.Model):
             if days_diff == 30:
                 pass
             elif days_diff > 30:
-                corporate_soho_invoice_date_end = date(datetime.today().year, datetime.today().month + 2,
-                                                       1) - relativedelta(days=2)
+                # corporate_soho_invoice_date_end = date(datetime.today().year, datetime.today().month + 2,
+                #                                        1) - relativedelta(days=2)
+                corporate_soho_invoice_date_end = datetime.date.today().replace(day=1)+ relativedelta(months=1) - relativedelta(days=2)
             #TEST BASIS#
             # if difference == 0:
             if difference:
