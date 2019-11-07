@@ -121,7 +121,10 @@ class RealIpChangeRequest(models.Model):
                     if line.name !='Real IP':
                         result.append(line.id)
                 real_to_normal_ip(record.customer.subscriber_id,record.customer.current_package_id.name)
-                record.customer.product_line=[(6,None,result)]
+                print(result)
+                record.customer.sudo().update({
+                    'product_line':[(6, None, result)]
+                })
 
     @api.one
     def on_ip_rejected(self):
