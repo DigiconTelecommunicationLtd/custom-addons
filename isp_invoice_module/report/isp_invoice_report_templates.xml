@@ -106,20 +106,20 @@
                             <table style="width: 100%;">
                                 <tr>
                                     <th>Name</th>
-                                    <th>Billing Start Date</th>
-                                    <th>Billing End Date</th>
+                                    <!--<th>Billing Start Date</th>-->
+                                    <!--<th>Billing End Date</th>-->
 
                                 </tr>
                                 <tr>
                                     <td>
                                         <span t-field="o.partner_id.name"/>
                                     </td>
-                                    <td>
-                                        <span t-field="o.partner_id.current_package_start_date"/>
-                                    </td>
-                                    <td>
-                                        <span t-field="o.partner_id.current_package_end_date"/>
-                                    </td>
+                                    <!--<td>-->
+                                        <!--<span t-field="o.partner_id.current_package_start_date"/>-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<span t-field="o.partner_id.current_package_end_date"/>-->
+                                    <!--</td>-->
 
                                 </tr>
 
