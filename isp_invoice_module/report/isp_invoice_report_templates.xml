@@ -219,6 +219,19 @@
                                                 </td>
                                             </tr>
                                             <tr>
+                                                <th>Billing Start Date</th>
+                                                <td>
+                                                    <span t-field="o.partner_id.current_package_start_date"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Billing End Date</th>
+                                                <td>
+                                                    <span t-field="o.partner_id.current_package_end_date"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
                                                 <th>Bill Date</th>
                                                 <td>
                                                     <span t-field="o.date_invoice"/>
@@ -236,6 +249,32 @@
                                                     <span t-field="o.date_due"/>
                                                 </td>
                                             </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-xs-6">
+                                    <table class="table table-bordered table-condensed" name="invoice_table">
+                                        <th>Attention:</th>
+                                        <tbody class="invoice_tbody">
+                                            <tr>
+                                                <th>Billing Persons name:</th>
+                                                <td>
+                                                    <span t-field="o.partner_id.billing_person_name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Billing Persons Mail:</th>
+                                                <td>
+                                                    <span t-field="o.partner_id.billing_person_email"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Billing Persons Contacts:</th>
+                                                <td>
+                                                    <span t-field="o.partner_id.billing_person_contact"/>
+                                                </td>
+                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>

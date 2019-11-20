@@ -5,15 +5,17 @@
     <record model="ir.ui.view" id="customer_view_buttons">
         <field name="name">partner.view.buttons</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="priority" eval="20"/>
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
-                <button type="object" class="oe_stat_button" icon="fa-pencil-square-o" name="action_view_customer_service_request"
-                    attrs="{'invisible': [('customer', '=', False)]}" context="{'default_partner_id': active_id}">
+                <button type="object" class="oe_stat_button" icon="fa-pencil-square-o"
+                        name="action_view_customer_service_request"
+                        attrs="{'invisible': [('customer', '=', False)]}" context="{'default_partner_id': active_id}">
                     <div class="o_form_field o_stat_info">
                         <span class="o_stat_value">
-                            <field name="total_installation_charge" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_installation_charge" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}"/>
                         </span>
                         <span class="o_stat_text">Total Charge</span>
                     </div>
@@ -30,7 +32,7 @@
         <field name="arch" type="xml">
             <field name="name" position="before">
                 <h3>
-                    <field name="subscriber_id" />
+                    <field name="subscriber_id"/>
                 </h3>
             </field>
             <field name="name" position="replace">
@@ -39,25 +41,30 @@
                 </h1>
             </field>
             <field name="type" position="after">
-                <field name="gender" string="Gender" />
-                <field name="birthday" string="Date Of Birth" />
+                <field name="gender" string="Gender"/>
+                <field name="birthday" string="Date Of Birth"/>
             </field>
             <field name="vat" position="before">
-                <field name="father" />
-                <field name="mother" />
+                <field name="father"/>
+                <field name="mother"/>
             </field>
             <field name="email" position="after">
-                <field name="identifier_name" />
+                <field name="identifier_name"/>
                 <field name="is_service_request_marked_done" invisible="1"/>
                 <field name="identifier_mobile" widget="phone"/>
                 <field name="identifier_phone" widget="phone"/>
-                <field name="identifier_nid" />
+                <field name="identifier_nid"/>
                 <field name="emergency_contact_number" widget="phone"/>
+
+                <field name="billing_person_name"/>
+                <field name="billing_person_email"/>
+                <field name="billing_person_contact" widget="phone"/>
+
                 <field name="service_activation_date"/>
                 <field name="billing_start_date"/>
                 <field name="proposed_activation_date"/>
                 <field name="assigned_rm" domain="[('share', '=', False)]"
-                                context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads']}"/>
+                       context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads']}"/>
                 <field name="customer_etin" attrs="{'invisible': [('is_service_request_marked_done', '=', False)]}"/>
                 <field name="customer_bin" attrs="{'invisible': [('is_service_request_marked_done', '=', False)]}"/>
             </field>
@@ -65,27 +72,27 @@
                 <label for="street" string="Billing Address"/>
             </xpath>
             <xpath expr="//group/label" position="before">
-               <field name="connectivity_address" />
+                <field name="connectivity_address"/>
             </xpath>
             <field name="function" position="replace">
-                <field name="function" string="Designation" />
+                <field name="function" string="Designation"/>
             </field>
             <field name="website" position="replace">
-                <field name="website" invisible="1" />
+                <field name="website" invisible="1"/>
             </field>
             <field name="category_id" position="replace">
-                <field name="category_id" invisible="1" />
+                <field name="category_id" invisible="1"/>
             </field>
             <field name="vat" position="replace">
-                <field name="vat" invisible="1" />
+                <field name="vat" invisible="1"/>
             </field>
             <field name="lang" position="replace">
-                <field name="lang" invisible="1" />
+                <field name="lang" invisible="1"/>
             </field>
 
 
             <!--Technical Information-->
-            <xpath expr="//notebook/page[@name='sales_purchases']" position="after" >
+            <xpath expr="//notebook/page[@name='sales_purchases']" position="after">
                 <page string="Description">
                     <field name="description_info"/>
                 </page>
@@ -94,7 +101,7 @@
                         <group>
                             <field name="current_package_id" string="Package ID"/>
                             <!--readonly="1"-->
-                            <field name="current_package_end_date" string="Valid Till" />
+                            <field name="current_package_end_date" string="Valid Till"/>
                             <field name="active_status"/>
                             <field name="service_type" string="Service Type"/>
                             <field name="connection_type" string="Connection Type"/>
@@ -114,7 +121,7 @@
                     <field name="product_line" mode="tree">
                         <tree string="Sales Order Lines">
                             <field name="product_id"/>
-<!--                            <field name="name"/>-->
+                            <!--                            <field name="name"/>-->
                             <field name="product_uom_qty"/>
                             <field name="price_unit"/>
                             <field name="price_subtotal"/>
@@ -122,9 +129,10 @@
                     </field>
                     <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
                         <div class="oe_subtotal_footer_separator oe_inline o_td_label">
-                            <label for="product_line_total" />
+                            <label for="product_line_total"/>
                         </div>
-                        <field name="product_line_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        <field name="product_line_total" nolabel="1" class="oe_subtotal_footer_separator"
+                               widget='monetary' options="{'currency_field': 'currency_id'}"/>
                     </group>
                 </page>
                 <!--end of order line-->
@@ -150,7 +158,7 @@
 
 
     <!--7 days before bill cycle date-->
-<record id="isp_crm_mail_template_for_sending_invoice" model="res.partner">
+    <record id="isp_crm_mail_template_for_sending_invoice" model="res.partner">
         <field name="name">sending_invoice_for_warning_the_customer</field>
         <field name="subject_mail">Payment reminder of next bill cycle</field>
         <field name="body_html"><![CDATA[

@@ -26,6 +26,7 @@ DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 DEFAULT_ACCOUNT_CODE = '100001'
 DEFAULT_PACKAGE_CAT_NAME = 'Packages'
 
+
 class Customer(models.Model):
     """Inherits res.partner and adds Customer info in partner form"""
     _inherit = 'res.partner'
@@ -36,22 +37,33 @@ class Customer(models.Model):
         ('email', 'Check(1=1)', 'Email must be unique!'),
     ]
 
-    subscriber_id = fields.Char('Subcriber ID', copy=False, readonly=True, index=True, default=lambda self: _('New'), track_visibility='onchange')
+    subscriber_id = fields.Char('Subcriber ID', copy=False, readonly=True, index=True, default=lambda self: _('New'),
+                                track_visibility='onchange')
     father = fields.Char("Father's Name", default='', required=False, track_visibility='onchange')
     mother = fields.Char(string="Mother's Name", required=False, default='', track_visibility='onchange')
     birthday = fields.Date('Date of Birth', required=False, default=None, track_visibility='onchange')
-    gender = fields.Selection(GENDERS, string='Gender', required=False, help="Gender of the Subscriber", default='', track_visibility='onchange')
+    gender = fields.Selection(GENDERS, string='Gender', required=False, help="Gender of the Subscriber", default='',
+                              track_visibility='onchange')
     identifier_name = fields.Char(string="Identifier's Name", required=False, default='', track_visibility='onchange')
-    identifier_phone = fields.Char(string="Identifier's Telephone", required=False, default='', track_visibility='onchange')
-    identifier_mobile = fields.Char(string="Identifier's Mobile", required=False, default='', track_visibility='onchange')
+    identifier_phone = fields.Char(string="Identifier's Telephone", required=False, default='',
+                                   track_visibility='onchange')
+    identifier_mobile = fields.Char(string="Identifier's Mobile", required=False, default='',
+                                    track_visibility='onchange')
     identifier_nid = fields.Char(string="Identifier's NID", required=False, default=False, track_visibility='onchange')
-    service_type = fields.Many2one('isp_crm.service_type', default=False, required=False, string='Service Type', track_visibility='onchange')
-    connection_type = fields.Many2one('isp_crm.connection_type', default=False, required=False, string='Connection Type', track_visibility='onchange')
-    connection_media = fields.Many2one('isp_crm.connection_media', default=False, required=False, string='Connection Media', track_visibility='onchange')
-    connection_status = fields.Boolean(string='Connection Up', default=False, required=False, track_visibility='onchange')
-    bill_cycle_date = fields.Integer(string='Bill Cycle Date', required=False, default=None, readonly=True, track_visibility='onchange')
-    total_installation_charge = fields.Monetary(compute='_compute_installation_charge', string="Total Instl. Charge", track_visibility='onchange')
-    is_potential_customer = fields.Boolean(string='Is This Customer potential or not?', default=True, required=False, track_visibility='onchange')
+    service_type = fields.Many2one('isp_crm.service_type', default=False, required=False, string='Service Type',
+                                   track_visibility='onchange')
+    connection_type = fields.Many2one('isp_crm.connection_type', default=False, required=False,
+                                      string='Connection Type', track_visibility='onchange')
+    connection_media = fields.Many2one('isp_crm.connection_media', default=False, required=False,
+                                       string='Connection Media', track_visibility='onchange')
+    connection_status = fields.Boolean(string='Connection Up', default=False, required=False,
+                                       track_visibility='onchange')
+    bill_cycle_date = fields.Integer(string='Bill Cycle Date', required=False, default=None, readonly=True,
+                                     track_visibility='onchange')
+    total_installation_charge = fields.Monetary(compute='_compute_installation_charge', string="Total Instl. Charge",
+                                                track_visibility='onchange')
+    is_potential_customer = fields.Boolean(string='Is This Customer potential or not?', default=True, required=False,
+                                           track_visibility='onchange')
     package_id = fields.Many2one('product.product', string='Package', domain=[('sale_ok', '=', True)],
                                  change_default=True, ondelete='restrict', track_visibility='onchange')
     # Package Info
@@ -60,31 +72,43 @@ class Customer(models.Model):
     current_package_start_date = fields.Date('Start Date', default=None, track_visibility='onchange')
     current_package_end_date = fields.Date('Valid Till', default=None, track_visibility='onchange')
     current_package_price = fields.Float('Current Package Price', required=True,
-                                         digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange')
+                                         digits=dp.get_precision('Product Price'), default=0.0,
+                                         track_visibility='onchange')
     current_package_original_price = fields.Float('Current Package Original Price',
-                                                  digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange')
-    current_package_sales_order_id = fields.Many2one('sale.order', string='Current Package Sales Order', track_visibility='onchange')
+                                                  digits=dp.get_precision('Product Price'), default=0.0,
+                                                  track_visibility='onchange')
+    current_package_sales_order_id = fields.Many2one('sale.order', string='Current Package Sales Order',
+                                                     track_visibility='onchange')
     next_package_id = fields.Many2one('product.product', string='Future Package', domain=[('sale_ok', '=', True)],
                                       change_default=True, ondelete='restrict', track_visibility='onchange')
     next_package_start_date = fields.Date('Next Package Start Date', default=None, track_visibility='onchange')
     next_package_price = fields.Float('Next Package Price',
-                                      digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange')
+                                      digits=dp.get_precision('Product Price'), default=0.0,
+                                      track_visibility='onchange')
     next_package_original_price = fields.Float('Next Package Original Price',
-                                               digits=dp.get_precision('Product Price'), default=0.0, track_visibility='onchange')
-    next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order', track_visibility='onchange')
-    active_status = fields.Selection(ACTIVE_STATES, string='Active Status', required=False, help="Active Status of Current Bill Cycle", default='active', track_visibility='onchange')
+                                               digits=dp.get_precision('Product Price'), default=0.0,
+                                               track_visibility='onchange')
+    next_package_sales_order_id = fields.Many2one('sale.order', string='Next Package Sales Order',
+                                                  track_visibility='onchange')
+    active_status = fields.Selection(ACTIVE_STATES, string='Active Status', required=False,
+                                     help="Active Status of Current Bill Cycle", default='active',
+                                     track_visibility='onchange')
     is_deferred = fields.Boolean("Is Deferred", default=False, track_visibility='onchange')
     assigned_rm = fields.Many2one('res.users', string='RM', track_visibility='onchange')
     customer_etin = fields.Char(string='Customer ETIN', track_visibility='onchange')
     customer_bin = fields.Char(string='Customer BIN', track_visibility='onchange')
-    is_service_request_marked_done = fields.Boolean(compute='_get_mark_done_info', default=False, track_visibility='onchange')
-    is_sent_package_change_req = fields.Boolean("Is Package Change Request Sent", default=False, track_visibility='onchange')
-    is_sent_package_change_req_from_technical_information = fields.Boolean("Is Package Change Request Made from Technical Information", default=True, track_visibility='onchange')
+    is_service_request_marked_done = fields.Boolean(compute='_get_mark_done_info', default=False,
+                                                    track_visibility='onchange')
+    is_sent_package_change_req = fields.Boolean("Is Package Change Request Sent", default=False,
+                                                track_visibility='onchange')
+    is_sent_package_change_req_from_technical_information = fields.Boolean(
+        "Is Package Change Request Made from Technical Information", default=True, track_visibility='onchange')
 
     product_line = fields.One2many('isp_crm_module.customer_product_line', 'customer_id',
-                                 string='Customer Product Lines', copy=True, auto_join=True)
-    product_line_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_product_line_total',
-                                       track_visibility='always')
+                                   string='Customer Product Lines', copy=True, auto_join=True)
+    product_line_total = fields.Monetary(string='Total', store=True, readonly=True,
+                                         compute='_compute_product_line_total',
+                                         track_visibility='always')
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', readonly=True,
                                    help="Pricelist for Customer.")
 
@@ -103,22 +127,29 @@ class Customer(models.Model):
     property_product_pricelist = fields.Many2one(
         'product.pricelist', 'Sale Pricelist', compute='_compute_product_pricelist',
         inverse="_inverse_product_pricelist", company_dependent=False,  # NOT A REAL PROPERTY
-        help="This pricelist will be used, instead of the default one, for sales to the current partner", track_visibility='onchange')
+        help="This pricelist will be used, instead of the default one, for sales to the current partner",
+        track_visibility='onchange')
 
     technical_info_ip = fields.Char('IP Address')
     technical_info_subnet_mask = fields.Char('Subnet Mask')
     technical_info_gateway = fields.Char('Gateway')
     description_info = fields.Text('Description')
-    emergency_contact_number = fields.Char(related='opportunity_ids.emergency_contact_number', string="Emergency Contact Number", required=False, default='',
+    emergency_contact_number = fields.Char(related='opportunity_ids.emergency_contact_number',
+                                           string="Emergency Contact Number", required=False, default='',
                                            track_visibility='onchange')
-    service_activation_date = fields.Date(related='opportunity_ids.service_activation_date', string='Service Activation Date', track_visibility='onchange')
-    billing_start_date = fields.Date(related='opportunity_ids.billing_start_date', string='Billing Start Date', track_visibility='onchange')
-    proposed_activation_date = fields.Date(related='opportunity_ids.proposed_activation_date', string='Proposed Activation Date', track_visibility='onchange')
+    service_activation_date = fields.Date(related='opportunity_ids.service_activation_date',
+                                          string='Service Activation Date', track_visibility='onchange')
+    billing_start_date = fields.Date(related='opportunity_ids.billing_start_date', string='Billing Start Date',
+                                     track_visibility='onchange')
+    proposed_activation_date = fields.Date(related='opportunity_ids.proposed_activation_date',
+                                           string='Proposed Activation Date', track_visibility='onchange')
 
     package_product_price = fields.Float('Package Price', required=False, default=0.0)
     connectivity_address = fields.Char(string='Connectivity Address', size=100)
 
-
+    billing_person_name = fields.Char("Billing Person Name", size=100)
+    billing_person_email = fields.Char("Billing Person Email", size=100)
+    billing_person_contact = fields.Char("Billing Person Contact", size=100)
 
     # @api.depends(lambda self: self._display_con_address_depends())
     def _compute_connectivity_address(self):
@@ -135,7 +166,8 @@ class Customer(models.Model):
         """
         for customer in self:
             check_done = customer.is_service_request_marked_done
-            get_opportunity = self.env['isp_crm_module.service_request'].search([('customer', '=', customer.id)], limit=1)
+            get_opportunity = self.env['isp_crm_module.service_request'].search([('customer', '=', customer.id)],
+                                                                                limit=1)
             if get_opportunity.is_done:
                 customer.update({
                     'is_service_request_marked_done': True,
@@ -144,7 +176,6 @@ class Customer(models.Model):
                 customer.update({
                     'is_service_request_marked_done': False,
                 })
-
 
     def _get_package_end_date(self, given_date):
         """
@@ -155,11 +186,11 @@ class Customer(models.Model):
         # Check if customer is inactive and valid till date is over
         today = str(date.today())
         today_obj = datetime.strptime(today, DEFAULT_DATE_FORMAT)
-        given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
+        given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
         if today_obj > given_date_obj:
             package_end_date_obj = today_obj + timedelta(days=DEFAULT_MONTH_DAYS + 1)
         else:
-            package_end_date_obj    = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
+            package_end_date_obj = given_date_obj + timedelta(days=DEFAULT_MONTH_DAYS)
         return package_end_date_obj.strftime(DEFAULT_DATE_FORMAT)
 
     def _get_next_package_start_date(self, given_date):
@@ -171,14 +202,15 @@ class Customer(models.Model):
         # Check if customer is inactive and valid till date is over
         today = str(date.today())
         today_obj = datetime.strptime(today, DEFAULT_DATE_FORMAT)
-        given_date_obj          = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
+        given_date_obj = datetime.strptime(given_date, DEFAULT_DATE_FORMAT)
         if today_obj > given_date_obj:
             package_start_date_obj = today_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS + 1)
         else:
-            package_start_date_obj  = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
+            package_start_date_obj = given_date_obj + timedelta(days=DEFAULT_NEXT_MONTH_DAYS)
         return package_start_date_obj.strftime(DEFAULT_DATE_FORMAT)
 
-    def update_current_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False, original_price=False, sales_order_id=False):
+    def update_current_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False,
+                                       original_price=False, sales_order_id=False):
         """
         Updates current month's package and bill cycle info of given customer
         :param customer: package user
@@ -203,25 +235,25 @@ class Customer(models.Model):
             #     original_price = original_price + original_price_sale_order_line
             original_price = customer.invoice_product_original_price
 
-        current_package_id              = product_id if product_id else customer.current_package_id.id
-        current_package_price           = price if price else customer.current_package_price
-        current_package_original_price  = original_price if original_price else customer.current_package_id.list_price
-        current_package_start_date      = start_date if start_date else datetime.today().strftime(DEFAULT_DATE_FORMAT)
-        current_package_end_date        = self._get_package_end_date(given_date=current_package_start_date)
-        current_package_sales_order_id  = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
+        current_package_id = product_id if product_id else customer.current_package_id.id
+        current_package_price = price if price else customer.current_package_price
+        current_package_original_price = original_price if original_price else customer.current_package_id.list_price
+        current_package_start_date = start_date if start_date else datetime.today().strftime(DEFAULT_DATE_FORMAT)
+        current_package_end_date = self._get_package_end_date(given_date=current_package_start_date)
+        current_package_sales_order_id = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
 
         customer.update({
-            'current_package_id'             : current_package_id,
-            'current_package_price'          : current_package_price,
-            'current_package_original_price' : current_package_original_price,
-            'current_package_start_date'     : current_package_start_date,
-            'current_package_end_date'       : current_package_end_date,
-            'current_package_sales_order_id' : current_package_sales_order_id,
+            'current_package_id': current_package_id,
+            'current_package_price': current_package_price,
+            'current_package_original_price': current_package_original_price,
+            'current_package_start_date': current_package_start_date,
+            'current_package_end_date': current_package_end_date,
+            'current_package_sales_order_id': current_package_sales_order_id,
         })
         return customer
 
-
-    def update_next_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False, sales_order_id=False):
+    def update_next_bill_cycle_info(self, customer, start_date=False, product_id=False, price=False,
+                                    sales_order_id=False):
         """
         Updates next month's package and bill cycle info of given customer
         :param customer: package user
@@ -232,19 +264,20 @@ class Customer(models.Model):
         :return: updated customer
         """
 
-        next_package_id             = product_id if product_id else customer.current_package_id.id
-        next_package_start_date     = start_date if start_date else self._get_next_package_start_date(given_date=customer.current_package_start_date)
-        next_package_price          = price if price else customer.current_package_price
+        next_package_id = product_id if product_id else customer.current_package_id.id
+        next_package_start_date = start_date if start_date else self._get_next_package_start_date(
+            given_date=customer.current_package_start_date)
+        next_package_price = price if price else customer.current_package_price
         next_package_original_price = price if price else customer.current_package_original_price
         next_package_sales_order_id = sales_order_id if sales_order_id else customer.current_package_sales_order_id.id
 
         customer.update({
-            'next_package_id'             : next_package_id,
-            'next_package_start_date'     : next_package_start_date,
-            'next_package_price'          : next_package_price,
-            'next_package_original_price' : next_package_original_price,
-            'next_package_sales_order_id' : next_package_sales_order_id,
-            'is_sent_package_change_req_from_technical_information' : True,
+            'next_package_id': next_package_id,
+            'next_package_start_date': next_package_start_date,
+            'next_package_price': next_package_price,
+            'next_package_original_price': next_package_original_price,
+            'next_package_sales_order_id': next_package_sales_order_id,
+            'is_sent_package_change_req_from_technical_information': True,
         })
         return customer
 
@@ -259,7 +292,9 @@ class Customer(models.Model):
             res_partner_obj = self.env['res.partner'].search([('id', '=', self._origin.id)], limit=1)
             if res_partner_obj.is_sent_package_change_req_from_technical_information:
 
-                customer_product_line_obj = self.env['isp_crm_module.customer_product_line'].search([('customer_id', '=', res_partner_obj.id),('product_id', '=', res_partner_obj.current_package_id.id)], limit=1)
+                customer_product_line_obj = self.env['isp_crm_module.customer_product_line'].search(
+                    [('customer_id', '=', res_partner_obj.id),
+                     ('product_id', '=', res_partner_obj.current_package_id.id)], limit=1)
 
                 if customer_product_line_obj:
                     # updating account moves of customer
@@ -367,10 +402,11 @@ class Customer(models.Model):
     def create(self, vals):
         validated = True
         name = vals.get('name')
-        rm  = self.env['crm.lead'].search([('name', '=', name)], order='create_date desc', limit=1)
+        rm = self.env['crm.lead'].search([('name', '=', name)], order='create_date desc', limit=1)
 
         # Update expected revenue
-        products = self.env['crm.lead'].search([('name', '=', name)], order='create_date desc', limit=1).tagged_product_ids
+        products = self.env['crm.lead'].search([('name', '=', name)], order='create_date desc',
+                                               limit=1).tagged_product_ids
         price = 0.00
         for product in products:
             price = price + product.price
@@ -381,7 +417,8 @@ class Customer(models.Model):
         vals['assigned_rm'] = rm.assigned_rm.id
         if vals.get('email'):
             if len(vals.get('email')) < 256:
-                if re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$", vals.get('email')) is None:
+                if re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$",
+                            vals.get('email')) is None:
                     validated = False
                     raise UserError(_('Please Enter a Valid Email Address!'))
 
@@ -423,7 +460,8 @@ class Customer(models.Model):
     def onchange_email(self):
         if self.email:
             if len(self.email) < 256:
-                if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$", self.email) is None:
+                if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9_-]+\.[a-zA-Z0-9-]+([\.]?[a-zA-Z0-9-])*$",
+                            self.email) is None:
                     raise UserError(_('Please Enter a Valid Email Address!'))
             else:
                 raise UserError(_('Email Address is too long!'))
@@ -462,8 +500,9 @@ class Customer(models.Model):
             all_partner_ids = partner.search([('customer', '=', True)])
 
         for partner in all_partner_ids:
-            customer_service_req_object = self.env['isp_crm_module.service_request'].search([('customer', '=', partner.id)])
-            total_instllation_charge =  sum(req.amount_total for req in customer_service_req_object)
+            customer_service_req_object = self.env['isp_crm_module.service_request'].search(
+                [('customer', '=', partner.id)])
+            total_instllation_charge = sum(req.amount_total for req in customer_service_req_object)
             partner.total_installation_charge = total_instllation_charge
 
     def get_customer_balance(self, customer_id, start_date=None, end_date=None):
@@ -475,7 +514,7 @@ class Customer(models.Model):
         :return: balance of the given customer
         """
         # Account
-        unearned_account_obj =  self.env['account.account'].search([
+        unearned_account_obj = self.env['account.account'].search([
             ('code', 'like', DEFAULT_ACCOUNT_CODE),
         ], limit=1)
 
@@ -528,8 +567,3 @@ class Customer(models.Model):
                 'product_line_total': amount_untaxed,
                 'package_product_price': package_price,
             })
-
-
-
-
-
