@@ -4,14 +4,14 @@
 
     <menuitem
             id="isp_crm_module.isp_crm_hd_menu"
-            name="Bandwidth"
+            name="Internet Service Ticket"
             parent="isp_crm_module.isp_crm_hd"
             action="isp_crm_module.isp_crm_helpdesk"
             sequence="1"
     />
 
     <!-- menu categories -->
-    <menuitem name="emergency balance" id="emergency_balance_res_partner_menu" parent="isp_crm_module.isp_crm_hd"/>
+    <menuitem name="Emergency Balance" id="emergency_balance_res_partner_menu" parent="isp_crm_module.isp_crm_hd"/>
 
     <!-- actions -->
 <!--    <menuitem name="Create ticket" id="emergency_balance_res_partner_menu_list" parent="emergency_balance_res_partner_menu"-->
@@ -21,6 +21,11 @@
 
      <menuitem name="Emergency Balance tickets" id="emergency_balance_res_partner_menu_list" parent="emergency_balance_res_partner_menu"
               action="emergence_balance_emergency_balance_action_window"/>
+
+    <menuitem name="Real IP Change Request" id="real_ip_change_request_menu_item" parent="isp_crm_module.menu_isp_crm_module_service_request_act"
+              action="real_ip_change_action_window"/>
+
+
 
 <!--    <menuitem name="Approval tickets" id="emergency_balance_approval_list" parent="emergency_balance_res_partner_menu"-->
 <!--              action="emergence_balance_approval_balance_action_window"/>-->

@@ -1,10 +1,9 @@
-from odoo import models, fields, api,_
+from odoo import models, fields, api,_,registry, SUPERUSER_ID
 from odoo.exceptions import Warning, UserError
 from datetime import datetime, timezone, timedelta, date
 from odoo.addons.isp_crm_module.models.radius_integration import *
 from odoo.addons.emergency_balance_2.models.color_code import *
-
-
+import threading
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 EMERGENCY_TYPE = [
     (1, _('1 Day')),
@@ -15,6 +14,9 @@ EMERGENCY_TYPE = [
     (6, _('6 Days')),
     (7, _('7 Days')),
 ]
+CUSTOMER_INACTIVE_STATUS = 'inactive'
+CUSTOMER_ACTIVE_STATUS = 'active'
+
 class DashboardOne(models.TransientModel):
     _name = 'emergency.wizard.balance'
 
@@ -40,12 +42,14 @@ class DashboardOne(models.TransientModel):
                                domain=[('subscriber_id', '!=', 'New'), ('subscriber_id', 'like', 'MR')])
     emergency_date = fields.Selection(EMERGENCY_TYPE, string='Emergency Balance', help="Emergency Balance",
                                       required=True, track_visibility='onchange')
+
     due_amount = fields.Float('Due Amount', required=True,
                               default=0.0,
                               track_visibility='onchange')
 
     subscriber_id = fields.Char(compute='change_emergency_date', string='Subscriber ID')
     current_package = fields.Char(compute='change_emergency_date', string='Current Package')
+    active_status = fields.Char(compute='change_emergency_date', string='Active Status')
     current_package_price = fields.Char(compute='change_emergency_date', string='Current Package Price')
     current_package_end_date = fields.Char(compute='change_emergency_date', string='Valid Till')
     next_package_start_date = fields.Char(compute='change_emergency_date', string='Next Start Date')
@@ -68,8 +72,8 @@ class DashboardOne(models.TransientModel):
             records.next_package_start_date = str(self.customer.next_package_start_date)
             records.assigned_rm = str(self.customer.assigned_rm.name)
             records.subscriber_id = str(self.customer.subscriber_id)
-            records.balance = str(abs(self.customer.get_customer_balance(self.customer.id)))
-
+            records.balance = "{0:.2f}".format(abs(self.customer.get_customer_balance(self.customer.id)))
+            records.active_status = str(self.customer.active_status)
 
     def on_submit(self):
         form_view_id = self.env.ref('emergency_balance_2.emergency_balance_create_ticket_wizard_view_form').ids
@@ -105,13 +109,21 @@ class DashboardOne(models.TransientModel):
             template_obj_new_service_request = self.env['emergency_balance.mail'].sudo().search(
                 [('name', '=', 'new_emergency_balance_approval')],
                 limit=1)
-            self.env['emergency_balance.mail'].action_send_email(str(self.emergency_date),
+            email_thread = threading.Thread(target=self._sent_email, args=(str(self.emergency_date),
                                                                  self.customer.name,
                                                                  self.customer.subscriber_id,
                                                                  self.customer.current_package_id.name,
-                                                                 str(self.customer.current_package_price),
-                                                                 template_obj_new_service_request
-                                                                 )
+                                                                 str(self.customer.current_package_price)
+
+                                                                 ))
+            email_thread.start()
+            # self.env['emergency_balance.mail'].action_send_email(str(self.emergency_date),
+            #                                                      self.customer.name,
+            #                                                      self.customer.subscriber_id,
+            #                                                      self.customer.current_package_id.name,
+            #                                                      str(self.customer.current_package_price),
+            #                                                      template_obj_new_service_request
+            #                                                      )
             # self.approved = False
             # self.has_due = False
             # self.set_for_approval = True
@@ -122,6 +134,7 @@ class DashboardOne(models.TransientModel):
                 'has_due': True,
                 'set_for_approval': False,
                 'state': 'due',
+                'active_status':'active',
                 'emergency_date': self.emergency_date,
                 'color': DUE_ACCEPTED,
                 'name': self.env['ir.sequence'].next_by_code('emergency_balance.emergency_balance')
@@ -129,7 +142,16 @@ class DashboardOne(models.TransientModel):
             customer_ref = self.env['res.partner'].search([('subscriber_id', '=', self.customer.subscriber_id)], limit=1)
             print('customer_red', customer_ref)
             print('current_package_end_date', customer_ref.current_package_end_date)
-            given_date_obj = datetime.strptime(customer_ref.current_package_end_date, DEFAULT_DATE_FORMAT)
+            #if the user is active then given date is current package end date else its today plus 6 hours
+            given_date_obj = None
+
+            if customer_ref.active_status == CUSTOMER_INACTIVE_STATUS:
+                today_new = datetime.now() + timedelta(hours=6)
+                #today = today_new.date()
+                given_date_obj = today_new.date()
+            else:
+                given_date_obj = datetime.strptime(customer_ref.current_package_end_date, DEFAULT_DATE_FORMAT)
+
             print('given_date', str(given_date_obj))
             modified_date = given_date_obj + timedelta(days=self.emergency_date)
             print('modified', str(modified_date))
@@ -138,6 +160,7 @@ class DashboardOne(models.TransientModel):
                 'has_due': True,
                 'emergency_date': self.emergency_date,
                 'emergency_balance_due_amount': 0,
+                'active_status': 'active',
                 'emergency_due_date': modified_date.strftime(DEFAULT_DATE_FORMAT),
 
             })
@@ -156,3 +179,20 @@ class DashboardOne(models.TransientModel):
             'type': 'ir.actions.act_window',
             'target': 'inline',
         }
+
+    def _sent_email(self,emergency_date,name,subscriber_id,current_package_id,current_package_price):
+        dbname = self.env.cr.dbname
+        db_registry = registry(dbname)
+        _context = self._context
+        with api.Environment.manage(), db_registry.cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, _context)
+            template_obj_new_service_request = env['emergency_balance.mail'].sudo().search(
+                [('name', '=', 'new_emergency_balance_approval')],
+                limit=1)
+            env['emergency_balance.mail'].action_send_email(str(emergency_date),
+                                                                 name,
+                                                                 subscriber_id,
+                                                                 current_package_id,
+                                                                 current_package_price,
+                                                                 template_obj_new_service_request
+                                                                 )

@@ -22,7 +22,7 @@ class ISPCRMInvoice(models.Model):
 
     _inherit = 'account.invoice'
 
-    payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type', default=1)
+    payment_service_id = fields.Many2one('isp_crm_module.selfcare_payment_service', string='Payment Service Type',default=1)
     is_deferred = fields.Boolean("Is Deferred", default=False)
     customer_po_no = fields.Char(compute='_get_customer_po_no', string='Customer PO No')
     billing_due_date = fields.Char(compute='_get_billing_due_date', string='Due Date', default="", readonly=False)
@@ -145,22 +145,26 @@ class ISPCRMInvoice(models.Model):
 
                             #Updated
                             start = datetime.date.today().replace(day=1) + relativedelta(months=1)
-                            end = datetime.date(datetime.date.today().year, datetime.date.today().month + 2,
-                                                                   1) - relativedelta(days=1)
 
+                            end = datetime.date.today().replace(day=1)+ relativedelta(months=2) - relativedelta(days=1)
+                            # end = datetime.date(datetime.date.today().year, datetime.date.today().month + 2,
+                            #                                        1) - relativedelta(days=1)
+                            print('start', start)
+                            print('end', end)
                             days_diff = end - start
                             days_diff = int(abs(days_diff.days))
                             if days_diff <= 30:
-                                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                    datetime.date.today().month + 1,
-                                                                                    1) - relativedelta(
-                                    days=1)
+                                # corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                                #                                                     datetime.date.today().month + 1,
+                                #                                                     1) - relativedelta(
+                                #     days=1)
+                                corporate_soho_first_month_date_end = datetime.date.today().replace(day=1)+ relativedelta(months=1) - relativedelta(days=1)
                             elif days_diff > 30:
-                                corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
-                                                                                    datetime.date.today().month + 1,
-                                                                                    1) - relativedelta(
-                                    days=2)
-
+                                # corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
+                                #                                                     datetime.date.today().month + 1,
+                                #                                                     1) - relativedelta(
+                                #     days=2)
+                                corporate_soho_first_month_date_end = datetime.date.today().replace(day=1)+ relativedelta(months=1) - relativedelta(days=2)
 
                             # corporate_soho_first_month_date_end = datetime.date(datetime.date.today().year,
                             #                                                     datetime.date.today().month + 1, 1) - relativedelta(
@@ -288,29 +292,36 @@ class ISPCRMInvoice(models.Model):
         customer = self.partner_id
         invoice_lines = self.invoice_line_ids
         customer_product_line_obj = self.env['isp_crm_module.customer_product_line']
-        for invoice_line in invoice_lines:
-            if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
-                package_line = invoice_line
-            created_product_line = customer_product_line_obj.create({
-                'customer_id': customer.id,
-                'name': invoice_line.name,
-                'product_id': invoice_line.product_id.id,
-                'product_updatable': False,
-                'product_uom_qty': invoice_line.quantity,
-                'product_uom': invoice_line.product_id.uom_id.id,
-                'price_unit': invoice_line.price_unit,
-                'price_subtotal': invoice_line.price_subtotal,
-                'price_total': self.amount_total,
-            })
-            created_product_line_list.append(created_product_line.id)
-        if package_line != '':
-            customer.update({
-                'invoice_product_id': package_line.product_id.id,
-                'invoice_product_price': package_line.price_subtotal,
-                'invoice_product_original_price': package_line.product_id.list_price,
-                'invoice_sales_order_name': self.origin,
-                'product_line': [(6, None, created_product_line_list)]
-            })
+        if customer.is_potential_customer == True:
+            for invoice_line in invoice_lines:
+                if invoice_line.product_id.categ_id.name == DEFAULT_PACKAGES_CATEGORY_NAME:
+                    print('************************************', invoice_line.product_id.name)
+                    if 'real' in invoice_line.product_id.name.lower() and 'ip' in invoice_line.product_id.name.lower():
+                        print('************************************', invoice_line.product_id.name)
+
+                    else:
+                        print('************************************', invoice_line.product_id.name)
+                        package_line = invoice_line
+                created_product_line = customer_product_line_obj.create({
+                    'customer_id': customer.id,
+                    'name': invoice_line.name,
+                    'product_id': invoice_line.product_id.id,
+                    'product_updatable': False,
+                    'product_uom_qty': invoice_line.quantity,
+                    'product_uom': invoice_line.product_id.uom_id.id,
+                    'price_unit': invoice_line.price_unit,
+                    'price_subtotal': invoice_line.price_subtotal,
+                    'price_total': self.amount_total,
+                })
+                created_product_line_list.append(created_product_line.id)
+            if package_line != '':
+                customer.update({
+                    'invoice_product_id': package_line.product_id.id,
+                    'invoice_product_price': package_line.price_subtotal,
+                    'invoice_product_original_price': package_line.product_id.list_price,
+                    'invoice_sales_order_name': self.origin,
+                    'product_line': [(6, None, created_product_line_list)]
+                })
 
         super(ISPCRMInvoice, self).action_invoice_open()
 

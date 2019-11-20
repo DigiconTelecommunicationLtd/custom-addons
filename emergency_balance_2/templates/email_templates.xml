@@ -41,7 +41,7 @@
         <field name="body_html"><![CDATA[
 
             <p><strong>Dear Sir,</strong></p>
-            <p>An invoice --invoiceno-- has been created for approval for deferred payment. Please take necessary action to proceed. Customer info is given below:.</p>
+            <p>An invoice has been created for approval for deferred payment. Please take necessary action to proceed. Customer info is given below:</p>
             <p>Customer Name:--customername--</p>
             <p>Package Name:--packagename--</p>
             <p>Package Price:--packageprice--</p>
@@ -50,6 +50,36 @@
             <br>
             <p>Thanks,</p>
             <p>Team MiME.</p>
+
+        ]]>
+
+        </field>
+    </record>
+      <record id="isp_crm_mail_template_for_sending_invoice_real_ip" model="res.partner">
+        <field name="name">sending_invoice_for_warning_the_customer_real_ip</field>
+        <field name="subject_mail">Payment reminder of next bill cycle</field>
+        <field name="body_html"><![CDATA[
+
+            <p><strong>Dear Valued Customer,</strong></p>
+
+            <p>Greetings from MIME. Please find your next bill payment info below</p>
+            <p>Details of your package and payment info is as follows:</p>
+
+            <p><strong>Customer ID : </strong>--customer_id--
+            <br/><strong>Customer Name: </strong>--customer_name--
+            <br/><strong>Package : </strong> --package--
+            <br/><strong>MRC : </strong> BDT &nbsp; --price--
+            <br/><strong>REAL IP : </strong> BDT &nbsp; --realipprice--
+            <br/><strong>TOTAL : </strong> BDT &nbsp; --totalprice--
+            <br/><strong>Last Payment Date : </strong> --last_payment_date--</p>
+            <p>Please make the payment by the last payment date to avoid any service interruption.</p>
+            <p>Here is our customer portal link for your kind convenience.
+            <br/><strong>Customer Portal URL:</strong> https://crm.mimebd.com/selfcare/login</p>
+
+            <p>Thanks,
+            <br/>Team MIME.</p>
+
+            <p><strong>[N.B: This is a system generated email. Please do not reply to this email. For any kind of query, please contact us: +8809609006463 or write us: info.mime@cg-bd.com <br/> Please ignore if you have already paid the bill.]</strong></p>
 
         ]]>
 

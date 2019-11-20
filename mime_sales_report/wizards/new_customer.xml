@@ -1,0 +1,34 @@
+<odoo>
+  <data>
+      <record model="ir.ui.view" id="mime_sales_report_new_customer">
+      <field name="name">Custom Payment</field>
+      <field name="model">mime_sales_report.new_customer_transient</field>
+      <field name="arch" type="xml">
+      <tree create="false" edit="false">
+
+          <field name="date_maturity" string="Date"/>
+          <field name="customer_name" string="Customer Name"/>
+          <field name="lead_type" string="Lead Type" invisible="1"/>
+          <field name="mrc" string="MRC"/>
+          <field name="otc" string="OTC"/>
+          <field name="debit" string="Debit" invisible="1"/>
+          <field name="credit" string="Credit" invisible="1"/>
+          <field name="label" string="Label"/>
+          <field name="billing_type" string="Payment Type" invisible="1"/>
+          <field name="account_name" string="Account Name" invisible="1"/>
+          <field name="account_code" string="Account Code" invisible="1"/>
+          <field name="current_package_end_date" />
+          <field name="billing_start_date" />
+
+        </tree>
+      </field>
+    </record>
+    <record model="ir.actions.act_window" id="mime_sales_report_new_customer_action_window">
+        <field name="name">New Retail Customer</field>
+        <field name="res_model">mime_sales_report.new_customer_transient</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+
+    </record>
+  </data>
+</odoo>

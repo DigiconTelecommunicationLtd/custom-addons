@@ -49,6 +49,7 @@ def disconnect(customer_id):
     command6 = 'echo user-name={} | radclient -x 172.16.1.61:3799 disconnect ' + PASS + ';'
     command7 = 'echo user-name={} | radclient -x 172.16.1.90:3799 disconnect ' + PASS + ';'
 
+
     client = paramiko.Transport((hostname, port))
     client.connect(username=username, password=password)
     command = command1.format(customer_id) + \

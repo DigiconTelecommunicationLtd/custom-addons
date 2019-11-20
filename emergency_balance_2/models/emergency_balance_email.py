@@ -63,7 +63,6 @@ class Team(models.Model):
     @api.multi
     def action_send_defer_review_email(self, invoiceno, name, package, price, reason,deferdays, template_obj):
         body = template_obj.body_html
-        body = body.replace('--invoiceno--', invoiceno)
         body = body.replace('--customername--', name)
         body = body.replace('--packagename--', package)
         body = body.replace('--packageprice--', price)

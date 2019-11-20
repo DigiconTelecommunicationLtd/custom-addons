@@ -45,16 +45,16 @@ class UpdateCronJobModel(models.Model):
             # the customer has sufficient balance.
             # If the customer has sufficient balance then reactivate the customer
             customers_list = self.env['res.partner'].search([
-                ('customer', '=', True)
-            ])
+                ('customer', '=', True)])
             for customer in customers_list:
                 # Get customer balance
                 customer_balance =  customer.get_customer_balance(customer_id=customer.id)
+                #print(customer_balance)
                 #update customer balance for emergency. add due only if today passed emergency valid till
-                if customer.has_due:
-                    custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
-                    if today_new > custom_valid_till:
-                        customer_balance = customer_balance + customer.emergency_balance_due_amount
+                # if customer.has_due:
+                #     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
+                #     if today_new > custom_valid_till:
+                #         customer_balance = customer_balance + customer.emergency_balance_due_amount
                 # find their invoices that are paid
                 current_month_invoice = self.env['account.invoice'].search([
                     ('partner_id', '=', customer.id),
@@ -182,23 +182,46 @@ class UpdateCronJobModel(models.Model):
                                 'current_package_price': ticket.proposed_package_price
                             })
 
-                elif str(customer.next_package_start_date) == str(tomorrow) or customer.active_status == CUSTOMER_INACTIVE_STATUS:
+                elif str(customer.next_package_start_date) == str(today) or customer.active_status == CUSTOMER_INACTIVE_STATUS or customer.has_due == True:
+                    #change the status of customer from new to existing
+                    if str(customer.next_package_start_date) == str(today):
+                        customer.update({
+                            'is_existing_user': True
+                        })
+
                     # updating the customer active_status and package according to their balance
+
+                    # add deferred payment patch
+                    if str(customer.customer_state) == 'paid':
+                        customer.update({
+                            'is_deferred': False
+                        })
+                    due_amount_for_customer = 0.0
+                    if customer.has_due:
+                        custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
+                        #custom_valid_till = custom_valid_till + timedelta(hours=6)
+                        custom_valid_till = custom_valid_till + timedelta(hours=30)
+                        if today_new > custom_valid_till:
+                            # due_amount_for_customer = customer.emergency_balance_due_amount
+                            due_amount_for_customer = customer.customer_total_due
+
                     if (customer_balance < 0) and (abs(
-                            customer_balance) >= customer.next_package_price):
+                            customer_balance) >= customer.total_monthly_bill+due_amount_for_customer):
+                    # if (customer_balance < 0) and (abs(
+                    #             customer_balance) >= customer.total_monthly_bill + due_amount_for_customer):
                         # updating account moves of customer
                         payment_obj = self.env['account.payment']
                         #adjust if customer has due
-                        if customer.has_due:
-                            payment_obj.customer_bill_adjustment(
+                        payment_obj.customer_bill_adjustment(
                                 customer=customer,
-                                package_price=customer.next_package_price+customer.emergency_balance_due_amount
+                                package_price=customer.total_monthly_bill + due_amount_for_customer
+                                # package_price=customer.total_monthly_bill + due_amount_for_customer
                             )
-                        else:
-                            payment_obj.customer_bill_adjustment(
-                                customer=customer,
-                                package_price=customer.next_package_price
-                            )
+                        # else:
+                        #     payment_obj.customer_bill_adjustment(
+                        #         customer=customer,
+                        #         package_price=customer.next_package_price
+                        #     )
                         # updating package info of customer
                         sale_order_lines = customer.next_package_sales_order_id.order_line
                         original_price = 0.0
@@ -214,12 +237,13 @@ class UpdateCronJobModel(models.Model):
                             if opportunity and opportunity.lead_type != "sohoandsme":
                                 #custom_due_date.strftime(DEFAULT_DATE_FORMAT)
                                 #fix deferred thing
-                                if customer.is_deferred == True:
+                                if customer.is_deferred == True and opportunity.lead_type == "retail":
                                     if str(customer.customer_state) == 'paid':
                                         updated_customer = customer.update_current_bill_cycle_info(
                                             customer=customer,
                                             product_id=customer.next_package_id.id,
                                             price=customer.next_package_price,
+                                            # price=customer.total_monthly_bill,
                                             original_price=customer.next_package_original_price,
                                             start_date=today.strftime(DEFAULT_DATE_FORMAT),
                                         )
@@ -229,14 +253,18 @@ class UpdateCronJobModel(models.Model):
                                         updated_customer.update({
                                             'is_deferred':False
                                         })
+                                        update_expiry_bandwidth(updated_customer.subscriber_id,
+                                                                updated_customer.current_package_end_date,
+                                                                updated_customer.current_package_id.name)
+
                                         #updated_customer.is_deferred = False
-                                        print('dinffered',str(updated_customer.is_deferred))
 
                                 else:
                                     updated_customer = customer.update_current_bill_cycle_info(
                                         customer=customer,
                                         product_id=customer.next_package_id.id,
                                         price=customer.next_package_price,
+                                        # price=customer.total_monthly_bill,
                                         original_price=customer.next_package_original_price,
                                         start_date=customer.next_package_start_date,
                                     )
@@ -252,6 +280,7 @@ class UpdateCronJobModel(models.Model):
                                     customer=customer,
                                     product_id=customer.next_package_id.id,
                                     price=customer.next_package_price,
+                                    # price=customer.total_monthly_bill,
                                     original_price=customer.next_package_original_price,
                                     start_date=customer.next_package_start_date,
                                 )
@@ -275,27 +304,29 @@ class UpdateCronJobModel(models.Model):
                         #     customer.update({
                         #         'active_status': CUSTOMER_INACTIVE_STATUS
                         #     })
-                        if customer.has_due:
+                        if customer.has_due and opportunity.lead_type == "retail":
                             custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
                             today_new = datetime.now() + timedelta(hours=6)
-
-                            print(today_new,custom_valid_till)
+                            #custom_valid_till = custom_valid_till + timedelta(hours=6)
+                            custom_valid_till = custom_valid_till + timedelta(hours=30)
 
                             if today_new > custom_valid_till:
                                 customer.update({
                                     'active_status': CUSTOMER_INACTIVE_STATUS
                                 })
-                        else:
+                        elif opportunity.lead_type == "retail":
                             customer.update({
                                 'active_status': CUSTOMER_INACTIVE_STATUS
                             })
 
                 #TEST PURPOSE
-                elif customer.has_due:
+                elif opportunity.lead_type == "retail" and customer.has_due:
                     custom_valid_till = datetime.strptime(customer.new_next_start_date, DEFAULT_DATE_FORMAT)
+                    #custom_valid_till = custom_valid_till + timedelta(hours=6)
+                    custom_valid_till = custom_valid_till + timedelta(hours=30)
                     today_new = datetime.now() + timedelta(hours=6)
 
-                    print(today_new, custom_valid_till)
+
 
                     if today_new > custom_valid_till:
                         customer.update({
@@ -304,8 +335,7 @@ class UpdateCronJobModel(models.Model):
 
                 #deffered payment
 
-                if customer.is_deferred:
-
+                if opportunity.lead_type == "retail" and customer.is_deferred:
                     opportunity = self.env['crm.lead'].search([('partner_id', '=', customer.id)], limit=1)
                     if opportunity:
                         if opportunity.lead_type == "retail":
@@ -319,7 +349,7 @@ class UpdateCronJobModel(models.Model):
                                     two_days = today_new +  timedelta(days=2)
 
                                     custom_due_date = datetime.strptime(due_date, DEFAULT_DATE_FORMAT)
-                                    custom_due_date = custom_due_date + timedelta(hours=6)
+                                    custom_due_date = custom_due_date + timedelta(hours=30)
 
                                     if(today_new > custom_due_date):
                                         update_expiry_bandwidth(customer.subscriber_id,
@@ -333,21 +363,10 @@ class UpdateCronJobModel(models.Model):
                                     customer.update({
                                         'active_status': CUSTOMER_ACTIVE_STATUS
                                     })
-
-                                    # if two_days == custom_due_date:
-                                    #     #shoot the email
-                                    #     template_obj_new_service_request = self.env[
-                                    #         'emergency_balance.mail'].sudo().search(
-                                    #         [('name', '=', 'new_reminder_for_deferred_mail')],
-                                    #         limit=1)
-                                    #     days=custom_due_date.strftime('%d, %b %Y')
-                                    #     self.env['emergency_balance.mail'].action_send_defer_email(days,customer.name,
-                                    #                                                                customer.subscriber_id,
-                                    #                                                                customer.current_package_id.name,
-                                    #                                                                str(customer.current_package_price),
-                                    #                                                                customer.email,
-                                    #                                                                template_obj_new_service_request
-                                    #                                                                )
+                                    #update radius database
+                                    update_expiry_bandwidth(customer.subscriber_id,
+                                                            customer.current_package_end_date,
+                                                            customer.current_package_id.name)
 
 
 
@@ -355,3 +374,114 @@ class UpdateCronJobModel(models.Model):
             return True
         except Exception as ex:
             print(ex)
+
+    @api.model
+    def send_customer_invoice_in_email(self):
+        print('************************************** updated cusomter invoice email')
+        """
+        Function for running in a cron job to send mail to the customer which
+        bill cycle will be completed after 7days
+        :return: boolean response
+        """
+        today = datetime.today()
+        after_threshold_days_date = today + timedelta(days=DEFAULT_THRESHOLD_DAYS)
+        after_threshold_days_date_str = after_threshold_days_date.strftime("%Y-%m-%d")
+
+        after_second_threshold_days_date = today + timedelta(days=DEFAULT_SECOND_THRESHOLD_DAYS)
+        after_second_threshold_days_date_str = after_second_threshold_days_date.strftime("%Y-%m-%d")
+
+        customers_list = self.env['res.partner'].search([
+            ('customer', '=', True),
+            '|',
+            ('current_package_end_date', '=', after_threshold_days_date),
+            ('current_package_end_date', '=', after_second_threshold_days_date)
+        ])
+
+        # customers_list = self.env['res.partner'].search([
+        #     ('customer', '=', True)
+        # ])
+
+        service_request_obj = self.env['isp_crm_module.service_request']
+
+        for customer in customers_list:
+            # Check if the customer is corporate or not
+            opportunities = self.env['crm.lead'].search([('partner_id', '=', customer.id)])
+            for opportunity in opportunities:
+                # check if lead type is corporate or soho or sme
+                if opportunity.lead_type != "corporate":
+                    # print("Creating Invoice for customer:- " + customer.name)
+                    customer_invoice_status = self.create_customer_invoice_status(customer=customer)
+                    try:
+                        # print("mail sending.....")
+                        if customer.real_ip:
+                            mail_sent = self._send_mail_to_customer_before_some_days_real_ip(customer=customer)
+                        else:
+                            mail_sent = self._send_mail_to_customer_before_some_days(customer=customer)
+                        # print("mail sent")
+                    except Exception as ex:
+                        print(ex)
+
+    def _send_mail_to_customer_before_some_days_real_ip(self, customer):
+        """
+        Sending mail to the customers which bill cycle date will end next week
+        :param customer: to whom the mail is to be sent
+        :return: boolean response
+        """
+        template_obj = self.env['res.partner'].sudo().search(
+                [('name', '=', 'sending_invoice_for_warning_the_customer_real_ip')],
+                limit=1)
+        self.mail_to = customer.email
+        # self.mail_cc = customer.email
+        body = template_obj.body_html
+        body = body.replace('--customer_id--', str(customer.subscriber_id))
+        if len(str(customer.name)) > 1:
+            body = body.replace('--customer_name--', str(customer.name))
+        else:
+            body = body.replace('--customer_name--', "N/A")
+        # show package info from customer's technical information.
+        if customer.opportunity_ids.lead_type != "corporate":
+            body = body.replace('--package--', str(customer.current_package_id.name or ""))
+            body = body.replace('--price--', str(customer.next_package_price))
+            body = body.replace('--realipprice--', str(customer.real_ip_subtotal))
+            body = body.replace('--totalprice--', str(customer.next_package_price+customer.real_ip_subtotal))
+
+            if customer.current_package_end_date:
+                body = body.replace('--last_payment_date--', str(datetime.strptime(str(customer.current_package_end_date),'%Y-%m-%d').strftime("%d-%m-%Y")))
+            else:
+                body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
+        else:
+            body = body.replace('--package--', str(customer.next_package_id.name or ""))
+            body = body.replace('--price--', str(customer.next_package_price))
+            if customer.current_package_end_date:
+                body = body.replace('--last_payment_date--', str(
+                    datetime.strptime(str(customer.current_package_end_date), '%Y-%m-%d').strftime("%d-%m-%Y")))
+            else:
+                body = body.replace('--last_payment_date--', str(customer.current_package_end_date))
+
+        # Creating attachment file of the invoice
+        # sales_order_obj = self.env['sale.order'].search([], order='create_date asc', limit=1)
+        # pdf = self.env.ref('isp_crm_module.action_report_receipt_attachment').render_qweb_pdf([sales_order_obj[0].id])
+        #
+        # # save pdf as attachment
+        # # ATTACHMENT_NAME = customer.name + "_" + invoice.number
+        # ATTACHMENT_NAME = customer.name
+        # attachment = self.env['ir.attachment'].create({
+        #     'name': ATTACHMENT_NAME,
+        #     'type': 'binary',
+        #     'datas_fname': ATTACHMENT_NAME + '.pdf',
+        #     'store_fname': ATTACHMENT_NAME,
+        #     'datas': base64.encodestring(pdf[0]),
+        #     'mimetype': 'application/x-pdf'
+        # })
+
+        if template_obj:
+            mail_values = {
+                'subject': template_obj.subject_mail,
+                'body_html': body,
+                'email_to': self.mail_to,
+                # 'email_cc': self.mail_cc,
+                'email_from': 'notice.mime@cg-bd.com',
+                # 'attachment_ids': [(6, 0, [attachment.id])],
+            }
+            create_and_send_email = self.env['mail.mail'].create(mail_values).send()
+        return create_and_send_email

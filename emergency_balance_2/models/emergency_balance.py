@@ -16,7 +16,8 @@ EMERGENCY_TYPE = [
     (6, _('6 Days')),
     (7, _('7 Days')),
 ]
-
+CUSTOMER_INACTIVE_STATUS = 'inactive'
+CUSTOMER_ACTIVE_STATUS = 'active'
 class emergency_balance(models.Model):
      _name = 'emergency.balance'
      _rec_name = 'name'
@@ -157,13 +158,24 @@ class emergency_balance(models.Model):
 
              record.customer.has_due = True
              record.customer.emergency_date = record.emergency_date
+
              record.approved_by = self.env.uid
              record.disable_header = True
              record.state = 'due'
              record.color = DUE_ACCEPTED
 
              print('current_package_end_date', record.customer.current_package_end_date)
-             given_date_obj = datetime.strptime(record.customer.current_package_end_date, DEFAULT_DATE_FORMAT)
+
+             #if the user is active then given date is current package end date else its today plus 6 hours
+             given_date_obj = None
+             if record.customer.active_status == CUSTOMER_INACTIVE_STATUS:
+                 today_new = datetime.now() + timedelta(hours=6)
+                 #today = today_new.date()
+                 given_date_obj = today_new.date()
+
+             else:
+                 given_date_obj = datetime.strptime(record.customer.current_package_end_date, DEFAULT_DATE_FORMAT)
+
              print('given_date', str(given_date_obj))
              modified_date = given_date_obj + timedelta(days=record.emergency_date)
              print('modified', str(modified_date))
@@ -172,7 +184,7 @@ class emergency_balance(models.Model):
              current_unit_price=(record.customer.current_package_price)/30
              due_amount = current_unit_price * (record.emergency_date - 2)
              record.customer.emergency_balance_due_amount = due_amount
-
+             record.customer.active_status = 'active'
              modified_date = modified_date + timedelta(hours=6)
              status = update_expiry_bandwidth(record.customer.subscriber_id,
                                               modified_date.strftime(DEFAULT_DATE_FORMAT),

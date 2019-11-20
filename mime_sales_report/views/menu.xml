@@ -1,0 +1,23 @@
+<odoo>
+  <data>
+    <!-- Top menu item -->
+    <menuitem name="MiME Sales Report" id="mime_sales_report_root"/>
+
+    <!-- menu categories -->
+    <menuitem name="Sales Report" id="mime_sales_report_label_customers" parent="mime_sales_report_root"/>
+
+    <!-- actions -->
+<!--    <menuitem name="New Customer Report" id="mime_sales_report_new_customer_list" parent="mime_sales_report_label_customers"-->
+<!--              action="mime_sales_report_new_customer_action_window"/>-->
+    <menuitem name="Customer Sales Report" id="mime_sales_report_new_customer_list" parent="mime_sales_report_label_customers"
+              action="mime_sale_report_filter_form_action_window"/>
+
+     <menuitem name="Individual Sales Report" id="mime_sales_report_new_individual_customer_list" parent="mime_sales_report_label_customers"
+              action="mime_sale_report_individual_filter_form_action_window"/>
+
+         <menuitem name="Group Sales Report" id="mime_sales_report_new_individual_group_by_customer_list" parent="mime_sales_report_label_customers"
+              action="mime_sale_report_filter_group_byform_action_window"/>
+
+
+  </data>
+</odoo>

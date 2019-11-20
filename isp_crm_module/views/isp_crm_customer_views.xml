@@ -187,6 +187,7 @@
         </field>
     </record>
 
+
     <!--adding fields in customer filter-->
     <record id="isp_crm_module.view_inherit_pres_partner_search" model="ir.ui.view">
         <field name="name">view.inherit.pres.partner.search</field>

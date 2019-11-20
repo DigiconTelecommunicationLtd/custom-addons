@@ -54,6 +54,7 @@ class ISPCRMPayment(models.Model):
 
     @api.multi
     def post(self, vals={}, is_mail_sent=False):
+
         """
         Overrides the default post function for advance payment option
         :return:
@@ -160,7 +161,7 @@ class ISPCRMPayment(models.Model):
             created_unearned_revenue_move_line.update({
                 'payment_id': rec.id
             })
-
+            acc_move.post()
             rec.partner_id.get_customer_balance(customer_id=rec.partner_id.id)
         return True
 
@@ -207,7 +208,10 @@ class ISPCRMPayment(models.Model):
             'partner_id': customer.id,
             'name': name,
             'account_id': revenue_acc_obj.id,
-            'debit': package_price,
+            'credit': package_price,
         })
+        acc_move.post()
         return True
+
+
 

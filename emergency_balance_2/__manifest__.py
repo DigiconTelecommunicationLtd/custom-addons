@@ -25,6 +25,7 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
+        'views/real_ip_change.xml',
         'views/create_ticket.xml',
         'views/emergency_balance.xml',
         'views/approval_balance.xml',

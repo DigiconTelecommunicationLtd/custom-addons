@@ -15,12 +15,12 @@
         sequence="6"
         action="isp_crm_module_service_request_action"/>
 
-    <menuitem
-        id="menu_isp_crm_module_change_package_act"
-        name="Package Change"
-        sequence="5"
-        action="isp_crm_module_change_package_action"
-        parent="crm.crm_menu_pipeline"/>
+<!--    <menuitem-->
+<!--        id="menu_isp_crm_module_change_package_act"-->
+<!--        name="Package Change"-->
+<!--        sequence="5"-->
+<!--        action="isp_crm_module_change_package_action"-->
+<!--        parent="crm.crm_menu_pipeline"/>-->
 
     <menuitem
         id="menu_isp_crm_module_new_connection_request"

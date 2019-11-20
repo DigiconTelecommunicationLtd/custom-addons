@@ -1,0 +1,200 @@
+<odoo>
+    <data>
+
+         <record model="report.paperformat" id="paperformat_sales_report">
+        <field name="name">paperformat.paperformat_sales_report</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_width">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_right">5</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+    </record>
+<report id="mime_sales_report.sales_report"
+            model="mime_sales_report.new_customer_transient"
+            string="Mime Sales Report"
+            report_type="qweb-pdf"
+            name="mime_sales_report.sales_report_view"
+            paperformat="paperformat_sales_report"
+            menu="False"/>
+
+    <template id="mime_sales_report.sales_report_view">
+        <div class="header" style="border-bottom: 2px solid black">
+            <div class="row">
+                <div class="col-xs-3 mb4">
+                    <img src="isp_invoice_module/static/src/assets/images/logo.png" style="max-height: 85px;"/>
+                </div>
+            </div>
+        </div>
+        <div class="article">
+            <br/>
+            <div class="row">
+                <h3 class="text-center">Sales Report (<t t-esc="lead_type"/>)</h3>
+                <h4 class="text-center">
+                    <strong>From</strong>:
+                    <t t-esc="date_start"/>
+                    <strong>To</strong>:
+                    <t t-esc="date_end"/>
+                </h4>
+            </div>
+            <br/>
+            <br/>
+             <div class="row">
+                <h4 class="text-center">New Customers</h4>
+
+            </div>
+            <table class="table table-condensed table-bordered" style="width: 100%">
+
+                <thead>
+<!--                    <th class="text-center" style="width: 70%">Date</th>-->
+<!--                    <th class="text-center" style="width: 70%">Customer Name</th>-->
+<!--                    <th class="text-center" style="width: 70%">MRC</th>-->
+<!--                    <th class="text-center" style="width: 70%">OTC</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Recieveable</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Paid</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Due</th>-->
+
+                    <th class="text-center" >Date</th>
+                    <th class="text-center" >Customer Name</th>
+                    <th class="text-center" >MRC</th>
+                    <th class="text-center" >OTC</th>
+                    <th class="text-center">Total Receivable</th>
+                    <th class="text-center" >Total Paid</th>
+                    <th class="text-center" >Total Due</th>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="docs_new" t-as="doc">
+                        <tr>
+                            <td>
+                                <span t-esc="doc['date_maturity']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['customer_name']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['mrc']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['otc']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_recieveable']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_paid']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_due']"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+             <div class="row">
+                <h4 class="text-center">Existing Customers</h4>
+
+            </div>
+
+            <table class="table table-condensed table-bordered" style="width: 100%">
+                <thead>
+<!--                    <th class="text-center" style="width: 70%">Date</th>-->
+<!--                    <th class="text-center" style="width: 70%">Customer Name</th>-->
+<!--                    <th class="text-center" style="width: 70%">MRC</th>-->
+<!--                    <th class="text-center" style="width: 70%">OTC</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Recieveable</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Paid</th>-->
+<!--                    <th class="text-center" style="width: 70%">Total Due</th>-->
+
+                     <th class="text-center" >Date</th>
+                    <th class="text-center" >Customer Name</th>
+                    <th class="text-center" >MRC</th>
+                    <th class="text-center" >OTC</th>
+                    <th class="text-center" >Total Receivable</th>
+                    <th class="text-center" >Total Paid</th>
+                    <th class="text-center" >Total Due</th>
+                </thead>
+                <tbody>
+                    <t t-foreach="docs_old" t-as="doc">
+                        <tr>
+                            <td>
+                                <span t-esc="doc['date_maturity']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['customer_name']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['mrc']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['otc']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_recieveable']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_paid']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['total_due']"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+             <table class="centerTable table table-condensed table-bordered" style="width: 100%">
+                <thead>
+<!--                    <th class="text-center" style="width: 70%">Grand Recieveable</th>-->
+<!--                    <th class="text-center" style="width: 70%">Grand Paid</th>-->
+<!--                    <th class="text-center" style="width: 70%">Grand Due</th>-->
+
+                     <th class="text-center" >Grand Receivable</th>
+                    <th class="text-center" >Grand Paid</th>
+                    <th class="text-center" >Grand Due</th>
+
+                </thead>
+                <tbody>
+                    <t>
+                        <tr>
+                            <td class="text-center">
+                                <span class="text-center" t-esc="grand_recieveable"/>
+                            </td>
+                            <td class="text-center">
+                                <span class="text-center" t-esc="grand_paid"/>
+                            </td>
+                            <td class="text-center">
+                                <span class="text-center" t-esc="grand_due"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="footer">
+            <div class="row text-center" style="border-top: 1px solid black;">
+                <div class="col-xs-3 col-xs-offset-9 text-right">
+                    <ul class="list-inline" style="margin-top:10px;">
+                        <li>Page:</li>
+                        <li>
+                            <span class="page"/>
+                        </li>
+                        <li>/</li>
+                        <li>
+                            <span class="topage"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </template>
+    </data>
+</odoo>
