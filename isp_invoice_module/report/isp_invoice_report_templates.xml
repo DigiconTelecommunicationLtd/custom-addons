@@ -280,101 +280,11 @@
                                 </div>
                             </div>
 
-                            <div class="col-xs-6">
-                                <u>One Time Cost (OTC) for Dedicated Data Connectivity Setup:</u>
-                            </div>
 
-                            <div style="padding-left:10px;margin-top:5%;">
-                                <table class="table table-bordered table-condensed" name="invoice_line_table">
-                                    <thead>
-                                        <tr>
-                                            <th>Foundation</th>
-                                            <th>Destination</th>
-                                            <th>Connectivity Media</th>
-                                            <th>Required Tower Height</th>
-                                            <th>Backbone Provider</th>
-                                            <th>OTC in BDT</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="invoice_tbody">
-                                        <tr>
-                                            <td>
-                                                MIME "<span t-field="o.get_sales_order_origin.foundation"/>" POP
-                                            </td>
-                                            <td>
-                                                <span t-field="o.get_sales_order_origin.destination"/>
-                                            </td>
-                                            <td>
-                                                <span t-field="o.get_sales_order_origin.connectivity_media"/>
-                                            </td>
-                                            <td>
-                                                <span t-field="o.get_sales_order_origin.required_tower_height"/>
-                                            </td>
-                                            <td>
-                                                <t t-if="o.get_sales_order_origin.backbone_provider">
-                                                    <span t-field="o.get_sales_order_origin.backbone_provider"/>
-                                                </t>
-                                                <t t-else="">
-                                                    <span>MIME</span>
-                                                </t>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-field="o.get_sales_order_origin.otc_price"/>
-                                            </td>
-                                        </tr>
 
-                                        <tr>
-                                            <td class="text-right pull-right" colspan="5">
-                                                <strong>Regular</strong>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-field="o.get_sales_order_origin.otc_price"
-                                                      t-field-options='{"widget": "False"}'/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right pull-right" colspan="5">
-                                                <strong>Discount</strong>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-field="o.get_sales_order_origin.discount"
-                                                      t-field-options='{"widget": "False"}'/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right pull-right" colspan="5">
-                                                <strong>Total</strong>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-field="o.get_sales_order_origin.price_total"
-                                                      t-field-options='{"widget": "False"}'/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right pull-right" colspan="5">
-                                                <strong>Without VAT</strong>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-field="o.get_sales_order_origin.price_total_without_vat"
-                                                      t-field-options='{"widget": "False"}'/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right pull-right" colspan="5">
-                                                <strong>Govt. VAT</strong>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-field="o.get_sales_order_origin.govt_vat_in_amount"
-                                                      t-field-options='{"widget": "False"}'/>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="col-xs-6" style="width:100%;">
-                                <u>Monthly Recurring Charge (MRC) for Dedicated Data Connectivity Setup:</u>
-                            </div>
+                            <!--<div class="col-xs-6" style="width:100%;">-->
+                                <!--<u>Monthly Recurring Charge (MRC) for Dedicated Data Connectivity Setup:</u>-->
+                            <!--</div>-->
 
                             <div style="padding-left:10px;margin-top:5%;">
                                 <table class="table table-bordered table-condensed" name="invoice_line_table">
@@ -383,8 +293,7 @@
                                             <th>SL</th>
                                             <th>Description</th>
                                             <th>Location</th>
-                                            <th class="hidden">Source Document</th>
-                                            <th class="text-right">Quantity in Mbps</th>
+                                            <th>Bandwidth</th>
                                             <th t-if="display_discount" class="text-right">Disc.(%)</th>
                                             <th class="text-right">Amount</th>
                                         </tr>
@@ -400,9 +309,9 @@
                                             <td>
                                                 <span t-field="o.get_sales_order_origin.destination"/>
                                             </td>
-                                            <td class="hidden">
-                                                <span t-field="l.origin"/>
-                                            </td>
+                                            <!--<td class="hidden">-->
+                                                <!--<span t-field="l.origin"/>-->
+                                            <!--</td>-->
                                             <td class="text-right">
                                                 <span t-field="l.quantity"/>
                                                 <span t-field="l.uom_id" groups="product.group_uom"/>
