@@ -281,9 +281,8 @@
                             </div>
 
 
-
                             <!--<div class="col-xs-6" style="width:100%;">-->
-                                <!--<u>Monthly Recurring Charge (MRC) for Dedicated Data Connectivity Setup:</u>-->
+                            <!--<u>Monthly Recurring Charge (MRC) for Dedicated Data Connectivity Setup:</u>-->
                             <!--</div>-->
 
                             <div style="padding-left:10px;margin-top:5%;">
@@ -299,7 +298,9 @@
                                         </tr>
                                     </thead>
                                     <tbody class="invoice_tbody">
+                                        <t t-set="l_index" t-value="0"/>
                                         <tr t-foreach="o.invoice_line_ids" t-as="l">
+
                                             <td>
                                                 <span t-esc="l_index + 1"/>
                                             </td>
@@ -310,7 +311,7 @@
                                                 <span t-field="o.get_sales_order_origin.destination"/>
                                             </td>
                                             <!--<td class="hidden">-->
-                                                <!--<span t-field="l.origin"/>-->
+                                            <!--<span t-field="l.origin"/>-->
                                             <!--</td>-->
                                             <td class="text-right">
                                                 <span t-field="l.quantity"/>
@@ -323,17 +324,67 @@
                                                 <span t-field="l.price_subtotal"
                                                       t-field-options='{"widget": "False"}'/>
                                             </td>
+                                            <t t-set="l_index" t-value="l_index + 1"/>
                                         </tr>
+
+
+                                        <!--otc-->
+                                        <tr>
+                                            <td>
+                                                <span t-esc="l_index + 1"/>
+                                            </td>
+
+                                            <td>
+                                                <span t-esc="'Installation Charge (OTC)'"/>
+                                            </td>
+
+                                            <td>
+                                                <span t-field="o.get_sales_order_origin.destination"/>
+                                            </td>
+                                            <td> </td>
+                                            <td class="text-right pull-right">
+                                                <span t-field="o.get_sales_order_origin.otc_price"/>
+                                            </td>
+                                        </tr>
+
 
                                         <tr>
                                             <td class="text-right pull-right" colspan="4">
-                                                <strong>Subtotal</strong>
+                                                <strong>Discount</strong>
                                             </td>
                                             <td class="text-right pull-right">
-                                                <span t-field="o.amount_untaxed"
+                                                <span t-field="o.get_sales_order_origin.discount"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right pull-right" colspan="4">
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td class="text-right pull-right">
+                                                <span t-field="o.get_sales_order_origin.price_total"
                                                       t-field-options='{"widget": "False"}'/>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td class="text-right pull-right" colspan="4">
+                                                <strong>Without VAT</strong>
+                                            </td>
+                                            <td class="text-right pull-right">
+                                                <span t-field="o.get_sales_order_origin.price_total_without_vat"
+                                                      t-field-options='{"widget": "False"}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right pull-right" colspan="4">
+                                                <strong>Govt. VAT</strong>
+                                            </td>
+                                            <td class="text-right pull-right">
+                                                <span t-field="o.get_sales_order_origin.govt_vat_in_amount"
+                                                      t-field-options='{"widget": "False"}'/>
+                                            </td>
+                                        </tr>
+
+                                        <!--otc end-->
                                         <tr>
                                             <td class="text-right pull-right" colspan="4">
                                                 <strong>Govt. VAT @ 5% (Including)</strong>
@@ -357,7 +408,7 @@
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="text-right pull-right">
-                                                <span t-esc="o.amount_without_vat + o.amount_vat"
+                                                <span t-esc="o.amount_without_vat + o.amount_vat + o.get_sales_order_origin.otc_price"
                                                       t-field-options='{"widget": "False"}'/>
                                             </td>
                                         </tr>
@@ -435,7 +486,7 @@
 
                             </table>
 
-                             <table>
+                            <table>
                                 <tr>
                                     <th>Billing Address:</th>
                                     <td>
