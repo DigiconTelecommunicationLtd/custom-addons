@@ -237,12 +237,12 @@
                                                     <span t-field="o.date_invoice"/>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th>Billing Period</th>
-                                                <td>
-                                                    <span t-field="o.payment_term_id"/>
-                                                </td>
-                                            </tr>
+                                            <!--<tr>-->
+                                                <!--<th>Billing Period</th>-->
+                                                <!--<td>-->
+                                                    <!--<span t-field="o.payment_term_id"/>-->
+                                                <!--</td>-->
+                                            <!--</tr>-->
                                             <tr>
                                                 <th>Due Date</th>
                                                 <td>
