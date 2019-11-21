@@ -237,6 +237,14 @@
                                                     <span t-field="o.date_invoice" t-field-options='{"format": "d MMMM y"}'/>
                                                 </td>
                                             </tr>
+
+                                            <tr>
+                                            <th>Billing Month</th>
+                                            <td>
+                                            <span t-field="o.corporate_soho_first_month_date_start" t-field-options='{"format": "MMMM"}'/>
+                                            </td>
+                                            </tr>
+
                                             <!--<tr>-->
                                             <!--<th>Billing Period</th>-->
                                             <!--<td>-->
