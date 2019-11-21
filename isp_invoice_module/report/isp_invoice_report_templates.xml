@@ -458,7 +458,7 @@
                                 </table>
                                 <div id="inword">
                                     <p>In Word: Taka
-                                        <t t-esc="o.convert(o.amount_total)"></t>
+                                        <t t-esc="o.convert(o.toal_amount_otc_mrc)"></t>
                                     </p>
                                 </div>
                             </div>
