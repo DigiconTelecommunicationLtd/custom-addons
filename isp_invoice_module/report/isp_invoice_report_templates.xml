@@ -238,7 +238,7 @@
                                                 </td>
                                             </tr>
 
-                                            <tr>
+                                            <!--<tr>-->
                                             <!--<th>Billing Month</th>-->
                                             <!--<td>-->
                                             <!--<span t-field="o.corporate_soho_first_month_date_start" t-field-options='{"format": "MMMM"}'/>-->
