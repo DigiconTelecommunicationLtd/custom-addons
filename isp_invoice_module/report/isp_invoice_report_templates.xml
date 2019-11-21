@@ -149,7 +149,7 @@
 
 
                             <br/>
-                            <div class="row" style="padding-left:10px;margin-top:3%;">
+                            <div class="row" style="padding-left:10px;margin-top:1%;">
                                 <div class="col-xs-6">
                                     <table class="table table-bordered table-condensed" name="invoice_customer_table">
                                         <tbody class="invoice_tbody">
@@ -254,7 +254,7 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <table class="table table-bordered table-condensed" name="invoice_table">
-                                        <th>Attention:</th>
+                                        <th colspan="2">Attention:</th>
                                         <tbody class="invoice_tbody">
                                             <tr>
                                                 <th>Billing Persons name:</th>
@@ -285,7 +285,7 @@
                             <!--<u>Monthly Recurring Charge (MRC) for Dedicated Data Connectivity Setup:</u>-->
                             <!--</div>-->
 
-                            <div style="padding-left:10px;margin-top:5%;">
+                            <div style="padding-left:10px;margin-top:1%;">
                                 <table class="table table-bordered table-condensed" name="invoice_line_table">
                                     <thead>
                                         <tr>
@@ -461,7 +461,7 @@
                                 <u>
                                     <strong>Payment Instructions:</strong>
                                 </u>
-                                <ul style="margin-top:2%;">
+                                <ul style="margin-top:1%;">
                                     <li>Payment to be made in favor of "DigiCon Telecommunications Limited".</li>
                                     <li>Please ignore this invoice if already paid</li>
                                     <li>As prepaid subscriber, ensure smooth and uninterrupted service by always paying
@@ -509,7 +509,7 @@
 
 
                             <br/>
-                            <div style="padding-left:10px;margin-top:3%;">
+                            <div style="padding-left:10px;margin-top:1%;">
                                 <table class="table table-bordered table-condensed" name="invoice_line_table">
                                     <thead>
                                         <tr>
@@ -624,7 +624,7 @@
                                 <u>
                                     <strong>Payment Instructions:</strong>
                                 </u>
-                                <ul style="margin-top:2%;">
+                                <ul style="margin-top:1%;">
                                     <li>Payment to be made in favor of "DigiCon Telecommunications Limited".</li>
                                     <li>Please ignore this invoice if already paid</li>
                                     <li>As prepaid subscriber, ensure smooth and uninterrupted service by always paying
