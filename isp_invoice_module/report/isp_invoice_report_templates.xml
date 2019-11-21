@@ -343,7 +343,7 @@
                                             </td>
                                             <td> </td>
                                             <td class="text-right pull-right">
-                                                <span t-field="o.get_sales_order_origin.otc_price"/>
+                                                <span t-field="o.corporate_otc_amount"/>
                                             </td>
                                         </tr>
 
@@ -408,8 +408,12 @@
                                             <td class="text-right pull-right" colspan="4">
                                                 <strong>Grand Total</strong>
                                             </td>
+                                            <!--<td class="text-right pull-right">-->
+                                                <!--<span t-esc="o.amount_without_vat + o.amount_vat + o.get_sales_order_origin.price_total"-->
+                                                      <!--t-field-options='{"widget": "False"}'/>-->
+                                            <!--</td>-->
                                             <td class="text-right pull-right">
-                                                <span t-esc="o.amount_without_vat + o.amount_vat + o.get_sales_order_origin.price_total"
+                                                <span t-field="o.toal_amount_otc_mrc"
                                                       t-field-options='{"widget": "False"}'/>
                                             </td>
                                         </tr>
@@ -440,16 +444,16 @@
                                                 </th>
                                             </tr>
                                         </t>
-                                        <tr style="border:1px solid #dddddd;">
-                                            <th>Total Outstanding</th>
-                                            <th>
-                                                <span class="text-right pull-right">
-                                                    <strong>BDT</strong>
-                                                    <span t-field="o.amount_total"
-                                                          t-field-options='{"widget": "False"}'/>
-                                                </span>
-                                            </th>
-                                        </tr>
+                                        <!--<tr style="border:1px solid #dddddd;">-->
+                                            <!--<th>Total Outstanding</th>-->
+                                            <!--<th>-->
+                                                <!--<span class="text-right pull-right">-->
+                                                    <!--<strong>BDT</strong>-->
+                                                    <!--<span t-field="o.amount_total"-->
+                                                          <!--t-field-options='{"widget": "False"}'/>-->
+                                                <!--</span>-->
+                                            <!--</th>-->
+                                        <!--</tr>-->
                                     </tbody>
                                 </table>
                                 <div id="inword">
