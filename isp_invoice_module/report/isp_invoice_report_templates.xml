@@ -348,14 +348,15 @@
                                         </tr>
 
 
-                                        <tr>
-                                            <td class="text-right pull-right" colspan="4">
-                                                <strong>Discount</strong>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-esc="o.get_sales_order_origin.discount + o.get_sales_order_origin.discount"/>
-                                            </td>
-                                        </tr>
+                                        <!--<tr>-->
+                                            <!--<td class="text-right pull-right" colspan="4">-->
+                                                <!--<strong>Discount</strong>-->
+                                            <!--</td>-->
+                                            <!--<td class="text-right pull-right">-->
+                                                <!--<span t-esc="o.get_sales_order_origin.discount + o.get_sales_order_origin.discount"/>-->
+                                            <!--</td>-->
+                                        <!--</tr>-->
+
                                         <tr>
                                             <td class="text-right pull-right" colspan="4">
                                                 <strong>Sub Total</strong>

@@ -89,15 +89,22 @@ class ISPCRMInvoice(models.Model):
                             formated_date = datetime.datetime.strptime(formated_date, "%Y-%m-%d")
 
                             # Get the first day of the month in order to calculate total days of the month.
-                            corporate_soho_first_month_date_start = formated_date.replace(
-                                day=1)
+                            corporate_soho_first_month_date_start = formated_date.replace(day=1)
                             corporate_soho_first_month_date_start = str(corporate_soho_first_month_date_start).split(" ")[0]
 
+                            #####
+                            #next month#
+                            date_format = datetime.datetime.strptime(str(corporate_soho_first_month_date_start), "%Y-%m-%d")
+                            next_month = datetime.datetime(date_format.year, date_format.month, date_format.day).replace(day=28) + datetime.timedelta(days=4)
+
+                            last_day_of_month = str(next_month - datetime.timedelta(days=next_month.day)).split(" ")[0]
+
+                            ####
+
                             # Get the last day of the month.
-                            corporate_soho_first_month_date_end = datetime.date(formated_date.year,
-                                                                                formated_date.month + 1,
-                                                                                1) - relativedelta(
-                                days=1)
+                            # corporate_soho_first_month_date_end = datetime.date(formated_date.year,
+                            #                                                     formated_date.month + 1, 1) - relativedelta(days=1)
+                            corporate_soho_first_month_date_end = last_day_of_month
 
                             bill_start_date = datetime.datetime.strptime(str(corporate_soho_first_month_date_start),
                                                                          "%Y-%m-%d").strftime(
