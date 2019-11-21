@@ -366,15 +366,15 @@
                                                       t-field-options='{"widget": "False"}'/>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td class="text-right pull-right" colspan="4">
-                                                <strong>Without VAT</strong>
-                                            </td>
-                                            <td class="text-right pull-right">
-                                                <span t-esc="o.get_sales_order_origin.price_total_without_vat + o.get_sales_order_origin.price_total_without_vat"
-                                                      t-field-options='{"widget": "False"}'/>
-                                            </td>
-                                        </tr>
+                                        <!--<tr>-->
+                                            <!--<td class="text-right pull-right" colspan="4">-->
+                                                <!--<strong>Without VAT</strong>-->
+                                            <!--</td>-->
+                                            <!--<td class="text-right pull-right">-->
+                                                <!--<span t-esc="o.get_sales_order_origin.price_total_without_vat + o.get_sales_order_origin.price_total_without_vat"-->
+                                                      <!--t-field-options='{"widget": "False"}'/>-->
+                                            <!--</td>-->
+                                        <!--</tr>-->
                                         <!--<tr>-->
                                             <!--<td class="text-right pull-right" colspan="4">-->
                                                 <!--<strong>Govt. VAT</strong>-->
