@@ -408,7 +408,7 @@
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="text-right pull-right">
-                                                <span t-esc="o.amount_without_vat + o.amount_vat + o.get_sales_order_origin.otc_price"
+                                                <span t-esc="o.amount_without_vat + o.amount_vat + o.get_sales_order_origin.price_total"
                                                       t-field-options='{"widget": "False"}'/>
                                             </td>
                                         </tr>
